@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/transparent_white_selector_bg"/>
+
+    <Spinner
+        android:id="@+id/locationSpinner"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/transparent_white_selector_bg"/>
+
+    <ImageView
+        android:id="@+id/mapToggleView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingLeft="12dp"
+        android:paddingRight="16dp"
+        android:src="@drawable/ic_map" />
+</LinearLayout>

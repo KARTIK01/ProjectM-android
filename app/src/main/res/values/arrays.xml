@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_name">
+        <item>All Categories</item>
+        <item>Food &amp; Drinks</item>
+        <item>Things to do</item>
+        <item>Beauty &amp; Spa</item>
+        <item>Local Services</item>
+    </string-array>
+    <string-array name="city_name">
+        <item>Current Location</item>
+        <item>San Francisco</item>
+        <item>Daly City</item>
+        <item>South San Francisco</item>
+        <item>San Bruno</item>
+        <item>Millbrae</item>
+        <item>Burlingame</item>
+        <item>San Mateo</item>
+    </string-array>
+    <string-array name="language_list">
+        <item>English</item>
+        <item>中文</item>
+    </string-array>
+</resources>

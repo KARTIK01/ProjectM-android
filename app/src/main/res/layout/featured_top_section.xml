@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+    <RelativeLayout
+        android:id="@+id/pagerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/featurePager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.mickledeals.views.PagerIndicator
+            android:id="@+id/pagerIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <TextView
+        style="@style/SectionTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_added_coupons" />
+
+    <com.mickledeals.views.ScrollInterceptRecyclerView
+        android:id="@+id/addedCouponRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingRight="@dimen/card_margin"
+        android:scrollbars="none" />
+
+    <TextView
+        style="@style/SectionTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/popular_coupons" />
+
+    <com.mickledeals.views.ScrollInterceptRecyclerView
+        android:id="@+id/popularCouponRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingRight="@dimen/card_margin"
+        android:scrollbars="none" />
+
+    <TextView
+        style="@style/SectionTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/this_week_best_deals" />
+
+
+</LinearLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardElevation="2dp"
+    card_view:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.mickledeals.views.AspectRatioImageView
+            android:id="@+id/card_image"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/card_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:maxLines="1"
+            android:paddingRight="4dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/themeTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/card_save"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingBottom="2dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="2dp"
+            android:paddingTop="7dp" />
+
+
+        <TextView
+            android:id="@+id/card_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/card_price"
+            android:layout_toRightOf="@id/card_image"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingLeft="6dp"
+            android:paddingRight="4dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/defaultTextColor"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_description"
+            android:layout_toLeftOf="@id/card_save"
+            android:layout_toRightOf="@id/card_image"
+            android:ellipsize="marquee"
+            android:paddingBottom="4dp"
+            android:paddingLeft="6dp"
+            android:singleLine="true"
+            android:textColor="@color/lighterGrayTextColor"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

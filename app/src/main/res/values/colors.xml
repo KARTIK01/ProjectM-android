@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary0">#E65100</color>
+    <color name="colorPrimary1">#EF6C00</color>
+    <color name="colorPrimary2">#F57C00</color>
+    <color name="colorPrimary3">#FB8C00</color>
+    <color name="colorPrimary4">#FF9800</color>
+    <color name="colorPrimary5">#FFA726</color>
+    <color name="colorPrimary6">#FFB74D</color>
+
+
+    <color name="colorPrimary">@color/colorPrimary1</color>
+    <color name="colorPrimaryDark">@color/colorPrimary0</color>
+    <color name="colorAccent">@color/colorPrimary2</color>
+    <color name="colorButtonBg">@color/colorPrimary1</color>
+    <color name="colorPressed">#efae78</color>
+
+
+    <color name="white">#FFFFFF</color>
+    <color name="defaultTextColor">#222222</color>
+    <color name="lightGrayTextColor">#666666</color>
+    <color name="lighterGrayTextColor">#999999</color>
+    <color name="themeTextColor">@color/colorPrimary1</color>
+    <color name="unselected_white_tab_text">#99FFFFFF</color>
+    <color name="tab_pressed_state">#33EEEEEE</color>
+    <color name="defaultLightGrayBg">#EEEEEE</color><!-- This is the default material bg color -->
+    <color name="light_divider">#d5d5d5</color>
+    <color name="selected_bg">#DDDDDD</color>
+
+</resources>
