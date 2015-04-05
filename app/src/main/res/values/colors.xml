@@ -18,12 +18,13 @@
 
     <color name="white">#FFFFFF</color>
     <color name="defaultTextColor">#222222</color>
-    <color name="lightGrayTextColor">#666666</color>
-    <color name="lighterGrayTextColor">#999999</color>
+    <color name="lightGrayTextColor">#808080</color>
+    <color name="lighterGrayTextColor">#808080</color>
     <color name="themeTextColor">@color/colorPrimary1</color>
     <color name="unselected_white_tab_text">#99FFFFFF</color>
     <color name="tab_pressed_state">#33EEEEEE</color>
     <color name="defaultLightGrayBg">#EEEEEE</color><!-- This is the default material bg color -->
+    <color name="lighterGrayBg">#F5F5F5</color><!-- This is the default material bg color -->
     <color name="light_divider">#d5d5d5</color>
     <color name="selected_bg">#DDDDDD</color>
 

@@ -11,6 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.MapFragment"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/nearbyRecyclerView"
             android:layout_width="match_parent"
@@ -20,10 +26,13 @@
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/toolbar_shadow" />
+
+
+        <include
+            android:id="@+id/toolbarShadow"
+            layout="@layout/toolbar_shadow"
+            />
+
 
     </FrameLayout>
 
