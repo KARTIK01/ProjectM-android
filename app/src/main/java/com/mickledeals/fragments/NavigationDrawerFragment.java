@@ -2,6 +2,7 @@ package com.mickledeals.fragments;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +58,9 @@ public class NavigationDrawerFragment extends BaseFragment {
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
     private Toolbar mToolbar;
+
+    private boolean mDrawerOpened;
+    private Intent mPendingActivityIntent;
 
     //    private int mCurrentSelectedPosition = -1;
     private boolean mFromSavedInstanceState;
@@ -135,7 +138,6 @@ public class NavigationDrawerFragment extends BaseFragment {
             });
             mMenuContainer.addView(menuRow);
         }
-        mLoginOutBtn = (TextView) view.findViewById(R.id.loginoutButton);
     }
 
     public boolean isDrawerOpen() {
@@ -183,13 +185,14 @@ public class NavigationDrawerFragment extends BaseFragment {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                Log.e("ZZZ", "drawerclosed");
-                if (!isAdded()) {
-                    return;
-                }
-                if (mCallbacks != null) {
-                    mCallbacks.onDrawerClosed();
-                }
+//                mDisableAnim = false;
+//                Log.e("ZZZ", "onDrawerClosed");
+//                if (!isAdded()) {
+//                    return;
+//                }
+//                if (mCallbacks != null) {
+//                    mCallbacks.onDrawerClosed();
+//                }
 //                if (mToolbar != null) {
 //                    if (mToolbar.getTitle().equals(getString(R.string.app_name))) {
 //                        mToolbar.setTitle(mPreviousTitle);
@@ -202,12 +205,14 @@ public class NavigationDrawerFragment extends BaseFragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
-                if (mCallbacks != null) {
-                    mCallbacks.onDrawerOpen();
-                }
+//                mDisableAnim = false;
+//                Log.e("ZZZ", "onDrawerOpened");
+//                if (!isAdded()) {
+//                    return;
+//                }
+//                if (mCallbacks != null) {
+//                    mCallbacks.onDrawerOpen();
+//                }
 //                if (mToolbar != null) {
 //                    mPreviousTitle = mToolbar.getTitle();
 //                    mToolbar.setTitle(R.string.app_name);
@@ -215,32 +220,60 @@ public class NavigationDrawerFragment extends BaseFragment {
 //                }
 //                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
-        }
 
-        ;
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                if (slideOffset > 0.2 && !mDrawerOpened) {
+                    mDrawerOpened = true;
+                    if (mCallbacks != null) {
+                        mCallbacks.onDrawerOpen();
+                    }
+                } else if (slideOffset < 0.2 && mDrawerOpened) {
+                    mDrawerOpened = false;
+                    if (mCallbacks != null) {
+                        mCallbacks.onDrawerClosed();
+                    }
+                    if (mPendingActivityIntent != null) {
+                        startActivity(mPendingActivityIntent);
+                        mPendingActivityIntent = null;
+                    }
+                }
+
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+            }
+        };
 
         // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post(new
-
-                                   Runnable() {
-                                       @Override
-                                       public void run() {
-                                           mDrawerToggle.syncState();
-                                       }
-                                   }
-
+        mDrawerLayout.post(new Runnable() {
+               @Override
+               public void run() {
+                   mDrawerToggle.syncState();
+               }
+           }
         );
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //so far do nothing
+            }
+        });
+    }
+
+    public void setPendingActivityIntent(Intent intent) {
+        mPendingActivityIntent = intent;
     }
 
     private void selectItem(int position) {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-
-//        if (mCurrentSelectedPosition == position) return;
-//        mCurrentSelectedPosition = position;
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }

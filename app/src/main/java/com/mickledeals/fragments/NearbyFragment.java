@@ -3,23 +3,41 @@ package com.mickledeals.fragments;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.Utils;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,6 +48,15 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     private Spinner mCategorySpinner;
     private Spinner mLocationSpinner;
     private RecyclerView mNearbyRecyclerView;
+    private ImageView mMapToggleView;
+    private FrameLayout mMapContainer;
+    private SupportMapFragment mMapFragment;
+    private MapView mMapView;
+    private GoogleMap mMap;
+    private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
+    private MarkerOptions mSelectedMarkerOptions;
+    private Marker mSelectedMarker;
+    private BitmapDescriptor mPinBitmap;
 
     private List<TestDataHolder> mNearbyList;
 
@@ -38,7 +65,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         super.onCreate(savedInstanceState);
         mNearbyList = DataListModel.getInstance().getNearbyList();
         for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-                mNearbyList.add(holder);
+            mNearbyList.add(holder);
         }
     }
 
@@ -95,6 +122,172 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                 outRect.bottom = bottomMargin;
             }
         });
+
+        mMapContainer = (FrameLayout) view.findViewById(R.id.mapContainer);
+        mMapToggleView = (ImageView) view.findViewById(R.id.mapToggleView);
+        mMapToggleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mNearbyRecyclerView.isShown()) {
+                    if (mMapFragment == null) initMapView();
+                    if (!mMapFragment.isAdded()) addMapFragment();
+                    showMap();
+
+                } else {
+                    hideMap();
+//                    hideMapFragment();
+//                    getActivity().getSupportFragmentManager().popBackStack();
+//                    removeMapFragment();
+                }
+            }
+        });
+        getActivity().getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                int count = getActivity().getSupportFragmentManager().getBackStackEntryCount();
+                if (count != 0) {
+                    String name = getActivity().getSupportFragmentManager().getBackStackEntryAt(count - 1).getName();
+                    if (!name.equals("map")) hideMap();
+                    else showMap();
+                } else {
+                    //is home, hideMap
+                    hideMap();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        } );
+    }
+
+    private void hideMap() {
+        mMapToggleView.setImageResource(R.drawable.ic_map);
+        mNearbyRecyclerView.setVisibility(View.VISIBLE);
+        mMapContainer.setVisibility(View.GONE);
+        if (mMapFragment != null && mMapFragment.isAdded()) mMapFragment.onPause();
+    }
+
+    private void showMap() {
+        mMapToggleView.setImageResource(R.drawable.ic_list);
+        mNearbyRecyclerView.setVisibility(View.GONE);
+        mMapContainer.setVisibility(View.VISIBLE);
+        if (mMapFragment != null && mMapFragment.isAdded()) mMapFragment.onResume();
+    }
+//try to hide/show fragment
+    private void addMapFragment() {
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.mapContainer, mMapFragment);
+//        fragmentTransaction.addToBackStack("map");
+        fragmentTransaction.commit();
+    }
+
+    private void hideMapFragment() {
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.detach(mMapFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showMapFragment() {
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.attach(mMapFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void initMapView() {
+
+        mMapFragment = SupportMapFragment.newInstance();
+        mMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                mMap.setMyLocationEnabled(true);
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                    public View getInfoWindow(Marker marker) {
+                        View view = getActivity().getLayoutInflater().inflate(R.layout.pin_overlay, null);
+                        TextView title = (TextView) view.findViewById(R.id.pin_item_title);
+                        TextView snippet = (TextView) view.findViewById(R.id.pin_item_snippet);
+                        title.setText(marker.getTitle());
+                        snippet.setText(marker.getSnippet());
+//                        if (marker.equals(mSelectedMarker)) {
+//                            snippet.setVisibility(View.GONE);
+//                            view.findViewById(R.id.arrow).setVisibility(View.GONE);
+//                        } else {
+//                            snippet.setText(marker.getSnippet());
+//                        }
+                        return view;
+                    }
+
+                    public View getInfoContents(Marker marker) {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+                });
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        int pos = mMarkersHashMap.get(marker);
+                        Utils.transitDetailsActivity(getActivity(), pos, getListType(), null);
+                    }
+                });
+//                MapsInitializer.initialize(mContext.getApplicationContext());
+                mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.pin);
+                popularMapOverlays(false);
+            }
+        });
+    }
+
+    private void popularMapOverlays(boolean anim) {
+        mMap.clear();
+        mMarkersHashMap.clear();
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < mNearbyList.size(); i++) {
+//            if (cafe.getId().equals(selectedCafeId)) continue;
+
+            TestDataHolder dataHolder = mNearbyList.get(i);
+            LatLng ll = Utils.getLatLngFromDataHolder(dataHolder);
+
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(ll)
+                    .title(dataHolder.getStoreName())
+                    .snippet(dataHolder.getDescription())
+                    .icon(mPinBitmap));
+
+            mMarkersHashMap.put(marker, i);
+
+            boundsBuilder.include(ll);
+            LatLngBounds bounds = boundsBuilder.build();
+            if (anim)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, Utils.getPixelsFromDip(50f, getResources())));
+            else
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, Utils.getDeviceWidth(mContext),
+                        Utils.getDeviceHeight(mContext) - Utils.getPixelsFromDip(56 + 48, mContext.getResources()), Utils.getPixelsFromDip(50f, getResources())));
+        }
+    }
+
+    protected int getListType() {
+        return Constants.TYPE_NEARBY_LIST;
     }
 
     @Override
@@ -114,4 +307,6 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }

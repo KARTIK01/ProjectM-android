@@ -1,61 +1,60 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lighterGrayBg"
     tools:context=".NavigationDrawerFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Jacky Wong"
-                android:textStyle="bold"
-                android:textColor="@color/lightGrayTextColor"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/userEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="chongkitwong@gmail.com"
-                android:textColor="@color/lightGrayTextColor"
-                android:textSize="13sp"
-                android:layout_below="@id/userName"/>
-
-            <TextView
-                android:id="@+id/loginoutButton"
-                android:textColor="@color/themeTextColor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/logout"
-                android:textSize="15sp"
-                android:layout_alignParentRight="true"/>
-
-        </RelativeLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/menuContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:divider="?android:listDivider"
-            android:showDividers="beginning"/>
-
-    </LinearLayout>
+            android:orientation="vertical">
 
 
-</ScrollView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jacky Wong"
+                    android:textStyle="bold"
+                    android:textColor="@color/lightGrayTextColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/userEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="chongkitwong@gmail.com"
+                    android:textColor="@color/lightGrayTextColor"
+                    android:textSize="13sp"
+                    android:layout_below="@id/userName" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/menuContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:divider="?android:listDivider"
+                android:showDividers="beginning" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <include layout="@layout/toolbar_shadow" />
+
+</FrameLayout>

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,17 +53,36 @@ public class HomeActivity extends BaseActivity
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
+                boolean isHome = false;
                 int count = getSupportFragmentManager().getBackStackEntryCount();
-                if (count != 0) {
+                for (int i = 0 ; i < count; i++) {
+                    String name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
+                    Log.e("ZZZ", "name = " + name);
+                }
+                if (count == 0) isHome = true;
+
+                if (!isHome) {
                     String name = getSupportFragmentManager().getBackStackEntryAt(count - 1).getName();
-                    String[] tokens = name.split("\\|");
-                    mCurrentPosition = Integer.parseInt(tokens[1]);
-                    mTitle = tokens[2];
-                } else {
+                    if (name.equals("map")) { //if fragment is map, look for previous stack title
+                        if (count == 1) { //if map is the only fragment, we know it is home
+                            isHome = true;
+                        } else {
+                            name = getSupportFragmentManager().getBackStackEntryAt(count - 2).getName();
+                        }
+                    }
+                    if (!isHome) { //if it is home, we dont even have backstack, so there is no name
+                        String[] tokens = name.split("\\|");
+                        mCurrentPosition = Integer.parseInt(tokens[1]);
+                        mTitle = tokens[2];
+                    }
+                }
+
+                if (isHome) {
                     mCurrentPosition = 0;
                     mTitle = getString(R.string.menu_home);
                 }
                 resetTitle();
+                if (mNavigationDrawerFragment != null) mNavigationDrawerFragment.resetMenuRowBg(mCurrentPosition);
             }
         });
 
@@ -119,11 +139,14 @@ public class HomeActivity extends BaseActivity
         if (navClass == null) return;
         if (Activity.class.isAssignableFrom(navClass)) {
             Intent i = new Intent(this, navClass);
-            startActivity(i);
+            if (mNavigationDrawerFragment != null) {
+                mNavigationDrawerFragment.setPendingActivityIntent(i);
+            }
         } else if (Fragment.class.isAssignableFrom(navClass)) {
             if (mCurrentPosition == position) return;
             mTitle = getString(item.getTitleRes());
-            if (mNavigationDrawerFragment != null) mNavigationDrawerFragment.resetMenuRowBg(position);
+            //onBack stack changed should already handled
+//            if (mNavigationDrawerFragment != null) mNavigationDrawerFragment.resetMenuRowBg(position);
 
             for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() ; i++) {
                 String  name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
@@ -140,7 +163,7 @@ public class HomeActivity extends BaseActivity
                 Fragment fragment = (Fragment) item.getNavClass().newInstance();
                 if (position == 0) {
                     if (mCurrentPosition == -1) {
-                        // update the main content by replacing fragments
+                        // cannot add home fragment to backstack, otherwise hitting back would display an empty screen
                         getSupportFragmentManager().beginTransaction()
                                 .add(R.id.container, fragment, mTitle.toString())
                                 .commit();
@@ -207,6 +230,4 @@ public class HomeActivity extends BaseActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

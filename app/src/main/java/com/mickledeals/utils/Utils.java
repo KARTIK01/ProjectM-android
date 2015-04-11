@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.mickledeals.R;
 import com.mickledeals.activities.AccountActivity;
 import com.mickledeals.activities.DetailsActivity;
@@ -41,6 +42,7 @@ public class Utils {
 
     public static ArrayList<NavMenuItem> sNavMenuList = new ArrayList<NavMenuItem>();
     private static int sDeviceWidth;
+    private static int sDeviceHeight;
     public static Locale mCurrentLocale;
 
     static {
@@ -68,6 +70,14 @@ public class Utils {
             sDeviceWidth = displayMetrics.widthPixels;
         }
         return sDeviceWidth;
+    }
+
+    public static int getDeviceHeight(Context context) {
+        if (sDeviceHeight == 0) {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            sDeviceHeight = displayMetrics.heightPixels;
+        }
+        return sDeviceHeight;
     }
 
     public static int getPixelsFromDip(float dips, Resources res) {
@@ -130,7 +140,7 @@ public class Utils {
 //        i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 //        activity.startActivity(i);
 
-        if (Build.VERSION.SDK_INT < 16) {
+        if (Build.VERSION.SDK_INT < 16 || v == null) {
             activity.startActivity(i);
         } else {
             Bundle scaledBundle = ActivityOptionsCompat.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle();
@@ -185,6 +195,12 @@ public class Utils {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    public static LatLng getLatLngFromDataHolder(TestDataHolder holder) {
+        String latLngStr = holder.mLatLng;
+        String[] tokens = holder.mLatLng.split(",");
+        return new LatLng(Double.parseDouble(tokens[0].trim()), Double.parseDouble(tokens[1].trim()));
     }
 
 }
