@@ -14,7 +14,7 @@ import com.mickledeals.activities.BaseActivity;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
 
     protected Context mContext;
     private int mTitleRes;
@@ -31,20 +31,14 @@ public abstract class BaseFragment extends Fragment{
     }
 
     public Toolbar getToolBar() {
-        return ((BaseActivity)getActivity()).getToolBar();
+        return ((BaseActivity) getActivity()).getToolBar();
     }
 
-    public void setTitleRes(int titleRes) {
-        mTitleRes = titleRes;
+    public boolean handleBackPressed() {
+        return false;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-//        if (mTitleRes != 0) {
-//            Toolbar toolbar = getToolBar();
-//            toolbar.setTitle(mTitleRes);
-//            toolbar.findViewById(R.id.sliding_tabs).setVisibility(View.GONE);
-//        }
+    public void onFragmentPaused() {
+
     }
 }

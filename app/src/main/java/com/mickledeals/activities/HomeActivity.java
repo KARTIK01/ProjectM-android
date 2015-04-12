@@ -12,11 +12,11 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.fragments.BaseFragment;
 import com.mickledeals.fragments.NavigationDrawerFragment;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.DLog;
@@ -113,18 +113,20 @@ public class HomeActivity extends BaseActivity
     @Override
     public void onDrawerOpen() {
         if (mToolBar != null) {
-            mToolBar.findViewById(R.id.sliding_tabs).setVisibility(View.GONE);
-            mToolBar.setTitle(getString(R.string.app_name));
+//            mToolBar.findViewById(R.id.sliding_tabs).setVisibility(View.GONE);
+            mToolBar.setTitle("");
+//            mToolBar.findViewById(R.id.toolbar_logo).setVisibility(View.VISIBLE);
         }
     }
 
     private void resetTitle() {
         if (mToolBar != null) {
             if (mCurrentPosition == 0) {
-                mToolBar.findViewById(R.id.sliding_tabs).setVisibility(View.VISIBLE);
+//                mToolBar.findViewById(R.id.sliding_tabs).setVisibility(View.VISIBLE);
             } else {
                 mToolBar.setTitle(mTitle);
             }
+//            mToolBar.findViewById(R.id.toolbar_logo).setVisibility(View.GONE);
         }
     }
 
@@ -144,9 +146,9 @@ public class HomeActivity extends BaseActivity
             }
         } else if (Fragment.class.isAssignableFrom(navClass)) {
             if (mCurrentPosition == position) return;
+            Fragment oldFragment = getSupportFragmentManager().findFragmentByTag(mTitle.toString());
+            ((BaseFragment)oldFragment).onFragmentPaused();
             mTitle = getString(item.getTitleRes());
-            //onBack stack changed should already handled
-//            if (mNavigationDrawerFragment != null) mNavigationDrawerFragment.resetMenuRowBg(position);
 
             for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() ; i++) {
                 String  name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
@@ -229,5 +231,21 @@ public class HomeActivity extends BaseActivity
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        String name = null;
+//        int count = getSupportFragmentManager().getBackStackEntryCount();
+//        if (count == 0) name = "Home";
+//        else {
+//            name = getSupportFragmentManager().getBackStackEntryAt(count - 1).getName();
+//            String[] tokens = name.split("\\|");
+//            name = tokens[2]; //get the tag
+//        }
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(mTitle.toString());
+        if (!((BaseFragment)fragment).handleBackPressed()) { //if handleBackPressed not consume
+            super.onBackPressed();
+        }
     }
 }

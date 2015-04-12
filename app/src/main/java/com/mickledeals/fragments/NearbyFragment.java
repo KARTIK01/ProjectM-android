@@ -3,11 +3,9 @@ package com.mickledeals.fragments;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -51,14 +48,12 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     private ImageView mMapToggleView;
     private FrameLayout mMapContainer;
     private SupportMapFragment mMapFragment;
-    private MapView mMapView;
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
-    private MarkerOptions mSelectedMarkerOptions;
-    private Marker mSelectedMarker;
     private BitmapDescriptor mPinBitmap;
-
     private List<TestDataHolder> mNearbyList;
+    private boolean mNeedPopularMapOverlays;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,53 +125,21 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
             public void onClick(View v) {
                 if (mNearbyRecyclerView.isShown()) {
                     if (mMapFragment == null) initMapView();
-                    if (!mMapFragment.isAdded()) addMapFragment();
                     showMap();
-
                 } else {
-                    hideMap();
-//                    hideMapFragment();
-//                    getActivity().getSupportFragmentManager().popBackStack();
-//                    removeMapFragment();
-                }
-            }
-        });
-        getActivity().getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                int count = getActivity().getSupportFragmentManager().getBackStackEntryCount();
-                if (count != 0) {
-                    String name = getActivity().getSupportFragmentManager().getBackStackEntryAt(count - 1).getName();
-                    if (!name.equals("map")) hideMap();
-                    else showMap();
-                } else {
-                    //is home, hideMap
                     hideMap();
                 }
             }
         });
-
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener( new View.OnKeyListener()
-        {
-            @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                        return true;
-                    }
-                }
-                return false;
-            }
-        } );
+    public boolean handleBackPressed() { //only get called when its current active fragment
+        if (!mNearbyRecyclerView.isShown()) {
+            hideMap();
+            return true;
+        }
+        return false;
     }
 
     private void hideMap() {
@@ -191,30 +154,18 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         mNearbyRecyclerView.setVisibility(View.GONE);
         mMapContainer.setVisibility(View.VISIBLE);
         if (mMapFragment != null && mMapFragment.isAdded()) mMapFragment.onResume();
+        if (mNeedPopularMapOverlays && mMap != null) popularMapOverlays(false);
     }
-//try to hide/show fragment
+
     private void addMapFragment() {
         android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.mapContainer, mMapFragment);
-//        fragmentTransaction.addToBackStack("map");
-        fragmentTransaction.commit();
-    }
-
-    private void hideMapFragment() {
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.detach(mMapFragment);
-        fragmentTransaction.commit();
-    }
-
-    private void showMapFragment() {
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.attach(mMapFragment);
         fragmentTransaction.commit();
     }
 
     private void initMapView() {
-
         mMapFragment = SupportMapFragment.newInstance();
+        addMapFragment();
         mMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -257,13 +208,13 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     }
 
     private void popularMapOverlays(boolean anim) {
+        mNeedPopularMapOverlays = false;
         mMap.clear();
         mMarkersHashMap.clear();
 
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
         for (int i = 0; i < mNearbyList.size(); i++) {
-//            if (cafe.getId().equals(selectedCafeId)) continue;
 
             TestDataHolder dataHolder = mNearbyList.get(i);
             LatLng ll = Utils.getLatLngFromDataHolder(dataHolder);
@@ -292,6 +243,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mNeedPopularMapOverlays = true;
         if (parent == mCategorySpinner) {
             mNearbyList.clear();
             for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
@@ -301,6 +253,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
             }
             mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
         }
+        if (mMapContainer.isShown()) popularMapOverlays(true);
     }
 
     @Override
@@ -308,5 +261,8 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
 
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

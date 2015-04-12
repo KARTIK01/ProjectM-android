@@ -238,7 +238,10 @@ public class NavigationDrawerFragment extends BaseFragment {
                         mPendingActivityIntent = null;
                     }
                 }
-
+                if (mToolbar != null) {
+                    mToolbar.findViewById(R.id.toolbar_logo).setAlpha(slideOffset);
+                    mToolbar.findViewById(R.id.sliding_tabs).setAlpha((1 - slideOffset * 1.3f));
+                }
                 super.onDrawerSlide(drawerView, slideOffset);
             }
 

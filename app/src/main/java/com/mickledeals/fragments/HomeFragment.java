@@ -25,6 +25,7 @@ public class HomeFragment extends BaseFragment {
     private static final int NUM_TABS = 2;
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
+    private BaseFragment[] mFragments = new BaseFragment[2];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,10 +113,22 @@ public class HomeFragment extends BaseFragment {
         @Override
         public Fragment getItem(int position) {
             DLog.d(this, "Home Pager getItem()");
-            if (position == 0) return new NearbyFragment();
-            else if (position == 1) return new FeaturedFragment();
+            if (position == 0) {
+                BaseFragment fragment = new NearbyFragment();
+                mFragments[0] = fragment;
+                return fragment;
+            }
+            else if (position == 1) {
+                BaseFragment fragment = new FeaturedFragment();
+                mFragments[1] = fragment;
+                return fragment;
+            }
             else throw new IllegalArgumentException("Invalid position");
         }
     }
 
+    @Override
+    public boolean handleBackPressed() {
+        return mFragments[mViewPager.getCurrentItem()].handleBackPressed();
+    }
 }
