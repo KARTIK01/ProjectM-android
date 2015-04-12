@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
@@ -10,21 +9,22 @@
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
     <FrameLayout
+        android:id="@+id/toolbar_extra_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.mickledeals.views.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.mickledeals.views.SlidingTabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/toolbar_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/full_logo"
-        android:alpha="0"/>
+        <ImageView
+            android:id="@+id/toolbar_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/full_logo"
+            android:alpha="0" />
 
     </FrameLayout>
 
-    </android.support.v7.widget.Toolbar>
+</android.support.v7.widget.Toolbar>

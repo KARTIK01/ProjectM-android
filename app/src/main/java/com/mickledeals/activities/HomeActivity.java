@@ -12,6 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
@@ -31,7 +32,9 @@ public class HomeActivity extends BaseActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
+    private View mToolBarLogo;
+    private View mSlidingTab;
+    private View mToolBarExtraLayout;
     private CharSequence mTitle;
 
     private int mCurrentPosition = -1;
@@ -40,6 +43,9 @@ public class HomeActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mToolBarLogo = mToolBar.findViewById(R.id.toolbar_logo);
+        mSlidingTab = mToolBar.findViewById(R.id.sliding_tabs);
+        mToolBarExtraLayout = mToolBar.findViewById(R.id.toolbar_extra_layout);
         int language = PreferenceHelper.getPreferenceValueInt(this, "language", -1);
         Utils.setLocaleWithLang(language, getBaseContext());
 
@@ -55,7 +61,7 @@ public class HomeActivity extends BaseActivity
             public void onBackStackChanged() {
                 boolean isHome = false;
                 int count = getSupportFragmentManager().getBackStackEntryCount();
-                for (int i = 0 ; i < count; i++) {
+                for (int i = 0; i < count; i++) {
                     String name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
                     Log.e("ZZZ", "name = " + name);
                 }
@@ -82,7 +88,11 @@ public class HomeActivity extends BaseActivity
                     mTitle = getString(R.string.menu_home);
                 }
                 resetTitle();
-                if (mNavigationDrawerFragment != null) mNavigationDrawerFragment.resetMenuRowBg(mCurrentPosition);
+                if (mNavigationDrawerFragment != null)
+                    mNavigationDrawerFragment.resetMenuRowBg(mCurrentPosition);
+
+                Fragment newFragment = getSupportFragmentManager().findFragmentByTag(mCurrentPosition + "");
+                ((BaseFragment) newFragment).onFragmentResume();
             }
         });
 
@@ -106,6 +116,14 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
+    public void onDrawerSliding(float slideOffSet) {
+        if (mCurrentPosition == 0) {
+            mToolBarLogo.setAlpha(slideOffSet);
+            mSlidingTab.setAlpha((1 - slideOffSet * 1.5f));
+        }
+    }
+
+    @Override
     public void onDrawerClosed() {
         resetTitle();
     }
@@ -113,20 +131,25 @@ public class HomeActivity extends BaseActivity
     @Override
     public void onDrawerOpen() {
         if (mToolBar != null) {
-//            mToolBar.findViewById(R.id.sliding_tabs).setVisibility(View.GONE);
-            mToolBar.setTitle("");
-//            mToolBar.findViewById(R.id.toolbar_logo).setVisibility(View.VISIBLE);
+            if (mCurrentPosition != 0) {
+                mSlidingTab.setVisibility(View.GONE);
+            }
+            mToolBarExtraLayout.setVisibility(View.VISIBLE);
         }
     }
 
     private void resetTitle() {
         if (mToolBar != null) {
+            mSlidingTab.setVisibility(View.VISIBLE);
             if (mCurrentPosition == 0) {
-//                mToolBar.findViewById(R.id.sliding_tabs).setVisibility(View.VISIBLE);
+                mToolBarExtraLayout.setVisibility(View.VISIBLE);
+                mSlidingTab.setVisibility(View.VISIBLE);
+                mToolBarLogo.setAlpha(0f);
+                mSlidingTab.setAlpha(1f);
             } else {
+                mToolBarExtraLayout.setVisibility(View.GONE);
                 mToolBar.setTitle(mTitle);
             }
-//            mToolBar.findViewById(R.id.toolbar_logo).setVisibility(View.GONE);
         }
     }
 
@@ -146,33 +169,37 @@ public class HomeActivity extends BaseActivity
             }
         } else if (Fragment.class.isAssignableFrom(navClass)) {
             if (mCurrentPosition == position) return;
-            Fragment oldFragment = getSupportFragmentManager().findFragmentByTag(mTitle.toString());
-            ((BaseFragment)oldFragment).onFragmentPaused();
+            if (mCurrentPosition != -1) {
+                Fragment oldFragment = getSupportFragmentManager().findFragmentByTag(mCurrentPosition + "");
+                ((BaseFragment) oldFragment).onFragmentPause();
+            }
             mTitle = getString(item.getTitleRes());
 
-            for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() ; i++) {
-                String  name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
+            for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                String name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
                 if (name != null && name.split("\\|")[0].equals(position + "")) {
                     int id = getSupportFragmentManager().getBackStackEntryAt(i).getId();
                     getSupportFragmentManager().popBackStack(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    mCurrentPosition = position;
-                    resetTitle();
+//                    mCurrentPosition = position;
+//                    resetTitle();
                     return;
                 }
             }
 
             try {
                 Fragment fragment = (Fragment) item.getNavClass().newInstance();
+
+                Log.e("ZZZ", "add title is = " + mTitle.toString());
                 if (position == 0) {
                     if (mCurrentPosition == -1) {
                         // cannot add home fragment to backstack, otherwise hitting back would display an empty screen
                         getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container, fragment, mTitle.toString())
+                                .add(R.id.container, fragment, position + "")
                                 .commit();
                     }
                 } else {
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container, fragment, mTitle.toString())
+                            .add(R.id.container, fragment, position + "")
                             .addToBackStack(mCurrentPosition + "|" + position + "|" + mTitle) //format is oldPosition|newPosition|newTitle
                             .commit();
                 }
@@ -243,8 +270,9 @@ public class HomeActivity extends BaseActivity
 //            String[] tokens = name.split("\\|");
 //            name = tokens[2]; //get the tag
 //        }
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(mTitle.toString());
-        if (!((BaseFragment)fragment).handleBackPressed()) { //if handleBackPressed not consume
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(mCurrentPosition + "");
+        if (!((BaseFragment) fragment).handleBackPressed()) { //if handleBackPressed not consume
             super.onBackPressed();
         }
     }

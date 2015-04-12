@@ -142,6 +142,18 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         return false;
     }
 
+    @Override
+    public void onFragmentPause() {
+        super.onFragmentPause();
+        if (mMapFragment != null && mMapFragment.isAdded() && mMapContainer.isShown()) mMapFragment.onPause();
+    }
+
+    @Override
+    public void onFragmentResume() {
+        super.onFragmentResume();
+        if (mMapFragment != null && mMapFragment.isAdded() && mMapContainer.isShown()) mMapFragment.onResume();
+    }
+
     private void hideMap() {
         mMapToggleView.setImageResource(R.drawable.ic_map);
         mNearbyRecyclerView.setVisibility(View.VISIBLE);
@@ -259,10 +271,5 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 }

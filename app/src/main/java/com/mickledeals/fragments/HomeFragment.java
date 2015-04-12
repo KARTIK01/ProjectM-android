@@ -131,4 +131,16 @@ public class HomeFragment extends BaseFragment {
     public boolean handleBackPressed() {
         return mFragments[mViewPager.getCurrentItem()].handleBackPressed();
     }
+
+    @Override
+    public void onFragmentPause() {
+        mFragments[0].onFragmentPause();
+        mFragments[1].onFragmentPause();
+    }
+
+    @Override
+    public void onFragmentResume() {
+        mFragments[0].onFragmentResume();
+        mFragments[1].onFragmentResume();
+    }
 }

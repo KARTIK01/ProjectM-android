@@ -38,7 +38,11 @@ public abstract class BaseFragment extends Fragment {
         return false;
     }
 
-    public void onFragmentPaused() {
+    public void onFragmentPause() {
+
+    }
+
+    public void onFragmentResume() {
 
     }
 }
