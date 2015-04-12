@@ -18,8 +18,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -47,7 +48,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     private RecyclerView mNearbyRecyclerView;
     private ImageView mMapToggleView;
     private FrameLayout mMapContainer;
-    private SupportMapFragment mMapFragment;
+    private MapView mMapView;
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
     private BitmapDescriptor mPinBitmap;
@@ -124,7 +125,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
             @Override
             public void onClick(View v) {
                 if (mNearbyRecyclerView.isShown()) {
-                    if (mMapFragment == null) initMapView();
+                    if (mMapView == null) initMapView();
                     showMap();
                 } else {
                     hideMap();
@@ -145,40 +146,36 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     @Override
     public void onFragmentPause() {
         super.onFragmentPause();
-        if (mMapFragment != null && mMapFragment.isAdded() && mMapContainer.isShown()) mMapFragment.onPause();
+        if (mMapView != null && mMapContainer.isShown()) mMapView.onPause();
     }
 
     @Override
     public void onFragmentResume() {
         super.onFragmentResume();
-        if (mMapFragment != null && mMapFragment.isAdded() && mMapContainer.isShown()) mMapFragment.onResume();
+        if (mMapView != null && mMapContainer.isShown()) mMapView.onResume();
     }
 
     private void hideMap() {
         mMapToggleView.setImageResource(R.drawable.ic_map);
         mNearbyRecyclerView.setVisibility(View.VISIBLE);
         mMapContainer.setVisibility(View.GONE);
-        if (mMapFragment != null && mMapFragment.isAdded()) mMapFragment.onPause();
+        mMapContainer.removeView(mMapView);
+        if (mMapView != null) mMapView.onPause();
     }
 
     private void showMap() {
         mMapToggleView.setImageResource(R.drawable.ic_list);
         mNearbyRecyclerView.setVisibility(View.GONE);
         mMapContainer.setVisibility(View.VISIBLE);
-        if (mMapFragment != null && mMapFragment.isAdded()) mMapFragment.onResume();
+        mMapContainer.addView(mMapView);
+        mMapView.onResume();
         if (mNeedPopularMapOverlays && mMap != null) popularMapOverlays(false);
     }
 
-    private void addMapFragment() {
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.mapContainer, mMapFragment);
-        fragmentTransaction.commit();
-    }
-
     private void initMapView() {
-        mMapFragment = SupportMapFragment.newInstance();
-        addMapFragment();
-        mMapFragment.getMapAsync(new OnMapReadyCallback() {
+        mMapView = new MapView(mContext);
+        mMapView.onCreate(null);
+        mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
@@ -212,7 +209,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                         Utils.transitDetailsActivity(getActivity(), pos, getListType(), null);
                     }
                 });
-//                MapsInitializer.initialize(mContext.getApplicationContext());
+                MapsInitializer.initialize(mContext.getApplicationContext());
                 mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.pin);
                 popularMapOverlays(false);
             }
@@ -271,5 +268,23 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mMapView != null) mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMapView != null) mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMapView != null) mMapView.onDestroy();
     }
 }

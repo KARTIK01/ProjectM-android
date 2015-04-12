@@ -10,6 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/mapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/nearbyRecyclerView"
@@ -20,11 +25,6 @@
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical" />
 
-        <FrameLayout
-            android:id="@+id/mapContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
 
         <include
             android:id="@+id/toolbarShadow"
