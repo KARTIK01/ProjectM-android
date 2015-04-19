@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,6 +44,7 @@ public class Utils {
     public static ArrayList<NavMenuItem> sNavMenuList = new ArrayList<NavMenuItem>();
     private static int sDeviceWidth;
     private static int sDeviceHeight;
+    private static Location mLastLocation;
     public static Locale mCurrentLocale;
 
     static {
@@ -198,9 +200,23 @@ public class Utils {
     }
 
     public static LatLng getLatLngFromDataHolder(TestDataHolder holder) {
-        String latLngStr = holder.mLatLng;
         String[] tokens = holder.mLatLng.split(",");
         return new LatLng(Double.parseDouble(tokens[0].trim()), Double.parseDouble(tokens[1].trim()));
+    }
+
+    public static void setLastLocation(Location location) {
+        mLastLocation = location;
+    }
+
+    public static float getDistanceFromCurLocation(TestDataHolder holder) {
+        if (mLastLocation == null) return 0;
+        Location dataLocation = new Location("");
+        String[] tokens = holder.mLatLng.split(",");
+        dataLocation.setLatitude(Double.parseDouble(tokens[0].trim()));
+        dataLocation.setLongitude(Double.parseDouble(tokens[1].trim()));
+        float meters = mLastLocation.distanceTo(dataLocation);
+        float miles = Math.round(meters / 1609 * 10) / 10f;
+        return miles;
     }
 
 }

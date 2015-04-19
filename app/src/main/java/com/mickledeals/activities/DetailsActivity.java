@@ -129,7 +129,7 @@ public class DetailsActivity extends BaseActivity {
         final int headerHeight = Utils.getDeviceWidth(DetailsActivity.this) * 9 / 16;
         final float ratio = (float) Math.min(Math.max(scrollPos, 0), headerHeight) / headerHeight;
         final int newAlpha = (int) (ratio * 255);
-        mToolBar.getBackground().setAlpha(newAlpha);
+        mToolBar.getBackground().mutate().setAlpha(newAlpha);
         mToolBar.setTitleTextColor(Color.argb(newAlpha, 255, 255, 255));
         mShadow.setAlpha(ratio);
     }

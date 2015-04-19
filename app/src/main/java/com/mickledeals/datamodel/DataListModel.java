@@ -355,8 +355,7 @@ public class DataListModel {
         holder.mPrice = 1;
         holder.mCategoryId = 1;
         holder.mShortDescriptionCh = "免費餐湯一客";
-        holder.mDescriptionCh = "消費滿";
-        holder.mStoreNameCh ="網天卡拉OK";
+        holder.mDescriptionCh = "消費滿$30以上即有免費番茄餐湯一客";
         mDataList.put(holder.mId, holder);
 
         holder = new TestDataHolder();

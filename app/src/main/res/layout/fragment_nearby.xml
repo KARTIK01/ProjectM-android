@@ -14,7 +14,7 @@
             android:id="@+id/mapContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/nearbyRecyclerView"
@@ -24,6 +24,36 @@
             android:paddingTop="@dimen/card_margin"
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:id="@+id/noResultLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_results_found"
+                android:textSize="22sp"
+                android:padding="30dp"
+                android:textStyle="bold"
+                android:textColor="@color/lighterGrayTextColor"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/try_different_filter"
+                android:textSize="17sp"
+                android:padding="30dp"
+                android:textColor="@color/lighterGrayTextColor"/>
+
+
+        </LinearLayout>
 
 
         <include

@@ -19,7 +19,7 @@
     <color name="white">#FFFFFF</color>
     <color name="defaultTextColor">#222222</color>
     <color name="lightGrayTextColor">#808080</color>
-    <color name="lighterGrayTextColor">#808080</color>
+    <color name="lighterGrayTextColor">#A0A0A0</color>
     <color name="themeTextColor">@color/colorPrimary1</color>
     <color name="unselected_white_tab_text">#99FFFFFF</color>
     <color name="tab_pressed_state">#33EEEEEE</color>

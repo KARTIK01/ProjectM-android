@@ -22,6 +22,7 @@ public abstract class BaseActivity extends ActionBarActivity{
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -29,24 +30,14 @@ public abstract class BaseActivity extends ActionBarActivity{
 //                }
 //            });
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     protected abstract int getLayoutResource();
 
-    protected void setActionBarIcon(int iconRes) {
-        mToolBar.setNavigationIcon(iconRes);
-    }
-
     public Toolbar getToolBar() {
         return mToolBar;
     }
-
-//    public TextView getActionBarTitleView() {
-//        int id = Resources.getSystem().getIdentifier("action_bar_title", "id", "android");
-//        return (TextView) findViewById(id);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,7 +48,5 @@ public abstract class BaseActivity extends ActionBarActivity{
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
-
 }

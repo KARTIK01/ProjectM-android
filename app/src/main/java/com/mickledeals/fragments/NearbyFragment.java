@@ -1,6 +1,7 @@
 package com.mickledeals.fragments;
 
 import android.graphics.Rect;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,7 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -41,8 +46,11 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSelectedListener {
+public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSelectedListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final double LAT_DEFAULT = 37.752814;
+    private static final double LONG_DEFAULT = -122.440690;
     private Spinner mCategorySpinner;
     private Spinner mLocationSpinner;
     private RecyclerView mNearbyRecyclerView;
@@ -53,15 +61,19 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
     private BitmapDescriptor mPinBitmap;
     private List<TestDataHolder> mNearbyList;
+    private View mNoResultLayout;
     private boolean mNeedPopularMapOverlays;
 
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        buildGoogleApiClient();
         mNearbyList = DataListModel.getInstance().getNearbyList();
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-            mNearbyList.add(holder);
+        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
+            mNearbyList.add(DataListModel.getInstance().getDataList().get(i));
         }
     }
 
@@ -78,12 +90,6 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCategorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
@@ -93,13 +99,23 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                 R.array.category_name, R.layout.spinner_textview);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mCategorySpinner.setAdapter(adapter);
-        mCategorySpinner.setOnItemSelectedListener(this);
+        mCategorySpinner.post(new Runnable() {
+            @Override
+            public void run() {
+                mCategorySpinner.setOnItemSelectedListener(NearbyFragment.this);
+            }
+        });
 
         adapter = ArrayAdapter.createFromResource(mContext,
                 R.array.city_name, R.layout.spinner_textview);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocationSpinner.setAdapter(adapter);
-        mLocationSpinner.setOnItemSelectedListener(this);
+        mLocationSpinner.post(new Runnable() {
+            @Override
+            public void run() {
+                mLocationSpinner.setOnItemSelectedListener(NearbyFragment.this);
+            }
+        });
 
         final int margin = getResources().getDimensionPixelSize(R.dimen.card_margin);
         final int bottomMargin = getResources().getDimensionPixelSize(R.dimen.card_margin_bottom);
@@ -118,13 +134,13 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                 outRect.bottom = bottomMargin;
             }
         });
-
+        mNoResultLayout = view.findViewById(R.id.noResultLayout);
         mMapContainer = (FrameLayout) view.findViewById(R.id.mapContainer);
         mMapToggleView = (ImageView) view.findViewById(R.id.mapToggleView);
         mMapToggleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mNearbyRecyclerView.isShown()) {
+                if (mNearbyRecyclerView.getVisibility() == View.VISIBLE) {
                     if (mMapView == null) initMapView();
                     showMap();
                 } else {
@@ -136,7 +152,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
 
     @Override
     public boolean handleBackPressed() { //only get called when its current active fragment
-        if (!mNearbyRecyclerView.isShown()) {
+        if (mNearbyRecyclerView.getVisibility() != View.VISIBLE) {
             hideMap();
             return true;
         }
@@ -146,13 +162,13 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     @Override
     public void onFragmentPause() {
         super.onFragmentPause();
-        if (mMapView != null && mMapContainer.isShown()) mMapView.onPause();
+        if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) mMapView.onPause();
     }
 
     @Override
     public void onFragmentResume() {
         super.onFragmentResume();
-        if (mMapView != null && mMapContainer.isShown()) mMapView.onResume();
+        if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) mMapView.onResume();
     }
 
     private void hideMap() {
@@ -160,6 +176,9 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         mNearbyRecyclerView.setVisibility(View.VISIBLE);
         mMapContainer.setVisibility(View.GONE);
         mMapContainer.removeView(mMapView);
+        if (mNearbyList.size() == 0) {
+            mNoResultLayout.setVisibility(View.VISIBLE);
+        }
         if (mMapView != null) mMapView.onPause();
     }
 
@@ -169,7 +188,8 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         mMapContainer.setVisibility(View.VISIBLE);
         mMapContainer.addView(mMapView);
         mMapView.onResume();
-        if (mNeedPopularMapOverlays && mMap != null) popularMapOverlays(false);
+        mNoResultLayout.setVisibility(View.GONE);
+        if (mNeedPopularMapOverlays && mMap != null) populateMapOverlays(false);
     }
 
     private void initMapView() {
@@ -211,17 +231,18 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                 });
                 MapsInitializer.initialize(mContext.getApplicationContext());
                 mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.pin);
-                popularMapOverlays(false);
+                populateMapOverlays(false);
             }
         });
     }
 
-    private void popularMapOverlays(boolean anim) {
+    private void populateMapOverlays(boolean anim) {
         mNeedPopularMapOverlays = false;
         mMap.clear();
         mMarkersHashMap.clear();
 
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
 
         for (int i = 0; i < mNearbyList.size(); i++) {
 
@@ -237,6 +258,21 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
             mMarkersHashMap.put(marker, i);
 
             boundsBuilder.include(ll);
+        }
+
+
+        if (mNearbyList.size() == 0) {
+            if (anim)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LAT_DEFAULT, LONG_DEFAULT), 12));
+            else
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LAT_DEFAULT, LONG_DEFAULT), 12));
+        } else if (mNearbyList.size() == 1) {
+            if (anim) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mNearbyList.get(0)), 15));
+            } else {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mNearbyList.get(0)), 15));
+            }
+        } else {
             LatLngBounds bounds = boundsBuilder.build();
             if (anim)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, Utils.getPixelsFromDip(50f, getResources())));
@@ -252,17 +288,8 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mNeedPopularMapOverlays = true;
-        if (parent == mCategorySpinner) {
-            mNearbyList.clear();
-            for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-                if (position == 0 || holder.mCategoryId == position) {
-                    mNearbyList.add(holder);
-                }
-            }
-            mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
-        }
-        if (mMapContainer.isShown()) popularMapOverlays(true);
+        DLog.d(this, "onItemSelected");
+        updateSearchFromSpinner();
     }
 
     @Override
@@ -270,21 +297,104 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
 
     }
 
+
+    //Temporary for demo
+    public void updateSearchFromSpinner() {
+        mNeedPopularMapOverlays = true;
+        mNearbyList.clear();
+        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
+            boolean matchCategory = false;
+            boolean matchLocation = false;
+            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
+            int categoryPos = mCategorySpinner.getSelectedItemPosition();
+            if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
+                matchCategory = true;
+            }
+            int locationPos = mLocationSpinner.getSelectedItemPosition();
+            String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
+            String[] addrToken = holder.mAddress.split(",");
+            String cityName = addrToken[addrToken.length - 1].trim();
+            if (locationPos == 0 || cityName.equals(targetCityName)) {
+                matchLocation = true;
+            }
+            if (matchCategory && matchLocation) {
+                mNearbyList.add(DataListModel.getInstance().getDataList().get(i));
+            }
+        }
+        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
+        if (mNearbyList.size() == 0) {
+            if (mMapContainer.getVisibility() == View.VISIBLE) {
+                Toast.makeText(mContext, getString(R.string.no_results_found) + " " + getString(R.string.try_different_filter), Toast.LENGTH_LONG).show();
+            } else {
+                mNoResultLayout.setVisibility(View.VISIBLE);
+            }
+        } else {
+            mNoResultLayout.setVisibility(View.GONE);
+        }
+        if (mMapContainer.getVisibility() == View.VISIBLE) populateMapOverlays(true);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        if (mMapView != null) mMapView.onResume();
+        if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) {
+            mMapView.onResume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mMapView != null) mMapView.onPause();
+        if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mMapView != null) mMapView.onDestroy();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        DLog.d(this, "onConnected");
+        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        Utils.setLastLocation(lastLocation);
+
+        DLog.d(this, "location = " + lastLocation.toString());
+
+        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        DLog.d(this, "onConnectionFailed");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        DLog.d(this, "onConnectionSuspended");
+    }
+
+    @Override
+    public void onStart() { // this is actually the same lifecycle as its activity
+        super.onStart();
+        DLog.d(this, "onStart");
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() { // this is actually the same lifecycle as its activity
+        super.onStop();
+        DLog.d(this, "onStop");
+        mGoogleApiClient.disconnect();
     }
 }

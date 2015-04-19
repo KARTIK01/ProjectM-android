@@ -4,6 +4,7 @@ package com.mickledeals.activities;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.datamodel.DataListModel;
@@ -38,6 +40,9 @@ public class HomeActivity extends BaseActivity
     private CharSequence mTitle;
 
     private int mCurrentPosition = -1;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

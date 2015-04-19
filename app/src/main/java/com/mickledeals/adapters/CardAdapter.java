@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
+import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 
@@ -31,6 +32,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public ImageView mCardImage;
         public TextView mCardPrice;
         public ImageView mCardSave;
+        public TextView mCardDist;
 
         public MainViewHolder(View v) {
             super(v);
@@ -39,6 +41,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mCardTitle = (TextView) v.findViewById(R.id.card_title);
             mCardPrice = (TextView) v.findViewById(R.id.card_price);
             mCardSave = (ImageView) v.findViewById(R.id.card_save);
+            mCardDist = (TextView) v.findViewById(R.id.card_dist);
         }
     }
 
@@ -81,7 +84,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewholder.mCardDescription.setText(dataHolder.getDescription());
             viewholder.mCardTitle.setText(dataHolder.getStoreName());
             viewholder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
-            viewholder.mCardPrice.setText(dataHolder.mPrice == 0 ? "Free" : "$" + (int) dataHolder.mPrice);
+            viewholder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
             if (dataHolder.mPrice == 0) {
                 viewholder.mCardPrice.setTextSize(17f);
             } else {
@@ -103,6 +106,15 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
                 }
             });
+            if (mListType == Constants.TYPE_NEARBY_LIST) {
+                viewholder.mCardDist.setVisibility(View.VISIBLE);
+                float dist = Utils.getDistanceFromCurLocation(dataHolder);
+                if (dist == 0) {
+                    viewholder.mCardDist.setVisibility(View.GONE);
+                } else {
+                    viewholder.mCardDist.setText(dist + " mi");
+                }
+            }
         }
     }
 

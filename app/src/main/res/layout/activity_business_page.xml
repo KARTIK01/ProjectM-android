@@ -72,7 +72,7 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:text="@string/news"
-                android:textColor="@color/lighterGrayTextColor"
+                android:textColor="@color/lightGrayTextColor"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -104,7 +104,7 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:text="@string/photos"
-                android:textColor="@color/lighterGrayTextColor"
+                android:textColor="@color/lightGrayTextColor"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -133,7 +133,7 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:text="@string/info"
-                android:textColor="@color/lighterGrayTextColor"
+                android:textColor="@color/lightGrayTextColor"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -194,7 +194,7 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:text="@string/coupons"
-                android:textColor="@color/lighterGrayTextColor"
+                android:textColor="@color/lightGrayTextColor"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

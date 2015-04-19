@@ -34,6 +34,8 @@
 
     <string name="category_select">Select Category</string>
     <string name="current_location">Current Location</string>
+    <string name="no_results_found">No matched results found :(</string>
+    <string name="try_different_filter">Please select a different location or category to search</string>
 
     <!-- Featured -->
     <string name="new_added_coupons">New Added Coupons</string>
@@ -94,7 +96,6 @@
 
     <!-- Misc -->
     <string name="free">Free</string>
-    <string name="no_result">No matched results found.</string>
     <string name="no_save">You do not have any saved coupons yet.</string>
 
     <!-- Temp -->
