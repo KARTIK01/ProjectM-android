@@ -55,6 +55,10 @@
     <string name="share_to">Share to...</string>
     <string name="share_failed">Share Failed</string>
 
+    <!-- Map -->
+    <string name="directions">DIRECTIONS</string>
+    <string name="open_in_google_maps">Open in Google Maps</string>
+
     <!-- Buy Dialog -->
 
     <string name="single_price">Unit Price</string>
@@ -76,7 +80,7 @@
     <string name="info">Info</string>
     <string name="coupons">Coupons</string>
     <string name="open_hours">Open Hours</string>
-    <string name="directions">Get Directions</string>
+    <string name="get_directions">Get Directions</string>
     <string name="website">Website</string>
 
     <!-- Accounts -->

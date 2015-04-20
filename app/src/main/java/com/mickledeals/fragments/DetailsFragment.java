@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.DetailsActivity;
+import com.mickledeals.activities.MapActivity;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
@@ -48,6 +49,8 @@ public class DetailsFragment extends BaseFragment {
     private TextView mSaveBtn;
     private TextView mBusinessInfoBtn;
     private TextView mShareBtn;
+    private View mAddressBtn;
+    private View mCallBtn;
     private View mBuyPanel;
     private View mRedeemPanel;
     private Handler mHandler;
@@ -86,6 +89,8 @@ public class DetailsFragment extends BaseFragment {
         mShareBtn = (TextView) view.findViewById(R.id.sharedButton);
         mBusinessInfoBtn = (TextView) view.findViewById(R.id.businessInfoButton);
         mSaveBtn = (TextView) view.findViewById(R.id.savedButton);
+        mAddressBtn = view.findViewById(R.id.address);
+        mCallBtn = view.findViewById(R.id.call);
         mBuyPanel = view.findViewById(R.id.buyPanel);
         mRedeemPanel = view.findViewById(R.id.redeemPanel);
         mDetailsScrollView = (NotifyingScrollView) view.findViewById(R.id.detailsScrollView);
@@ -96,7 +101,12 @@ public class DetailsFragment extends BaseFragment {
         ((TextView) view.findViewById(R.id.couponPrice)).setText(mHolder.mPrice == 0 ? "FREE" : "$" + (int) (mHolder.mPrice));
         ((TextView) view.findViewById(R.id.buyPrice)).setText("$" + (int) (mHolder.mPrice));
         ((TextView) view.findViewById(R.id.address)).setText(mHolder.mAddress);
-        ((TextView) view.findViewById(R.id.addressDist)).setText(mHolder.mAddressShort);
+        float dist = Utils.getDistanceFromCurLocation(mHolder);
+        String addrShort = mHolder.mAddressShort;
+        if (dist != 0) {
+            addrShort += " • " + dist + " mi";
+        }
+        ((TextView) view.findViewById(R.id.addressDist)).setText(addrShort);
 
         ImageView storePhoto = (ImageView) view.findViewById(R.id.imageView);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) storePhoto.getLayoutParams();
@@ -143,6 +153,22 @@ public class DetailsFragment extends BaseFragment {
                     }
                 }
                 PreferenceHelper.savePreferencesStr(mContext, "saveList", sb.toString());
+            }
+        });
+
+        mAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, MapActivity.class);
+                i.putExtra("dataObject", mHolder);
+                startActivity(i);
+            }
+        });
+
+        mCallBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

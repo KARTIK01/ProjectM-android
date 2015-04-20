@@ -22,7 +22,6 @@ public abstract class BaseActivity extends ActionBarActivity{
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -30,6 +29,7 @@ public abstract class BaseActivity extends ActionBarActivity{
 //                }
 //            });
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 

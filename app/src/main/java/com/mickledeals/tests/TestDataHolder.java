@@ -2,10 +2,12 @@ package com.mickledeals.tests;
 
 import com.mickledeals.utils.Utils;
 
+import java.io.Serializable;
+
 /**
  * Created by Nicky on 12/7/2014.
  */
-public class TestDataHolder {
+public class TestDataHolder implements Serializable{
 
     public int mId;
     public int mImageResId;

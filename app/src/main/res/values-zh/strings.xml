@@ -71,7 +71,7 @@
     <string name="info">基本資料</string>
     <string name="coupons">優惠卷</string>
     <string name="open_hours">營業時間</string>
-    <string name="directions">規劃路綫</string>
+    <string name="get_directions">規劃路綫</string>
     <string name="website">網站</string>
 
     <!-- Accounts -->
@@ -90,7 +90,6 @@
     <string name="unlock_gift">獲取禮物</string>
 
     <!-- Misc -->
-    <string name="free">免費</string>
     <string name="no_save">目前沒有儲存任何優惠卷</string>
 
 

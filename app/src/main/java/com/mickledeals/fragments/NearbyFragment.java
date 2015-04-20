@@ -230,7 +230,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                     }
                 });
                 MapsInitializer.initialize(mContext.getApplicationContext());
-                mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.pin);
+                mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.md_pin);
                 populateMapOverlays(false);
             }
         });
@@ -368,8 +368,6 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         Utils.setLastLocation(lastLocation);
-
-        DLog.d(this, "location = " + lastLocation.toString());
 
         mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
     }
