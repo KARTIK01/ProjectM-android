@@ -27,6 +27,7 @@ public class FeaturedFragment extends BaseFragment {
     private RecyclerView mPopularCouponRecyclerView;
     private RecyclerView mBestCouponRecyclerView;
     private GridLayoutManager mLayoutManager;
+    private FeaturedAdapter mFeatureAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +59,8 @@ public class FeaturedFragment extends BaseFragment {
         });
 
         mFeatureRecyclerView.setLayoutManager(mLayoutManager);
-        mFeatureRecyclerView.setAdapter(new FeaturedAdapter(getActivity(), DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout));
+        mFeatureAdapter = new FeaturedAdapter(getActivity(), DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout);
+        mFeatureRecyclerView.setAdapter(mFeatureAdapter);
         mFeatureRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mFeatureRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -75,4 +77,23 @@ public class FeaturedFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopAutoSliding();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startAutoSliding();
+    }
+
+    public void stopAutoSliding() {
+        if (mFeatureAdapter != null) mFeatureAdapter.stopAutoSliding();
+    }
+
+    public void startAutoSliding() {
+        if (mFeatureAdapter != null) mFeatureAdapter.startAutoSliding();
+    }
 }

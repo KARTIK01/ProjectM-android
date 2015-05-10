@@ -5,7 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import java.util.List;
 public class FeaturedAdapter extends CardAdapter {
     private static final int TYPE_TOP_SECTION = 0;
     private static final int TYPE_BEST_COUPONS = 1;
+    private FeatureSliderAdapter mFeatureSliderAdapter;
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         public HeaderViewHolder(View v) {
@@ -63,16 +63,12 @@ public class FeaturedAdapter extends CardAdapter {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) pagerLayout.getLayoutParams();
             params.height = Utils.getDeviceWidth(mFragmentActivity) * 9 / 16;
             pagerLayout.setLayoutParams(params);
-            FeatureSliderAdapter adapter = new FeatureSliderAdapter(mFragmentActivity.getSupportFragmentManager(),
-                    (PagerIndicator) v.findViewById(R.id.pagerIndicator), pager);
-            pager.setAdapter(adapter);
-            pager.setOnPageChangeListener(adapter);
-            pager.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    Log.e("ZZZ", "hasFocus = " + hasFocus);
-                }
-            });
+            if (mFeatureSliderAdapter == null) {
+                mFeatureSliderAdapter = new FeatureSliderAdapter(mFragmentActivity.getSupportFragmentManager(),
+                        (PagerIndicator) v.findViewById(R.id.pagerIndicator), pager);
+                pager.setAdapter(mFeatureSliderAdapter);
+                pager.setOnPageChangeListener(mFeatureSliderAdapter);
+            }
 
             HeaderViewHolder hvh = new HeaderViewHolder(v);
 
@@ -110,6 +106,18 @@ public class FeaturedAdapter extends CardAdapter {
 
     private boolean isPositionHeader(int position) {
         return position == 0;
+    }
+
+    public void stopAutoSliding() {
+        if (mFeatureSliderAdapter != null) {
+            mFeatureSliderAdapter.stopAutoSliding();
+        }
+    }
+
+    public void startAutoSliding() {
+        if (mFeatureSliderAdapter != null) {
+            mFeatureSliderAdapter.startAutoSliding();
+        }
     }
 
 

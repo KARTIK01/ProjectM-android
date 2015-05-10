@@ -48,10 +48,18 @@ public class FeatureSliderAdapter extends FragmentPagerAdapter implements
         mHandler.postDelayed(mSlidePageThread, REFRESH_PERIOD);
     }
 
+    public void stopAutoSliding() {
+        mHandler.removeCallbacks(mSlidePageThread);
+    }
+
+    public void startAutoSliding() {
+        mHandler.removeCallbacks(mSlidePageThread);
+        mHandler.postDelayed(mSlidePageThread, REFRESH_PERIOD);
+    }
+
     @Override
     public Fragment getItem(int position) {
 
-        DLog.d(this, "Featured Fragment getItem()");
         Fragment fragment = new SlidePageFragment();
         Bundle args = new Bundle();
         args.putInt("imageResId", mList.get(position).mImageResId);

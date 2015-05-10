@@ -63,7 +63,7 @@ public class NavigationDrawerFragment extends BaseFragment {
     private Intent mPendingActivityIntent;
 
     //    private int mCurrentSelectedPosition = -1;
-    private boolean mFromSavedInstanceState;
+//    private boolean mFromSavedInstanceState;
 
 
     private LinearLayout mMenuContainer;
@@ -77,10 +77,10 @@ public class NavigationDrawerFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         DLog.d(this, "onCreate");
 
-        if (savedInstanceState != null) {
-//            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
+//        if (savedInstanceState != null) {
+////            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+//            mFromSavedInstanceState = true;
+//        }
 
         // Select either the default item (0) or the last selected item.
         selectItem(0);

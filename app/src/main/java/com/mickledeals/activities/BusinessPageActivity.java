@@ -2,6 +2,7 @@ package com.mickledeals.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -32,6 +33,7 @@ public class BusinessPageActivity extends BaseActivity{
 
     private TextView mOpenHours;
     private TextView mAddress;
+    private TextView mDirection;
 
     private NotifyingScrollView mDetailsScrollView;
 
@@ -39,6 +41,8 @@ public class BusinessPageActivity extends BaseActivity{
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
         mDetailsScrollView = (NotifyingScrollView) findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
@@ -67,6 +71,23 @@ public class BusinessPageActivity extends BaseActivity{
         mOpenHours.setText(getString(R.string.open_hours) + ": 10:00AM to 11:00PM");
         mAddress = (TextView) findViewById(R.id.address);
         mAddress.setText(mHolder.mAddress);
+        mAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BusinessPageActivity.this, MapActivity.class);
+                i.putExtra("dataObject", mHolder);
+                startActivity(i);
+            }
+        });
+        mDirection = (TextView) findViewById(R.id.directions);
+        mDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr=" + mHolder.mLatLng.replace(" ", "")));
+                startActivity(intent);
+            }
+        });
 
         getSupportActionBar().setTitle(mHolder.getStoreName());
         setToolBarTransparency(0);

@@ -68,7 +68,7 @@ public class HomeActivity extends BaseActivity
                 int count = getSupportFragmentManager().getBackStackEntryCount();
                 for (int i = 0; i < count; i++) {
                     String name = getSupportFragmentManager().getBackStackEntryAt(i).getName();
-                    Log.e("ZZZ", "name = " + name);
+//                    Log.e("ZZZ", "name = " + name);
                 }
                 if (count == 0) isHome = true;
 

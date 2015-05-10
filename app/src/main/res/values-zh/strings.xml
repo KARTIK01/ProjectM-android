@@ -5,7 +5,7 @@
     <string name="logout">登出</string>
 
     <string name="menu_home">主頁</string>
-    <string name="menu_my_deals">我的優惠卷</string>
+    <string name="menu_my_deals">我的優惠券</string>
     <string name="menu_saved_deals">收藏夾</string>
     <string name="menu_random">隨機推介</string>
 
@@ -23,7 +23,7 @@
 
 
     <!-- Home -->
-    <string name="nearby_tab_text">附近商戶</string>
+    <string name="nearby_tab_text">瀏覽優惠</string>
     <string name="featured_tab_text">優惠推介</string>
 
     <string name="category_select">類別選擇</string>
@@ -45,9 +45,9 @@
     <string name="more_coupon">更多此商戶的優惠</string>
 
     <string name="fine_print">條款</string>
-    <string name="unlock_coupon">購買優惠卷</string>
-    <string name="redeem_coupon">兌換此優惠卷</string>
-    <string name="share_subject">一張來自MickleDeals的絕佳優惠卷!</string>
+    <string name="unlock_coupon">購買優惠券</string>
+    <string name="redeem_coupon">兌換此優惠券</string>
+    <string name="share_subject">一張來自MickleDeals的絕佳優惠券!</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
 
@@ -61,15 +61,15 @@
 
     <!-- Redeem Dialog -->
 
-    <string name="redeem_dialog_header">感謝你購買此優惠卷，你將獲得:</string>
+    <string name="redeem_dialog_header">感謝你購買此優惠券，你將獲得:</string>
     <string name="expires_in">離過期還剩 </string>
-    <string name="redeem_dialog_footer">請在兌換優惠時向商戶展示此優惠卷認證畫面</string>
+    <string name="redeem_dialog_footer">請在兌換優惠時向商戶展示此優惠券認證畫面</string>
 
     <!-- Business Page -->
     <string name="news">最新消息</string>
     <string name="photos">相片</string>
     <string name="info">基本資料</string>
-    <string name="coupons">優惠卷</string>
+    <string name="coupons">優惠券</string>
     <string name="open_hours">營業時間</string>
     <string name="get_directions">規劃路綫</string>
     <string name="website">網站</string>
@@ -90,12 +90,12 @@
     <string name="unlock_gift">獲取禮物</string>
 
     <!-- Misc -->
-    <string name="no_save">目前沒有儲存任何優惠卷</string>
+    <string name="no_save">目前沒有儲存任何優惠券</string>
 
 
     <!-- Temp -->
     <string name="expire_date">到期日為 08/27/2015</string>
-    <string name="fine_print_description">每桌限用一張優惠卷, 及只限店内使用。</string>
+    <string name="fine_print_description">每桌限用一張優惠券, 及只限店内使用。</string>
     <string name="business_description">
 Savory Steakhouse的特色是在演繹傳統美式扒房菜款當中, 帶出陣陣日式風味。自2005年開業以來獲得多項獎項和榮譽, 是餐飲界中備受歡迎的一員。</string>
     <string name="business_photo1">菲力牛扒配蝦仁醬</string>
@@ -106,7 +106,7 @@ Savory Steakhouse的特色是在演繹傳統美式扒房菜款當中, 帶出陣�
     <string name="business_news2">現正重新推出9pm-12am歡樂時光優惠! 快來享受特惠而香醇的雞尾酒!</string>
     <string name="notification_msg1_title">歡迎你!</string>
     <string name="notification_msg1_msg">歡迎使用MickleDeals! 你將能夠找到三藩市灣區裏最好的優惠...</string>
-    <string name="notification_msg2_title">把優惠卷分享到Facebook將為你帶來一張免費的優惠卷!</string>
-    <string name="notification_msg2_msg">在你的Facebook分享優惠卷後, 你將會獲得一張免費的神秘優惠卷作爲獎賞!</string>
+    <string name="notification_msg2_title">把優惠券分享到Facebook將為你帶來一張免費的優惠券!</string>
+    <string name="notification_msg2_msg">在你的Facebook分享優惠券後, 你將會獲得一張免費的神秘優惠券作爲獎賞!</string>
 
 </resources>

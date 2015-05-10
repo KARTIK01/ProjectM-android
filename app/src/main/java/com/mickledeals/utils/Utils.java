@@ -45,7 +45,7 @@ public class Utils {
     private static int sDeviceWidth;
     private static int sDeviceHeight;
     private static Location mLastLocation;
-    public static Locale mCurrentLocale;
+    public static Locale mCurrentLocale = Locale.ENGLISH;
 
     static {
         sNavMenuList.add(new NavMenuItem(HomeFragment.class, R.string.menu_home, R.drawable.ic_home));

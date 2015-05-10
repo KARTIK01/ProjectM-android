@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Language: "
+            android:textSize="22dp"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/langugaeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="English"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp"
+            android:drawableRight="@drawable/ic_arrow_down"></TextView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/whiteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start!"
+        android:textColor="@color/themeTextColor"
+        android:padding="10dp"
+        android:textSize="22dp"
+        android:background="@drawable/white_button_selector_bg" />
+
+</LinearLayout>

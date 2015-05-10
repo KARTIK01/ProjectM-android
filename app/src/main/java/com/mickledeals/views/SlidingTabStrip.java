@@ -24,9 +24,6 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.mickledeals.R;
 
 
 class SlidingTabStrip extends LinearLayout {
@@ -114,13 +111,13 @@ class SlidingTabStrip extends LinearLayout {
         mSelectedPosition = position;
         mSelectionOffset = positionOffset;
         invalidate();
-        for (int i = 0; i < getChildCount(); i++) {
-            View view = getChildAt(i);
-            if (view != null && view instanceof TextView) {
-                if (i == position) ((TextView) view).setTextColor(getResources().getColor(R.color.white));
-                else ((TextView) view).setTextColor(getResources().getColor(R.color.unselected_white_tab_text));
-            }
-        }
+//        for (int i = 0; i < getChildCount(); i++) {
+//            View view = getChildAt(i);
+//            if (view != null && view instanceof TextView) {
+//                if (i == position) ((TextView) view).setTextColor(getResources().getColor(R.color.white));
+//                else ((TextView) view).setTextColor(getResources().getColor(R.color.unselected_white_tab_text));
+//            }
+//        }
     }
 
     @Override

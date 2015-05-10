@@ -33,6 +33,8 @@ public class DetailsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
+
         int index = getIntent().getIntExtra("listIndex", 0);
         mListType = getIntent().getIntExtra("listType", 0);
         mList = Utils.getListFromType(mListType);

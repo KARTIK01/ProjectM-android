@@ -9,11 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.utils.DLog;
-import com.mickledeals.views.AspectRatioImageView;
 import com.mickledeals.views.PagerIndicator;
 
 /**
@@ -113,8 +113,7 @@ public class BusinessPhotoSliderAdapter extends FragmentPagerAdapter implements
             DLog.d(this, "onCreateView");
             ViewGroup rootView = (ViewGroup) inflater.inflate(
                     R.layout.business_photo_slide_page, container, false);
-            AspectRatioImageView imageView = (AspectRatioImageView) rootView.findViewById(R.id.slider_image);
-            imageView.setRatio(9f/16);
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
             imageView.setImageResource(getArguments().getInt("imageResId"));
             TextView description = (TextView) rootView.findViewById(R.id.slider_text);
             description.setText(getString(getArguments().getInt("photoDescription")));

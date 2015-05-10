@@ -39,7 +39,10 @@ public class ScrollInterceptRecyclerView extends RecyclerView {
                 mCanScrollLeft = ViewCompat.canScrollHorizontally(this, -1);
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!mCanScrollLeft && x > mInitialX) return false;
+                if (!mCanScrollLeft && x > mInitialX) {
+                    return false;
+                }
+
                 break;
         }
 

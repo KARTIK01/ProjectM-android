@@ -46,6 +46,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        DLog.d(this, "onViewCreated");
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setOffscreenPageLimit(NUM_TABS);
         mViewPager.setAdapter(new HomePagerAdapter(getActivity().getSupportFragmentManager()));
@@ -59,10 +60,29 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public int getDividerColor(int position) {
-                return Color.parseColor("#99FFFFFF");
+//                return Color.parseColor("#99FFFFFF"); //need divider???
+                return mContext.getResources().getColor(R.color.colorPrimary);
             }
         });
         mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    if (mFragments[1] != null) ((FeaturedFragment)mFragments[1]).stopAutoSliding();
+                } else {
+                    if (mFragments[1] != null) ((FeaturedFragment)mFragments[1]).startAutoSliding();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     @Override
@@ -112,7 +132,6 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
-            DLog.d(this, "Home Pager getItem()");
             if (position == 0) {
                 BaseFragment fragment = new NearbyFragment();
                 mFragments[0] = fragment;
@@ -134,13 +153,13 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onFragmentPause() {
-        mFragments[0].onFragmentPause();
-        mFragments[1].onFragmentPause();
+        if (mFragments[0] != null) mFragments[0].onFragmentPause();
+        if (mFragments[1] != null) mFragments[1].onFragmentPause();
     }
 
     @Override
     public void onFragmentResume() {
-        mFragments[0].onFragmentResume();
-        mFragments[1].onFragmentResume();
+        if (mFragments[0] != null) mFragments[0].onFragmentResume();
+        if (mFragments[1] != null) mFragments[1].onFragmentResume();
     }
 }

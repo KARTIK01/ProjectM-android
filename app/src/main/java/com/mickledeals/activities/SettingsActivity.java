@@ -26,6 +26,8 @@ public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
+
         mLanguageText = (TextView) findViewById(R.id.languageText);
         if (Utils.mCurrentLocale.getLanguage().equals("zh")) language = Constants.LANG_CHT;
         mLanguageText.setText(getResources().getStringArray(R.array.language_list)[language]);

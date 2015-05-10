@@ -13,6 +13,8 @@ public class RedeemActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
     }
 
     @Override
