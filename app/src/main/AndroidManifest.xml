@@ -38,7 +38,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DetailsActivity" />
+        <activity android:name=".activities.DetailsActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
         <activity
             android:name=".activities.AccountActivity"
             android:theme="@style/AppTheme.Base.ActionBar"
@@ -55,7 +56,9 @@
             android:name=".activities.SettingsActivity"
             android:theme="@style/AppTheme.Base.ActionBar"
             android:label="@string/menu_settings" />
-        <activity android:name=".activities.BusinessPageActivity" />
+        <activity android:name=".activities.BusinessPageActivity"
+            android:theme="@style/AppTheme.Base.Transcluent"
+            />
         <activity android:name=".activities.MapActivity"
             android:theme="@style/AppTheme.Base.ActionBar" />
     </application>

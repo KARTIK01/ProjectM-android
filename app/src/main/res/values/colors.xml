@@ -23,8 +23,9 @@
     <color name="themeTextColor">@color/colorPrimary1</color>
     <color name="tab_pressed_state">#33EEEEEE</color>
     <color name="defaultLightGrayBg">#EEEEEE</color><!-- This is the default material bg color -->
-    <color name="lighterGrayBg">#F5F5F5</color><!-- This is the default material bg color -->
+    <color name="lighterGrayBg">#F5F5F5</color>
     <color name="light_divider">#d5d5d5</color>
     <color name="selected_bg">#DDDDDD</color>
+    <color name="transparentViewPagerBg">#99000000</color>
 
 </resources>

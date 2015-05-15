@@ -62,7 +62,10 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.transitDetailsActivity(mFragmentActivity, vh.getPosition(), mListType, v);
+                String transition = "cardImage" + mDataset.get(vh.getPosition()).mId;
+                //doesnt seem to need below line
+//                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
+                Utils.transitDetailsActivity(mFragmentActivity, vh.getPosition(), mListType, v.findViewById(R.id.card_image), transition);
             }
         });
         return vh;
@@ -84,6 +87,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewholder.mCardDescription.setText(dataHolder.getDescription());
             viewholder.mCardTitle.setText(dataHolder.getStoreName());
             viewholder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
+//            if (Build.VERSION.SDK_INT >= 21) viewholder.mCardDescription.setTransitionName("");
             viewholder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
             if (dataHolder.mPrice == 0) {
                 viewholder.mCardPrice.setTextSize(17f);

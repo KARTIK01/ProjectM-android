@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,6 +55,7 @@ public class DetailsFragment extends BaseFragment {
     private View mCallBtn;
     private View mBuyPanel;
     private View mRedeemPanel;
+    private LinearLayout mMoreCouponRow;
     private Handler mHandler;
     private TextView mExpiredTime;
     private NotifyingScrollView mDetailsScrollView;
@@ -93,6 +96,7 @@ public class DetailsFragment extends BaseFragment {
         mCallBtn = view.findViewById(R.id.call);
         mBuyPanel = view.findViewById(R.id.buyPanel);
         mRedeemPanel = view.findViewById(R.id.redeemPanel);
+        mMoreCouponRow = (LinearLayout) view.findViewById(R.id.moreCouponRow);
         mDetailsScrollView = (NotifyingScrollView) view.findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(mScrollListener);
 
@@ -113,6 +117,12 @@ public class DetailsFragment extends BaseFragment {
         params.height = Utils.getDeviceWidth(mContext) * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
         storePhoto.setLayoutParams(params);
         storePhoto.setImageResource(mHolder.mImageResId);
+        if (Build.VERSION.SDK_INT >= 21) {
+            storePhoto.setTransitionName("cardImage" + mHolder.mId);
+            getActivity().startPostponedEnterTransition();
+            //seems like no need to use below line???
+            //scheduleStartPostponedTransition(storePhoto);
+        }
 
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,12 +201,14 @@ public class DetailsFragment extends BaseFragment {
                 }
             });
 
-
-            view.findViewById(R.id.moreCouponRow).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.moreCouponRow).setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
+            View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
+            mMoreCouponRow.setVisibility(View.VISIBLE);
+            mMoreCouponRow.addView(otherCoupon);
+            otherCoupon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i =new Intent(mContext, DetailsActivity.class);
+                    Intent i = new Intent(mContext, DetailsActivity.class);
                     DataListModel.getInstance().getMoreCouponsList().clear();
                     DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
                     i.putExtra("listIndex", 0);
@@ -204,12 +216,23 @@ public class DetailsFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
-            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
-            TestDataHolder otherCoupon = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
-            ((ImageView) view.findViewById(R.id.moreCouponImage)).setImageResource(otherCoupon.mSmallImageResId);
-            ((TextView) view.findViewById(R.id.moreCouponTitle)).setText(otherCoupon.getDescription());
-            ((TextView) view.findViewById(R.id.moreCouponPrice)).setText("$" + (int) (otherCoupon.mPrice));
+            TestDataHolder otherCouponData = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
+            ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
+            ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
+            ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
         }
+    }
+
+    private void scheduleStartPostponedTransition(final View sharedElement) {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+                        getActivity().startPostponedEnterTransition();
+                        return true;
+                    }
+                });
     }
 
     public void setOnScrollChangeListener(NotifyingScrollView.OnScrollChangedListener listener) {
@@ -361,6 +384,7 @@ public class DetailsFragment extends BaseFragment {
             mHandler.postDelayed(this, 0);
         }
     };
+
 
 
 }

@@ -50,7 +50,7 @@ public class FeaturedAdapter extends CardAdapter {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.transitDetailsActivity(mFragmentActivity, vh.getPosition() - 1, mListType, v);
+                    Utils.transitDetailsActivity(mFragmentActivity, vh.getPosition() - 1, mListType, v, null);
                 }
             });
             return vh;
@@ -76,8 +76,8 @@ public class FeaturedAdapter extends CardAdapter {
             RecyclerView mPopularCouponRecyclerView = (RecyclerView) v.findViewById(R.id.popularCouponRecyclerView);
             mAddedCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
             mPopularCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
-            mAddedCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getNewAddedCouponList(), Constants.TYPE_NEW_ADDED_LIST, R.layout.small_card_layout));
-            mPopularCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getPopularCouponList(), Constants.TYPE_POPULAR_LIST, R.layout.small_card_layout));
+            mAddedCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getNewAddedCouponList(), Constants.TYPE_NEW_ADDED_LIST, R.layout.card_layout_new));
+            mPopularCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getPopularCouponList(), Constants.TYPE_POPULAR_LIST, R.layout.card_layout_new));
             mAddedCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
             mPopularCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
             return hvh;

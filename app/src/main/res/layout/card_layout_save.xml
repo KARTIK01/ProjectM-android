@@ -4,32 +4,31 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="2dp"
     card_view:cardElevation="2dp"
-    card_view:cardUseCompatPadding="true"
->
+    card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="160dp"
         android:orientation="vertical">
 
         <com.mickledeals.views.AspectRatioImageView
             android:id="@+id/card_image"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="0dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/card_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/card_image"
             android:maxLines="1"
             android:paddingRight="4dp"
             android:paddingTop="2dp"
@@ -40,26 +39,27 @@
 
         <ImageView
             android:id="@+id/card_save"
-            android:paddingRight="3dp"
-            android:paddingBottom="3dp"
-            android:paddingTop="8dp"
-            android:paddingLeft="8dp"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:background="?android:attr/selectableItemBackground"/>
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingBottom="2dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="2dp"
+            android:paddingTop="7dp" />
 
 
         <TextView
             android:id="@+id/card_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/card_image"
             android:layout_toLeftOf="@id/card_price"
+            android:layout_toRightOf="@id/card_image"
             android:ellipsize="end"
             android:maxLines="2"
-            android:paddingLeft="4dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="4dp"
             android:paddingTop="2dp"
             android:textColor="@color/defaultTextColor"
             android:textSize="15sp" />
@@ -70,28 +70,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/card_description"
             android:layout_toLeftOf="@id/card_save"
+            android:layout_toRightOf="@id/card_image"
             android:ellipsize="marquee"
             android:paddingBottom="4dp"
-            android:paddingLeft="4dp"
+            android:paddingLeft="6dp"
             android:singleLine="true"
             android:textColor="@color/lightGrayTextColor"
             android:textSize="14sp"
             android:textStyle="bold" />
-
-
-
-        <TextView
-            android:id="@+id/card_dist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/card_description"
-            android:background="#77000000"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="gone"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
-            />
 
 
     </RelativeLayout>

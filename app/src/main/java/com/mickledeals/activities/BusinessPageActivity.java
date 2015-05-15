@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.BusinessPhotoSliderAdapter;
+import com.mickledeals.adapters.VerticalPagerAdapter;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
@@ -20,11 +22,15 @@ import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
 import com.mickledeals.views.RoundedImageView;
+import com.mickledeals.views.VerticalViewPager;
 
 /**
  * Created by Nicky on 2/21/2015.
  */
-public class BusinessPageActivity extends BaseActivity{
+public class BusinessPageActivity extends BaseActivity {
+
+    private VerticalViewPager mViewPager;
+    private VerticalPagerAdapter mAdapter;
 
     private RoundedImageView mRoundedImageView;
     private ViewPager mPhotoViewPager;
@@ -35,6 +41,7 @@ public class BusinessPageActivity extends BaseActivity{
     private TextView mAddress;
     private TextView mDirection;
 
+    private LinearLayout mMoreCouponRow;
     private NotifyingScrollView mDetailsScrollView;
 
     @Override
@@ -43,6 +50,14 @@ public class BusinessPageActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
+
+
+        mViewPager = (VerticalViewPager) findViewById(R.id.verticalViewPager);
+        mAdapter = new VerticalPagerAdapter(this, mViewPager);
+        mViewPager.setPageTransformer(true, mAdapter);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(1, false);
+        mViewPager.setOffscreenPageLimit(3);
 
         mDetailsScrollView = (NotifyingScrollView) findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
@@ -93,47 +108,46 @@ public class BusinessPageActivity extends BaseActivity{
         setToolBarTransparency(0);
 
 
-        findViewById(R.id.moreCouponRow1).setVisibility(View.VISIBLE);
-        findViewById(R.id.moreCouponRow1).setOnClickListener(new View.OnClickListener() {
+        mMoreCouponRow = (LinearLayout) findViewById(R.id.moreCouponRow);
+        View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
+        mMoreCouponRow.setVisibility(View.VISIBLE);
+        mMoreCouponRow.addView(otherCoupon);
+        otherCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
-                DataListModel.getInstance().getMoreCouponsList().clear();
-                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(2));
+                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
+                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
                 i.putExtra("listIndex", 0);
                 i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
                 startActivity(i);
             }
         });
-        TestDataHolder otherCoupon = DataListModel.getInstance().getDataList().get(2);
-        ((ImageView) findViewById(R.id.moreCouponImage1)).setImageResource(otherCoupon.mSmallImageResId);
-        ((TextView) findViewById(R.id.moreCouponTitle1)).setText(otherCoupon.getDescription());
-        ((TextView) findViewById(R.id.moreCouponPrice1)).setText("$" + (int) (otherCoupon.mPrice));
 
+        TestDataHolder otherCouponData = DataListModel.getInstance().getDataList().get(2);
+        ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
+        ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
+        ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
 
-        findViewById(R.id.moreCouponRow2).setVisibility(View.VISIBLE);
-        findViewById(R.id.moreCouponRow2).setOnClickListener(new View.OnClickListener() {
+        View otherCoupon2 = getLayoutInflater().inflate(R.layout.card_layout_others, null);
+        mMoreCouponRow.setVisibility(View.VISIBLE);
+        mMoreCouponRow.addView(otherCoupon2);
+        otherCoupon2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
-                DataListModel.getInstance().getMoreCouponsList().clear();
-                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(3));
+                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
+                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
                 i.putExtra("listIndex", 0);
                 i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
                 startActivity(i);
             }
         });
-        TestDataHolder otherCoupon2 = DataListModel.getInstance().getDataList().get(3);
-        ((ImageView) findViewById(R.id.moreCouponImage2)).setImageResource(otherCoupon2.mSmallImageResId);
-        ((TextView) findViewById(R.id.moreCouponTitle2)).setText(otherCoupon2.getDescription());
-        ((TextView) findViewById(R.id.moreCouponPrice2)).setText("$" + (int) (otherCoupon2.mPrice));
+        TestDataHolder otherCouponData2 = DataListModel.getInstance().getDataList().get(3);
+        ((ImageView) otherCoupon2.findViewById(R.id.card_image)).setImageResource(otherCouponData2.mSmallImageResId);
+        ((TextView) otherCoupon2.findViewById(R.id.card_description)).setText(otherCouponData2.getDescription());
+        ((TextView) otherCoupon2.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData2.mPrice));
 
-
-    }
-
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_business_page;
     }
 
     private void setToolBarTransparency(int scrollPos) {
@@ -144,4 +158,14 @@ public class BusinessPageActivity extends BaseActivity{
         mToolBar.setTitleTextColor(Color.argb(newAlpha, 255, 255, 255));
         mShadow.setAlpha(ratio);
     }
+
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_business_page;
+    }
+
+
+
+
 }

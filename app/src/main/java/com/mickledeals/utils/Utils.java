@@ -134,17 +134,17 @@ public class Utils {
         }
     }
 
-    public static void transitDetailsActivity(Activity activity, int index, int listType, View v) {
+    public static void transitDetailsActivity(Activity activity, int index, int listType, View v, String transition) {
         Intent i = new Intent(activity, DetailsActivity.class);
         i.putExtra("listIndex", index);
         i.putExtra("listType", listType);
 
-//        i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//        activity.startActivity(i);
-
         if (Build.VERSION.SDK_INT < 16 || v == null) {
-            activity.startActivity(i);
-        } else {
+            activity.startActivity(i); //use default animation
+        } else if (Build.VERSION.SDK_INT >= 21) { //use tranistion animation
+            Bundle scaledBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, v, transition).toBundle();
+            activity.startActivity(i, scaledBundle);
+        } else { //use scale up animation
             Bundle scaledBundle = ActivityOptionsCompat.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle();
             activity.startActivity(i, scaledBundle);
         }
@@ -154,8 +154,12 @@ public class Utils {
         Intent i = new Intent(activity, DetailsActivity.class);
         i.putExtra("listIndex", index);
         i.putExtra("listType", listType);
-        i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        activity.startActivity(i);
+//        if (Build.VERSION.SDK_INT < 16 || v == null) {
+            activity.startActivity(i);
+//        } else {
+//            Bundle scaledBundle = ActivityOptionsCompat.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle();
+//            activity.startActivity(i, scaledBundle);
+//        }
     }
 
     /**

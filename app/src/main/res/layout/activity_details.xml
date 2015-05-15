@@ -1,30 +1,45 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+<com.mickledeals.views.VerticalViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/verticalViewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@drawable/details_pic_tint_bg" />
+        android:layout_height="match_parent"
+        android:background="@color/transparentViewPagerBg" />
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/details_pic_tint_bg"
+            />
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
 
 
+        <include
+            android:id="@+id/toolbarShadow"
+            layout="@layout/toolbar_shadow" />
+
+    </RelativeLayout>
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparentViewPagerBg" />
 
-    <include
-        android:id="@+id/toolbarShadow"
-        layout="@layout/toolbar_shadow"
-        />
-
-</RelativeLayout>
+</com.mickledeals.views.VerticalViewPager>

@@ -87,7 +87,7 @@ public class SavedCouponsFragment extends BaseFragment implements AdapterView.On
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mRecyclerView.setAdapter(new CardAdapter(getActivity(), mSaveList, Constants.TYPE_SAVED_LIST, R.layout.list_card_layout));
+        mRecyclerView.setAdapter(new CardAdapter(getActivity(), mSaveList, Constants.TYPE_SAVED_LIST, R.layout.card_layout_save));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 

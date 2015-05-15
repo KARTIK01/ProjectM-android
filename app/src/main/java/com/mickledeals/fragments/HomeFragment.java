@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -113,7 +113,7 @@ public class HomeFragment extends BaseFragment {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
 
-    public class HomePagerAdapter extends FragmentStatePagerAdapter {
+    public class HomePagerAdapter extends FragmentPagerAdapter {
         public HomePagerAdapter(FragmentManager fm) {
             super(fm);
         }

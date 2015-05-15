@@ -226,7 +226,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
                     @Override
                     public void onInfoWindowClick(Marker marker) {
                         int pos = mMarkersHashMap.get(marker);
-                        Utils.transitDetailsActivity(getActivity(), pos, getListType(), null);
+                        Utils.transitDetailsActivity(getActivity(), pos, getListType(), null, null);
                     }
                 });
                 MapsInitializer.initialize(mContext.getApplicationContext());

@@ -1,6 +1,7 @@
 package com.mickledeals.activities;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,20 +13,26 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.mickledeals.R;
+import com.mickledeals.adapters.VerticalPagerAdapter;
 import com.mickledeals.fragments.DetailsFragment;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
+import com.mickledeals.views.VerticalViewPager;
 
 import java.util.List;
 
 /**
  * Created by Nicky on 12/27/2014.
  */
-public class DetailsActivity extends BaseActivity {
+public class DetailsActivity extends BaseActivity  {
 
-    private ViewPager mViewPager;
+    private VerticalViewPager mViewPager;
+    private VerticalPagerAdapter mAdapter;
+
+    private ViewPager mDetailsViewPager;
     private int mListType;
+    private int mInitialIndex;
     private List<TestDataHolder> mList;
     private View mShadow;
 
@@ -35,16 +42,28 @@ public class DetailsActivity extends BaseActivity {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
-        int index = getIntent().getIntExtra("listIndex", 0);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            postponeEnterTransition();
+        }
+
+        mViewPager = (VerticalViewPager) findViewById(R.id.verticalViewPager);
+        mAdapter = new VerticalPagerAdapter(this, mViewPager);
+        mViewPager.setPageTransformer(true, mAdapter);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(1, false);
+        mViewPager.setOffscreenPageLimit(3);
+
+        mInitialIndex = getIntent().getIntExtra("listIndex", 0);
         mListType = getIntent().getIntExtra("listType", 0);
         mList = Utils.getListFromType(mListType);
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mDetailsViewPager = (ViewPager) findViewById(R.id.viewpager);
         mShadow = findViewById(R.id.toolbarShadow);
         DetailsPagerAdapter adapter = new DetailsPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(adapter);
-        mViewPager.setOnPageChangeListener(adapter);
-        mViewPager.setCurrentItem(index);
-        getSupportActionBar().setTitle(mList.get(index).getStoreName());
+        mDetailsViewPager.setAdapter(adapter);
+        mDetailsViewPager.setOnPageChangeListener(adapter);
+        mDetailsViewPager.setCurrentItem(mInitialIndex);
+        getSupportActionBar().setTitle(mList.get(mInitialIndex).getStoreName());
         setToolBarTransparency(0);
     }
 
@@ -107,7 +126,7 @@ public class DetailsActivity extends BaseActivity {
 
         @Override
         public void onPageSelected(int position) {
-            DetailsFragment fragment = (DetailsFragment) instantiateItem(mViewPager, position);
+            DetailsFragment fragment = (DetailsFragment) instantiateItem(mDetailsViewPager, position);
             int scrollPos = 0;
             if (fragment != null) {
                 scrollPos = fragment.getScrollYPosition();
@@ -134,5 +153,12 @@ public class DetailsActivity extends BaseActivity {
         mToolBar.getBackground().mutate().setAlpha(newAlpha);
         mToolBar.setTitleTextColor(Color.argb(newAlpha, 255, 255, 255));
         mShadow.setAlpha(ratio);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super method will apply shared element transition
+        if (Build.VERSION.SDK_INT < 21 || mDetailsViewPager.getCurrentItem() == mInitialIndex) super.onBackPressed();
+        else finish();
     }
 }
