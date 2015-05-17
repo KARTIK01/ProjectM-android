@@ -37,6 +37,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView mCardPrice;
         public ImageView mCardSave;
         public TextView mCardDist;
+        public TextView mCardCity;
         public RelativeLayout mCardBaseLayout;
 
         public MainViewHolder(View v) {
@@ -48,6 +49,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mCardPrice = (TextView) v.findViewById(R.id.card_price);
             mCardSave = (ImageView) v.findViewById(R.id.card_save);
             mCardDist = (TextView) v.findViewById(R.id.card_dist);
+            mCardCity = (TextView) v.findViewById(R.id.card_city);
         }
     }
 
@@ -74,8 +76,13 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 mDummpyImageView.setRatio(vh.mCardImage.getRatio());
                 mDummpyImageView.setImageResource(mDataset.get(pos).mSmallImageResId);
                 mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
-                vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
+                final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
+                vh.mCardBaseLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
+                    }
+                }, 1000);
                 String transition = "cardImage" + mDataset.get(pos).mId;
                 //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
@@ -99,15 +106,19 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final TestDataHolder dataHolder = getItem(position);
 
             if (viewholder.mCardBaseLayout != null) viewholder.mCardBaseLayout.removeView(mDummpyImageView);
-            if (viewholder.mCardDescription != null) viewholder.mCardDescription.setText(dataHolder.getDescription());
+            if (viewholder.mCardDescription != null) {
+                viewholder.mCardDescription.setText(dataHolder.getDescription());
+            }
             if (viewholder.mCardTitle != null) viewholder.mCardTitle.setText(dataHolder.getStoreName());
             if (viewholder.mCardImage != null) viewholder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
             if (viewholder.mCardPrice != null) viewholder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
             if (viewholder.mCardPrice != null) {
+                int delta = 0;
+                if (mListType == Constants.TYPE_BEST_LIST) delta = 1;
                 if (dataHolder.mPrice == 0) {
-                    viewholder.mCardPrice.setTextSize(17f);
+                    viewholder.mCardPrice.setTextSize(17f + delta);
                 } else {
-                    viewholder.mCardPrice.setTextSize(18f);
+                    viewholder.mCardPrice.setTextSize(18f + delta);
                 }
             }
             if (viewholder.mCardSave != null) {
@@ -127,6 +138,9 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
                     }
                 });
+            }
+            if (viewholder.mCardCity != null) {
+                viewholder.mCardCity.setText(dataHolder.mAddressShort.replace("San Francisco", "SF"));
             }
             if (viewholder.mCardDist != null) {
                 viewholder.mCardDist.setVisibility(View.VISIBLE);

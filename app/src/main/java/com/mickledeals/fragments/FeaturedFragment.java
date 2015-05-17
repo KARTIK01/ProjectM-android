@@ -1,6 +1,5 @@
 package com.mickledeals.fragments;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -45,9 +44,6 @@ public class FeaturedFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        final int margin = getResources().getDimensionPixelSize(R.dimen.card_margin);
-        final int bottomMargin = getResources().getDimensionPixelSize(R.dimen.card_margin_bottom);
-
         mFeatureRecyclerView = (RecyclerView) view.findViewById(R.id.featureRecyclerView);
         mLayoutManager = new LinearLayoutManager(mContext);
 //        mLayoutManager = new GridLayoutManager(mContext, 2);
@@ -63,18 +59,18 @@ public class FeaturedFragment extends BaseFragment {
         mFeatureAdapter = new FeaturedAdapter(getActivity(), DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout_featured);
         mFeatureRecyclerView.setAdapter(mFeatureAdapter);
         mFeatureRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mFeatureRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int pos = parent.getChildPosition(view);
-                if (pos != 0) {
-                    boolean leftside = pos % 2 == 1;
-                    outRect.left = leftside ? margin : margin / 2;
-                    outRect.right = leftside ? margin / 2 : margin;
-                    outRect.bottom = bottomMargin;
-                }
-            }
-        });
+//        mFeatureRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                int pos = parent.getChildPosition(view);
+//                if (pos != 0) {
+//                    boolean leftside = pos % 2 == 1;
+//                    outRect.left = leftside ? margin : margin / 2;
+//                    outRect.right = leftside ? margin / 2 : margin;
+//                    outRect.bottom = bottomMargin;
+//                }
+//            }
+//        });
 
     }
 
