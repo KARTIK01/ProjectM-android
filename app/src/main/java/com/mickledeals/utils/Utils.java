@@ -25,7 +25,6 @@ import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.fragments.HomeFragment;
 import com.mickledeals.fragments.MyCouponsFragment;
-import com.mickledeals.fragments.RandomCouponsFragment;
 import com.mickledeals.fragments.SavedCouponsFragment;
 import com.mickledeals.tests.TestDataHolder;
 
@@ -51,7 +50,7 @@ public class Utils {
         sNavMenuList.add(new NavMenuItem(HomeFragment.class, R.string.menu_home, R.drawable.ic_home));
         sNavMenuList.add(new NavMenuItem(MyCouponsFragment.class, R.string.menu_my_deals, R.drawable.ic_coupons));
         sNavMenuList.add(new NavMenuItem(SavedCouponsFragment.class, R.string.menu_saved_deals, R.drawable.ic_save));
-        sNavMenuList.add(new NavMenuItem(RandomCouponsFragment.class, R.string.menu_random, R.drawable.ic_random));
+//        sNavMenuList.add(new NavMenuItem(RandomCouponsFragment.class, R.string.menu_random, R.drawable.ic_random));
         sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
         sNavMenuList.add(new NavMenuItem(NotificationActivity.class, R.string.menu_notification, R.drawable.ic_bell));
         sNavMenuList.add(new NavMenuItem(AccountActivity.class, R.string.menu_account, R.drawable.ic_account));

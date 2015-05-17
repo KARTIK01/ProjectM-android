@@ -18,6 +18,7 @@
 
     <color name="white">#FFFFFF</color>
     <color name="defaultTextColor">#222222</color>
+    <color name="lightBlackTextColor">#444444</color>
     <color name="lightGrayTextColor">#808080</color>
     <color name="lighterGrayTextColor">#A0A0A0</color>
     <color name="themeTextColor">@color/colorPrimary1</color>
@@ -25,7 +26,7 @@
     <color name="defaultLightGrayBg">#EEEEEE</color><!-- This is the default material bg color -->
     <color name="lighterGrayBg">#F5F5F5</color>
     <color name="light_divider">#d5d5d5</color>
-    <color name="selected_bg">#DDDDDD</color>
+    <color name="selected_bg">#EEEEEE</color>
     <color name="transparentViewPagerBg">#99000000</color>
 
 </resources>

@@ -117,11 +117,13 @@ public class NavigationDrawerFragment extends BaseFragment {
                 View divider = new View(mContext);
                 divider.setBackgroundColor(getResources().getColor(R.color.light_divider));
                 mMenuContainer.addView(divider,
-                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Utils.getPixelsFromDip(8, getResources())));
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Utils.getPixelsFromDip(1, getResources())));
                 continue;
             }
             View menuRow = LayoutInflater.from(mContext).inflate(R.layout.nav_menu_row, mMenuContainer, false);
-            if (i == 0) menuRow.setSelected(true);
+            if (i == 0) {
+                menuRow.setSelected(true);
+            }
             ImageView menuIcon = (ImageView) menuRow.findViewById(R.id.navMenuIcon);
             TextView menuText = (TextView) menuRow.findViewById(R.id.navMenuText);
             int iconRes = item.getIconRes();

@@ -1,13 +1,9 @@
 package com.mickledeals.adapters;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,7 +24,7 @@ import java.util.List;
  */
 
 
-public class FeatureSliderAdapter extends FragmentPagerAdapter implements
+public class FeatureSliderAdapter extends PagerAdapter implements
         ViewPager.OnPageChangeListener {
 
     private static final long REFRESH_PERIOD = 5000;
@@ -36,9 +32,10 @@ public class FeatureSliderAdapter extends FragmentPagerAdapter implements
     private PagerIndicator mIndicator;
     private ViewPager mViewPager;
     private Handler mHandler;
+    private Activity mActivity;
 
-    public FeatureSliderAdapter(FragmentManager fm, PagerIndicator indicator, ViewPager viewPager) {
-        super(fm);
+    public FeatureSliderAdapter(Activity activity, PagerIndicator indicator, ViewPager viewPager) {
+        mActivity = activity;
         mList = DataListModel.getInstance().getFeatureSliderCouponList();
         mIndicator = indicator;
         mIndicator.setSize(mList.size());
@@ -58,16 +55,34 @@ public class FeatureSliderAdapter extends FragmentPagerAdapter implements
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public boolean isViewFromObject(View view, Object object) {
+        return view == ((View) object);
+    }
 
-        Fragment fragment = new SlidePageFragment();
-        Bundle args = new Bundle();
-        args.putInt("imageResId", mList.get(position).mImageResId);
-        args.putString("storeName", mList.get(position).getStoreName());
-        args.putString("description", mList.get(position).getDescription());
-        args.putInt("position", position);
-        fragment.setArguments(args);
-        return fragment;
+
+    @Override
+    public Object instantiateItem(ViewGroup container, final int position) {
+        DLog.d(this, "onCreateView");
+        ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
+                R.layout.fragment_feature_slide_page, null);
+        final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
+        imageView.setImageResource(mList.get(position).mImageResId);
+        TextView description = (TextView) rootView.findViewById(R.id.slider_text);
+        description.setText(mList.get(position).getStoreName() + " - " + mList.get(position).getDescription());
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String transition = "cardImage" + mList.get(position).mId;
+                Utils.transitDetailsActivity(mActivity, position, Constants.TYPE_FEATURE_SLIDER_LIST, null, transition);
+            }
+        });
+        ((ViewPager) container).addView(rootView, 0);
+        return rootView;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        ((ViewPager) container).removeView((View) object);
     }
 
     @Override
@@ -105,31 +120,5 @@ public class FeatureSliderAdapter extends FragmentPagerAdapter implements
             mHandler.postDelayed(this, REFRESH_PERIOD);
         }
     };
-
-    public static class SlidePageFragment extends Fragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-            DLog.d(this, "onCreateView");
-            ViewGroup rootView = (ViewGroup) inflater.inflate(
-                    R.layout.fragment_feature_slide_page, container, false);
-            final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
-            imageView.setImageResource(getArguments().getInt("imageResId"));
-            TextView description = (TextView) rootView.findViewById(R.id.slider_text);
-            description.setText(getArguments().getString("storeName") + " - " + getArguments().getString("description"));
-            rootView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Utils.transitDetailsActivityFromViewPager(getActivity(), getArguments().getInt("position"), Constants.TYPE_FEATURE_SLIDER_LIST, v);
-                    int pos = getArguments().getInt("position");
-//                    String transition = "cardImage" + mDataset.get(pos).mId;
-                    Utils.transitDetailsActivity(getActivity(), pos, Constants.TYPE_FEATURE_SLIDER_LIST, imageView, transition);
-                }
-            });
-            return rootView;
-
-        }
-    }
 }
 

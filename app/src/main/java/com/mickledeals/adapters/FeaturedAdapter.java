@@ -54,7 +54,7 @@ public class FeaturedAdapter extends CardAdapter {
             params.height = Utils.getDeviceWidth(mFragmentActivity) * 9 / 16;
             pagerLayout.setLayoutParams(params);
             if (mFeatureSliderAdapter == null) {
-                mFeatureSliderAdapter = new FeatureSliderAdapter(mFragmentActivity.getSupportFragmentManager(),
+                mFeatureSliderAdapter = new FeatureSliderAdapter(mFragmentActivity,
                         (PagerIndicator) v.findViewById(R.id.pagerIndicator), pager);
                 pager.setAdapter(mFeatureSliderAdapter);
                 pager.setOnPageChangeListener(mFeatureSliderAdapter);
