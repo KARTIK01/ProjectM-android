@@ -66,7 +66,9 @@
         <item name="android:clickable">true</item>
     </style>
 
-
+    <declare-styleable name="AspectRatioImageView">
+        <attr name="ratio" format="float" />
+    </declare-styleable>
 
 </resources>
 

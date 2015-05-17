@@ -337,6 +337,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     @Override
     public void onResume() {
         super.onResume();
+        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
         if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) {
             mMapView.onResume();
         }

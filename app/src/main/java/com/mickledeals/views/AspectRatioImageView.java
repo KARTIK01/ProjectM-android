@@ -1,8 +1,11 @@
 package com.mickledeals.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.mickledeals.R;
 
 /**
  * Created by Nicky on 12/11/2014.
@@ -17,6 +20,11 @@ public class AspectRatioImageView extends ImageView {
 
     public AspectRatioImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        TypedArray a = getContext().obtainStyledAttributes(attrs,
+                R.styleable.AspectRatioImageView, 0, 0);
+        mRatio = a.getFloat(R.styleable.AspectRatioImageView_ratio, mRatio);
+        a.recycle();
     }
 
     public AspectRatioImageView(Context context, AttributeSet attrs, int defStyle) {
@@ -31,5 +39,9 @@ public class AspectRatioImageView extends ImageView {
 
     public void setRatio(float ratio) {
         mRatio = ratio;
+    }
+
+    public float getRatio() {
+        return mRatio;
     }
 }

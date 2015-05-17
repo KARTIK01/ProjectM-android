@@ -53,7 +53,7 @@ public class SmallCardAdapter extends RecyclerView.Adapter<SmallCardAdapter.View
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.transitDetailsActivity(mFragmentActivity, vh.getPosition(), mListType, v, null);
+                Utils.transitDetailsActivity(mFragmentActivity, vh.getAdapterPosition(), mListType, v, null);
             }
         });
         return vh;

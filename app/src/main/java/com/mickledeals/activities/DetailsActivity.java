@@ -43,6 +43,42 @@ public class DetailsActivity extends BaseActivity  {
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
 
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            TransitionSet set = new TransitionSet();
+//            set.addTransition(new ChangeClipBounds());
+//            set.addTransition(new ChangeImageTransform());
+//            set.addTransition(new ChangeTransform());
+//            set.addTransition(new ChangeBounds());
+//
+//            set.addListener(new Transition.TransitionListener() {
+//                @Override
+//                public void onTransitionStart(Transition transition) {
+//                    Log.e("ZZZ", "onTransitionStart");
+//                }
+//
+//                @Override
+//                public void onTransitionEnd(Transition transition) {
+//                    Log.e("ZZZ", "onTransitionEnd");
+//                }
+//
+//                @Override
+//                public void onTransitionCancel(Transition transition) {
+//                    Log.e("ZZZ", "onTransitionCancel");
+//                }
+//
+//                @Override
+//                public void onTransitionPause(Transition transition) {
+//                    Log.e("ZZZ", "onTransitionPause");
+//                }
+//
+//                @Override
+//                public void onTransitionResume(Transition transition) {
+//                    Log.e("ZZZ", "onTransitionResume");
+//                }
+//            });
+//            getWindow().setSharedElementEnterTransition(set);
+//        }
+
         if (Build.VERSION.SDK_INT >= 21) {
             postponeEnterTransition();
         }

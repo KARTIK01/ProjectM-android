@@ -43,17 +43,7 @@ public class FeaturedAdapter extends CardAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         if (viewType == TYPE_BEST_COUPONS) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(mLayoutRes, parent, false);
-            final MainViewHolder vh = new MainViewHolder(v);
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.transitDetailsActivity(mFragmentActivity, vh.getPosition() - 1, mListType, v, null);
-                }
-            });
-            return vh;
+            return super.onCreateViewHolder(parent, viewType);
 
         } else if (viewType == TYPE_TOP_SECTION) {
             View v = LayoutInflater.from(parent.getContext())
@@ -73,13 +63,13 @@ public class FeaturedAdapter extends CardAdapter {
             HeaderViewHolder hvh = new HeaderViewHolder(v);
 
             RecyclerView mAddedCouponRecyclerView = (RecyclerView) v.findViewById(R.id.addedCouponRecyclerView);
-            RecyclerView mPopularCouponRecyclerView = (RecyclerView) v.findViewById(R.id.popularCouponRecyclerView);
+//            RecyclerView mPopularCouponRecyclerView = (RecyclerView) v.findViewById(R.id.popularCouponRecyclerView);
             mAddedCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
-            mPopularCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
+//            mPopularCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
             mAddedCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getNewAddedCouponList(), Constants.TYPE_NEW_ADDED_LIST, R.layout.card_layout_new));
-            mPopularCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getPopularCouponList(), Constants.TYPE_POPULAR_LIST, R.layout.card_layout_new));
+//            mPopularCouponRecyclerView.setAdapter(new SmallCardAdapter(mFragmentActivity, DataListModel.getInstance().getPopularCouponList(), Constants.TYPE_POPULAR_LIST, R.layout.card_layout_new));
             mAddedCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mPopularCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//            mPopularCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
             return hvh;
         }
         return null;
