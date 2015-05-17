@@ -64,7 +64,7 @@
             android:paddingBottom="6dp"
             android:paddingRight="4dp"
             android:textColor="@color/defaultTextColor"
-            android:textSize="17sp"
+            android:textSize="16sp"
             card_view:minTextSize="15sp" />
 
         <com.mickledeals.views.AutofitTextView
@@ -94,6 +94,11 @@
             android:paddingRight="2dp"
             android:paddingLeft="2dp"
             />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_price_tag"/>
 
 
     </RelativeLayout>

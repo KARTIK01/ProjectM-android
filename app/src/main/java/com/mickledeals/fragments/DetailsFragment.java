@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -344,10 +345,9 @@ public class DetailsFragment extends BaseFragment {
 
     private void showRedeemDialog() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.redeem_dialog, null);
-        final AlertDialog dialog = new AlertDialog.Builder(mContext)
+        final AlertDialog dialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom))
                 .setView(view)
                 .create();
-
         dialog.show();
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -357,10 +357,9 @@ public class DetailsFragment extends BaseFragment {
         });
         final TextView storeName = (TextView) view.findViewById(R.id.storeName);
         storeName.setText(mHolder.getStoreName());
-        final TextView discShort = (TextView) view.findViewById(R.id.discShort);
-        discShort.setText(mHolder.getShortDescription());
         final TextView discLong = (TextView) view.findViewById(R.id.discLong);
         discLong.setText(mHolder.getDescription());
+        discLong.setSelected(true);
         mExpiredTime = (TextView) view.findViewById(R.id.expireTime);
 
         if (mHolder.mRedeemTime == 0) mHolder.mRedeemTime = System.currentTimeMillis();
