@@ -6,8 +6,9 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="3dp"
-    android:layout_marginRight="3dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="2dp"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="2dp"
     card_view:cardElevation="2dp"
@@ -21,7 +22,7 @@
 
         <com.mickledeals.views.AspectRatioImageView
             android:id="@+id/card_image"
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop" />
 
@@ -31,17 +32,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:maxLines="1"
-            android:paddingRight="4dp"
-            android:paddingTop="2dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
             android:textColor="@color/themeTextColor"
-            android:textSize="18sp"
             android:textStyle="bold" />
 
 
         <ImageView
             android:id="@+id/card_save"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="?android:attr/selectableItemBackground"
@@ -51,7 +51,7 @@
             android:paddingTop="7dp" />
 
 
-        <TextView
+        <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,24 +60,40 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingLeft="8dp"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingRight="4dp"
             android:textColor="@color/defaultTextColor"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            card_view:minTextSize="15sp" />
 
-        <TextView
+        <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/card_description"
             android:layout_toRightOf="@id/card_image"
-            android:ellipsize="end"
-            android:maxLines="2"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             android:paddingBottom="4dp"
             android:paddingLeft="8dp"
+            android:paddingRight="34dp"
             android:textColor="@color/lightGrayTextColor"
             android:textSize="17sp"
+            card_view:minTextSize="15sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/card_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#44000000"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            />
 
 
     </RelativeLayout>

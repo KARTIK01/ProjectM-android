@@ -41,7 +41,7 @@
 
     <style name="SectionTextStyle">
         <item name="android:textColor">@color/defaultTextColor</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:layout_marginTop">16dp</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:paddingLeft">12dp</item>
@@ -69,6 +69,17 @@
     <declare-styleable name="AspectRatioImageView">
         <attr name="ratio" format="float" />
     </declare-styleable>
+
+
+        <declare-styleable name="AutofitTextView">
+            <!-- Minimum size of the text. -->
+            <attr name="minTextSize" format="dimension" />
+            <!-- Amount of precision used to calculate the correct text size to fit within its
+            bounds. Lower precision is more precise and takes more time. -->
+            <attr name="precision" format="float" />
+            <!-- Defines whether to automatically resize text to fit to the view's bounds. -->
+            <attr name="sizeToFit" format="boolean" />
+        </declare-styleable>
 
 </resources>
 

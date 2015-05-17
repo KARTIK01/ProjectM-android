@@ -114,14 +114,17 @@ public class FeatureSliderAdapter extends FragmentPagerAdapter implements
             DLog.d(this, "onCreateView");
             ViewGroup rootView = (ViewGroup) inflater.inflate(
                     R.layout.fragment_feature_slide_page, container, false);
-            ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
+            final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
             imageView.setImageResource(getArguments().getInt("imageResId"));
             TextView description = (TextView) rootView.findViewById(R.id.slider_text);
             description.setText(getArguments().getString("storeName") + " - " + getArguments().getString("description"));
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.transitDetailsActivityFromViewPager(getActivity(), getArguments().getInt("position"), Constants.TYPE_FEATURE_SLIDER_LIST, v);
+//                    Utils.transitDetailsActivityFromViewPager(getActivity(), getArguments().getInt("position"), Constants.TYPE_FEATURE_SLIDER_LIST, v);
+                    int pos = getArguments().getInt("position");
+//                    String transition = "cardImage" + mDataset.get(pos).mId;
+                    Utils.transitDetailsActivity(getActivity(), pos, Constants.TYPE_FEATURE_SLIDER_LIST, imageView, transition);
                 }
             });
             return rootView;

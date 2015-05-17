@@ -23,7 +23,6 @@
             android:id="@+id/card_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:alpha="0.5"
             android:scaleType="centerCrop"/>
 
         <TextView
@@ -66,7 +65,7 @@
             android:textColor="@color/defaultTextColor"
             android:textSize="15sp" />
 
-        <TextView
+        <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +76,8 @@
             android:paddingLeft="4dp"
             android:singleLine="true"
             android:textColor="@color/lightGrayTextColor"
-            android:textSize="14sp"
+            android:textSize="15sp"
+            card_view:minTextSize="14sp"
             android:textStyle="bold" />
 
 
