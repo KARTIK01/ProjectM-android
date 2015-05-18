@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.BusinessPhotoSliderAdapter;
-import com.mickledeals.adapters.VerticalPagerAdapter;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
@@ -22,15 +21,12 @@ import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
 import com.mickledeals.views.RoundedImageView;
-import com.mickledeals.views.VerticalViewPager;
 
 /**
  * Created by Nicky on 2/21/2015.
  */
-public class BusinessPageActivity extends BaseActivity {
+public class BusinessPageActivity extends SwipeDismissActivity {
 
-    private VerticalViewPager mViewPager;
-    private VerticalPagerAdapter mAdapter;
 
     private RoundedImageView mRoundedImageView;
     private ViewPager mPhotoViewPager;
@@ -51,13 +47,6 @@ public class BusinessPageActivity extends BaseActivity {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
-
-        mViewPager = (VerticalViewPager) findViewById(R.id.verticalViewPager);
-        mAdapter = new VerticalPagerAdapter(this, mViewPager);
-        mViewPager.setPageTransformer(true, mAdapter);
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(1, false);
-        mViewPager.setOffscreenPageLimit(3);
 
         mDetailsScrollView = (NotifyingScrollView) findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {

@@ -1,0 +1,22 @@
+<com.mickledeals.views.VerticalViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/verticalViewPager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparentViewPagerBg">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/baseLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</com.mickledeals.views.VerticalViewPager>

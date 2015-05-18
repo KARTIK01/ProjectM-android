@@ -1,7 +1,7 @@
 package com.mickledeals.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +21,10 @@ import android.widget.Toast;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPageActivity;
+import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MapActivity;
+import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
@@ -43,6 +44,8 @@ import java.io.IOException;
 public class DetailsFragment extends BaseFragment {
 
     private static final long INTIIAL_REMAINING_TIME = 2 * 60 * 60 * 1000;
+    private static final int REQUEST_CODE_BUY = 1;
+    private static final int REQUEST_CODE_REDEEM = 2;
 
     private TestDataHolder mHolder;
 
@@ -128,21 +131,22 @@ public class DetailsFragment extends BaseFragment {
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBuyDialog();
-            }
-        });
-
-        mJoinVipBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showVipDialog();
+//                showBuyDialog();
+                Intent i = new Intent(mContext, BuyDialogActivity.class);
+                i.putExtra("price", mHolder.mPrice);
+                startActivityForResult(i, REQUEST_CODE_BUY);
             }
         });
 
         mRedeemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showRedeemDialog();
+//                showRedeemDialog();
+                Intent i = new Intent(mContext, RedeemDialogActivity.class);
+                i.putExtra("storeName", mHolder.getStoreName());
+                i.putExtra("couponDesc", mHolder.getDescription());
+                startActivityForResult(i, REQUEST_CODE_REDEEM);
+
             }
         });
 
@@ -236,6 +240,19 @@ public class DetailsFragment extends BaseFragment {
                 });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_BUY) {
+                mRedeemPanel.setVisibility(View.VISIBLE);
+                mBuyPanel.setVisibility(View.GONE);
+            } else if (requestCode == REQUEST_CODE_REDEEM) {
+
+            }
+        }
+    }
+
     public void setOnScrollChangeListener(NotifyingScrollView.OnScrollChangedListener listener) {
         mScrollListener = listener;
     }
@@ -281,10 +298,6 @@ public class DetailsFragment extends BaseFragment {
                 Uri.fromFile(file));
         shareIntent.setType("image/*");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_to)));
-    }
-
-    private void showVipDialog() {
-
     }
 
     private void showBuyDialog() {
@@ -344,28 +357,28 @@ public class DetailsFragment extends BaseFragment {
     }
 
     private void showRedeemDialog() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.redeem_dialog, null);
-        final AlertDialog dialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom))
-                .setView(view)
-                .create();
-        dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                mHandler.removeCallbacks(mUpdatetimerThread);
-            }
-        });
-        final TextView storeName = (TextView) view.findViewById(R.id.storeName);
-        storeName.setText(mHolder.getStoreName());
-        final TextView discLong = (TextView) view.findViewById(R.id.discLong);
-        discLong.setText(mHolder.getDescription());
-        discLong.setSelected(true);
-        mExpiredTime = (TextView) view.findViewById(R.id.expireTime);
-
-        if (mHolder.mRedeemTime == 0) mHolder.mRedeemTime = System.currentTimeMillis();
-
-        mHandler.removeCallbacks(mUpdatetimerThread);
-        mHandler.postDelayed(mUpdatetimerThread, 0);
+//        View view = LayoutInflater.from(mContext).inflate(R.layout.redeem_dialog, null);
+//        final AlertDialog dialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom))
+//                .setView(view)
+//                .create();
+//        dialog.show();
+//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                mHandler.removeCallbacks(mUpdatetimerThread);
+//            }
+//        });
+//        final TextView storeName = (TextView) view.findViewById(R.id.storeName);
+//        storeName.setText(mHolder.getStoreName());
+//        final TextView discLong = (TextView) view.findViewById(R.id.discLong);
+//        discLong.setText(mHolder.getDescription());
+//        discLong.setSelected(true);
+//        mExpiredTime = (TextView) view.findViewById(R.id.expireTime);
+//
+//        if (mHolder.mRedeemTime == 0) mHolder.mRedeemTime = System.currentTimeMillis();
+//
+//        mHandler.removeCallbacks(mUpdatetimerThread);
+//        mHandler.postDelayed(mUpdatetimerThread, 0);
     }
 
     private String getExpiredTimerValue() {

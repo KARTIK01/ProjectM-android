@@ -61,6 +61,10 @@
             />
         <activity android:name=".activities.MapActivity"
             android:theme="@style/AppTheme.Base.ActionBar" />
+        <activity android:name=".activities.RedeemDialogActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
+        <activity android:name=".activities.BuyDialogActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
     </application>
 
 </manifest>

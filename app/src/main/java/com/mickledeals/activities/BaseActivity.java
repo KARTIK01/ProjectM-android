@@ -5,8 +5,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.mickledeals.R;
 
@@ -33,17 +34,22 @@ public abstract class BaseActivity extends ActionBarActivity{
             }
         }
 
-
-        setContentView(getLayoutResource());
+        if (this instanceof SwipeDismissActivity) {
+            setContentView(R.layout.activity_swipe_dismiss_base);
+            getLayoutInflater().inflate(getLayoutResource(), (RelativeLayout) findViewById(R.id.baseLayout), true);
+        } else {
+            setContentView(getLayoutResource());
+        }
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolBar != null) {
             setSupportActionBar(mToolBar);
-//            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    finish();
-//                }
-//            });
+            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //to enforce activity return transition
+                    onBackPressed();
+                }
+            });
         }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -72,11 +78,5 @@ public abstract class BaseActivity extends ActionBarActivity{
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e("ZZZ", "destroy" + this.getClass().getSimpleName());
     }
 }

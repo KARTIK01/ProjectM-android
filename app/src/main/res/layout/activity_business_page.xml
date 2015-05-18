@@ -1,268 +1,250 @@
-<com.mickledeals.views.VerticalViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/verticalViewPager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/defaultLightGrayBg">
 
-    <View
+    <com.mickledeals.views.NotifyingScrollView
+        android:id="@+id/detailsScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparentViewPagerBg" />
+        android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/defaultLightGrayBg">
 
-        <com.mickledeals.views.NotifyingScrollView
-            android:id="@+id/detailsScrollView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:showDividers="middle"
+            android:paddingBottom="8dp">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <LinearLayout
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/pic_business" />
+
+                <com.mickledeals.views.RoundedImageView
+                    android:id="@+id/roundImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/pic_business_logo" />
+
+            </RelativeLayout>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:showDividers="middle"
-                android:paddingBottom="8dp">
+                android:gravity="center_horizontal"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="Savory SteakHouse"
+                android:textColor="@color/lightGrayTextColor"
+                android:textSize="19sp"
+                android:textStyle="bold" />
 
-                <RelativeLayout
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="@string/business_description"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="@string/news"
+                android:textColor="@color/lightGrayTextColor"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/business_news1"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/business_news2"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="@string/photos"
+                android:textColor="@color/lightGrayTextColor"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/photoViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:clipToPadding="false"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp" />
+
+            <com.mickledeals.views.PagerIndicator
+                android:id="@+id/pagerIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="@string/info"
+                android:textColor="@color/lightGrayTextColor"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="3dp"
+                card_view:cardUseCompatPadding="true">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imageView"
+                    <TextView
+                        android:id="@+id/address"
+                        style="@style/StoreInfoTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/pic_business" />
+                        android:drawableLeft="@drawable/ic_location" />
 
-                    <com.mickledeals.views.RoundedImageView
-                        android:id="@+id/roundImageView"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_centerHorizontal="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/pic_business_logo" />
-
-                </RelativeLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:text="Savory SteakHouse"
-                    android:textColor="@color/lightGrayTextColor"
-                    android:textSize="19sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/business_description"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/news"
-                    android:textColor="@color/lightGrayTextColor"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/business_news1"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/business_news2"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/photos"
-                    android:textColor="@color/lightGrayTextColor"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/photoViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="230dp"
-                    android:clipToPadding="false"
-                    android:paddingLeft="26dp"
-                    android:paddingRight="26dp" />
-
-                <com.mickledeals.views.PagerIndicator
-                    android:id="@+id/pagerIndicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/info"
-                    android:textColor="@color/lightGrayTextColor"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    card_view:cardCornerRadius="2dp"
-                    card_view:cardElevation="3dp"
-                    card_view:cardUseCompatPadding="true">
+                    <TextView
+                        android:id="@+id/directions"
+                        style="@style/StoreInfoTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_direction"
+                        android:text="@string/get_directions" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/address"
+                            android:id="@+id/call"
                             style="@style/StoreInfoTextStyle"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_location" />
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/ic_call"
+                            android:text="(415)723-9412" />
 
                         <TextView
-                            android:id="@+id/directions"
+                            android:id="@+id/website"
                             style="@style/StoreInfoTextStyle"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_direction"
-                            android:text="@string/get_directions" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/call"
-                                style="@style/StoreInfoTextStyle"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableLeft="@drawable/ic_call"
-                                android:text="(415)723-9412" />
-
-                            <TextView
-                                android:id="@+id/website"
-                                style="@style/StoreInfoTextStyle"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableLeft="@drawable/ic_website"
-                                android:text="@string/website" />
-
-                        </LinearLayout>
-
-
-                        <TextView
-                            android:id="@+id/openHours"
-                            style="@style/StoreInfoTextStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_clock" />
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/ic_website"
+                            android:text="@string/website" />
 
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/coupons"
-                    android:textColor="@color/lightGrayTextColor"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/moreCouponRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="6dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="2dp"
-                    android:visibility="gone" />
 
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/openHours"
+                        style="@style/StoreInfoTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_clock" />
 
-        </com.mickledeals.views.NotifyingScrollView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/details_pic_tint_bg" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="@string/coupons"
+                android:textColor="@color/lightGrayTextColor"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
+            <LinearLayout
+                android:id="@+id/moreCouponRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="6dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
+                android:visibility="gone" />
 
-        <include
-            android:id="@+id/toolbarShadow"
-            layout="@layout/toolbar_shadow" />
 
+        </LinearLayout>
 
-    </RelativeLayout>
-
+    </com.mickledeals.views.NotifyingScrollView>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparentViewPagerBg" />
+        android:layout_height="56dp"
+        android:background="@drawable/details_pic_tint_bg" />
 
-</com.mickledeals.views.VerticalViewPager>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <include
+        android:id="@+id/toolbarShadow"
+        layout="@layout/toolbar_shadow" />
+
+
+</RelativeLayout>

@@ -1,100 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogContainer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="20dp">
 
-    <ImageView
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/dialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitStart"
-        android:src="@drawable/water_mark_bg"
-        android:adjustViewBounds="true"/>
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="10dp"
+        card_view:cardUseCompatPadding="true"
+        android:clipChildren="true"
+        android:clipToPadding="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/redeem_dialog_header"
-            android:textColor="@color/white" />
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/baseContent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/water_mark_bg"
+                android:adjustViewBounds="false" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp"
-            android:padding="12dp">
-
-            <TextView
-                android:id="@+id/storeName"
+            <LinearLayout
+                android:id="@+id/baseContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textColor="@color/defaultTextColor"
-                android:textSize="26sp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/discLong"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textColor="@color/defaultTextColor"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:padding="8dp"
-                android:textSize="20sp" />
-
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="20dp">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#FF0000"
-            android:orientation="horizontal"
-            android:padding="4dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/redeem_dialog_header"
+                    android:textColor="@color/white" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/expires_in"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card_view:cardCornerRadius="5dp"
+                    card_view:cardElevation="5dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:layout_marginTop="16dp">
 
-            <TextView
-                android:id="@+id/expireTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-        </LinearLayout>
+                        <TextView
+                            android:id="@+id/storeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/defaultTextColor"
+                            android:textSize="26sp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/discLong"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/defaultTextColor"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:padding="8dp"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="#FF0000"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/expires_in"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/expireTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/redeem_dialog_footer"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-
-</FrameLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/redeem_dialog_footer"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

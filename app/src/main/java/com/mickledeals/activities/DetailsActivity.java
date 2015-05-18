@@ -13,22 +13,17 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.mickledeals.R;
-import com.mickledeals.adapters.VerticalPagerAdapter;
 import com.mickledeals.fragments.DetailsFragment;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
-import com.mickledeals.views.VerticalViewPager;
 
 import java.util.List;
 
 /**
  * Created by Nicky on 12/27/2014.
  */
-public class DetailsActivity extends BaseActivity  {
-
-    private VerticalViewPager mViewPager;
-    private VerticalPagerAdapter mAdapter;
+public class DetailsActivity extends SwipeDismissActivity  {
 
     private ViewPager mDetailsViewPager;
     private int mListType;
@@ -42,53 +37,9 @@ public class DetailsActivity extends BaseActivity  {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
-
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            TransitionSet set = new TransitionSet();
-//            set.addTransition(new ChangeClipBounds());
-//            set.addTransition(new ChangeImageTransform());
-//            set.addTransition(new ChangeTransform());
-//            set.addTransition(new ChangeBounds());
-//
-//            set.addListener(new Transition.TransitionListener() {
-//                @Override
-//                public void onTransitionStart(Transition transition) {
-//                    Log.e("ZZZ", "onTransitionStart");
-//                }
-//
-//                @Override
-//                public void onTransitionEnd(Transition transition) {
-//                    Log.e("ZZZ", "onTransitionEnd");
-//                }
-//
-//                @Override
-//                public void onTransitionCancel(Transition transition) {
-//                    Log.e("ZZZ", "onTransitionCancel");
-//                }
-//
-//                @Override
-//                public void onTransitionPause(Transition transition) {
-//                    Log.e("ZZZ", "onTransitionPause");
-//                }
-//
-//                @Override
-//                public void onTransitionResume(Transition transition) {
-//                    Log.e("ZZZ", "onTransitionResume");
-//                }
-//            });
-//            getWindow().setSharedElementEnterTransition(set);
-//        }
-
         if (Build.VERSION.SDK_INT >= 21) {
             postponeEnterTransition();
         }
-
-        mViewPager = (VerticalViewPager) findViewById(R.id.verticalViewPager);
-        mAdapter = new VerticalPagerAdapter(this, mViewPager);
-        mViewPager.setPageTransformer(true, mAdapter);
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(1, false);
-        mViewPager.setOffscreenPageLimit(3);
 
         mInitialIndex = getIntent().getIntExtra("listIndex", 0);
         mListType = getIntent().getIntExtra("listType", 0);

@@ -1,7 +1,9 @@
 package com.mickledeals.adapters;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +16,7 @@ public class VerticalPagerAdapter extends PagerAdapter implements
         VerticalViewPager.PageTransformer {
     private Activity mActivity;
     private VerticalViewPager mPager;
+    private Drawable mBg;
 
     public float getPageHeight(int position) {
         return 1f;
@@ -21,6 +24,7 @@ public class VerticalPagerAdapter extends PagerAdapter implements
     public VerticalPagerAdapter(Activity a, VerticalViewPager pager) {
         mActivity = a;
         mPager = pager;
+        mBg = mPager.getBackground().mutate();
     }
     public int getCount() {
         return 3;
@@ -46,7 +50,16 @@ public class VerticalPagerAdapter extends PagerAdapter implements
         }
         if (view == mPager.getChildAt(1)) return;
 
-        if (position >= 0 && position <= 1) view.setAlpha(position);
-        else if (position <= 0 && position >= -1) view.setAlpha(-position);
+//        if (position >= 0 && position <= 1) view.setAlpha(position);
+//        else if (position <= 0 && position >= -1) view.setAlpha(-position);
+        Log.e("ZZZ", "position= " + position);
+        if (position >= 0 && position <= 1) {
+            mBg.setAlpha((int)(position * 255));
+            mPager.getChildAt(1).setAlpha(position * 2);
+        }
+        else if (position <= 0 && position >= -1) {
+            mBg.setAlpha(-(int)(position * 255));
+            mPager.getChildAt(1).setAlpha(-position * 2);
+        }
     }
 }

@@ -1,45 +1,25 @@
-<com.mickledeals.views.VerticalViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/verticalViewPager"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparentViewPagerBg" />
+        android:layout_height="56dp"
+        android:background="@drawable/details_pic_tint_bg" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/details_pic_tint_bg"
-            />
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
 
-        <include
-            android:id="@+id/toolbarShadow"
-            layout="@layout/toolbar_shadow" />
+    <include
+        android:id="@+id/toolbarShadow"
+        layout="@layout/toolbar_shadow" />
 
-    </RelativeLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparentViewPagerBg" />
-
-</com.mickledeals.views.VerticalViewPager>
+</RelativeLayout>
