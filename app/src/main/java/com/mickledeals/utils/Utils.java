@@ -53,7 +53,7 @@ public class Utils {
 //        sNavMenuList.add(new NavMenuItem(RandomCouponsFragment.class, R.string.menu_random, R.drawable.ic_random));
         sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
         sNavMenuList.add(new NavMenuItem(NotificationActivity.class, R.string.menu_notification, R.drawable.ic_bell));
-        sNavMenuList.add(new NavMenuItem(AccountActivity.class, R.string.menu_account, R.drawable.ic_account));
+        sNavMenuList.add(new NavMenuItem(AccountActivity.class, R.string.menu_account, R.drawable.ic_payment));
         sNavMenuList.add(new NavMenuItem(RedeemActivity.class, R.string.menu_redeem, R.drawable.ic_gift));
         sNavMenuList.add(new NavMenuItem(SettingsActivity.class, R.string.menu_settings, R.drawable.ic_setting));
         sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
