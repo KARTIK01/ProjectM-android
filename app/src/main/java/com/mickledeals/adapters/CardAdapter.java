@@ -13,6 +13,7 @@ import com.mickledeals.R;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.LocationManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.AspectRatioImageView;
@@ -145,8 +146,8 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             if (viewholder.mCardDist != null) {
                 viewholder.mCardDist.setVisibility(View.VISIBLE);
-                float dist = Utils.getDistanceFromCurLocation(dataHolder);
-                if (dist == 0) {
+                float dist = LocationManager.getInstance(mFragmentActivity).getDistanceFromCurLocation(dataHolder);
+                if (dist < 0) {
                     viewholder.mCardDist.setVisibility(View.GONE);
                 } else {
                     viewholder.mCardDist.setText(dist + " mi");

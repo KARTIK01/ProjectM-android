@@ -29,6 +29,7 @@ import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.LocationManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
@@ -109,9 +110,9 @@ public class DetailsFragment extends BaseFragment {
         ((TextView) view.findViewById(R.id.couponPrice)).setText(mHolder.mPrice == 0 ? "FREE" : "$" + (int) (mHolder.mPrice));
         ((TextView) view.findViewById(R.id.buyPrice)).setText("$" + (int) (mHolder.mPrice));
         ((TextView) view.findViewById(R.id.address)).setText(mHolder.mAddress);
-        float dist = Utils.getDistanceFromCurLocation(mHolder);
+        float dist = LocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
         String addrShort = mHolder.mAddressShort;
-        if (dist != 0) {
+        if (dist > 0) {
             addrShort += " • " + dist + " mi";
         }
         ((TextView) view.findViewById(R.id.addressDist)).setText(addrShort);
