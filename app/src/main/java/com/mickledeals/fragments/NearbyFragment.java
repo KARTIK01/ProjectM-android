@@ -53,6 +53,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
     private static final double LONG_DEFAULT = -122.440690;
     private Spinner mCategorySpinner;
     private Spinner mLocationSpinner;
+    private Spinner mSortSpinner;
     private RecyclerView mNearbyRecyclerView;
     private ImageView mMapToggleView;
     private FrameLayout mMapContainer;
@@ -94,6 +95,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         super.onViewCreated(view, savedInstanceState);
         mCategorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
         mLocationSpinner = (Spinner) view.findViewById(R.id.locationSpinner);
+        mSortSpinner = (Spinner) view.findViewById(R.id.sortSpinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
                 R.array.category_name, R.layout.spinner_textview);
@@ -102,6 +104,7 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
         mCategorySpinner.post(new Runnable() {
             @Override
             public void run() {
+                //prevent onitem listener get called
                 mCategorySpinner.setOnItemSelectedListener(NearbyFragment.this);
             }
         });
@@ -114,6 +117,16 @@ public class NearbyFragment extends BaseFragment implements AdapterView.OnItemSe
             @Override
             public void run() {
                 mLocationSpinner.setOnItemSelectedListener(NearbyFragment.this);
+            }
+        });
+        adapter = ArrayAdapter.createFromResource(mContext,
+                R.array.sort_options, R.layout.dummy_spinner_textview);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        mSortSpinner.setAdapter(adapter);
+        mSortSpinner.post(new Runnable() {
+            @Override
+            public void run() {
+                mSortSpinner.setOnItemSelectedListener(NearbyFragment.this);
             }
         });
 

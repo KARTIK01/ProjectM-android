@@ -9,14 +9,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlNormal">#ffffff</item>
-        <item name="colorControlHighlight">#ffffff</item>
     </style>
 
     <style name="AppTheme.Base.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorControlHighlight">#ffffff</item>
     </style>
 
     <style name="AppTheme.Base.Transcluent" parent="AppTheme.Base">

@@ -60,11 +60,11 @@
     <string name="confirm">確定</string>
 
     <!-- Redeem Dialog -->
-
+<!--
     <string name="redeem_dialog_header">感謝你購買此優惠券，你將獲得</string>
     <string name="expires_in">離過期還剩 </string>
     <string name="redeem_dialog_footer">請在兌換優惠時向商戶展示此認證畫面</string>
-
+-->
     <!-- Business Page -->
     <string name="news">最新消息</string>
     <string name="photos">相片</string>

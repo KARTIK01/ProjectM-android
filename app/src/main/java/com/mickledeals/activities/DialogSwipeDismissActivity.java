@@ -43,7 +43,7 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
             }
 
         });
-        colorAnimation.setDuration(1000);
+        colorAnimation.setDuration(500);
         colorAnimation.start();
     }
 }

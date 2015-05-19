@@ -13,14 +13,14 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:paddingLeft="8dp"
-        android:layout_weight="1.1"
+        android:layout_weight="1"
         android:background="@drawable/transparent_white_selector_bg"/>
 
     <Spinner
         android:id="@+id/locationSpinner"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="1.1"
         android:background="@drawable/transparent_white_selector_bg"/>
 
     <ImageView
@@ -28,9 +28,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/transparent_white_selector_bg"
-        android:paddingLeft="8dp"
+        android:paddingLeft="10dp"
         android:paddingRight="8dp"
         android:src="@drawable/ic_map" />
+
 
     <FrameLayout
         android:layout_width="42dp"
@@ -51,8 +52,6 @@
             android:background="@drawable/transparent_white_selector_bg"
             />
 
-        </FrameLayout>
-
-
+    </FrameLayout>
 
 </LinearLayout>

@@ -51,6 +51,9 @@ public class DetailsActivity extends SwipeDismissActivity  {
         mDetailsViewPager.setOnPageChangeListener(adapter);
         mDetailsViewPager.setCurrentItem(mInitialIndex);
         mDetailsViewPager.setPageMargin(Utils.getPixelsFromDip(30f, getResources()));
+
+//        mDetailsViewPager.setPageMarginDrawable(R.drawable.water_mark_bg);
+//        mDetailsViewPager.setPageMarginDrawable(R.color.transparentViewPagerDivider);
         getSupportActionBar().setTitle(mList.get(mInitialIndex).getStoreName());
         setToolBarTransparency(0);
     }

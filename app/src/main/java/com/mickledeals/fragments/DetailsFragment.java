@@ -143,8 +143,8 @@ public class DetailsFragment extends BaseFragment {
             public void onClick(View v) {
 //                showRedeemDialog();
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
-                i.putExtra("storeName", mHolder.getStoreName());
-                i.putExtra("couponDesc", mHolder.getDescription());
+                i.putExtra("storeName", mHolder.mStoreName);
+                i.putExtra("couponDesc", mHolder.mDescription);
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
 
             }

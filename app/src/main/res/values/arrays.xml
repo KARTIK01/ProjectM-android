@@ -8,7 +8,7 @@
         <item>Local Services</item>
     </string-array>
     <string-array name="city_name">
-        <item>Current Location</item>
+        <item>All Locations</item>
         <item>San Francisco</item>
         <item>Daly City</item>
         <item>South San Francisco</item>
@@ -16,6 +16,11 @@
         <item>Millbrae</item>
         <item>Burlingame</item>
         <item>San Mateo</item>
+    </string-array>
+    <string-array name="sort_options">
+        <item>Sort by Distance</item>
+        <item>Sort by Date Added</item>
+        <item>Random</item>
     </string-array>
     <string-array name="language_list">
         <item>English</item>
