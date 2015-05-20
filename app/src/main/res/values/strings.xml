@@ -37,6 +37,9 @@
     <string name="no_results_found">No matched results found :(</string>
     <string name="try_different_filter">Please select a different location or category to search</string>
 
+    <!-- Save -->
+    <string name="empty_save_msg">You will see your saved coupons here by tapping on the star icon in any coupon</string>
+
     <!-- Featured -->
     <string name="new_added_coupons">New Added Coupons</string>
     <string name="popular_coupons">Popular Coupons</string>

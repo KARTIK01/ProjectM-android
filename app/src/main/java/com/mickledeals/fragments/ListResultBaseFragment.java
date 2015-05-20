@@ -1,10 +1,7 @@
 package com.mickledeals.fragments;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +26,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
-import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
@@ -51,14 +47,14 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     private Spinner mCategorySpinner;
     private Spinner mLocationSpinner;
     private Spinner mSortSpinner;
-    private RecyclerView mNearbyRecyclerView;
+    protected RecyclerView mListResultRecyclerView;
     private ImageView mMapToggleView;
     private FrameLayout mMapContainer;
     private MapView mMapView;
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
     private BitmapDescriptor mPinBitmap;
-    private List<TestDataHolder> mNearbyList;
+    protected List<TestDataHolder> mDataList;
     private View mNoResultLayout;
     private boolean mNeedPopularMapOverlays;
 
@@ -70,11 +66,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
         mLocationManager = LocationManager.getInstance(mContext);
         mLocationManager.registerCallback(this);
-
-        mNearbyList = DataListModel.getInstance().getNearbyList();
-        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
-            mNearbyList.add(DataListModel.getInstance().getDataList().get(i));
-        }
+        mDataList = getDataList();
+        mLocationManager.connect();
     }
 
     @Override
@@ -83,10 +76,9 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
         DLog.d(this, "onCreateView");
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_nearby, container, false);
+                getFragmentLayoutRes(), container, false);
 
         return rootView;
-
     }
 
     @Override
@@ -96,17 +88,20 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mLocationSpinner = (Spinner) view.findViewById(R.id.locationSpinner);
         mSortSpinner = (Spinner) view.findViewById(R.id.sortSpinner);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext,
-                R.array.category_name, R.layout.spinner_textview);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mCategorySpinner.setAdapter(adapter);
-        mCategorySpinner.post(new Runnable() {
-            @Override
-            public void run() {
-                //prevent onitem listener get called
-                mCategorySpinner.setOnItemSelectedListener(ListResultBaseFragment.this);
-            }
-        });
+        ArrayAdapter<CharSequence> adapter;
+        if (mCategorySpinner != null) {
+            adapter = ArrayAdapter.createFromResource(mContext,
+                    R.array.category_name, R.layout.spinner_textview);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCategorySpinner.setAdapter(adapter);
+            mCategorySpinner.post(new Runnable() {
+                @Override
+                public void run() {
+                    //prevent onitem listener get called
+                    mCategorySpinner.setOnItemSelectedListener(ListResultBaseFragment.this);
+                }
+            });
+        }
 
         adapter = ArrayAdapter.createFromResource(mContext,
                 R.array.city_name, R.layout.spinner_textview);
@@ -129,30 +124,15 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
             }
         });
 
-        final int margin = getResources().getDimensionPixelSize(R.dimen.card_margin);
-        final int bottomMargin = getResources().getDimensionPixelSize(R.dimen.card_margin_bottom);
-
-        mNearbyRecyclerView = (RecyclerView) view.findViewById(R.id.nearbyRecyclerView);
-        mNearbyRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
-        mNearbyRecyclerView.setAdapter(new CardAdapter(getActivity(), mNearbyList, Constants.TYPE_NEARBY_LIST, R.layout.card_layout));
-        mNearbyRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mNearbyRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int pos = parent.getChildPosition(view);
-                boolean leftside = pos % 2 == 0;
-                outRect.left = leftside ? margin : margin / 2;
-                outRect.right = leftside ? margin / 2 : margin;
-                outRect.bottom = bottomMargin;
-            }
-        });
+        mListResultRecyclerView = (RecyclerView) view.findViewById(R.id.listResultRecyclerView);
+        setRecyclerView();
         mNoResultLayout = view.findViewById(R.id.noResultLayout);
         mMapContainer = (FrameLayout) view.findViewById(R.id.mapContainer);
         mMapToggleView = (ImageView) view.findViewById(R.id.mapToggleView);
         mMapToggleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mNearbyRecyclerView.getVisibility() == View.VISIBLE) {
+                if (mListResultRecyclerView.getVisibility() == View.VISIBLE) {
                     if (mMapView == null) initMapView();
                     showMap();
                 } else {
@@ -164,7 +144,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     @Override
     public boolean handleBackPressed() { //only get called when its current active fragment
-        if (mNearbyRecyclerView.getVisibility() != View.VISIBLE) {
+        if (mListResultRecyclerView.getVisibility() != View.VISIBLE) {
             hideMap();
             return true;
         }
@@ -185,10 +165,10 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     private void hideMap() {
         mMapToggleView.setImageResource(R.drawable.ic_map);
-        mNearbyRecyclerView.setVisibility(View.VISIBLE);
+        mListResultRecyclerView.setVisibility(View.VISIBLE);
         mMapContainer.setVisibility(View.GONE);
         mMapContainer.removeView(mMapView);
-        if (mNearbyList.size() == 0) {
+        if (mDataList.size() == 0) {
             mNoResultLayout.setVisibility(View.VISIBLE);
         }
         if (mMapView != null) mMapView.onPause();
@@ -196,7 +176,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     private void showMap() {
         mMapToggleView.setImageResource(R.drawable.ic_list);
-        mNearbyRecyclerView.setVisibility(View.GONE);
+        mListResultRecyclerView.setVisibility(View.GONE);
         mMapContainer.setVisibility(View.VISIBLE);
         mMapContainer.addView(mMapView);
         mMapView.onResume();
@@ -256,9 +236,9 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
 
-        for (int i = 0; i < mNearbyList.size(); i++) {
+        for (int i = 0; i < mDataList.size(); i++) {
 
-            TestDataHolder dataHolder = mNearbyList.get(i);
+            TestDataHolder dataHolder = mDataList.get(i);
             LatLng ll = Utils.getLatLngFromDataHolder(dataHolder);
 
             Marker marker = mMap.addMarker(new MarkerOptions()
@@ -273,16 +253,16 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         }
 
 
-        if (mNearbyList.size() == 0) {
+        if (mDataList.size() == 0) {
             if (anim)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LAT_DEFAULT, LONG_DEFAULT), 12));
             else
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LAT_DEFAULT, LONG_DEFAULT), 12));
-        } else if (mNearbyList.size() == 1) {
+        } else if (mDataList.size() == 1) {
             if (anim) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mNearbyList.get(0)), 15));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mDataList.get(0)), 15));
             } else {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mNearbyList.get(0)), 15));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mDataList.get(0)), 15));
             }
         } else {
             LatLngBounds bounds = boundsBuilder.build();
@@ -301,7 +281,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         DLog.d(this, "onItemSelected");
-        updateSearchFromSpinner();
+        sendUpdateRequest();
     }
 
     @Override
@@ -310,10 +290,12 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     }
 
 
-    //Temporary for demo
-    public void updateSearchFromSpinner() {
+    public void sendUpdateRequest() {
         mNeedPopularMapOverlays = true;
-        mNearbyList.clear();
+        mDataList.clear();
+
+        //call api
+        //temporrary
         for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
             boolean matchCategory = false;
             boolean matchLocation = false;
@@ -329,20 +311,21 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
             if (locationPos == 0 || cityName.equals(targetCityName)) {
                 matchLocation = true;
             }
-            if (matchCategory && matchLocation) {
-                mNearbyList.add(DataListModel.getInstance().getDataList().get(i));
+
+            if (this instanceof SavedCouponsFragment) {
+                if (matchCategory && matchLocation && holder.mSaved) {
+                    mDataList.add(DataListModel.getInstance().getDataList().get(i));
+                }
+            } else {
+                if (matchCategory && matchLocation) {
+                    mDataList.add(DataListModel.getInstance().getDataList().get(i));
+                }
             }
-
         }
-
-        //get last location for api call
-        if (mLocationManager.getLastLocation() == null) {
-            //return and wait for onConnect callback
-        }
-        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
-        if (mNearbyList.size() == 0) {
+        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
+        if (mDataList.size() == 0) {
             if (mMapContainer.getVisibility() == View.VISIBLE) {
-                Toast.makeText(mContext, getString(R.string.no_results_found) + " " + getString(R.string.try_different_filter), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, getNoResultToastMessage(), Toast.LENGTH_LONG).show();
             } else {
                 mNoResultLayout.setVisibility(View.VISIBLE);
             }
@@ -355,7 +338,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     @Override
     public void onResume() {
         super.onResume();
-        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
+        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
         if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) {
             mMapView.onResume();
         }
@@ -375,7 +358,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     @Override
     public void onConnected() {
-        mNearbyRecyclerView.getAdapter().notifyDataSetChanged();
+        sendUpdateRequest();
     }
 
     public void onConnectionFailed() {
@@ -385,7 +368,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     public void onStart() { // this is actually the same lifecycle as its activity
         super.onStart();
         DLog.d(this, "onStart");
-        mLocationManager.connect();
+        //no need get location here, going back to activity(onstart) should not request another update
+//        mLocationManager.connect();
     }
 
     @Override
@@ -394,4 +378,12 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         DLog.d(this, "onStop");
         mLocationManager.disconnect();
     }
+
+    public abstract List<TestDataHolder> getDataList();
+
+    public abstract int getFragmentLayoutRes();
+
+    public abstract void setRecyclerView();
+
+    public abstract String getNoResultToastMessage();
 }

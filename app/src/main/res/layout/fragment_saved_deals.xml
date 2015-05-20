@@ -2,9 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/defaultLightGrayBg"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:background="@color/defaultLightGrayBg">
 
     <include layout="@layout/filter_panel" />
 
@@ -12,8 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/mapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/listResultRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -21,12 +26,31 @@
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical" />
 
+        <LinearLayout
+            android:id="@+id/noResultLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/empty_save_msg"
+                android:textSize="17sp"
+                android:padding="30dp"
+                android:textColor="@color/lighterGrayTextColor"/>
+
+
+        </LinearLayout>
 
 
         <include
             android:id="@+id/toolbarShadow"
-            layout="@layout/toolbar_shadow"
-            />
+            layout="@layout/toolbar_shadow" />
+
 
     </FrameLayout>
 

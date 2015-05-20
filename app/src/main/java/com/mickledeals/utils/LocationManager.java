@@ -23,6 +23,7 @@ public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, Go
     private LocationConnectionCallback mCallback;
     private static LocationManager sManager;
     private Location mLastLocation;
+//    private boolean isConnecting;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -43,9 +44,11 @@ public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, Go
     }
 
     public Location getLastLocation() {
-        if (mLastLocation == null) {
-            connect();
-        }
+        //adding this logic may not be needed and could be error prone
+//        if (mLastLocation == null && !isConnecting) {
+//            isConnecting = true;
+//            connect();
+//        }
         return mLastLocation;
     }
 
@@ -71,6 +74,7 @@ public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, Go
     @Override
     public void onConnected(Bundle bundle) {
         DLog.d(this, "onConnected");
+//        isConnecting = false;
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mCallback != null) mCallback.onConnected();
@@ -79,12 +83,14 @@ public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, Go
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         DLog.d(this, "onConnectionFailed");
+//        isConnecting = false;
         if (mCallback != null) mCallback.onConnectionFailed();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         DLog.d(this, "onConnectionSuspended");
+//        isConnecting = false;
         if (mCallback != null) mCallback.onConnectionFailed();
     }
 

@@ -32,6 +32,10 @@
     <string name="no_results_found">沒有符合的結果 :(</string>
     <string name="try_different_filter">請選擇其他地點或類別</string>
 
+
+    <!-- Save -->
+    <string name="empty_save_msg">請在任何優惠券按下星號以顯示在這收藏夾中</string>
+
     <!-- Featured -->
     <string name="new_added_coupons">最新優惠</string>
     <string name="popular_coupons">熱門之選</string>
