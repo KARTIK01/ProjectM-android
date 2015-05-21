@@ -27,6 +27,7 @@ public class DataListModel {
     private List<TestDataHolder> mBoughtList = new ArrayList<TestDataHolder>();
 
     private List<TestDataHolder> mMoreCouponsList = new ArrayList<TestDataHolder>();
+    private List<TestDataHolder> mSearchResultList = new ArrayList<TestDataHolder>();
 
     public static DataListModel getInstance() {
         if (sInstance == null) {
@@ -81,6 +82,10 @@ public class DataListModel {
 
     public List<TestDataHolder> getMoreCouponsList() {
         return mMoreCouponsList;
+    }
+
+    public List<TestDataHolder> getSearchResultList() {
+        return mSearchResultList;
     }
 
     private void initFeatureSliderCoupon() {

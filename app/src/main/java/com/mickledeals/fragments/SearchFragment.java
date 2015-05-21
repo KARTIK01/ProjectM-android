@@ -14,20 +14,16 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class SavedCouponsFragment extends ListResultBaseFragment{
+public class SearchFragment extends ListResultBaseFragment{
 
 
     public List<TestDataHolder> getDataList() {
-        List<TestDataHolder> list = DataListModel.getInstance().getSavedList();
-        //tepomorary
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-            if (holder.mSaved) list.add(holder);
-        }
+        List<TestDataHolder> list = DataListModel.getInstance().getSearchResultList();
         return list;
     }
 
     public int getFragmentLayoutRes() {
-        return R.layout.fragment_saved_deals;
+        return R.layout.fragment_search;
     }
 
     public String getNoResultToastMessage() {
@@ -36,7 +32,7 @@ public class SavedCouponsFragment extends ListResultBaseFragment{
 
     public void setRecyclerView() {
         mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mListResultRecyclerView.setAdapter(new CardAdapter(getActivity(), mDataList, Constants.TYPE_SAVED_LIST, R.layout.card_layout_save));
+        mListResultRecyclerView.setAdapter(new CardAdapter(getActivity(), mDataList, Constants.TYPE_SEARCH_RESULT_LIST, R.layout.card_layout_featured));
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 }

@@ -12,6 +12,7 @@ public interface Constants {
     public static final int TYPE_SAVED_LIST = 6;
     public static final int TYPE_BOUGHT_LIST = 7;
     public static final int TYPE_MORE_COUPONS_LIST = 8;
+    public static final int TYPE_SEARCH_RESULT_LIST = 9;
 
     public static final int LANG_ENG = 0;
     public static final int LANG_CHT = 1;

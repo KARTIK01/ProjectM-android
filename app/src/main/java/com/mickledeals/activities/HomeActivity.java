@@ -2,15 +2,12 @@ package com.mickledeals.activities;
 
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -194,7 +191,6 @@ public class HomeActivity extends BaseActivity
             try {
                 Fragment fragment = (Fragment) item.getNavClass().newInstance();
 
-                Log.e("ZZZ", "add title is = " + mTitle.toString());
                 if (position == 0) {
                     if (mCurrentPosition == -1) {
                         // cannot add home fragment to backstack, otherwise hitting back would display an empty screen
@@ -237,13 +233,6 @@ public class HomeActivity extends BaseActivity
         // decide what to show in the action bar.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
-
         restoreActionBar();
         return true;
 //        }
@@ -252,15 +241,13 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_search) {
-//            return true;
-//        }
+        if (id == R.id.action_search) {
+            Intent i = new Intent(this, SearchActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(i);
+        }
 
         return super.onOptionsItemSelected(item);
     }

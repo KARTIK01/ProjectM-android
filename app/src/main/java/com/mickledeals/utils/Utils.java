@@ -126,6 +126,8 @@ public class Utils {
                 return dataModel.getBoughtList();
             case Constants.TYPE_MORE_COUPONS_LIST:
                 return dataModel.getMoreCouponsList();
+            case Constants.TYPE_SEARCH_RESULT_LIST:
+                return dataModel.getSearchResultList();
             default:
                 return null;
         }
