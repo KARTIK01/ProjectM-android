@@ -113,8 +113,14 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
                 mLocationSpinner.setOnItemSelectedListener(ListResultBaseFragment.this);
             }
         });
-        adapter = ArrayAdapter.createFromResource(mContext,
-                R.array.sort_options, R.layout.dummy_spinner_textview);
+        if (mSortSpinner != null) {
+            adapter = ArrayAdapter.createFromResource(mContext,
+                    R.array.sort_options, R.layout.dummy_spinner_textview);
+        } else {
+            mSortSpinner = (Spinner) view.findViewById(R.id.sortSpinnerInSearch);
+            adapter = ArrayAdapter.createFromResource(mContext,
+                    R.array.sort_options, R.layout.spinner_textview);
+        }
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         mSortSpinner.setAdapter(adapter);
         mSortSpinner.post(new Runnable() {
@@ -300,7 +306,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
             boolean matchCategory = false;
             boolean matchLocation = false;
             TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
-            int categoryPos = mCategorySpinner.getSelectedItemPosition();
+            int categoryPos = 0;
+            if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
             if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
                 matchCategory = true;
             }
