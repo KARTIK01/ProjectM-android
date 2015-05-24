@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -120,7 +121,7 @@ public class SearchActivity extends SwipeDismissActivity {
         mSearchEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event.getAction() == KeyEvent.KEYCODE_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     sendSearchRequest(v.getText().toString());
                     return true;
                 }

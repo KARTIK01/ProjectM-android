@@ -13,6 +13,7 @@ import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,9 +29,12 @@ public class NearbyFragment extends ListResultBaseFragment {
     }
 
     public List<TestDataHolder> getDataList() {
-        List<TestDataHolder> list = DataListModel.getInstance().getNearbyList();
+        return DataListModel.getInstance().getNearbyList();
+    }
 
+    public List<TestDataHolder> getTemporaryDataList() {
         //temporary
+        List<TestDataHolder> list = new ArrayList<TestDataHolder>();
         for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
             TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
             list.add(holder);
@@ -50,16 +54,18 @@ public class NearbyFragment extends ListResultBaseFragment {
         final int margin = getResources().getDimensionPixelSize(R.dimen.card_margin);
         final int bottomMargin = getResources().getDimensionPixelSize(R.dimen.card_margin_bottom);
 
-        mListResultRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+        final int column = mContext.getResources().getInteger(R.integer.dp_width_level) > 0 ? 3 : 2;
+        mListResultRecyclerView.setLayoutManager(new GridLayoutManager(mContext, column));
         mListResultRecyclerView.setAdapter(new CardAdapter(getActivity(), mDataList, Constants.TYPE_NEARBY_LIST, R.layout.card_layout));
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mListResultRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 int pos = parent.getChildPosition(view);
-                boolean leftside = pos % 2 == 0;
+                boolean leftside = pos % column == 0;
+                boolean rightside = pos % column == (column - 1);
                 outRect.left = leftside ? margin : margin / 2;
-                outRect.right = leftside ? margin / 2 : margin;
+                outRect.right = rightside ? margin : margin / 2;
                 outRect.bottom = bottomMargin;
             }
         });

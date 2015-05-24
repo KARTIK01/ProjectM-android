@@ -50,7 +50,8 @@ public class Utils {
     private static int sDeviceHeight;
     public static Locale mCurrentLocale = Locale.ENGLISH;
 
-    static {
+    public static void loadMenuItems() {
+        sNavMenuList.clear();
         sNavMenuList.add(new NavMenuItem(HomeFragment.class, R.string.menu_home, R.drawable.ic_home));
         sNavMenuList.add(new NavMenuItem(MyCouponsFragment.class, R.string.menu_my_deals, R.drawable.ic_coupons));
         sNavMenuList.add(new NavMenuItem(SavedCouponsFragment.class, R.string.menu_saved_deals, R.drawable.ic_save));

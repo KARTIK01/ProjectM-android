@@ -32,7 +32,6 @@ import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.LocationManager;
 import com.mickledeals.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -296,18 +295,16 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
 
     public void sendUpdateRequest() {
-        DLog.d(this, "sendUpdateRequest");
         mNeedPopularMapOverlays = true;
-        List<TestDataHolder> cloneList = new ArrayList<TestDataHolder>();
-        cloneList.addAll(mDataList);
+        List<TestDataHolder> temporaryDataList = getTemporaryDataList();
         mDataList.clear();
 
         //call api
         //temporrary
-        for (int i = 0; i < cloneList.size(); i++) {
+        for (int i = 0; i < temporaryDataList.size(); i++) {
             boolean matchCategory = false;
             boolean matchLocation = false;
-            TestDataHolder holder = cloneList.get(i);
+            TestDataHolder holder = temporaryDataList.get(i);
             int categoryPos = 0;
             if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
             if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
@@ -382,6 +379,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     }
 
     public abstract List<TestDataHolder> getDataList();
+
+    public abstract List<TestDataHolder> getTemporaryDataList();
 
     public abstract int getFragmentLayoutRes();
 

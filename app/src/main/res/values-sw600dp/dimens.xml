@@ -1,0 +1,9 @@
+<resources>
+
+
+    <dimen name="card_margin">10dp</dimen>
+    <dimen name="card_margin_bottom">5dp</dimen>
+    <dimen name="navigation_drawer_width">300dp</dimen>
+
+    <integer name="dp_width_level">1</integer><!-- 0 = phone, 1 = sw600dp, 2 = sw800dp -->
+</resources>

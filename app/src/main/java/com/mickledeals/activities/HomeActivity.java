@@ -48,8 +48,6 @@ public class HomeActivity extends BaseActivity
         mToolBarLogo = mToolBar.findViewById(R.id.toolbar_logo);
         mSlidingTab = mToolBar.findViewById(R.id.sliding_tabs);
         mToolBarExtraLayout = mToolBar.findViewById(R.id.toolbar_extra_layout);
-        int language = PreferenceHelper.getPreferenceValueInt(this, "language", -1);
-        Utils.setLocaleWithLang(language, getBaseContext());
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -254,15 +252,12 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-//        String name = null;
-//        int count = getSupportFragmentManager().getBackStackEntryCount();
-//        if (count == 0) name = "Home";
-//        else {
-//            name = getSupportFragmentManager().getBackStackEntryAt(count - 1).getName();
-//            String[] tokens = name.split("\\|");
-//            name = tokens[2]; //get the tag
-//        }
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
+            mNavigationDrawerFragment.closeDrawer();
+            return;
+        }
 
+        //this is for handling back button to hide map
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(mCurrentPosition + "");
         if (!((BaseFragment) fragment).handleBackPressed()) { //if handleBackPressed not consume
             super.onBackPressed();

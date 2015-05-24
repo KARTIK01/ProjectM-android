@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,7 +68,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 
 
     private LinearLayout mMenuContainer;
-    private TextView mLoginOutBtn;
+    private int mSelectableBgResId;
 
     public NavigationDrawerFragment() {
     }
@@ -77,12 +78,17 @@ public class NavigationDrawerFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         DLog.d(this, "onCreate");
 
+        TypedValue outValue = new TypedValue();
+        mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        mSelectableBgResId = outValue.resourceId;
+
 //        if (savedInstanceState != null) {
 ////            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
 //            mFromSavedInstanceState = true;
 //        }
 
         // Select either the default item (0) or the last selected item.
+        Utils.loadMenuItems();
         selectItem(0);
     }
 
@@ -116,6 +122,7 @@ public class NavigationDrawerFragment extends BaseFragment {
             if (item.getTitleRes() == 0) {
                 View divider = new View(mContext);
                 divider.setBackgroundColor(getResources().getColor(R.color.light_divider));
+                divider.setTag("divider");
                 mMenuContainer.addView(divider,
                         new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Utils.getPixelsFromDip(1, getResources())));
                 continue;
@@ -123,6 +130,7 @@ public class NavigationDrawerFragment extends BaseFragment {
             View menuRow = LayoutInflater.from(mContext).inflate(R.layout.nav_menu_row, mMenuContainer, false);
             if (i == 0) {
                 menuRow.setSelected(true);
+                menuRow.setBackgroundColor(getResources().getColor(R.color.selected_bg));
             }
             ImageView menuIcon = (ImageView) menuRow.findViewById(R.id.navMenuIcon);
             TextView menuText = (TextView) menuRow.findViewById(R.id.navMenuText);
@@ -150,8 +158,14 @@ public class NavigationDrawerFragment extends BaseFragment {
         if (mMenuContainer != null) {
             for (int i = 0; i < mMenuContainer.getChildCount(); i++) {
                 View view = mMenuContainer.getChildAt(i);
-                if (i == selectedPosition) view.setSelected(true);
-                else view.setSelected(false);
+                if (view.getTag() != null && view.getTag().toString().equals("divider")) continue;
+                if (i == selectedPosition) {
+                    view.setBackgroundColor(getResources().getColor(R.color.selected_bg));
+                    view.setSelected(true);
+                } else {
+                    view.setBackgroundResource(mSelectableBgResId);
+                    view.setSelected(false);
+                }
             }
         }
     }
@@ -283,6 +297,12 @@ public class NavigationDrawerFragment extends BaseFragment {
         }
     }
 
+    public void closeDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -307,7 +327,6 @@ public class NavigationDrawerFragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
     @Override

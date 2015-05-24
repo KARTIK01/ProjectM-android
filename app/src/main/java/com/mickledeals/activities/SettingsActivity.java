@@ -52,6 +52,7 @@ public class SettingsActivity extends BaseActivity {
                                 Intent i = new Intent(SettingsActivity.this, HomeActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(i);
+                                android.os.Process.killProcess(android.os.Process.myPid());
                             }
                         })
                         .create()
