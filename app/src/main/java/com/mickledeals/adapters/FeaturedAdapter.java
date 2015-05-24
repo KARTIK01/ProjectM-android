@@ -28,7 +28,7 @@ public class FeaturedAdapter extends CardAdapter {
     private static final int TYPE_BEST_COUPONS = 1;
     private FeatureSliderAdapter mFeatureSliderAdapter;
 
-    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+    public static class HeaderViewHolder extends CardAdapter.MainViewHolder {
         public HeaderViewHolder(View v) {
             super(v);
         }
@@ -40,7 +40,7 @@ public class FeaturedAdapter extends CardAdapter {
 
     // Create new views (invoked by the layout manager)
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public CardAdapter.MainViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         if (viewType == TYPE_BEST_COUPONS) {
             return super.onCreateViewHolder(parent, viewType);
@@ -75,6 +75,11 @@ public class FeaturedAdapter extends CardAdapter {
         return null;
     }
 
+    @Override
+    public void onBindViewHolder(MainViewHolder holder, int position) {
+        if (isPositionHeader(position)) return;
+        super.onBindViewHolder(holder, position);
+    }
 
     @Override
     public int getItemCount() {

@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by Nicky on 12/7/2014.
  */
-public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder> {
     protected List<TestDataHolder> mDataset;
     protected int mLayoutRes;
     protected FragmentActivity mFragmentActivity;
@@ -62,8 +62,8 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                      int viewType) {
+    public CardAdapter.MainViewHolder onCreateViewHolder(ViewGroup parent,
+                                                         int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(mLayoutRes, parent, false);
         final MainViewHolder vh = new MainViewHolder(v);
@@ -71,7 +71,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = mListType == Constants.TYPE_BEST_LIST ? vh.getAdapterPosition() -1 : vh.getAdapterPosition();
+                int pos = mListType == Constants.TYPE_BEST_LIST ? vh.getAdapterPosition() - 1 : vh.getAdapterPosition();
                 mDummpyImageView = new AspectRatioImageView(v.getContext());
                 mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
                 mDummpyImageView.setRatio(vh.mCardImage.getRatio());
@@ -81,6 +81,7 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 vh.mCardBaseLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        vh.mCardBaseLayout.removeView(mDummpyImageView);
                         vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
                     }
                 }, 1000);
@@ -94,64 +95,65 @@ public class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(CardAdapter.MainViewHolder holder, final int position) {
 
-        if (holder instanceof MainViewHolder) {
-            MainViewHolder viewholder = (MainViewHolder) holder;
 //            if (position % 2 == 0) {
 //                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewholder.mCardView.getLayoutParams();
 //                params.rightMargin = viewholder.mCardView.getResources().getDimensionPixelSize(R.dimen.card_margin);
 //                viewholder.mCardView.setLayoutParams(params);
 //            }
 
-            final TestDataHolder dataHolder = getItem(position);
 
-            if (viewholder.mCardBaseLayout != null) viewholder.mCardBaseLayout.removeView(mDummpyImageView);
-            if (viewholder.mCardDescription != null) {
-                viewholder.mCardDescription.setText(dataHolder.getDescription());
-                viewholder.mCardDescription.setSelected(true);
+        final TestDataHolder dataHolder = getItem(position);
+
+        if (holder.mCardBaseLayout != null)
+            holder.mCardBaseLayout.removeView(mDummpyImageView);
+        if (holder.mCardDescription != null) {
+            holder.mCardDescription.setText(dataHolder.getDescription());
+            holder.mCardDescription.setSelected(true);
+        }
+        if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.getStoreName());
+        if (holder.mCardImage != null)
+            holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
+        if (holder.mCardPrice != null)
+            holder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
+        if (holder.mCardPrice != null) {
+            int delta = 0;
+            if (mListType == Constants.TYPE_BEST_LIST) delta = 1;
+            if (dataHolder.mPrice == 0) {
+                holder.mCardPrice.setTextSize(17f + delta);
+            } else {
+                holder.mCardPrice.setTextSize(18f + delta);
             }
-            if (viewholder.mCardTitle != null) viewholder.mCardTitle.setText(dataHolder.getStoreName());
-            if (viewholder.mCardImage != null) viewholder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
-            if (viewholder.mCardPrice != null) viewholder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
-            if (viewholder.mCardPrice != null) {
-                int delta = 0;
-                if (mListType == Constants.TYPE_BEST_LIST) delta = 1;
-                if (dataHolder.mPrice == 0) {
-                    viewholder.mCardPrice.setTextSize(17f + delta);
-                } else {
-                    viewholder.mCardPrice.setTextSize(18f + delta);
-                }
-            }
-            if (viewholder.mCardSave != null) {
-                viewholder.mCardSave.setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
-                viewholder.mCardSave.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dataHolder.mSaved = !dataHolder.mSaved;
-                        ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
-                        StringBuilder sb = new StringBuilder();
-                        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-                            if (holder.mSaved) {
-                                sb.append(holder.mId);
-                                sb.append("|");
-                            }
+        }
+        if (holder.mCardSave != null) {
+            holder.mCardSave.setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
+            holder.mCardSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dataHolder.mSaved = !dataHolder.mSaved;
+                    ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
+                    StringBuilder sb = new StringBuilder();
+                    for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+                        if (holder.mSaved) {
+                            sb.append(holder.mId);
+                            sb.append("|");
                         }
-                        PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
                     }
-                });
-            }
-            if (viewholder.mCardCity != null) {
-                viewholder.mCardCity.setText(dataHolder.mAddressShort.replace("San Francisco", "SF"));
-            }
-            if (viewholder.mCardDist != null) {
-                viewholder.mCardDist.setVisibility(View.VISIBLE);
-                float dist = LocationManager.getInstance(mFragmentActivity).getDistanceFromCurLocation(dataHolder);
-                if (dist < 0) {
-                    viewholder.mCardDist.setVisibility(View.GONE);
-                } else {
-                    viewholder.mCardDist.setText(dist + " mi");
+                    PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
                 }
+            });
+        }
+        if (holder.mCardCity != null) {
+            holder.mCardCity.setText(dataHolder.mAddressShort.replace("San Francisco", "SF"));
+        }
+        if (holder.mCardDist != null) {
+            holder.mCardDist.setVisibility(View.VISIBLE);
+            float dist = LocationManager.getInstance(mFragmentActivity).getDistanceFromCurLocation(dataHolder);
+            if (dist < 0) {
+                holder.mCardDist.setVisibility(View.GONE);
+            } else {
+                holder.mCardDist.setText(dist + " mi");
             }
         }
     }

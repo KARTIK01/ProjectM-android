@@ -11,21 +11,6 @@
         android:layout_height="match_parent"
         android:background="@color/defaultLightGrayBg">
 
-        <FrameLayout
-            android:id="@+id/mapContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listResultRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="@dimen/card_margin"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="vertical"
-            android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/searchSuggestionRecyclerView"
@@ -35,24 +20,131 @@
             android:paddingTop="@dimen/card_margin"
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/noResultLayout"
+        <com.mickledeals.views.NotifyingScrollView
+            android:id="@+id/recentHotLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="gone"
-            android:orientation="vertical">
-            <TextView
+            android:layout_height="match_parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/empty_save_msg"
-                android:textSize="17sp"
-                android:padding="30dp"
-                android:textColor="@color/lighterGrayTextColor"/>
-        </LinearLayout>
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/recentLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/suggestion_card_left_padding">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="8dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/recent_searches"
+                            android:textColor="@color/defaultTextColor"
+                            android:textSize="17sp"/>
+
+                        <TextView
+                            android:id="@+id/clearAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/clear_all"
+                            android:textColor="@color/lightGrayTextColor"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hot_search"
+                    android:textColor="@color/defaultTextColor"
+                    android:textSize="17sp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
+
+
+                <LinearLayout
+                    android:id="@+id/hotLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/suggestion_card_left_padding"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+        </com.mickledeals.views.NotifyingScrollView>
+
+
+        <FrameLayout
+            android:id="@+id/listMapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listResultRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/card_margin"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                android:background="@color/defaultLightGrayBg" />
+
+            <LinearLayout
+                android:id="@+id/noResultLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/noResultMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:padding="30dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/lighterGrayTextColor"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/empty_search_msg"
+                    android:textSize="17sp"
+                    android:padding="30dp"
+                    android:textColor="@color/lighterGrayTextColor"/>
+            </LinearLayout>
+
+        </FrameLayout>
 
 
 

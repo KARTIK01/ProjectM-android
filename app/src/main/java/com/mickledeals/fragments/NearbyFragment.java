@@ -1,6 +1,7 @@
 package com.mickledeals.fragments;
 
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +20,21 @@ import java.util.List;
  */
 public class NearbyFragment extends ListResultBaseFragment {
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mLocationManager.connect();
+    }
+
     public List<TestDataHolder> getDataList() {
         List<TestDataHolder> list = DataListModel.getInstance().getNearbyList();
+
+        //temporary
+        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
+            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
+            list.add(holder);
+        }
         return list;
     }
 

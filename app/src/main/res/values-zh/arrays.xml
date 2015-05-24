@@ -23,4 +23,19 @@
         <item>按日期排序</item>
         <item>隨機顯示</item>
     </string-array>
+
+    <string-array name="hot_list">
+        <item>咖啡</item>
+        <item>薄餅</item>
+        <item>快餐</item>
+        <item>牛扒</item>
+        <item>甜品</item>
+        <item>自助餐</item>
+        <item>健身</item>
+        <item>水療</item>
+        <item>中菜</item>
+        <item>壽司</item>
+        <item>日本菜</item>
+
+    </string-array>
 </resources>

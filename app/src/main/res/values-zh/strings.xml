@@ -33,8 +33,14 @@
     <string name="try_different_filter">請選擇其他地點或類別</string>
 
     <!-- Search -->
-    <string name="no_results_found_in_search">沒有 "%d" 相關的優惠 :(</string>
-    <string name="empty_search_msg">請再試其他搜尋</string>
+
+    <string name="recent_searches">搜尋記錄</string>
+    <string name="clear_all">清除所有</string>
+    <string name="hot_search">熱門搜尋</string>
+    <string name="search_hint">搜尋類別,商舖名稱等等...</string>
+    <string name="no_results_found_in_search">沒有 \"%s\" 相關的優惠 :(</string>
+    <string name="no_results_found_in_search_in_location">沒有在%2$s找到 \"%1$s\" 相關的優惠 :(</string>
+    <string name="empty_search_msg">請試其他搜尋</string>
 
     <!-- Save -->
     <string name="empty_save_msg">請在任何優惠券按下星號以顯示在這收藏夾中</string>

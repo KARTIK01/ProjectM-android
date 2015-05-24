@@ -1,5 +1,6 @@
 package com.mickledeals.fragments;
 
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 
@@ -16,12 +17,19 @@ import java.util.List;
  */
 public class SavedCouponsFragment extends ListResultBaseFragment{
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mLocationManager.connect();
+    }
 
     public List<TestDataHolder> getDataList() {
         List<TestDataHolder> list = DataListModel.getInstance().getSavedList();
-        //tepomorary
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-            if (holder.mSaved) list.add(holder);
+
+        //temporary
+        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
+            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
+            if (holder.mSaved)  list.add(holder);
         }
         return list;
     }

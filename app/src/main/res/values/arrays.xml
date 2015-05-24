@@ -26,4 +26,27 @@
         <item>English</item>
         <item>中文</item>
     </string-array>
+
+    <string-array name="suggestion_list">
+        <item>seafood</item>
+        <item>spa</item>
+        <item>steak</item>
+        <item>sushi</item>
+        <item>Savory Steak House</item>
+    </string-array>
+
+    <string-array name="hot_list">
+        <item>Coffee</item>
+        <item>Pizza</item>
+        <item>Fast Food</item>
+        <item>Steak</item>
+        <item>Dessert</item>
+        <item>Buffet</item>
+        <item>Fitness</item>
+        <item>Spa</item>
+        <item>Chinese</item>
+        <item>Sushi</item>
+        <item>Japanese</item>
+
+    </string-array>
 </resources>

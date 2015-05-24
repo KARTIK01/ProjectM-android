@@ -26,13 +26,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
-import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.LocationManager;
 import com.mickledeals.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     private static final double LAT_DEFAULT = 37.752814;
     private static final double LONG_DEFAULT = -122.440690;
     private Spinner mCategorySpinner;
-    private Spinner mLocationSpinner;
+    protected Spinner mLocationSpinner;
     private Spinner mSortSpinner;
     protected RecyclerView mListResultRecyclerView;
     private ImageView mMapToggleView;
@@ -58,7 +58,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     private View mNoResultLayout;
     private boolean mNeedPopularMapOverlays;
 
-    private LocationManager mLocationManager;
+    protected LocationManager mLocationManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,6 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mLocationManager = LocationManager.getInstance(mContext);
         mLocationManager.registerCallback(this);
         mDataList = getDataList();
-        mLocationManager.connect();
     }
 
     @Override
@@ -297,15 +296,18 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
 
     public void sendUpdateRequest() {
+        DLog.d(this, "sendUpdateRequest");
         mNeedPopularMapOverlays = true;
+        List<TestDataHolder> cloneList = new ArrayList<TestDataHolder>();
+        cloneList.addAll(mDataList);
         mDataList.clear();
 
         //call api
         //temporrary
-        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
+        for (int i = 0; i < cloneList.size(); i++) {
             boolean matchCategory = false;
             boolean matchLocation = false;
-            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
+            TestDataHolder holder = cloneList.get(i);
             int categoryPos = 0;
             if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
             if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
@@ -318,15 +320,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
             if (locationPos == 0 || cityName.equals(targetCityName)) {
                 matchLocation = true;
             }
-
-            if (this instanceof SavedCouponsFragment) {
-                if (matchCategory && matchLocation && holder.mSaved) {
-                    mDataList.add(DataListModel.getInstance().getDataList().get(i));
-                }
-            } else {
-                if (matchCategory && matchLocation) {
-                    mDataList.add(DataListModel.getInstance().getDataList().get(i));
-                }
+            if (matchCategory && matchLocation) {
+                mDataList.add(holder);
             }
         }
         mListResultRecyclerView.getAdapter().notifyDataSetChanged();
