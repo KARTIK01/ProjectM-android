@@ -123,8 +123,6 @@ public class Utils {
                 return dataModel.getFeatureSliderCouponList();
             case Constants.TYPE_NEW_ADDED_LIST:
                 return dataModel.getNewAddedCouponList();
-            case Constants.TYPE_POPULAR_LIST:
-                return dataModel.getPopularCouponList();
             case Constants.TYPE_BEST_LIST:
                 return dataModel.getBestCouponList();
             case Constants.TYPE_SAVED_LIST:
@@ -137,6 +135,29 @@ public class Utils {
                 return dataModel.getSearchResultList();
             default:
                 return null;
+        }
+    }
+
+    public static int getStringResFromType(int listType) {
+        switch (listType) {
+            case Constants.TYPE_NEARBY_LIST:
+                return R.string.nearby_tab_text;
+            case Constants.TYPE_FEATURE_SLIDER_LIST:
+                return R.string.feature_slider_text;
+            case Constants.TYPE_NEW_ADDED_LIST:
+                return R.string.new_added_coupons;
+            case Constants.TYPE_BEST_LIST:
+                return R.string.this_week_best_deals;
+            case Constants.TYPE_SAVED_LIST:
+                return R.string.menu_saved_deals;
+            case Constants.TYPE_BOUGHT_LIST:
+                return R.string.menu_my_deals;
+//            case Constants.TYPE_MORE_COUPONS_LIST:
+//                return 0;
+            case Constants.TYPE_SEARCH_RESULT_LIST:
+                return R.string.search_results;
+            default:
+                return 0;
         }
     }
 

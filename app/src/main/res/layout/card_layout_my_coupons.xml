@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:layout_marginBottom="2dp"
+    android:layout_marginBottom="1dp"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="2dp"
     card_view:cardElevation="2dp"
@@ -27,76 +27,79 @@
             android:scaleType="centerCrop"
             card_view:ratio="0.75"/>
 
-        <TextView
-            android:id="@+id/card_price"
-            android:layout_width="wrap_content"
+
+        <com.mickledeals.views.AutofitTextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:maxLines="1"
-            android:paddingRight="8dp"
-            android:paddingTop="4dp"
-            android:textColor="@color/themeTextColor"
-            android:textStyle="bold" />
-
-
-        <ImageView
-            android:id="@+id/card_save"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:background="?android:attr/selectableItemBackground"
+            android:layout_toRightOf="@id/card_image"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:paddingTop="6dp"
             android:paddingBottom="4dp"
-            android:paddingLeft="7dp"
+            android:paddingLeft="8dp"
             android:paddingRight="4dp"
-            android:paddingTop="7dp" />
+            android:textColor="@color/defaultTextColor"
+            android:textSize="15sp"
+            card_view:minTextSize="15sp"
+            android:textStyle="bold" />
 
 
         <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/card_price"
             android:layout_toRightOf="@id/card_image"
+            android:layout_below="@id/card_title"
             android:ellipsize="end"
-            android:maxLines="2"
-            android:paddingLeft="8dp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:paddingRight="4dp"
-            android:textColor="@color/defaultTextColor"
-            android:textSize="16sp"
-            card_view:minTextSize="15sp" />
-
-        <com.mickledeals.views.AutofitTextView
-            android:id="@+id/card_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_description"
-            android:layout_toRightOf="@id/card_image"
-            android:ellipsize="marquee"
             android:singleLine="true"
-            android:paddingBottom="4dp"
             android:paddingLeft="8dp"
-            android:paddingRight="34dp"
+            android:paddingRight="4dp"
             android:textColor="@color/lightGrayTextColor"
-            android:textSize="16sp"
-            card_view:minTextSize="15sp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            card_view:minTextSize="14sp" />
+
 
 
         <TextView
-            android:id="@+id/card_dist"
+            android:id="@+id/card_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="#77000000"
+            android:background="#44000000"
             android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="gone"
+            android:textSize="13sp"
             android:paddingRight="2dp"
-            android:paddingLeft="2dp"
-            />
+            android:paddingLeft="2dp" />
+
+        <TextView
+            android:id="@+id/card_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_below="@id/card_title"
+            android:layout_marginBottom="8dp"
+            android:padding="4dp"
+            android:text="@string/redeem"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/button_selector_bg"/>
+
+        <TextView
+            android:id="@+id/card_expired_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/card_image"
+            android:layout_toLeftOf="@id/card_button"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/defaultTextColor"
+            android:textSize="13sp"
+            android:paddingRight="2dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="4dp"/>
 
 
     </RelativeLayout>

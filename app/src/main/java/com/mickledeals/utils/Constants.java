@@ -7,7 +7,6 @@ public interface Constants {
     public static final int TYPE_NEARBY_LIST = 1;
     public static final int TYPE_FEATURE_SLIDER_LIST = 2;
     public static final int TYPE_NEW_ADDED_LIST = 3;
-    public static final int TYPE_POPULAR_LIST = 4;
     public static final int TYPE_BEST_LIST = 5;
     public static final int TYPE_SAVED_LIST = 6;
     public static final int TYPE_BOUGHT_LIST = 7;

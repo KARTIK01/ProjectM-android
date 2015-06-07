@@ -51,6 +51,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
         mDetailsViewPager.setOnPageChangeListener(adapter);
         mDetailsViewPager.setCurrentItem(mInitialIndex);
         mDetailsViewPager.setPageMargin(Utils.getPixelsFromDip(30f, getResources()));
+        mDetailsViewPager.setPageTransformer(false, adapter);
 
 //        mDetailsViewPager.setPageMarginDrawable(R.drawable.water_mark_bg);
 //        mDetailsViewPager.setPageMarginDrawable(R.color.transparentViewPagerDivider);
@@ -83,8 +84,9 @@ public class DetailsActivity extends SwipeDismissActivity  {
 
 
 
-    public class DetailsPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener{
+    public class DetailsPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener, ViewPager.PageTransformer {
 
+        int prevPosition = -1;
 
         public DetailsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -103,6 +105,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
         @Override
         public Fragment getItem(int position) {
             DetailsFragment fragment = new DetailsFragment();
+            if (position == 0) fragment.showNavPanelHint();
             fragment.setOnScrollChangeListener(new NotifyingScrollView.OnScrollChangedListener() {
                 @Override
                 public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
@@ -111,20 +114,34 @@ public class DetailsActivity extends SwipeDismissActivity  {
             });
             Bundle bundle = new Bundle();
             bundle.putInt("storeId", mList.get(position).mId);
+            bundle.putInt("listType", mListType);
+            int stringRes = Utils.getStringResFromType(mListType);
+            if (stringRes != 0) bundle.putString("navMidText", getString(stringRes) + " " + (position + 1) + "/" + mList.size());
+            if (position > 0) bundle.putString("navLeftText", (position) + "/" + mList.size());
+            if (position < mList.size() - 1) bundle.putString("navRightText", (position + 2) + "/" + mList.size());
             fragment.setArguments(bundle);
             return fragment;
         }
 
         @Override
         public void onPageSelected(int position) {
+            //this wont get called when position is 0
+            if (prevPosition != -1) {
+                DetailsFragment oldFragment = (DetailsFragment) instantiateItem(mDetailsViewPager, prevPosition);
+                if (oldFragment != null) {
+                    oldFragment.resetNavPanelHint();
+                }
+            }
             DetailsFragment fragment = (DetailsFragment) instantiateItem(mDetailsViewPager, position);
             int scrollPos = 0;
             if (fragment != null) {
+                fragment.showNavPanelHint();
                 scrollPos = fragment.getScrollYPosition();
             }
             setToolBarTransparency(scrollPos);
 
             getSupportActionBar().setTitle(mList.get(position).getStoreName());
+            prevPosition = position;
         }
 
         @Override
@@ -135,6 +152,11 @@ public class DetailsActivity extends SwipeDismissActivity  {
         public void onPageScrolled(int i, float v, int i2) {
         }
 
+        public void transformPage(View view, float position) {
+
+            if (position >= 0 && position <= 1) view.setAlpha(2 - position * 2);
+            else if (position <= 0 && position >= -1) view.setAlpha(2 + position * 2);
+        }
     }
 
     private void setToolBarTransparency(int scrollPos) {

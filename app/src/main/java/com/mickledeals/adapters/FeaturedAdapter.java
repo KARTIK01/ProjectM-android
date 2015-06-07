@@ -95,10 +95,6 @@ public class FeaturedAdapter extends CardAdapter {
     }
 
 
-    protected TestDataHolder getItem(int position) {
-        return mDataset.get(position - 1);
-    }
-
     private boolean isPositionHeader(int position) {
         return position == 0;
     }
@@ -115,5 +111,10 @@ public class FeaturedAdapter extends CardAdapter {
         }
     }
 
+    @Override
+    protected int convertListPosToDataPos(int position) {
+
+        return position - 1;
+    }
 
 }

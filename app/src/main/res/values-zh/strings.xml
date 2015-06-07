@@ -41,6 +41,17 @@
     <string name="no_results_found_in_search">沒有 \"%s\" 相關的優惠 :(</string>
     <string name="no_results_found_in_search_in_location">沒有在%2$s找到 \"%1$s\" 相關的優惠 :(</string>
     <string name="empty_search_msg">請試其他搜尋</string>
+    <string name="search_results">搜尋結果</string>
+
+    <!-- My Coupons -->
+    <string name="clear">清除</string>
+    <string name="expiring">將到期</string>
+    <string name="available">可用</string>
+    <string name="expired">已過期</string>
+    <string name="used">已用</string>
+    <string name="expired_on">於 %s 過期</string>
+    <string name="buy_again">再買一次</string>
+    <string name="redeem">兌換</string>
 
     <!-- Save -->
     <string name="empty_save_msg">請在任何優惠券按下星號以顯示在這收藏夾中</string>
@@ -49,6 +60,7 @@
     <string name="new_added_coupons">最新優惠</string>
     <string name="popular_coupons">熱門之選</string>
     <string name="this_week_best_deals">本週精選</string>
+    <string name="feature_slider_text">主優惠</string>
 
     <!-- Details -->
     <string name="save">收藏</string>
@@ -107,7 +119,7 @@
 
 
     <!-- Temp -->
-    <string name="expire_date">到期日為 08/27/2015</string>
+    <string name="expire_date">到期日為 08/27/15</string>
     <string name="fine_print_description">每桌限用一張優惠券, 及只限店内使用。</string>
     <string name="business_description">
 Savory Steakhouse的特色是在演繹傳統美式扒房菜款當中, 帶出陣陣日式風味。自2005年開業以來獲得多項獎項和榮譽, 是餐飲界中備受歡迎的一員。</string>

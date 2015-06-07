@@ -1,5 +1,6 @@
 package com.mickledeals.fragments;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +53,9 @@ public class DetailsFragment extends BaseFragment {
 
     private TestDataHolder mHolder;
 
+    private int mListType;
+    private ImageView mImageView;
     private TextView mBuyBtn;
-    private TextView mJoinVipBtn;
     private TextView mRedeemBtn;
     private TextView mSaveBtn;
     private TextView mBusinessInfoBtn;
@@ -61,7 +65,11 @@ public class DetailsFragment extends BaseFragment {
     private View mBuyPanel;
     private View mRedeemPanel;
     private LinearLayout mMoreCouponRow;
-    private Handler mHandler;
+    private View mNavigationHintPanel;
+    private TextView mNavLeftText;
+    private TextView mNavMidText;
+    private TextView mNavRightText;
+    private Handler mHandler = new Handler();
     private TextView mExpiredTime;
     private NotifyingScrollView mDetailsScrollView;
     private NotifyingScrollView.OnScrollChangedListener mScrollListener;
@@ -71,8 +79,8 @@ public class DetailsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mListType = getArguments().getInt("listType");
         mHolder = DataListModel.getInstance().getDataList().get(getArguments().getInt("storeId"));
-        mHandler = new Handler();
     }
 
     @Override
@@ -92,7 +100,6 @@ public class DetailsFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mBuyBtn = (TextView) view.findViewById(R.id.buyBtn);
-        mJoinVipBtn = (TextView) view.findViewById(R.id.joinVipBtn);
         mRedeemBtn = (TextView) view.findViewById(R.id.redeemBtn);
         mShareBtn = (TextView) view.findViewById(R.id.sharedButton);
         mBusinessInfoBtn = (TextView) view.findViewById(R.id.businessInfoButton);
@@ -101,9 +108,42 @@ public class DetailsFragment extends BaseFragment {
         mCallBtn = view.findViewById(R.id.call);
         mBuyPanel = view.findViewById(R.id.buyPanel);
         mRedeemPanel = view.findViewById(R.id.redeemPanel);
+        mNavigationHintPanel = view.findViewById(R.id.navigateHintPanel);
+        mNavLeftText = (TextView) view.findViewById(R.id.navLeftText);
+        mNavMidText = (TextView) view.findViewById(R.id.navMidText);
+        mNavRightText = (TextView) view.findViewById(R.id.navRightText);
         mMoreCouponRow = (LinearLayout) view.findViewById(R.id.moreCouponRow);
         mDetailsScrollView = (NotifyingScrollView) view.findViewById(R.id.detailsScrollView);
-        mDetailsScrollView.setOnScrollChangedListener(mScrollListener);
+        mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
+                if (mScrollListener != null) mScrollListener.onScrollChanged(who, l, t, oldl, oldt);
+
+                // changing position of ImageView
+                mImageView.setTranslationY(t / 2);
+
+
+//                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mImageView.getLayoutParams();
+//                params.height = Utils.getDeviceWidth(mContext) * 9 / 16 - t;
+//                mImageView.setLayoutParams(params);
+            }
+        });
+
+        String midStr = getArguments().getString("navMidText");
+        String leftStr = getArguments().getString("navLeftText");
+        String rightStr = getArguments().getString("navRightText");
+        if (midStr != null) {
+            mNavMidText.setText(midStr);
+            mNavMidText.setVisibility(View.VISIBLE);
+        }
+        if (leftStr != null) {
+            mNavLeftText.setText(leftStr);
+            mNavLeftText.setVisibility(View.VISIBLE);
+        }
+        if (rightStr != null) {
+            mNavRightText.setText(rightStr);
+            mNavRightText.setVisibility(View.VISIBLE);
+        }
 
         ((TextView) view.findViewById(R.id.storeName)).setText(mHolder.getStoreName());
         ((TextView) view.findViewById(R.id.couponDescription)).setText(mHolder.getDescription());
@@ -117,13 +157,13 @@ public class DetailsFragment extends BaseFragment {
         }
         ((TextView) view.findViewById(R.id.addressDist)).setText(addrShort);
 
-        ImageView storePhoto = (ImageView) view.findViewById(R.id.imageView);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) storePhoto.getLayoutParams();
+        mImageView = (ImageView) view.findViewById(R.id.imageView);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
         params.height = Utils.getDeviceWidth(mContext) * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
-        storePhoto.setLayoutParams(params);
-        storePhoto.setImageResource(mHolder.mImageResId);
+        mImageView.setLayoutParams(params);
+        mImageView.setImageResource(mHolder.mImageResId);
         if (Build.VERSION.SDK_INT >= 21) {
-            storePhoto.setTransitionName("cardImage" + mHolder.mId);
+            mImageView.setTransitionName("cardImage" + mHolder.mId);
             getActivity().startPostponedEnterTransition();
             //seems like no need to use below line???
             //scheduleStartPostponedTransition(storePhoto);
@@ -252,6 +292,24 @@ public class DetailsFragment extends BaseFragment {
 
             }
         }
+    }
+
+    public void showNavPanelHint() {
+        mHandler.postDelayed(mHideNavHintPanelRunnable, 2000);
+    }
+
+    private Runnable mHideNavHintPanelRunnable = new Runnable() {
+        @Override
+        public void run() {
+            ObjectAnimator anim = ObjectAnimator.ofFloat(mNavigationHintPanel, "alpha", 1f, 0f);
+            anim.setDuration(1000);
+            anim.start();
+        }
+    };
+
+    public void resetNavPanelHint() {
+        mHandler.removeCallbacks(mHideNavHintPanelRunnable);
+        mNavigationHintPanel.setAlpha(1f);
     }
 
     public void setOnScrollChangeListener(NotifyingScrollView.OnScrollChangedListener listener) {

@@ -66,12 +66,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                                                          int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(mLayoutRes, parent, false);
-        final MainViewHolder vh = new MainViewHolder(v);
+        final MainViewHolder vh = createViewHolder(v);
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = mListType == Constants.TYPE_BEST_LIST ? vh.getAdapterPosition() - 1 : vh.getAdapterPosition();
+                int pos = convertListPosToDataPos(vh.getAdapterPosition());
                 mDummpyImageView = new AspectRatioImageView(v.getContext());
                 mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
                 mDummpyImageView.setRatio(vh.mCardImage.getRatio());
@@ -84,7 +84,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                         vh.mCardBaseLayout.removeView(mDummpyImageView);
                         vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
                     }
-                }, 1000);
+                }, 1500);
                 String transition = "cardImage" + mDataset.get(pos).mId;
                 //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
@@ -94,8 +94,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         return vh;
     }
 
+    protected MainViewHolder createViewHolder(View v) {
+        return new MainViewHolder(v);
+    }
+
     @Override
-    public void onBindViewHolder(CardAdapter.MainViewHolder holder, final int position) {
+    public void onBindViewHolder(CardAdapter.MainViewHolder holder, int position) {
 
 //            if (position % 2 == 0) {
 //                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewholder.mCardView.getLayoutParams();
@@ -103,8 +107,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 //                viewholder.mCardView.setLayoutParams(params);
 //            }
 
+        position = convertListPosToDataPos(position);
 
-        final TestDataHolder dataHolder = getItem(position);
+        final TestDataHolder dataHolder = mDataset.get(position);
 
         if (holder.mCardBaseLayout != null)
             holder.mCardBaseLayout.removeView(mDummpyImageView);
@@ -164,7 +169,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     }
 
 
-    protected TestDataHolder getItem(int position) {
-        return mDataset.get(position);
+    protected int convertListPosToDataPos(int position) {
+        return position;
     }
 }

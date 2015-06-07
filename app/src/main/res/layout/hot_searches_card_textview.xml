@@ -10,7 +10,7 @@
     card_view:cardCornerRadius="3dp"
     card_view:cardElevation="3dp"
     card_view:cardUseCompatPadding="true"
-    card_view:cardBackgroundColor="@color/colorPrimary2">
+    card_view:cardBackgroundColor="@color/colorPrimary3">
 
 
     <TextView
