@@ -95,6 +95,13 @@ public class MyCouponsAdapter extends CardAdapter {
             super.onBindViewHolder(holder, position);
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
             vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
+            if (position > 5) {
+                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.buy_again));
+//                vh.mCardButton.setBackgroundResource(R.drawable.button_selector_bg);
+            } else {
+                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
+//                vh.mCardButton.setBackgroundResource(R.drawable.green_button_selector_bg);
+            }
         }
     }
 

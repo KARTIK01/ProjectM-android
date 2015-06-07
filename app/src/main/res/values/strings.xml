@@ -55,7 +55,7 @@
     <string name="used">Used</string>
     <string name="expired_on">Expired on %s</string>
     <string name="buy_again">Buy again</string>
-    <string name="redeem">Redeem</string>
+    <string name="redeem">REDEEM</string>
 
     <!-- Save -->
     <string name="empty_save_msg">You will see your saved coupons here by tapping on the star icon in any coupon</string>

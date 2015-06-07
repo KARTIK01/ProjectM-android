@@ -13,7 +13,6 @@
         android:layout_width="0dp"
         android:textColor="@color/defaultTextColor"
         android:textSize="18sp"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
