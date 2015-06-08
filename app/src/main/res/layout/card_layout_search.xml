@@ -22,7 +22,7 @@
 
         <com.mickledeals.views.AspectRatioImageView
             android:id="@+id/card_image"
-            android:layout_width="120dp"
+            android:layout_width="@dimen/thumbnail_image_width"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
             card_view:ratio="0.75"/>
@@ -65,8 +65,8 @@
             android:paddingBottom="6dp"
             android:paddingRight="4dp"
             android:textColor="@color/defaultTextColor"
-            android:textSize="16sp"
-            card_view:minTextSize="15sp" />
+            android:textSize="@dimen/sp_16"
+            card_view:minTextSize="@dimen/sp_15" />
 
         <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_title"
@@ -80,8 +80,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="34dp"
             android:textColor="@color/lightGrayTextColor"
-            android:textSize="16sp"
-            card_view:minTextSize="15sp"
+            android:textSize="@dimen/sp_16"
+            card_view:minTextSize="@dimen/sp_15"
             android:textStyle="bold" />
 
 

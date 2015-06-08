@@ -22,7 +22,7 @@
 
         <com.mickledeals.views.AspectRatioImageView
             android:id="@+id/card_image"
-            android:layout_width="120dp"
+            android:layout_width="@dimen/thumbnail_image_width"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
             card_view:ratio="0.75" />
@@ -40,8 +40,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="4dp"
             android:textColor="@color/defaultTextColor"
-            android:textSize="15sp"
-            card_view:minTextSize="15sp"
+            android:textSize="@dimen/sp_15"
+            card_view:minTextSize="@dimen/sp_14"
             android:textStyle="bold" />
 
 
@@ -56,8 +56,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="4dp"
             android:textColor="@color/lightGrayTextColor"
-            android:textSize="15sp"
-            card_view:minTextSize="14sp" />
+            android:textSize="@dimen/sp_15"
+            card_view:minTextSize="@dimen/sp_14" />
 
 
         <TextView
@@ -79,7 +79,7 @@
             android:layout_toRightOf="@id/card_image"
             android:layout_alignParentBottom="true"
             android:textColor="@color/defaultTextColor"
-            android:textSize="13sp"
+            android:textSize="@dimen/sp_13"
             android:paddingRight="2dp"
             android:paddingLeft="8dp"
             android:paddingBottom="7dp" />
@@ -116,7 +116,7 @@
             android:layout_alignParentRight="true"
             android:textColor="@color/defaultTextColor"
             android:text="@string/deal_ended"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             android:paddingRight="6dp"
             android:paddingBottom="7dp" />
 

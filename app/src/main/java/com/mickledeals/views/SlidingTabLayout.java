@@ -23,7 +23,6 @@ import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -78,7 +77,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private static final float MIN_TEXT_ALPHA = 0.6f;//added by nicky
     private static final int TITLE_OFFSET_DIPS = 24;
     private static final int TAB_VIEW_PADDING_DIPS = 0;
-    private static final int TAB_VIEW_TEXT_SIZE_SP = 17;
 
     private int mTitleOffset;
 
@@ -174,7 +172,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
             viewPager.setPageTransformer(true, new PageTransformer() {
                 @Override
                 public void transformPage(View page, float position) {
-                    Log.e("ZZZ", "position = t" + position);
                     View firstView = mTabStrip.getChildAt(0);
                     View secondView = mTabStrip.getChildAt(1);
                     if (firstView != null && firstView instanceof TextView && position > 0) {
@@ -199,7 +196,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     protected TextView createDefaultTabView(Context context) {
         TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimensionPixelSize(R.dimen.sp_17));
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setTextColor(Color.argb((int)(MIN_TEXT_ALPHA * 255), 255, 255, 255));
         textView.setBackgroundResource(R.drawable.transparent_white_selector_bg);

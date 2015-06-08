@@ -1,0 +1,31 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_margin_bottom">2.5dp</dimen>
+    <dimen name="suggestion_card_margin_bottom">0dp</dimen>
+    <dimen name="suggestion_card_left_padding">8dp</dimen>
+
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">300dp</dimen>
+
+    <integer name="dp_width_level">0</integer><!-- 0 = phone, 1 = sw600dp, 2 = sw800dp -->
+
+    <dimen name="sp_13">13sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_17">17sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
+    <dimen name="sp_19">19sp</dimen>
+    <dimen name="sp_20">20sp</dimen>
+
+
+    <dimen name="card_button_width">80dp</dimen>
+    <dimen name="thumbnail_image_width">120dp</dimen>
+    <dimen name="thumbnail_small_image_width">100dp</dimen> <!-- used in save, other coupon -->
+</resources>

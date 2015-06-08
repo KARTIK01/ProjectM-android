@@ -2,6 +2,7 @@ package com.mickledeals.adapters;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,12 +124,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         if (holder.mCardPrice != null)
             holder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
         if (holder.mCardPrice != null) {
-            int delta = 0;
-            if (mListType == Constants.TYPE_BEST_LIST) delta = 1;
+
+            int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
+            int sp18 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_18);
+            int sp19 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_19);
+
+            boolean extraSize = false;
+            if (mListType == Constants.TYPE_BEST_LIST) extraSize = true;
             if (dataHolder.mPrice == 0) {
-                holder.mCardPrice.setTextSize(17f + delta);
+                holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp18 : sp17);
             } else {
-                holder.mCardPrice.setTextSize(18f + delta);
+                holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
             }
         }
         if (holder.mCardSave != null) {

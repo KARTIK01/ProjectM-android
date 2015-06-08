@@ -35,7 +35,6 @@
             android:paddingRight="4dp"
             android:paddingTop="2dp"
             android:textColor="@color/themeTextColor"
-            android:textSize="18sp"
             android:textStyle="bold" />
 
 
@@ -63,7 +62,7 @@
             android:paddingLeft="4dp"
             android:paddingTop="2dp"
             android:textColor="@color/defaultTextColor"
-            android:textSize="15sp" />
+            android:textSize="@dimen/sp_15" />
 
         <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_title"
@@ -76,8 +75,8 @@
             android:paddingLeft="4dp"
             android:singleLine="true"
             android:textColor="@color/lightGrayTextColor"
-            android:textSize="15sp"
-            card_view:minTextSize="14sp"
+            android:textSize="@dimen/sp_15"
+            card_view:minTextSize="@dimen/sp_14"
             android:textStyle="bold" />
 
 
