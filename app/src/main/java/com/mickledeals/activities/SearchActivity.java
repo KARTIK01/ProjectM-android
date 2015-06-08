@@ -137,7 +137,7 @@ public class SearchActivity extends SwipeDismissActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.toString().trim().length() > 0) {
-                    mSearchEdit.setTextSize(19f);
+                    mSearchEdit.setTextSize(18f);
                     mClear.setVisibility(View.VISIBLE);
 
                     mSuggestionRecyclerView.setVisibility(View.VISIBLE);

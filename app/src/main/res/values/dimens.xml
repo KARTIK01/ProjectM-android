@@ -27,6 +27,7 @@
 
 
     <dimen name="card_button_width">70dp</dimen>
+    <dimen name="card_button_padding">3dp</dimen>
     <dimen name="thumbnail_image_width">110dp</dimen>
     <dimen name="thumbnail_small_image_width">90dp</dimen> <!-- used in save, other coupon -->
 
