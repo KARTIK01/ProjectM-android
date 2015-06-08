@@ -237,7 +237,6 @@ public class DetailsFragment extends BaseFragment {
 
 
         if (mHolder.mId == 2 || mHolder.mId == 3) {
-            mBusinessInfoBtn.setVisibility(View.VISIBLE);
             mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

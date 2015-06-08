@@ -71,6 +71,19 @@
             android:paddingRight="2dp"
             android:paddingLeft="2dp" />
 
+
+        <TextView
+            android:id="@+id/card_expired_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/card_image"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/defaultTextColor"
+            android:textSize="13sp"
+            android:paddingRight="2dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="7dp" />
+
         <!-- Margin bottom layout does not work for button, thus need a framelayout -->
         <FrameLayout
             android:id="@+id/card_button_layout"
@@ -96,16 +109,15 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/card_expired_date"
+            android:id="@+id/card_deal_ended"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/card_image"
-            android:layout_toLeftOf="@id/card_button_layout"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:textColor="@color/defaultTextColor"
-            android:textSize="13sp"
-            android:paddingRight="2dp"
-            android:paddingLeft="8dp"
+            android:text="@string/deal_ended"
+            android:textSize="14sp"
+            android:paddingRight="6dp"
             android:paddingBottom="7dp" />
 
 

@@ -32,10 +32,12 @@ public class MyCouponsAdapter extends CardAdapter {
     public static class MyCouponViewHolder extends MainViewHolder {
         public TextView mCardButton;
         public TextView mCardExpiredDate;
+        public TextView mCardDealEnded;
         public MyCouponViewHolder(View v) {
             super(v);
             mCardButton = (TextView) v.findViewById(R.id.card_button);
             mCardExpiredDate = (TextView) v.findViewById(R.id.card_expired_date);
+            mCardDealEnded = (TextView) v.findViewById(R.id.card_deal_ended);
         }
     }
 
@@ -94,13 +96,21 @@ public class MyCouponsAdapter extends CardAdapter {
         } else {
             super.onBindViewHolder(holder, position);
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
-            vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
-            if (position > 5) {
+            if (position > 8) {
+                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.buy_again));
-//                vh.mCardButton.setBackgroundResource(R.drawable.button_selector_bg);
-            } else {
+            }
+            else {
+                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
-//                vh.mCardButton.setBackgroundResource(R.drawable.green_button_selector_bg);
+            }
+
+            if (position == 6 || position == 7 || position == 11) {
+                vh.mCardButton.setVisibility(View.GONE);
+                vh.mCardDealEnded.setVisibility(View.VISIBLE);
+            } else {
+                vh.mCardButton.setVisibility(View.VISIBLE);
+                vh.mCardDealEnded.setVisibility(View.GONE);
             }
         }
     }
@@ -128,6 +138,7 @@ public class MyCouponsAdapter extends CardAdapter {
         else if (position == 7) position = 4;
         else if (position == 9) position = 5;
         else if (position == 10) position = 6;
+        else if (position == 11) position = 7;
 
         return position;
     }

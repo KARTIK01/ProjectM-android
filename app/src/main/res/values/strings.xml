@@ -56,6 +56,7 @@
     <string name="expired_on">Expired on %s</string>
     <string name="buy_again">Buy again</string>
     <string name="redeem">REDEEM</string>
+    <string name="deal_ended">Deal Ended</string>
 
     <!-- Save -->
     <string name="empty_save_msg">You will see your saved coupons here by tapping on the star icon in any coupon</string>
@@ -63,7 +64,7 @@
     <!-- Featured -->
     <string name="new_added_coupons">New Added Coupons</string>
     <string name="popular_coupons">Popular Coupons</string>
-    <string name="this_week_best_deals">This week\'s best deals</string>
+    <string name="this_week_best_deals">This Week\'s Best Deals</string>
     <string name="feature_slider_text">Main Feature</string>
 
     <!-- Details -->
@@ -128,6 +129,7 @@
 
     <!-- Temp -->
     <string name="expire_date">Expires 08/27/15</string>
+    <string name="used_date">Used on 06/14/15</string>
     <string name="fine_print_description">Limit 1 per table. Only valid for Dine in.</string>
     <string name="business_description">
 Savory Steakhouse is a fine dining interpretation of the classic American steakhouse with hints of Japanese influence laced into the menu.

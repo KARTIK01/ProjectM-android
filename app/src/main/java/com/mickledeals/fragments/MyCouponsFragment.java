@@ -36,7 +36,7 @@ public class MyCouponsFragment extends BaseFragment {
         mBoughtList.clear();
         for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
             if (holder.mId == 4 || holder.mId == 1 || holder.mId == 5 || holder.mId == 10
-            || holder.mId == 15 || holder.mId == 9 || holder.mId == 16) mBoughtList.add(holder);
+            || holder.mId == 15 || holder.mId == 9 || holder.mId == 16 || holder.mId == 13) mBoughtList.add(holder);
         }
     }
 
