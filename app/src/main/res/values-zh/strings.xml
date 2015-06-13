@@ -69,9 +69,8 @@
     <string name="share">分享</string>
     <string name="business_info">商戶專頁</string>
     <string name="more_coupon">更多此商戶的優惠</string>
-
     <string name="fine_print">條款</string>
-    <string name="unlock_coupon">購買優惠券</string>
+    <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠券</string>
     <string name="share_subject">一張來自MickleDeals的絕佳優惠券!</string>
     <string name="share_to">分享到...</string>
@@ -116,6 +115,7 @@
     <string name="unlock_gift">獲取禮物</string>
 
     <!-- Misc -->
+    <string name="free">免費</string>
     <string name="no_save">目前沒有儲存任何優惠券</string>
 
 

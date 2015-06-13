@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 
@@ -60,28 +58,9 @@ public class DetailsActivity extends SwipeDismissActivity  {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.details, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_search) {
-//            return true;
-//        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected int getLayoutResource() {
         return R.layout.activity_details;
     }
-
-
 
 
     public class DetailsPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener, ViewPager.PageTransformer {

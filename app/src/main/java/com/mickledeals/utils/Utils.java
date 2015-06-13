@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +20,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mickledeals.R;
@@ -34,6 +39,9 @@ import com.mickledeals.fragments.SavedCouponsFragment;
 import com.mickledeals.tests.TestDataHolder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -177,18 +185,6 @@ public class Utils {
         }
     }
 
-    public static void transitDetailsActivityFromViewPager(Activity activity, int index, int listType, View v) {
-        Intent i = new Intent(activity, DetailsActivity.class);
-        i.putExtra("listIndex", index);
-        i.putExtra("listType", listType);
-//        if (Build.VERSION.SDK_INT < 16 || v == null) {
-            activity.startActivity(i);
-//        } else {
-//            Bundle scaledBundle = ActivityOptionsCompat.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle();
-//            activity.startActivity(i, scaledBundle);
-//        }
-    }
-
     /**
      * Create a File for saving an image
      */
@@ -279,6 +275,46 @@ public class Utils {
             if (show) imm.showSoftInput(editText, 0);
             else imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         }
+    }
+
+    public static void shareScreenShot(Activity activity, ScrollView scrollView, String subject, String content) {
+
+        View v = scrollView.getChildAt(0);
+
+        scrollView.scrollTo(0, 0);
+
+        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        Bitmap bitmap = Bitmap.createBitmap(Utils.getDeviceWidth(activity), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bitmap);
+        v.draw(c);
+        File file = Utils.getImageFileLocation();
+        if (file == null) {
+            Toast.makeText(activity, R.string.share_failed,
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        FileOutputStream fout;
+        try {
+            fout = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fout);
+            fout.flush();
+            fout.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        shareIntent.putExtra(Intent.EXTRA_STREAM,
+                Uri.fromFile(file));
+        shareIntent.setType("image/*");
+        activity.startActivity(Intent.createChooser(shareIntent, activity.getResources().getText(R.string.share_to)));
     }
 
 

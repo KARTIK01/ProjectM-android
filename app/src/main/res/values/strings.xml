@@ -74,8 +74,8 @@
     <string name="business_info">Business\nPage</string>
     <string name="more_coupon">More Coupon in This Place</string>
     <string name="fine_print">Fine Print</string>
-    <string name="unlock_coupon">Unlock Now</string>
-    <string name="redeem_coupon">Redeem Coupon</string>
+    <string name="unlock_coupon">Get this Coupon for %s</string>
+    <string name="redeem_coupon">Redeem this Coupon</string>
     <string name="share_subject">A great coupon from MickleDeals!</string>
     <string name="share_to">Share to...</string>
     <string name="share_failed">Share Failed</string>
@@ -124,7 +124,7 @@
     <string name="unlock_gift">Claim Your Gift</string>
 
     <!-- Misc -->
-    <string name="free">Free</string>
+    <string name="free">FREE</string>
     <string name="no_save">You do not have any saved coupons yet.</string>
 
     <!-- Temp -->

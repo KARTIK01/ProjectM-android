@@ -2,16 +2,16 @@ package com.mickledeals.fragments;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPageActivity;
@@ -37,11 +36,6 @@ import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 /**
  * Created by Nicky on 11/28/2014.
  */
@@ -57,13 +51,13 @@ public class DetailsFragment extends BaseFragment {
     private ImageView mImageView;
     private TextView mBuyBtn;
     private TextView mRedeemBtn;
-    private TextView mSaveBtn;
-    private TextView mBusinessInfoBtn;
-    private TextView mShareBtn;
+    private View mSaveBtn;
+    private View mBusinessInfoBtn;
+    private TextView mSaveBtnText;
+    private TextView mBusinessInfoBtnText;
     private View mAddressBtn;
     private View mCallBtn;
     private View mBuyPanel;
-    private View mRedeemPanel;
     private LinearLayout mMoreCouponRow;
     private View mNavigationHintPanel;
     private TextView mNavLeftText;
@@ -79,6 +73,7 @@ public class DetailsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mListType = getArguments().getInt("listType");
         mHolder = DataListModel.getInstance().getDataList().get(getArguments().getInt("storeId"));
     }
@@ -101,18 +96,19 @@ public class DetailsFragment extends BaseFragment {
 
         mBuyBtn = (TextView) view.findViewById(R.id.buyBtn);
         mRedeemBtn = (TextView) view.findViewById(R.id.redeemBtn);
-        mShareBtn = (TextView) view.findViewById(R.id.sharedButton);
-        mBusinessInfoBtn = (TextView) view.findViewById(R.id.businessInfoButton);
-        mSaveBtn = (TextView) view.findViewById(R.id.savedButton);
+        mBusinessInfoBtn = view.findViewById(R.id.businessInfoButton);
+        mSaveBtn = view.findViewById(R.id.savedButton);
+        mBusinessInfoBtnText = (TextView) view.findViewById(R.id.businessInfoButtonText);
+        mSaveBtnText = (TextView) view.findViewById(R.id.savedButtonText);
         mAddressBtn = view.findViewById(R.id.address);
         mCallBtn = view.findViewById(R.id.call);
         mBuyPanel = view.findViewById(R.id.buyPanel);
-        mRedeemPanel = view.findViewById(R.id.redeemPanel);
         mNavigationHintPanel = view.findViewById(R.id.navigateHintPanel);
         mNavLeftText = (TextView) view.findViewById(R.id.navLeftText);
         mNavMidText = (TextView) view.findViewById(R.id.navMidText);
         mNavRightText = (TextView) view.findViewById(R.id.navRightText);
         mMoreCouponRow = (LinearLayout) view.findViewById(R.id.moreCouponRow);
+
         mDetailsScrollView = (NotifyingScrollView) view.findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
             @Override
@@ -147,9 +143,11 @@ public class DetailsFragment extends BaseFragment {
 
         ((TextView) view.findViewById(R.id.storeName)).setText(mHolder.getStoreName());
         ((TextView) view.findViewById(R.id.couponDescription)).setText(mHolder.getDescription());
-        ((TextView) view.findViewById(R.id.couponPrice)).setText(mHolder.mPrice == 0 ? "FREE" : "$" + (int) (mHolder.mPrice));
-        ((TextView) view.findViewById(R.id.buyPrice)).setText("$" + (int) (mHolder.mPrice));
         ((TextView) view.findViewById(R.id.address)).setText(mHolder.mAddress);
+
+        String priceText = mHolder.mPrice == 0 ? getString(R.string.free) : "$" + (int) (mHolder.mPrice);
+        mBuyBtn.setText(getString(R.string.unlock_coupon, priceText));
+        ((TextView) view.findViewById(R.id.couponPrice)).setText(priceText);
         float dist = LocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
         String addrShort = mHolder.mAddressShort;
         if (dist > 0) {
@@ -191,15 +189,15 @@ public class DetailsFragment extends BaseFragment {
             }
         });
 
-        mSaveBtn.setText(mHolder.mSaved ? R.string.saved : R.string.save);
-        mSaveBtn.setCompoundDrawablesWithIntrinsicBounds(mHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off, 0, 0, 0);
+        mSaveBtnText.setText(mHolder.mSaved ? R.string.saved : R.string.save);
+        mSaveBtnText.setCompoundDrawablesWithIntrinsicBounds(mHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off, 0, 0, 0);
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 mHolder.mSaved = !mHolder.mSaved;
-                mSaveBtn.setText(mHolder.mSaved ? R.string.saved : R.string.save);
-                mSaveBtn.setCompoundDrawablesWithIntrinsicBounds(mHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off, 0, 0, 0);
+                mSaveBtnText.setText(mHolder.mSaved ? R.string.saved : R.string.save);
+                mSaveBtnText.setCompoundDrawablesWithIntrinsicBounds(mHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off, 0, 0, 0);
 
                 StringBuilder sb = new StringBuilder();
                 for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
@@ -228,12 +226,12 @@ public class DetailsFragment extends BaseFragment {
             }
         });
 
-        mShareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareCoupon();
-            }
-        });
+//        mShareBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                shareCoupon();
+//            }
+//        });
 
 
         if (mHolder.mId == 2 || mHolder.mId == 3) {
@@ -285,8 +283,8 @@ public class DetailsFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_BUY) {
-                mRedeemPanel.setVisibility(View.VISIBLE);
-                mBuyPanel.setVisibility(View.GONE);
+                mRedeemBtn.setVisibility(View.VISIBLE);
+                mBuyBtn.setVisibility(View.GONE);
             } else if (requestCode == REQUEST_CODE_REDEEM) {
 
             }
@@ -323,122 +321,6 @@ public class DetailsFragment extends BaseFragment {
         return mDetailsScrollView.getScrollY();
     }
 
-    private void shareCoupon() {
-        View v = getActivity().findViewById(android.R.id.content).getRootView();
-        v.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
-        v.setDrawingCacheEnabled(false);
-        int statusBarHeight = Utils.getStatusBarHeight(mContext);
-        bitmap = Bitmap.createBitmap(bitmap, 0, statusBarHeight, bitmap.getWidth(), bitmap.getHeight() - statusBarHeight, null, true);
-        File file = Utils.getImageFileLocation();
-        if (file == null) {
-            Toast.makeText(mContext, R.string.share_failed,
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-        FileOutputStream fout;
-        try {
-            fout = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fout);
-            fout.flush();
-            fout.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, mHolder.getDescription() + "\n" + mHolder.getStoreName());
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, mContext.getResources().getString(R.string.share_subject));
-        shareIntent.putExtra(Intent.EXTRA_STREAM,
-                Uri.fromFile(file));
-        shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_to)));
-    }
-
-    private void showBuyDialog() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.buy_dialog, null);
-        final AlertDialog dialog = new AlertDialog.Builder(mContext)
-                .setView(view)
-                .create();
-
-        dialog.show();
-
-        TextView cancel = (TextView) view.findViewById(R.id.cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        TextView confirm = (TextView) view.findViewById(R.id.confirm);
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRedeemPanel.setVisibility(View.VISIBLE);
-                mBuyPanel.setVisibility(View.GONE);
-                dialog.dismiss();
-            }
-        });
-        final TextView quantityTv = (TextView) view.findViewById(R.id.quantity);
-        quantityTv.setText(mQuantity + "");
-        final TextView singlePrice = (TextView) view.findViewById(R.id.singlePrice);
-        singlePrice.setText("$" + (int) (mHolder.mPrice));
-        final TextView totalPriceTv = (TextView) view.findViewById(R.id.totalPrice);
-        totalPriceTv.setText("$" + (int) (mQuantity * mHolder.mPrice));
-        TextView plus = (TextView) view.findViewById(R.id.plus);
-        final TextView minus = (TextView) view.findViewById(R.id.minus);
-        if (mQuantity <= 1) minus.setEnabled(false);
-        else minus.setEnabled(true);
-        minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mQuantity--;
-                quantityTv.setText(mQuantity + "");
-                totalPriceTv.setText("$" + (int) (mQuantity * mHolder.mPrice));
-                if (mQuantity <= 1) minus.setEnabled(false);
-                else minus.setEnabled(true);
-            }
-        });
-        plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mQuantity++;
-                quantityTv.setText(mQuantity + "");
-                totalPriceTv.setText("$" + (int) (mQuantity * mHolder.mPrice));
-                if (mQuantity <= 1) minus.setEnabled(false);
-                else minus.setEnabled(true);
-            }
-        });
-    }
-
-    private void showRedeemDialog() {
-//        View view = LayoutInflater.from(mContext).inflate(R.layout.redeem_dialog, null);
-//        final AlertDialog dialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogCustom))
-//                .setView(view)
-//                .create();
-//        dialog.show();
-//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//            @Override
-//            public void onDismiss(DialogInterface dialog) {
-//                mHandler.removeCallbacks(mUpdatetimerThread);
-//            }
-//        });
-//        final TextView storeName = (TextView) view.findViewById(R.id.storeName);
-//        storeName.setText(mHolder.getStoreName());
-//        final TextView discLong = (TextView) view.findViewById(R.id.discLong);
-//        discLong.setText(mHolder.getDescription());
-//        discLong.setSelected(true);
-//        mExpiredTime = (TextView) view.findViewById(R.id.expireTime);
-//
-//        if (mHolder.mRedeemTime == 0) mHolder.mRedeemTime = System.currentTimeMillis();
-//
-//        mHandler.removeCallbacks(mUpdatetimerThread);
-//        mHandler.postDelayed(mUpdatetimerThread, 0);
-    }
-
     private String getExpiredTimerValue() {
 
         long timeDiff = System.currentTimeMillis() - mHolder.mRedeemTime;
@@ -456,5 +338,20 @@ public class DetailsFragment extends BaseFragment {
     };
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.details, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            Utils.shareScreenShot(getActivity(), mDetailsScrollView, getString(R.string.share_subject), mHolder.getDescription() + "\n" + mHolder.getStoreName());
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

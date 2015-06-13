@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -155,6 +157,21 @@ public class BusinessPageActivity extends SwipeDismissActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            Utils.shareScreenShot(this, mDetailsScrollView, getString(R.string.share_subject), mHolder.getDescription() + "\n" + mHolder.getStoreName());
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

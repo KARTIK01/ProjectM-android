@@ -122,7 +122,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         if (holder.mCardImage != null)
             holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
         if (holder.mCardPrice != null)
-            holder.mCardPrice.setText(dataHolder.mPrice == 0 ? mFragmentActivity.getString(R.string.free) : "$" + (int) dataHolder.mPrice);
+            holder.mCardPrice.setText(dataHolder.mPrice == 0 ? "Free" : "$" + (int) dataHolder.mPrice);
         if (holder.mCardPrice != null) {
 
             int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
