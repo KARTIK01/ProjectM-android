@@ -93,6 +93,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
             });
             Bundle bundle = new Bundle();
             bundle.putInt("storeId", mList.get(position).mId);
+            bundle.putInt("position", position);
             bundle.putInt("listType", mListType);
             int stringRes = Utils.getStringResFromType(mListType);
             if (stringRes != 0) bundle.putString("navMidText", getString(stringRes) + " " + (position + 1) + "/" + mList.size());

@@ -95,21 +95,31 @@ public class MyCouponsAdapter extends CardAdapter {
             }
         } else {
             super.onBindViewHolder(holder, position);
+
+            position = convertListPosToDataPos(position);
+            final TestDataHolder dataHolder = mDataset.get(position);
+
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
-            if (position > 8) {
+            if (position > 4) {
                 vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
-                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.buy_again));
+//                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.buy_again));
             }
             else {
                 vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
             }
 
-            if (position == 6 || position == 7 || position == 11) {
-                vh.mCardButton.setVisibility(View.GONE);
-                vh.mCardDealEnded.setVisibility(View.VISIBLE);
-            } else {
+            if (position < 3) {
+                dataHolder.mBought = true;
                 vh.mCardButton.setVisibility(View.VISIBLE);
+            } else {
+                vh.mCardButton.setVisibility(View.GONE);
+            }
+
+            if (position == 3 || position == 4 || position == 7) {
+                vh.mCardDealEnded.setVisibility(View.VISIBLE);
+                dataHolder.mExpired = true;
+            } else {
                 vh.mCardDealEnded.setVisibility(View.GONE);
             }
         }

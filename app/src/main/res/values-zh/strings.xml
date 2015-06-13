@@ -45,7 +45,7 @@
 
     <!-- My Coupons -->
     <string name="clear">清除</string>
-    <string name="expiring">將到期</string>
+    <string name="expiring">即將到期</string>
     <string name="available">可用</string>
     <string name="expired">已過期</string>
     <string name="used">已用</string>
@@ -71,7 +71,7 @@
     <string name="more_coupon">更多此商戶的優惠</string>
     <string name="fine_print">條款</string>
     <string name="unlock_coupon">%s換領此優惠券</string>
-    <string name="redeem_coupon">兌換此優惠券</string>
+    <string name="redeem_coupon">兌換此優惠</string>
     <string name="share_subject">一張來自MickleDeals的絕佳優惠券!</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
@@ -120,8 +120,10 @@
 
 
     <!-- Temp -->
-    <string name="expire_date">於 08/27/15 到期</string>
-    <string name="used_date">於 06/14/15 使用</string>
+    <string name="expire_date">到期於 08/27/15</string>
+    <string name="used_date">兌換於 06/14/15</string>
+    <string name="bought_date">你於 05/30/15 以%s購買此優惠券</string>
+    <string name="obtain_date">你於 05/30/15 免費換領此優惠券</string>
     <string name="fine_print_description">每桌限用一張優惠券, 及只限店内使用。</string>
     <string name="business_description">
 Savory Steakhouse的特色是在演繹傳統美式扒房菜款當中, 帶出陣陣日式風味。自2005年開業以來獲得多項獎項和榮譽, 是餐飲界中備受歡迎的一員。</string>

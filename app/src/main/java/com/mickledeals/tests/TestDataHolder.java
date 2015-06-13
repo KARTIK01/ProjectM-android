@@ -28,8 +28,8 @@ public class TestDataHolder implements Serializable{
 
     public boolean mSaved;
     public boolean mBought;
+    public boolean mExpired;
 
-    public int mQuantityBought;
     public long mRedeemTime;
 
     public String getStoreName() {

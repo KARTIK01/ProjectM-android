@@ -130,6 +130,8 @@
     <!-- Temp -->
     <string name="expire_date">Expires 08/27/15</string>
     <string name="used_date">Used on 06/14/15</string>
+    <string name="bought_date">You bought this coupon on 05/30/15 for %s</string>
+    <string name="obtain_date">You obtained this coupon on 05/30/15 for Free</string>
     <string name="fine_print_description">Limit 1 per table. Only valid for Dine in.</string>
     <string name="business_description">
 Savory Steakhouse is a fine dining interpretation of the classic American steakhouse with hints of Japanese influence laced into the menu.

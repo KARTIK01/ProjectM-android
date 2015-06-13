@@ -48,11 +48,16 @@ public class DetailsFragment extends BaseFragment {
     private TestDataHolder mHolder;
 
     private int mListType;
+    private TextView mBusinessName;
+    private TextView mDescription;
+    private TextView mPrice;
     private ImageView mImageView;
     private TextView mBuyBtn;
     private TextView mRedeemBtn;
     private View mSaveBtn;
     private View mBusinessInfoBtn;
+    private TextView mBoughtDate;
+    private TextView mDealEndedText;
     private TextView mSaveBtnText;
     private TextView mBusinessInfoBtnText;
     private View mAddressBtn;
@@ -68,14 +73,13 @@ public class DetailsFragment extends BaseFragment {
     private NotifyingScrollView mDetailsScrollView;
     private NotifyingScrollView.OnScrollChangedListener mScrollListener;
 
-    private int mQuantity = 1;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mListType = getArguments().getInt("listType");
-        mHolder = DataListModel.getInstance().getDataList().get(getArguments().getInt("storeId"));
+//        mHolder = DataListModel.getInstance().getDataList().get(getArguments().getInt("storeId"));
+        mHolder = Utils.getListFromType(mListType).get(getArguments().getInt("position"));
     }
 
     @Override
@@ -94,6 +98,10 @@ public class DetailsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mBusinessName = (TextView) view.findViewById(R.id.storeName);
+        mDescription = (TextView) view.findViewById(R.id.couponDescription);
+        mPrice = (TextView) view.findViewById(R.id.couponPrice);
+        mBoughtDate = (TextView) view.findViewById(R.id.boughtDate);
         mBuyBtn = (TextView) view.findViewById(R.id.buyBtn);
         mRedeemBtn = (TextView) view.findViewById(R.id.redeemBtn);
         mBusinessInfoBtn = view.findViewById(R.id.businessInfoButton);
@@ -108,6 +116,7 @@ public class DetailsFragment extends BaseFragment {
         mNavMidText = (TextView) view.findViewById(R.id.navMidText);
         mNavRightText = (TextView) view.findViewById(R.id.navRightText);
         mMoreCouponRow = (LinearLayout) view.findViewById(R.id.moreCouponRow);
+        mDealEndedText = (TextView) view.findViewById(R.id.dealEndedText);
 
         mDetailsScrollView = (NotifyingScrollView) view.findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
@@ -141,13 +150,13 @@ public class DetailsFragment extends BaseFragment {
             mNavRightText.setVisibility(View.VISIBLE);
         }
 
-        ((TextView) view.findViewById(R.id.storeName)).setText(mHolder.getStoreName());
-        ((TextView) view.findViewById(R.id.couponDescription)).setText(mHolder.getDescription());
+        mBusinessName.setText(mHolder.getStoreName());
+        mDescription.setText(mHolder.getDescription());
         ((TextView) view.findViewById(R.id.address)).setText(mHolder.mAddress);
 
         String priceText = mHolder.mPrice == 0 ? getString(R.string.free) : "$" + (int) (mHolder.mPrice);
         mBuyBtn.setText(getString(R.string.unlock_coupon, priceText));
-        ((TextView) view.findViewById(R.id.couponPrice)).setText(priceText);
+        mPrice.setText(priceText);
         float dist = LocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
         String addrShort = mHolder.mAddressShort;
         if (dist > 0) {
@@ -264,6 +273,38 @@ public class DetailsFragment extends BaseFragment {
             ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
             ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
         }
+
+
+
+        if (mHolder.mExpired) {
+            showExpiredStatus();
+        } else if (mHolder.mBought) {
+            showBoughtStatus();
+        }
+    }
+
+    private void showAvailableStatus() {
+
+    }
+
+    private void showExpiredStatus() {
+        mDealEndedText.setVisibility(View.VISIBLE);
+        mRedeemBtn.setVisibility(View.GONE);
+        mBuyBtn.setVisibility(View.GONE);
+        mPrice.setVisibility(View.GONE);
+        mBoughtDate.setVisibility(View.GONE);
+    }
+
+    private void showBoughtStatus() {
+        mPrice.setVisibility(View.GONE);
+        mRedeemBtn.setVisibility(View.VISIBLE);
+        mBuyBtn.setVisibility(View.GONE);
+        if (mHolder.mPrice == 0) {
+            mBoughtDate.setText(getString(R.string.obtain_date));
+        } else {
+            mBoughtDate.setText(getString(R.string.bought_date,  "$" + (int) (mHolder.mPrice)));
+        }
+        mBoughtDate.setVisibility(View.VISIBLE);
     }
 
     private void scheduleStartPostponedTransition(final View sharedElement) {
@@ -283,8 +324,7 @@ public class DetailsFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_BUY) {
-                mRedeemBtn.setVisibility(View.VISIBLE);
-                mBuyBtn.setVisibility(View.GONE);
+                showBoughtStatus();
             } else if (requestCode == REQUEST_CODE_REDEEM) {
 
             }
