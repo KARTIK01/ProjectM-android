@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme"
         android:name="com.mickledeals.activities.MDApplication">
 
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -69,6 +70,21 @@
         <activity android:name=".activities.SearchActivity"
             android:theme="@style/AppTheme.Base.Transcluent"
             android:windowSoftInputMode="stateVisible"/>
+        <activity android:name=".activities.LoginDialogActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
+        <activity android:name=".activities.ForgotPasswordActivity"
+            android:theme="@style/AppTheme.Base.Transcluent"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1234"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
 
 /**
@@ -33,7 +34,7 @@ import com.mickledeals.utils.Utils;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends BaseFragment {
+public class NavigationDrawerFragment extends BaseFragment implements MDLoginManager.LoginCallback{
 
     /**
      * Remember the position of the selected item.
@@ -63,12 +64,13 @@ public class NavigationDrawerFragment extends BaseFragment {
     private boolean mDrawerOpened;
     private Intent mPendingActivityIntent;
 
-    //    private int mCurrentSelectedPosition = -1;
-//    private boolean mFromSavedInstanceState;
-
-
     private LinearLayout mMenuContainer;
     private int mSelectableBgResId;
+
+    private View mUserInfo;
+    private View mLoginArea;
+    private TextView mUserEmail;
+    private TextView mUserName;
 
     public NavigationDrawerFragment() {
     }
@@ -82,12 +84,6 @@ public class NavigationDrawerFragment extends BaseFragment {
         mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         mSelectableBgResId = outValue.resourceId;
 
-//        if (savedInstanceState != null) {
-////            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-//            mFromSavedInstanceState = true;
-//        }
-
-        // Select either the default item (0) or the last selected item.
         Utils.loadMenuItems();
         selectItem(0);
     }
@@ -95,7 +91,6 @@ public class NavigationDrawerFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
     }
 
@@ -109,12 +104,49 @@ public class NavigationDrawerFragment extends BaseFragment {
         return scrollView;
     }
 
-    private void inflateMenuViews(LayoutInflater inflater) {
+    @Override
+    public void onLoginSuccess() {
+        mUserEmail.setText(MDLoginManager.mEmailAddr);
+        mUserName.setText(MDLoginManager.mUserName);
+        mUserInfo.setVisibility(View.VISIBLE);
+        mLoginArea.setVisibility(View.GONE);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mLoginArea = view.findViewById(R.id.loginArea);
+        mUserInfo = view.findViewById(R.id.userInfo);
+        mUserEmail = (TextView) view.findViewById(R.id.userEmail);
+        mUserName = (TextView) view.findViewById(R.id.userName);
+
+        MDLoginManager.registerCallback(this);
+
+        if (MDLoginManager.isLogin()) {
+            onLoginSuccess();
+        } else {
+            mUserInfo.setVisibility(View.GONE);
+            mLoginArea.setVisibility(View.VISIBLE);
+        }
+
+        mLoginArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MDLoginManager.login(getActivity(), null);
+            }
+        });
+
+//        mUserInfo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LinearLayout layoutOfPopup = new LinearLayout(mContext);
+//                TextView tv = new TextView()
+//                PopupWindow window = new PopupWindow(layoutOfPopup, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                window.setContentView(layoutOfPopup);
+//            }
+//        });
+
         mMenuContainer = (LinearLayout) view.findViewById(R.id.menuContainer);
         for (int i = 0; i < Utils.sNavMenuList.size(); i++) {
             final int pos = i;
@@ -317,6 +349,7 @@ public class NavigationDrawerFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
+        MDLoginManager.unregisterCallback(this);
     }
 
     @Override

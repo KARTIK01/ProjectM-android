@@ -4,8 +4,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlNormal">@color/colorPrimary3</item>
-        <item name="colorControlHighlight">@color/colorPrimary6</item>
+        <!--<item name="colorControlNormal">@color/colorPrimary3</item>    unselected edittext, scroll bar, unselected checkbox, -->
+        <item name="colorControlHighlight">@color/colorPrimary6</item> <!-- selectable bg -->
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>

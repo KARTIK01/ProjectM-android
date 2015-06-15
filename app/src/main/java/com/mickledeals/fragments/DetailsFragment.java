@@ -32,6 +32,7 @@ import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.LocationManager;
+import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
@@ -179,17 +180,25 @@ public class DetailsFragment extends BaseFragment {
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showBuyDialog();
-                Intent i = new Intent(mContext, BuyDialogActivity.class);
-                i.putExtra("price", mHolder.mPrice);
-                startActivityForResult(i, REQUEST_CODE_BUY);
+
+                if (MDLoginManager.isLogin()) {
+                    Intent i = new Intent(mContext, BuyDialogActivity.class);
+                    i.putExtra("price", mHolder.mPrice);
+                    startActivityForResult(i, REQUEST_CODE_BUY);
+                } else {
+                    MDLoginManager.login(getActivity(), new MDLoginManager.LoginCallback() {
+                        @Override
+                        public void onLoginSuccess() {
+
+                        }
+                    });
+                }
             }
         });
 
         mRedeemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showRedeemDialog();
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
                 i.putExtra("storeName", mHolder.mStoreName);
                 i.putExtra("couponDesc", mHolder.mDescription);

@@ -2,14 +2,12 @@
 <resources>
 
     <string name="app_name">MickleDeals</string>
+    <string name="facebook_app_id">1568512020076583</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_search">Search</string>
 
     <!-- Menu -->
-
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_my_deals">My Coupons</string>
@@ -116,7 +114,14 @@
     <string name="remove_card">Remove Card</string>
 
     <!-- Settings -->
+    <string name="gneral">General</string>
+    <string name="account_settings">Account Settings</string>
     <string name="language">Language</string>
+    <string name="log_out">Log Out</string>
+    <string name="change_password">Change Password</string>
+    <string name="log_out_confirm">Are you sure you want to log out of account %s ?</string>
+    <string name="log_out_yes">YES</string>
+    <string name="log_out_no">NO</string>
 
     <!-- Gift Redeem -->
     <string name="redeem_msg">Enter redeem code below to claim the gift:</string>
@@ -126,6 +131,22 @@
     <!-- Misc -->
     <string name="free">FREE</string>
     <string name="no_save">You do not have any saved coupons yet.</string>
+
+
+    <!-- Login -->
+    <string name="or">or</string>
+    <string name="login_or_signup">LOG IN / SIGN UP</string>
+    <string name="login">LOG IN</string>
+    <string name="signup">SIGN UP</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="facebook_never_post_msg">We\'ll never post anything without your permission</string>
+    <string name="reset_password_msg">Please enter your email below. A temporary password will be sent to you.</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="submit">Submit</string>
+    <string name="invalid_email">Please enter a valid email address</string>
+    <string name="invalid_password">Please enter password with more than 6 characters</string>
 
     <!-- Temp -->
     <string name="expire_date">Expires 08/27/15</string>

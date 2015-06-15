@@ -10,14 +10,14 @@
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/menu_settings" />
+        android:text="@string/gneral" />
 
     <LinearLayout
-        android:id="@+id/languageRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp"
+        android:onClick="languageRowClick"
         android:background="?android:attr/selectableItemBackground">
 
         <TextView
@@ -37,5 +37,48 @@
             android:textColor="@color/defaultTextColor" />
 
     </LinearLayout>
+
+
+    <TextView
+        android:layout_marginTop="8dp"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/account_settings" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/log_out"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:onClick="signoutClick"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/defaultTextColor" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/change_password"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:onClick="changePasswordClick"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/defaultTextColor" />
+
 
 </LinearLayout>

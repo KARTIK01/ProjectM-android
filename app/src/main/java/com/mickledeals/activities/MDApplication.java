@@ -2,6 +2,8 @@ package com.mickledeals.activities;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
+import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 
@@ -15,5 +17,7 @@ public class MDApplication extends Application {
         super.onCreate();
         int language = PreferenceHelper.getPreferenceValueInt(this, "language", -1);
         Utils.setLocaleWithLang(language, getBaseContext());
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        MDLoginManager.initFromPreference(getApplicationContext());
     }
 }

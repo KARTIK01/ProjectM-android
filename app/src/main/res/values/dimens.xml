@@ -16,6 +16,7 @@
     <integer name="dp_width_level">0</integer><!-- 0 = phone, 1 = sw600dp, 2 = sw800dp -->
 
 
+    <dimen name="sp_12">11sp</dimen>
     <dimen name="sp_13">12sp</dimen>
     <dimen name="sp_14">13sp</dimen>
     <dimen name="sp_15">14sp</dimen>
