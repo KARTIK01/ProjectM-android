@@ -4,6 +4,8 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.mickledeals.R;
 
@@ -45,5 +47,15 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
         });
         colorAnimation.setDuration(500);
         colorAnimation.start();
+
+        final Animation transAnim = AnimationUtils.loadAnimation(this,
+                R.anim.translate_anim);
+        findViewById(R.id.dialogContainer).startAnimation(transAnim);
+    }
+
+    //    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 }

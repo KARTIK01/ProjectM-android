@@ -21,6 +21,9 @@ import java.util.Locale;
 public class SettingsActivity extends BaseActivity {
 
     private TextView mLanguageText;
+    private TextView mLogin;
+    private TextView mLogout;
+    private TextView mChangePwd;
     private int language = Constants.LANG_ENG;
 
     @Override
@@ -29,9 +32,27 @@ public class SettingsActivity extends BaseActivity {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
+        mLogin = (TextView) findViewById(R.id.login);
+        mLogout = (TextView) findViewById(R.id.logOut);
+        mChangePwd = (TextView) findViewById(R.id.changePassword);
+
+        setLoginBtnState();
+
         mLanguageText = (TextView) findViewById(R.id.languageText);
         if (Utils.mCurrentLocale.getLanguage().equals("zh")) language = Constants.LANG_CHT;
         mLanguageText.setText(getResources().getStringArray(R.array.language_list)[language]);
+    }
+
+    private void setLoginBtnState() {
+        if (MDLoginManager.isLogin()) {
+            mLogin.setVisibility(View.GONE);
+            mLogout.setVisibility(View.VISIBLE);
+            mChangePwd.setVisibility(View.VISIBLE);
+        } else {
+            mLogin.setVisibility(View.VISIBLE);
+            mLogout.setVisibility(View.GONE);
+            mChangePwd.setVisibility(View.GONE);
+        }
     }
 
     public void languageRowClick(View v) {
@@ -58,6 +79,15 @@ public class SettingsActivity extends BaseActivity {
                 })
                 .create()
                 .show();
+    }
+
+    public void loginClick(View v) {
+        MDLoginManager.loginIfNecessary(this, new MDLoginManager.LoginCallback() {
+            @Override
+            public void onLoginSuccess() {
+                setLoginBtnState();
+            }
+        });
     }
 
     public void signoutClick(View v) {

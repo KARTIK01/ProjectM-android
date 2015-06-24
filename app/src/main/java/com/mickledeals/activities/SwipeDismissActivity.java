@@ -25,4 +25,12 @@ public abstract class SwipeDismissActivity extends BaseActivity {
         mViewPager.setCurrentItem(1, false);
         mViewPager.setOffscreenPageLimit(3);
     }
+
+    //cannot override finish here because details
+
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        overridePendingTransition(0, 0);
+//    }
 }

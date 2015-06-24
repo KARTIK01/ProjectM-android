@@ -30,6 +30,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     protected FragmentActivity mFragmentActivity;
     protected int mListType;
 
+    private boolean mClickable = true;//to prevent multilpe click
+
     private AspectRatioImageView mDummpyImageView;
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
@@ -72,6 +74,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!mClickable) return;
+                mClickable = false;
                 int pos = convertListPosToDataPos(vh.getAdapterPosition());
                 mDummpyImageView = new AspectRatioImageView(v.getContext());
                 mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
@@ -86,6 +90,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                         vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
                     }
                 }, 1500);
+                v.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mClickable = true;
+                    }
+                }, 2000);
                 String transition = "cardImage" + mDataset.get(pos).mId;
                 //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);

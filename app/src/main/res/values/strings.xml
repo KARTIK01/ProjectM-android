@@ -144,7 +144,7 @@
     <string name="facebook_never_post_msg">We\'ll never post anything without your permission</string>
     <string name="reset_password_msg">Please enter your email below. A temporary password will be sent to you.</string>
     <string name="reset_password">Reset Password</string>
-    <string name="submit">Submit</string>
+    <string name="reset">Reset</string>
     <string name="invalid_email">Please enter a valid email address</string>
     <string name="invalid_password">Please enter password with more than 6 characters</string>
 

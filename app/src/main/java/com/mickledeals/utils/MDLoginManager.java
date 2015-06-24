@@ -70,17 +70,21 @@ public class MDLoginManager {
         for (LoginCallback callback : mCallbackSet) {
             callback.onLoginSuccess();
         }
+        if (mPendingCallback != null) mPendingCallback.onLoginSuccess();
     }
 
     public static void onLoginCancelOrFail() {
         mPendingCallback = null;
     }
 
-    public static void login(Activity activity, LoginCallback callback) {
-        Intent i = new Intent(activity, LoginDialogActivity.class);
-        activity.startActivity(i);
-//        mCallback = callback;
-
+    public static void loginIfNecessary(Activity activity, LoginCallback callback) {
+        if (isLogin()) {
+            callback.onLoginSuccess();
+        } else {
+            Intent i = new Intent(activity, LoginDialogActivity.class);
+            activity.startActivity(i);
+            mPendingCallback = callback;
+        }
     }
 
     public void setAccessToken(AccessToken token) {

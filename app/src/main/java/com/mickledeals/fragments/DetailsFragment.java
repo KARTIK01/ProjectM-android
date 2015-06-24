@@ -180,19 +180,14 @@ public class DetailsFragment extends BaseFragment {
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (MDLoginManager.isLogin()) {
-                    Intent i = new Intent(mContext, BuyDialogActivity.class);
-                    i.putExtra("price", mHolder.mPrice);
-                    startActivityForResult(i, REQUEST_CODE_BUY);
-                } else {
-                    MDLoginManager.login(getActivity(), new MDLoginManager.LoginCallback() {
-                        @Override
-                        public void onLoginSuccess() {
-
-                        }
-                    });
-                }
+                MDLoginManager.loginIfNecessary(getActivity(), new MDLoginManager.LoginCallback() {
+                    @Override
+                    public void onLoginSuccess() {
+                        Intent i = new Intent(mContext, BuyDialogActivity.class);
+                        i.putExtra("price", mHolder.mPrice);
+                        startActivityForResult(i, REQUEST_CODE_BUY);
+                    }
+                });
             }
         });
 

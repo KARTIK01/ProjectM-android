@@ -133,7 +133,7 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
         mLoginArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MDLoginManager.login(getActivity(), null);
+                MDLoginManager.loginIfNecessary(getActivity(), null);
             }
         });
 

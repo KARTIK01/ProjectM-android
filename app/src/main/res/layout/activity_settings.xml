@@ -46,39 +46,58 @@
         android:layout_height="wrap_content"
         android:text="@string/account_settings" />
 
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="@string/log_out"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:onClick="signoutClick"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="?android:attr/selectableItemBackground"
-        android:textColor="@color/defaultTextColor" />
+        android:showDividers="middle"
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/light_divider" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="@string/change_password"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:onClick="changePasswordClick"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="?android:attr/selectableItemBackground"
-        android:textColor="@color/defaultTextColor" />
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/login_or_signup"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:onClick="loginClick"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/defaultTextColor" />
 
+        <TextView
+            android:id="@+id/logOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/log_out"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:onClick="signoutClick"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/defaultTextColor" />
+
+        <TextView
+            android:id="@+id/changePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/change_password"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:onClick="changePasswordClick"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/defaultTextColor" />
+
+    </LinearLayout>
 
 </LinearLayout>

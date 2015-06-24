@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="login">登入</string>
-    <string name="logout">登出</string>
-
     <string name="menu_home">主頁</string>
     <string name="menu_my_deals">我的優惠券</string>
     <string name="menu_saved_deals">收藏夾</string>
@@ -107,7 +104,14 @@
     <string name="remove_card">移除信用卡</string>
 
     <!-- Settings -->
+    <string name="gneral">一般</string>
+    <string name="account_settings">帳戶設定</string>
     <string name="language">語言</string>
+    <string name="log_out">登出</string>
+    <string name="change_password">更改密碼</string>
+    <string name="log_out_confirm">你確定要登出帳號 %s ?</string>
+    <string name="log_out_yes">確定</string>
+    <string name="log_out_no">取消</string>
 
     <!-- Gift Redeem -->
     <string name="redeem_msg">請在下面輸入兌換代碼以獲取禮物</string>
@@ -118,6 +122,21 @@
     <string name="free">免費</string>
     <string name="no_save">目前沒有儲存任何優惠券</string>
 
+    <!-- Login -->
+    <string name="or">或</string>
+    <string name="login_or_signup">登入 / 註冊</string>
+    <string name="login">登入</string>
+    <string name="signup">註冊</string>
+    <string name="forgot_password">忘記密碼?</string>
+    <string name="email">電郵</string>
+    <string name="password">密碼</string>
+    <string name="facebook_never_post_msg">未得到你同意前, 我們絕不發佈任何訊息</string>
+    <string name="reset_password_msg">請輸入你的電郵地址, 我們會發送一個臨時密碼到你的電郵。</string>
+    <string name="reset_password">重設密碼</string>
+    <string name="reset">重設</string>
+    <string name="logout">登出</string>
+    <string name="invalid_email">請輸入有效電郵地址</string>
+    <string name="invalid_password">請輸入超過6個字母的密碼</string>
 
     <!-- Temp -->
     <string name="expire_date">到期於 08/27/15</string>
