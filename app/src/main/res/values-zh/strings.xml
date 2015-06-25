@@ -72,6 +72,7 @@
     <string name="share_subject">一張來自MickleDeals的絕佳優惠券!</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
+    <string name="nav_text_more">張</string>
 
     <!-- Buy Dialog -->
     <string name="single_price">單價</string>
@@ -125,6 +126,7 @@
     <!-- Login -->
     <string name="or">或</string>
     <string name="login_or_signup">登入 / 註冊</string>
+    <string name="login_with_fb">使用 Facebook 登入</string>
     <string name="login">登入</string>
     <string name="signup">註冊</string>
     <string name="forgot_password">忘記密碼?</string>

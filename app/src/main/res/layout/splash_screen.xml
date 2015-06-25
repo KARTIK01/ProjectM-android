@@ -37,6 +37,6 @@
         android:textColor="@color/themeTextColor"
         android:padding="10dp"
         android:textSize="22dp"
-        android:background="@drawable/white_button_selector_bg" />
+        android:background="@drawable/border_button_selector_bg" />
 
 </LinearLayout>

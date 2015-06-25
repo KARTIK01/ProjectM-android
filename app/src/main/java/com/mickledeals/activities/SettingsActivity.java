@@ -91,7 +91,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     public void signoutClick(View v) {
-        String msg = getString(R.string.log_out_confirm, MDLoginManager.mEmailAddr);
+        String msg = getString(R.string.log_out_confirm, MDLoginManager.getNameOrEmail());
 
         new AlertDialog.Builder(SettingsActivity.this)
                 .setMessage(msg)

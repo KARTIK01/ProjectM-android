@@ -13,7 +13,7 @@
     <color name="colorPrimaryDark">@color/colorPrimary0</color>
     <color name="colorAccent">@color/colorPrimary2</color>
     <color name="colorButtonBg">@color/colorPrimary3</color>
-    <color name="colorPressed">#efae78</color>
+    <color name="colorPressed">#aaFFB74D</color>
 
 
     <color name="white">#FFFFFF</color>

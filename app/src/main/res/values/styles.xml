@@ -8,19 +8,15 @@
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="searchViewStyle">@style/AppTheme.SearchView</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorPressed</item>
     </style>
 
     <style name="AppTheme.Base.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="colorControlNormal">@color/colorPrimary3</item>
-        <item name="colorControlHighlight">@color/colorPrimary6</item>
+        <item name="colorControlHighlight">@color/colorPressed</item>
     </style>
 
     <style name="AppTheme.Base.Transcluent" parent="AppTheme.Base">
@@ -28,9 +24,6 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
-    <style name="AppTheme.SearchView" parent="Widget.AppCompat.Light.SearchView">
     </style>
 
     <style name="AppButtonStyle">

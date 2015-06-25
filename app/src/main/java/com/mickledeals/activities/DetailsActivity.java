@@ -97,8 +97,8 @@ public class DetailsActivity extends SwipeDismissActivity  {
             bundle.putInt("listType", mListType);
             int stringRes = Utils.getStringResFromType(mListType);
             if (stringRes != 0) bundle.putString("navMidText", getString(stringRes) + " " + (position + 1) + "/" + mList.size());
-            if (position > 0) bundle.putString("navLeftText", position + " 張");
-            if (position < mList.size() - 1) bundle.putString("navRightText", (mList.size() - position - 1) + " 張");
+            if (position > 0) bundle.putString("navLeftText", position + " " + getString(R.string.nav_text_more));
+            if (position < mList.size() - 1) bundle.putString("navRightText", (mList.size() - position - 1) + " " + getString(R.string.nav_text_more));
             fragment.setArguments(bundle);
             return fragment;
         }

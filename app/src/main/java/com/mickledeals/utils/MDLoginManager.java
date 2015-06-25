@@ -38,6 +38,11 @@ public class MDLoginManager {
         return sManager;
     }
 
+    public static String getNameOrEmail() {
+        if (mUserName != null) return mUserName;
+        else return mEmailAddr;
+    }
+
     public static boolean isLogin() {
         return mUserId != null;
     }

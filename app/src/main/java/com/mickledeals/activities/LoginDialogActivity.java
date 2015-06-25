@@ -46,11 +46,13 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
         mPassword = (EditText) findViewById(R.id.password);
         mCallbackManager = CallbackManager.Factory.create();
         mLoginButton = (LoginButton) findViewById(R.id.login_button);
+        mLoginButton.setText(R.string.login_with_fb);
         mLoginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday"));
         mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 finish();
+//                overridePendingTransition(0, R.anim.translate_anim_exit); //cannot use because bg not fade in
                 MDLoginManager.getInstance().setAccessToken(loginResult.getAccessToken());
                 String fbAuthToken = loginResult.getAccessToken().getToken();
                 DLog.d(LoginDialogActivity.this, "fb login onSuccess token = " + fbAuthToken);
@@ -71,6 +73,7 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
                                     DLog.d(LoginDialogActivity.this, "email = " + email + " id = " + id + "name = "
                                     + name + "birthday = " + birthday + "gender = " + gender);
                                     // send email and id to your web server
+
 
                                     //wait for server response to ensure server received user id
                                     //server needs error handling when user id does not exist in database
@@ -187,4 +190,6 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
     protected int getLayoutResource() {
         return R.layout.login_dialog;
     }
+
+
 }
