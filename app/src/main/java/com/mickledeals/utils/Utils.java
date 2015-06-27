@@ -26,10 +26,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mickledeals.R;
-import com.mickledeals.activities.AccountActivity;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.NotificationActivity;
-import com.mickledeals.activities.RedeemActivity;
+import com.mickledeals.activities.PaymentActivity;
 import com.mickledeals.activities.SettingsActivity;
 import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.datamodel.DataListModel;
@@ -66,8 +65,8 @@ public class Utils {
 //        sNavMenuList.add(new NavMenuItem(RandomCouponsFragment.class, R.string.menu_random, R.drawable.ic_random));
         sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
         sNavMenuList.add(new NavMenuItem(NotificationActivity.class, R.string.menu_notification, R.drawable.ic_bell));
-        sNavMenuList.add(new NavMenuItem(AccountActivity.class, R.string.menu_account, R.drawable.ic_payment));
-        sNavMenuList.add(new NavMenuItem(RedeemActivity.class, R.string.menu_redeem, R.drawable.ic_gift));
+        sNavMenuList.add(new NavMenuItem(PaymentActivity.class, R.string.menu_account, R.drawable.ic_payment));
+//        sNavMenuList.add(new NavMenuItem(RedeemActivity.class, R.string.menu_redeem, R.drawable.ic_gift));
         sNavMenuList.add(new NavMenuItem(SettingsActivity.class, R.string.menu_settings, R.drawable.ic_setting));
         sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
         sNavMenuList.add(new NavMenuItem(null, R.string.menu_faq, 0));

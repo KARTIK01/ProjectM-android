@@ -107,12 +107,17 @@
     <string name="get_directions">Get Directions</string>
     <string name="website">Website</string>
 
-    <!-- Accounts -->
+    <!-- Payment -->
     <string name="account_information">Account Information</string>
     <string name="payment_methods">Payment Methods</string>
-    <string name="add_card">Add Card</string>
-    <string name="edit_card">Edit Card</string>
-    <string name="remove_card">Remove Card</string>
+    <string name="saved_methods">Saved Methods</string>
+    <string name="add_paypal">Add PayPal</string>
+    <string name="add_card">Add Credit / Debit Card</string>
+    <string name="mickle_credit">Mickle Credit: $7</string>
+    <string name="your_mickle_credit">Your Mickle Credit: $7</string>
+    <string name="save_payment_hint">Add a payment method to receive $5 Mickle Credit</string>
+    <string name="get_more_credit">How to get more Mickle Credit?</string>
+    <string name="secure_transmitted_msg">All information is transmitted securely by PayPal</string>
 
     <!-- Settings -->
     <string name="gneral">General</string>

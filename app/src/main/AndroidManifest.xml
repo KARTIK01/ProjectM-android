@@ -43,9 +43,8 @@
         <activity android:name=".activities.DetailsActivity"
             android:theme="@style/AppTheme.Base.Transcluent" />
         <activity
-            android:name=".activities.AccountActivity"
-            android:theme="@style/AppTheme.Base.ActionBar"
-            android:label="@string/menu_account" />
+            android:name=".activities.PaymentActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
         <activity
             android:name=".activities.NotificationActivity"
             android:theme="@style/AppTheme.Base.ActionBar"
@@ -85,6 +84,15 @@
         <provider android:authorities="com.facebook.app.FacebookContentProvider1234"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
+
+
+        <service android:name="com.paypal.android.sdk.payments.PayPalService"
+            android:exported="false" />
+
+        <activity android:name="com.paypal.android.sdk.payments.FuturePaymentInfoActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PayPalProfileSharingActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.ProfileSharingConsentActivity" />
     </application>
 
 </manifest>
