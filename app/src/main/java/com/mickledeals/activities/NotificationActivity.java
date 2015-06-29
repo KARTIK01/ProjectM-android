@@ -7,7 +7,7 @@ import com.mickledeals.R;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class NotificationActivity extends BaseActivity {
+public class NotificationActivity extends SwipeDismissActivity {
 
 
     @Override

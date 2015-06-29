@@ -72,6 +72,8 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
     private TextView mUserEmail;
     private TextView mUserName;
 
+    private int mSelectedBgIndex;
+
     public NavigationDrawerFragment() {
     }
 
@@ -163,6 +165,7 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
             if (i == 0) {
                 menuRow.setSelected(true);
                 menuRow.setBackgroundColor(getResources().getColor(R.color.selected_bg));
+                mSelectedBgIndex = i;
             }
             ImageView menuIcon = (ImageView) menuRow.findViewById(R.id.navMenuIcon);
             TextView menuText = (TextView) menuRow.findViewById(R.id.navMenuText);
@@ -188,17 +191,27 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
 
     public void resetMenuRowBg(int selectedPosition) {
         if (mMenuContainer != null) {
-            for (int i = 0; i < mMenuContainer.getChildCount(); i++) {
-                View view = mMenuContainer.getChildAt(i);
-                if (view.getTag() != null && view.getTag().toString().equals("divider")) continue;
-                if (i == selectedPosition) {
-                    view.setBackgroundColor(getResources().getColor(R.color.selected_bg));
-                    view.setSelected(true);
-                } else {
-                    view.setBackgroundResource(mSelectableBgResId);
-                    view.setSelected(false);
-                }
-            }
+            View oldView = mMenuContainer.getChildAt(mSelectedBgIndex);
+            oldView.setSelected(false); //this is for settings icon and text color;
+            oldView.setBackgroundResource(mSelectableBgResId);
+
+            View newView = mMenuContainer.getChildAt(selectedPosition);
+            newView.setBackgroundColor(getResources().getColor(R.color.selected_bg));
+            newView.setSelected(true);
+
+            mSelectedBgIndex = selectedPosition;
+
+//            for (int i = 0; i < mMenuContainer.getChildCount(); i++) {
+//                View view = mMenuContainer.getChildAt(i);
+//                if (view.getTag() != null && view.getTag().toString().equals("divider")) continue;
+//                if (i == selectedPosition) {
+//                    view.setBackgroundColor(getResources().getColor(R.color.selected_bg));
+//                    view.setSelected(true);
+//                } else {
+//                    view.setBackgroundResource(mSelectableBgResId);
+//                    view.setSelected(false);
+//                }
+//            }
         }
     }
 
@@ -271,12 +284,12 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                if (slideOffset > 0.2 && !mDrawerOpened) {
+                if (slideOffset > 0.99 && !mDrawerOpened) {
                     mDrawerOpened = true;
                     if (mCallbacks != null) {
                         mCallbacks.onDrawerOpen();
                     }
-                } else if (slideOffset < 0.2 && mDrawerOpened) {
+                } else if (slideOffset < 0.99 && mDrawerOpened) {
                     mDrawerOpened = false;
                     if (mCallbacks != null) {
                         mCallbacks.onDrawerClosed();

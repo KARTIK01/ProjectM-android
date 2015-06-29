@@ -8,6 +8,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- Permission to vibrate - recommended, allows vibration feedback on scan -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Permission to use camera - required -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Camera features - recommended -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -46,16 +57,15 @@
             android:name=".activities.PaymentActivity"
             android:theme="@style/AppTheme.Base.Transcluent" />
         <activity
+            android:name=".activities.EnterCardDetailsActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
+        <activity
             android:name=".activities.NotificationActivity"
-            android:theme="@style/AppTheme.Base.ActionBar"
+            android:theme="@style/AppTheme.Base.Transcluent"
             android:label="@string/menu_notification" />
         <activity
-            android:name=".activities.RedeemActivity"
-            android:theme="@style/AppTheme.Base.ActionBar"
-            android:label="@string/menu_redeem" />
-        <activity
             android:name=".activities.SettingsActivity"
-            android:theme="@style/AppTheme.Base.ActionBar"
+            android:theme="@style/AppTheme.Base.Transcluent"
             android:label="@string/menu_settings" />
         <activity android:name=".activities.BusinessPageActivity"
             android:theme="@style/AppTheme.Base.Transcluent"
@@ -93,6 +103,9 @@
         <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PayPalProfileSharingActivity" />
         <activity android:name="com.paypal.android.sdk.payments.ProfileSharingConsentActivity" />
+        <!-- Activities responsible for gathering payment info -->
+        <activity android:name="io.card.payment.CardIOActivity" android:configChanges="keyboardHidden|orientation" />
+        <activity android:name="io.card.payment.DataEntryActivity" />
     </application>
 
 </manifest>

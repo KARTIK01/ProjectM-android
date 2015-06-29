@@ -252,6 +252,11 @@ public class SearchActivity extends SwipeDismissActivity {
     }
 
     @Override
+    protected int getLayoutType() {
+        return LAYOUT_TYPE_DIALOG_SWIPE;
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);

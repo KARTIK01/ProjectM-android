@@ -26,6 +26,11 @@ public abstract class SwipeDismissActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(3);
     }
 
+    @Override
+    protected int getLayoutType() {
+        return LAYOUT_TYPE_FULLSCREEN_SWIPE;
+    }
+
     //cannot override finish here because details
 
 //    @Override

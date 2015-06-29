@@ -7,7 +7,7 @@
     <string name="menu_random">隨機推介</string>
 
     <string name="menu_notification">系統通知</string>
-    <string name="menu_account">付款方法</string>
+    <string name="menu_account">付款方式</string>
     <string name="menu_redeem">禮物兌換</string>
     <string name="menu_settings">設定</string>
 
@@ -97,22 +97,43 @@
     <string name="get_directions">規劃路綫</string>
     <string name="website">網站</string>
 
-    <!-- Accounts -->
-    <string name="account_information">帳戶資料</string>
-    <string name="payment_methods">付款方法</string>
-    <string name="add_card">新增信用卡</string>
-    <string name="edit_card">更改信用卡</string>
-    <string name="remove_card">移除信用卡</string>
+
+    <!-- Payment -->
+    <string name="payment_methods">付款方式</string>
+    <string name="saved_methods">已儲存方式</string>
+    <string name="add_paypal">新增 PayPal</string>
+    <string name="add_card">新增信用卡 /\nDebit Card</string>
+    <string name="mickle_credit">Mickle Credit: $7</string>
+    <string name="your_mickle_credit">你現有的 Mickle Credit: $7</string>
+    <string name="save_payment_hint">新增付款方式以獲得 $5 Mickle Credit</string>
+    <string name="get_more_credit">如何獲得更多 Mickle Credit?</string>
+    <string name="get_more_credit_dialog_title">如何獲得更多 Mickle Credit</string>
+    <string name="get_more_credit_dialog_msg">1. If you log in for 7 consecutive days, you will receive $2 Mickle Credit
+    \n\n2. After you purchased a coupon, tap on Facebook share button to share and you will receive $1 Mickle Credit</string>
+    <string name="secure_transmitted_msg">所有資料都安全經用PayPal連接傳輸</string>
+
+
+    <!-- Enter Card Details -->
+    <string name="enter_card_details">掃描或輸入信用卡資料</string>
+    <string name="scan_your_card">掃描信用卡</string>
+    <string name="credit_card_number">信用卡號碼</string>
+    <string name="enter_card_save">儲存</string>
+
 
     <!-- Settings -->
-    <string name="gneral">一般</string>
-    <string name="account_settings">帳戶設定</string>
+    <string name="general_settings">一般</string>
+    <string name="account_settings">帳戶</string>
+    <string name="privacy_settings">私隠</string>
     <string name="language">語言</string>
     <string name="log_out">登出</string>
     <string name="change_password">更改密碼</string>
+    <string name="clear_search_history">清除搜尋記錄</string>
+    <string name="clear_used_coupon_history">移除已用/已過期優惠券</string>
+    <string name="clear_search_history_confirm">你確定要清除搜尋記錄?</string>
+    <string name="clear_used_coupon_history_confirm">你確定要移除已用/已過期優惠券?</string>
     <string name="log_out_confirm">你確定要登出帳號 %s ?</string>
-    <string name="log_out_yes">確定</string>
-    <string name="log_out_no">取消</string>
+    <string name="dialog_yes">確定</string>
+    <string name="dialog_no">取消</string>
 
     <!-- Gift Redeem -->
     <string name="redeem_msg">請在下面輸入兌換代碼以獲取禮物</string>
@@ -121,6 +142,7 @@
 
     <!-- Misc -->
     <string name="free">免費</string>
+    <string name="ok">確定</string>
     <string name="no_save">目前沒有儲存任何優惠券</string>
 
     <!-- Login -->

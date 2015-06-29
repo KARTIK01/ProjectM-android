@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.mickledeals.R;
@@ -18,7 +19,7 @@ import java.util.Locale;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends SwipeDismissActivity {
 
     private TextView mLanguageText;
     private TextView mLogin;
@@ -56,7 +57,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     public void languageRowClick(View v) {
-        new AlertDialog.Builder(SettingsActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
                 .setSingleChoiceItems(getResources().getStringArray(R.array.language_list), language, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -77,8 +78,12 @@ public class SettingsActivity extends BaseActivity {
                         android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 })
-                .create()
-                .show();
+                .create();
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.dimAmount = 0.6F;
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
     }
 
     public void loginClick(View v) {
@@ -93,9 +98,9 @@ public class SettingsActivity extends BaseActivity {
     public void signoutClick(View v) {
         String msg = getString(R.string.log_out_confirm, MDLoginManager.getNameOrEmail());
 
-        new AlertDialog.Builder(SettingsActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
                 .setMessage(msg)
-                .setPositiveButton(R.string.log_out_yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -107,19 +112,70 @@ public class SettingsActivity extends BaseActivity {
 
                     }
                 })
-                .setNegativeButton(R.string.log_out_no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .create()
-                .show();
+                .create();
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.dimAmount = 0.6F;
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
     }
 
     public void changePasswordClick(View v) {
 
     }
+
+    public void clearSearchClick(View v) {
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
+                .setMessage(R.string.clear_search_history_confirm)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.dimAmount = 0.6F;
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
+    }
+
+    public void clearUsedCouponClick(View v) {
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
+                .setMessage(R.string.clear_used_coupon_history_confirm)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.dimAmount = 0.6F;
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
+    }
+
 
     @Override
     protected int getLayoutResource() {

@@ -56,6 +56,13 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
     //    @Override
     public void finish() {
         super.finish();
+        //disable exti animation
         overridePendingTransition(0, 0);
+    }
+
+
+    @Override
+    protected int getLayoutType() {
+        return LAYOUT_TYPE_DIALOG_SWIPE;
     }
 }

@@ -141,6 +141,11 @@ public class BusinessPageActivity extends SwipeDismissActivity {
 
     }
 
+    @Override
+    protected int getLayoutType() {
+        return LAYOUT_TYPE_DIALOG_SWIPE; //do not use fullscreen_swipe because of toolbar overlap
+    }
+
     private void setToolBarTransparency(int scrollPos) {
         final int headerHeight = Utils.getDeviceWidth(this) * 336 / 540;
         final float ratio = (float) Math.min(Math.max(scrollPos, 0), headerHeight) / headerHeight;

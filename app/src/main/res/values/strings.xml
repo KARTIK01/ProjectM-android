@@ -15,7 +15,7 @@
     <string name="menu_random">Random Coupons</string>
 
     <string name="menu_notification">Notifications</string>
-    <string name="menu_account">Payment Method</string>
+    <string name="menu_account">Payment Methods</string>
     <string name="menu_redeem">Gift Redeem</string>
     <string name="menu_settings">Settings</string>
 
@@ -108,26 +108,48 @@
     <string name="website">Website</string>
 
     <!-- Payment -->
-    <string name="account_information">Account Information</string>
     <string name="payment_methods">Payment Methods</string>
     <string name="saved_methods">Saved Methods</string>
     <string name="add_paypal">Add PayPal</string>
-    <string name="add_card">Add Credit / Debit Card</string>
+    <string name="add_card">Add Credit /\n Debit Card</string>
     <string name="mickle_credit">Mickle Credit: $7</string>
     <string name="your_mickle_credit">Your Mickle Credit: $7</string>
     <string name="save_payment_hint">Add a payment method to receive $5 Mickle Credit</string>
     <string name="get_more_credit">How to get more Mickle Credit?</string>
+    <string name="get_more_credit_dialog_title">How to get more Mickle Credit</string>
+    <string name="get_more_credit_dialog_msg">1. If you log in for 7 consecutive days, you will receive $2 Mickle Credit
+    \n\n2. After you purchased a coupon, tap on Facebook share button to share and you will receive $1 Mickle Credit</string>
     <string name="secure_transmitted_msg">All information is transmitted securely by PayPal</string>
 
+    <!-- Enter Card Details -->
+    <string name="enter_card_details">Scan or Enter Card Details</string>
+    <string name="scan_your_card">Scan your Card</string>
+    <string name="credit_card_number">Card Number</string>
+    <string name="mm">MM</string>
+    <string name="yy">YY</string>
+    <string name="cvv">CVV</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="enter_card_save">SAVE</string>
+    <string name="invalid_card_number">Please enter a valid card number</string>
+    <string name="invalid_card_mm">Please enter a valid expired card Month</string>
+    <string name="invalid_card_yy">Please enter a valid expired card Year</string>
+    <string name="invalid_card_cvv">Please enter a valid Security Code on the back of the card</string>
+    <string name="invalid_card_zip_code">Please enter a valid Zip Code</string>
+
     <!-- Settings -->
-    <string name="gneral">General</string>
-    <string name="account_settings">Account Settings</string>
+    <string name="general_settings">General</string>
+    <string name="account_settings">Account</string>
+    <string name="privacy_settings">Privacy</string>
     <string name="language">Language</string>
     <string name="log_out">Log Out</string>
     <string name="change_password">Change Password</string>
+    <string name="clear_search_history">Clear Search History</string>
+    <string name="clear_used_coupon_history">Remove Used / Expired Coupons</string>
+    <string name="clear_search_history_confirm">Are you sure you want to clear search history?</string>
+    <string name="clear_used_coupon_history_confirm">Are you sure you want to remove used / expired coupons?</string>
     <string name="log_out_confirm">Are you sure you want to log out of account %s ?</string>
-    <string name="log_out_yes">YES</string>
-    <string name="log_out_no">NO</string>
+    <string name="dialog_yes">YES</string>
+    <string name="dialog_no">NO</string>
 
     <!-- Gift Redeem -->
     <string name="redeem_msg">Enter redeem code below to claim the gift:</string>
@@ -136,6 +158,7 @@
 
     <!-- Misc -->
     <string name="free">FREE</string>
+    <string name="ok">OK</string>
     <string name="no_save">You do not have any saved coupons yet.</string>
 
 

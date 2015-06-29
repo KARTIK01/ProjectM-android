@@ -20,8 +20,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/defaultLightGrayBg"
             android:orientation="vertical">
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -34,156 +34,172 @@
                 android:background="@color/colorPrimary"
                 android:textAllCaps="true" />
 
-            <android.support.v7.widget.CardView
+
+            <com.mickledeals.views.NotifyingScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp"
-                card_view:cardUseCompatPadding="true"
-                android:layout_margin="8dp">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/defaultLightGrayBg"
                     android:orientation="vertical">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardCornerRadius="2dp"
+                        card_view:cardElevation="3dp"
+                        card_view:cardUseCompatPadding="true"
+                        android:layout_margin="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="12dp"
+                                android:paddingTop="8dp"
+                                android:textColor="@color/lightGrayTextColor"
+                                android:textSize="14sp"
+                                android:text="@string/saved_methods" />
+
+                            <LinearLayout
+                                android:id="@+id/savedMethodLayout"
+                                android:paddingBottom="8dp"
+                                android:paddingTop="6dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:padding="16dp"
+                                android:textColor="@color/defaultTextColor"
+                                android:textStyle="italic"
+                                android:visibility="visible"
+                                android:textSize="16sp"
+                                android:text="@string/save_payment_hint" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/light_divider" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center_horizontal"
+                                    android:padding="8dp"
+                                    android:orientation="vertical"
+                                    android:background="?android:attr/selectableItemBackground"
+                                    android:onClick="addPayPalClick">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/defaultTextColor"
+                                        android:gravity="center"
+                                        android:paddingTop="6dp"
+                                        android:paddingBottom="10dp"
+                                        android:textSize="@dimen/sp_16"
+                                        android:text="@string/add_paypal" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_paypal" />
+
+                                </LinearLayout>
+
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/light_divider" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_horizontal"
+                                    android:padding="8dp"
+                                    android:orientation="vertical"
+                                    android:background="?android:attr/selectableItemBackground"
+                                    android:onClick="addCardClick">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/defaultTextColor"
+                                        android:gravity="center"
+                                        android:paddingBottom="8dp"
+                                        android:paddingRight="4dp"
+                                        android:paddingLeft="4dp"
+                                        android:textSize="@dimen/sp_15"
+                                        android:text="@string/add_card" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/ic_credit_cards" />
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        android:text="@string/secure_transmitted_msg"
+                        android:drawableLeft="@drawable/ic_lock" />
+
+                    <TextView
+                        android:id="@+id/mickleCredit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/defaultTextColor"
+                        android:text="@string/your_mickle_credit" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="12dp"
-                        android:paddingTop="8dp"
-                        android:textColor="@color/lightGrayTextColor"
-                        android:textSize="14sp"
-                        android:text="@string/saved_methods" />
-
-                <LinearLayout
-                    android:id="@+id/savedMethodLayout"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="6dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:padding="16dp"
-                        android:textColor="@color/defaultTextColor"
-                        android:textStyle="italic"
-                        android:visibility="gone"
+                        android:padding="8dp"
+                        android:layout_margin="8dp"
                         android:textSize="16sp"
-                        android:text="@string/save_payment_hint" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/light_divider" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:padding="10dp"
-                            android:orientation="vertical"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:onClick="addPayPalClick">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/defaultTextColor"
-                                android:gravity="center"
-                                android:paddingTop="6dp"
-                                android:paddingBottom="10dp"
-                                android:textSize="@dimen/sp_16"
-                                android:text="@string/add_paypal" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_paypal" />
-
-                        </LinearLayout>
-
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/light_divider" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:padding="10dp"
-                            android:orientation="vertical"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:onClick="addCardClick">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/defaultTextColor"
-                                android:gravity="center"
-                                android:paddingBottom="8dp"
-                                android:paddingRight="4dp"
-                                android:paddingLeft="4dp"
-                                android:textSize="@dimen/sp_15"
-                                android:text="@string/add_card" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_credit_cards" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
+                        android:textColor="@color/themeTextColor"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:onClick="getMoreCreditClick"
+                        android:text="@string/get_more_credit" />
 
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:visibility="gone"
-                android:text="@string/secure_transmitted_msg"
-                android:drawableLeft="@drawable/ic_lock"/>
-
-            <TextView
-                android:id="@+id/mickleCredit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textSize="18sp"
-                android:textColor="@color/defaultTextColor"
-                android:text="@string/your_mickle_credit" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:layout_margin="8dp"
-                android:textSize="16sp"
-                android:textColor="@color/themeTextColor"
-                android:background="?android:attr/selectableItemBackground"
-                android:onClick="getMoreCreditClick"
-                android:text="@string/get_more_credit" />
-
+            </com.mickledeals.views.NotifyingScrollView>
 
         </LinearLayout>
 
