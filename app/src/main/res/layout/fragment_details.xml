@@ -124,16 +124,16 @@
                             card_view:cardElevation="2dp"
                             card_view:cardUseCompatPadding="true">
 
-                        <TextView
-                            android:id="@+id/savedButtonText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_star_off"
-                            android:gravity="center"
-                            android:text="@string/save"
-                            android:textColor="@color/themeTextColor"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/savedButtonText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_star_off"
+                                android:gravity="center"
+                                android:text="@string/save"
+                                android:textColor="@color/themeTextColor"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
 
                         </android.support.v7.widget.CardView>
 
@@ -149,23 +149,22 @@
                             card_view:cardUseCompatPadding="true">
 
 
-                        <TextView
-                            android:id="@+id/businessInfoButtonText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_business"
-                            android:gravity="center"
-                            android:text="@string/business_info"
-                            android:textColor="@color/themeTextColor"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/businessInfoButtonText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_business"
+                                android:gravity="center"
+                                android:text="@string/business_info"
+                                android:textColor="@color/themeTextColor"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
 
                         </android.support.v7.widget.CardView>
 
                     </LinearLayout>
 
                 </LinearLayout>
-
 
 
                 <TextView
@@ -178,7 +177,7 @@
                     android:textSize="14sp"
                     android:textStyle="italic"
                     android:visibility="gone"
-                    android:layout_marginTop="12dp"/>
+                    android:layout_marginTop="12dp" />
 
                 <TextView
                     android:id="@+id/moreCouponLabel"
@@ -205,7 +204,6 @@
                     android:paddingRight="12dp"
                     android:layout_marginTop="2dp"
                     android:visibility="gone" />
-
 
 
                 <LinearLayout
@@ -337,12 +335,13 @@
                         <TextView
                             android:id="@+id/address"
                             style="@style/StoreInfoTextStyle"
-                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
                             android:drawableLeft="@drawable/ic_location" />
 
                         <TextView
                             android:id="@+id/call"
+                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
                             style="@style/StoreInfoTextStyle"
                             android:text="(415) 723-9412"
@@ -418,31 +417,49 @@
             android:layout_height="60dp"
             android:orientation="horizontal"
             android:background="#BBFFFFFF"
-            android:padding="8dp">
+            android:padding="6dp">
 
-            <TextView
+            <android.support.v7.widget.CardView
                 android:id="@+id/buyBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/buy_selector_bg"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/unlock_coupon"
-                android:textColor="@color/white"
-                android:textSize="21sp"
-                android:textStyle="bold" />
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true">
 
-            <TextView
+                <TextView
+                    android:id="@+id/buyBtnText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/button_selector_bg"
+                    android:text="@string/unlock_coupon"
+                    android:textColor="@color/white"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+
                 android:id="@+id/redeemBtn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/redeem_coupon_selector_bg"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/redeem_coupon"
-                android:textColor="@color/white"
-                android:textSize="21sp"
-                android:textStyle="bold" />
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/green_button_selector_bg"
+                    android:gravity="center"
+                    android:text="@string/redeem_coupon"
+                    android:textColor="@color/white"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:id="@+id/dealEndedText"
@@ -453,7 +470,7 @@
                 android:gravity="center"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/lightBlackTextColor"/>
+                android:textColor="@color/lightBlackTextColor" />
 
         </LinearLayout>
     </LinearLayout>

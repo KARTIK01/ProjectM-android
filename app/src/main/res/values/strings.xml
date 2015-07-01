@@ -73,7 +73,7 @@
     <string name="more_coupon">More Coupon in This Place</string>
     <string name="fine_print">Fine Print</string>
     <string name="unlock_coupon">Get this Coupon for %s</string>
-    <string name="redeem_coupon">Redeem this Coupon</string>
+    <string name="redeem_coupon">Redeem this Offer</string>
     <string name="share_subject">A great coupon from MickleDeals!</string>
     <string name="share_to">Share to...</string>
     <string name="share_failed">Share Failed</string>
@@ -92,11 +92,21 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
 
+
+    <!-- Success Purchase Dialog -->
+    <string name="success_purchase_title">This Coupon is Now Yours!</string>
+    <string name="success_purchase_msg">To use the coupon, tap on Redeem button and show the verification screen to business</string>
+    <string name="share_to_fb">Share to Facebook</string>
+    <string name="thank_you_msg">Thank you for your purchase</string>
+    <string name="share_to_fb_purchase">Share this purchase to Facebook to receive $1 Mickle Credit!</string>
+    <string name="share_to_fb_free">Share this free coupon to your friends!</string>
+
+
     <!-- Redeem Dialog -->
 
     <string name="redeem_dialog_header">Thanks for purchasing coupon for</string>
     <string name="expires_in">Expires in </string>
-    <string name="redeem_dialog_footer">Show this screen to the business when redeeming your offer.</string>
+    <string name="redeem_dialog_footer">Show this verification screen to the business when redeeming your offer.</string>
 
     <!-- Business Page -->
     <string name="news">News</string>
@@ -128,7 +138,7 @@
     <string name="mm">MM</string>
     <string name="yy">YY</string>
     <string name="cvv">CVV</string>
-    <string name="zip_code">Zip Code</string>
+    <string name="zip_code">ZIP CODE</string>
     <string name="enter_card_save">SAVE</string>
     <string name="invalid_card_number">Please enter a valid card number</string>
     <string name="invalid_card_mm">Please enter a valid expired card Month</string>

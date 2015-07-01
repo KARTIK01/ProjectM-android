@@ -36,6 +36,9 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 i.putExtra("remainingTime", "");
                 setResult(RESULT_OK, i);
                 finish();
+
+                Intent newIntent = new Intent(BuyDialogActivity.this, SuccessDialogActivity.class);
+                startActivity(newIntent);
             }
         });
         final TextView totalPriceTv = (TextView) findViewById(R.id.totalPrice);

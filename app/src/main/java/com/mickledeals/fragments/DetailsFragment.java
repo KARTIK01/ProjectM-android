@@ -53,8 +53,9 @@ public class DetailsFragment extends BaseFragment {
     private TextView mDescription;
     private TextView mPrice;
     private ImageView mImageView;
-    private TextView mBuyBtn;
-    private TextView mRedeemBtn;
+    private View mBuyBtn;
+    private TextView mBuyBtnText;
+    private View mRedeemBtn;
     private View mSaveBtn;
     private View mBusinessInfoBtn;
     private TextView mBoughtDate;
@@ -103,8 +104,9 @@ public class DetailsFragment extends BaseFragment {
         mDescription = (TextView) view.findViewById(R.id.couponDescription);
         mPrice = (TextView) view.findViewById(R.id.couponPrice);
         mBoughtDate = (TextView) view.findViewById(R.id.boughtDate);
-        mBuyBtn = (TextView) view.findViewById(R.id.buyBtn);
-        mRedeemBtn = (TextView) view.findViewById(R.id.redeemBtn);
+        mBuyBtn = view.findViewById(R.id.buyBtn);
+        mBuyBtnText = (TextView) view.findViewById(R.id.buyBtnText);
+        mRedeemBtn = view.findViewById(R.id.redeemBtn);
         mBusinessInfoBtn = view.findViewById(R.id.businessInfoButton);
         mSaveBtn = view.findViewById(R.id.savedButton);
         mBusinessInfoBtnText = (TextView) view.findViewById(R.id.businessInfoButtonText);
@@ -156,7 +158,7 @@ public class DetailsFragment extends BaseFragment {
         ((TextView) view.findViewById(R.id.address)).setText(mHolder.mAddress);
 
         String priceText = mHolder.mPrice == 0 ? getString(R.string.free) : "$" + (int) (mHolder.mPrice);
-        mBuyBtn.setText(getString(R.string.unlock_coupon, priceText));
+        mBuyBtnText.setText(getString(R.string.unlock_coupon, priceText));
         mPrice.setText(priceText);
         float dist = LocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
         String addrShort = mHolder.mAddressShort;
