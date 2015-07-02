@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="24dp">
+    android:padding="18dp">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -21,156 +21,249 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/white">
+            android:background="@color/defaultLightGrayBg">
 
-            <LinearLayout
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:text="@string/confirm_purchase"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/couponDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="19sp"
+                android:textColor="@color/lightBlackTextColor"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/storeName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/lightBlackTextColor"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp" />
+
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
+                android:layout_margin="8dp"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="3dp"
+                card_view:cardUseCompatPadding="true">
 
-                <TextView
-                    android:layout_width="0dp"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/single_price"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/singlePrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:id="@+id/paymentRow"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:onClick="paymentMethodClick"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:orientation="horizontal">
 
-            </LinearLayout>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="17sp"
+                            android:textColor="@color/defaultTextColor"
+                            android:text="@string/payment_method" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+                        <ImageView
+                            android:id="@+id/creditCardIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleX="0.6"
+                            android:scaleY="0.6"/>
+
+                        <TextView
+                            android:id="@+id/paymentMethod"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="1234"
+                            android:includeFontPadding="true"
+                            android:drawablePadding="8dp"
+                            android:drawableRight="@drawable/ic_right_arrow_small"
+                            android:textSize="15sp"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="17sp"
+                            android:textColor="@color/defaultTextColor"
+                            android:text="@string/coupon_price" />
+
+                        <TextView
+                            android:id="@+id/couponPrice"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:textColor="@color/defaultTextColor"
+                            android:textStyle="bold"
+                            android:textSize="19sp" />
+
+                    </LinearLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/mickleCreditText"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:textSize="17sp"
+                            android:textColor="@color/defaultTextColor"
+                            android:text="@string/mickle_credit_text" />
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/mickleCreditText"
+                            android:layout_width="wrap_content"
+                            android:text="@string/current_credit" />
+
+                        <TextView
+                            android:id="@+id/mickleCredit"
+                            android:layout_alignParentRight="true"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:textColor="@color/defaultTextColor"
+                            android:textStyle="bold"
+                            android:textSize="19sp" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_divider"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="@string/total_price"
+                            android:textColor="@color/defaultTextColor"
+                            android:textStyle="bold"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/totalPrice"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:textColor="@color/defaultTextColor"
+                            android:textStyle="bold"
+                            android:textSize="19sp" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/noChargeMsg"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/lightGrayTextColor"
+                        android:text="@string/no_charge_msg"
+                        android:layout_gravity="right"
+                        android:textStyle="italic"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/quantity"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp" />
-
-
-                <Button
-                    android:id="@+id/minus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:layout_marginRight="8dp"
-                    android:text="-"
-                    android:textSize="22sp" />
-
-                <EditText
-                    android:id="@+id/quantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:paddingLeft="22dp"
-                    android:paddingRight="22dp"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                <Button
-                    android:id="@+id/plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:text="+"
-                    android:textSize="22sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/payment_method"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp" />
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="confirmClick"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="VISA-1234"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/total_price"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/totalPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/cancel"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textAllCaps="true"
                     android:gravity="center"
-                    android:text="@string/cancel"
-                    android:textColor="@color/defaultTextColor"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/confirm"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:gravity="center"
+                    android:background="@drawable/button_selector_bg"
                     android:text="@string/confirm"
-                    android:textColor="@color/themeTextColor"
-                    android:textSize="20sp" />
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

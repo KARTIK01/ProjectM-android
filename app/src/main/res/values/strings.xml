@@ -15,7 +15,7 @@
     <string name="menu_random">Random Coupons</string>
 
     <string name="menu_notification">Notifications</string>
-    <string name="menu_account">Payment Methods</string>
+    <string name="menu_account">Payment Method</string>
     <string name="menu_redeem">Gift Redeem</string>
     <string name="menu_settings">Settings</string>
 
@@ -85,12 +85,13 @@
 
     <!-- Buy Dialog -->
 
-    <string name="single_price">Unit Price</string>
-    <string name="quantity">Quantity</string>
     <string name="payment_method">Payment Method</string>
-    <string name="total_price">Total</string>
-    <string name="cancel">Cancel</string>
-    <string name="confirm">Confirm</string>
+    <string name="coupon_price">Coupon Price</string>
+    <string name="total_price">Total Price</string>
+    <string name="current_credit">Current Credit: $7</string>
+    <string name="mickle_credit_text">Mickle Credit</string>
+    <string name="confirm_purchase">Confirm Purchase</string>
+    <string name="no_charge_msg">No Charge At All!</string>
 
 
     <!-- Success Purchase Dialog -->
@@ -118,7 +119,7 @@
     <string name="website">Website</string>
 
     <!-- Payment -->
-    <string name="payment_methods">Payment Methods</string>
+    <string name="payment_methods">Payment Method</string>
     <string name="saved_methods">Saved Methods</string>
     <string name="add_paypal">Add PayPal</string>
     <string name="add_card">Add Credit /\n Debit Card</string>
@@ -170,7 +171,8 @@
     <string name="free">FREE</string>
     <string name="ok">OK</string>
     <string name="no_save">You do not have any saved coupons yet.</string>
-
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 
     <!-- Login -->
     <string name="or">or</string>

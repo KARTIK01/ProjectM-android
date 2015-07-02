@@ -27,6 +27,7 @@ import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
+import com.mickledeals.activities.SuccessDialogActivity;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
@@ -185,11 +186,22 @@ public class DetailsFragment extends BaseFragment {
                 MDLoginManager.loginIfNecessary(getActivity(), new MDLoginManager.LoginCallback() {
                     @Override
                     public void onLoginSuccess() {
-                        Intent i = new Intent(mContext, BuyDialogActivity.class);
-                        i.putExtra("price", mHolder.mPrice);
-                        startActivityForResult(i, REQUEST_CODE_BUY);
+
+                        if (mHolder.mPrice == 0) {
+                            Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
+                            startActivity(newIntent);
+                        } else {
+                            Intent i = new Intent(mContext, BuyDialogActivity.class);
+                            i.putExtra("price", mHolder.mPrice);
+                            i.putExtra("store_name", mHolder.getStoreName());
+                            i.putExtra("coupon_description", mHolder.getDescription());
+                            startActivityForResult(i, REQUEST_CODE_BUY);
+                        }
                     }
                 });
+
+
+
             }
         });
 
@@ -311,6 +323,8 @@ public class DetailsFragment extends BaseFragment {
             mBoughtDate.setText(getString(R.string.bought_date,  "$" + (int) (mHolder.mPrice)));
         }
         mBoughtDate.setVisibility(View.VISIBLE);
+
+
     }
 
     private void scheduleStartPostponedTransition(final View sharedElement) {
@@ -331,6 +345,9 @@ public class DetailsFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_BUY) {
                 showBoughtStatus();
+
+                Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
+                startActivity(newIntent);
             } else if (requestCode == REQUEST_CODE_REDEEM) {
 
             }

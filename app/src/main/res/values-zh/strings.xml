@@ -80,7 +80,7 @@
     <string name="payment_method">付款方法</string>
     <string name="total_price">總價</string>
     <string name="cancel">取消</string>
-    <string name="confirm">確定</string>
+    <string name="confirm_purchase">確定</string>
 
     <!-- Redeem Dialog -->
 <!--
