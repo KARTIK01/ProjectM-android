@@ -12,6 +12,7 @@
         android:id="@+id/dialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="#FFDF6D2F"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="10dp"
         card_view:cardUseCompatPadding="true">

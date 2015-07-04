@@ -74,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/card_description"
             android:layout_toRightOf="@id/card_image"
+            style="@style/MediumBoldTextStyle"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:paddingBottom="4dp"
@@ -81,8 +82,7 @@
             android:paddingRight="34dp"
             android:textColor="@color/lightGrayTextColor"
             android:textSize="@dimen/sp_16"
-            card_view:minTextSize="@dimen/sp_15"
-            android:textStyle="bold" />
+            card_view:minTextSize="@dimen/sp_15" />
 
 
         <TextView

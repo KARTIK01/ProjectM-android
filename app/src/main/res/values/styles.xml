@@ -67,6 +67,10 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="MediumBoldTextStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <declare-styleable name="AspectRatioImageView">
         <attr name="ratio" format="float" />
     </declare-styleable>

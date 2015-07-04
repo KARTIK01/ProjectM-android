@@ -102,6 +102,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
         startActivityForResult(i, REQUEST_CODE_ADD_CARD);
     }
 
+
     public void getMoreCreditClick(View v) {
 
         AlertDialog dialog = new AlertDialog.Builder(PaymentActivity.this)

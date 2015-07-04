@@ -98,9 +98,8 @@
     <string name="success_purchase_title">This Coupon is Now Yours!</string>
     <string name="success_purchase_msg">To use the coupon, tap on Redeem button and show the verification screen to business</string>
     <string name="share_to_fb">Share to Facebook</string>
-    <string name="thank_you_msg">Thank you for your purchase</string>
-    <string name="share_to_fb_purchase">Share this purchase to Facebook to receive $1 Mickle Credit!</string>
-    <string name="share_to_fb_free">Share this free coupon to your friends!</string>
+    <string name="share_to_fb_purchase">To appreciate your purchase, you will receive $1 Mickle Credit when you share this to your friends!</string>
+    <string name="share_to_fb_free">Share this to your friends!</string>
 
 
     <!-- Redeem Dialog -->

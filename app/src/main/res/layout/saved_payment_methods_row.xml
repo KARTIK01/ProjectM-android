@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:paddingTop="2dp"
     android:paddingBottom="2dp"
-    android:paddingLeft="8dp"
+    android:paddingLeft="6dp"
     android:paddingRight="16dp"
     android:background="?android:attr/selectableItemBackground">
 
@@ -21,9 +21,9 @@
         android:id="@+id/payment_text"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:textSize="@dimen/sp_17"
+        android:textSize="@dimen/sp_16"
         android:textColor="@color/defaultTextColor"
-        android:paddingLeft="8sp"
+        android:paddingLeft="6sp"
         android:paddingRight="4sp"
         android:lines="1"
         android:layout_height="wrap_content" />

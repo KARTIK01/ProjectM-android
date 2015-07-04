@@ -25,7 +25,6 @@
 
     <string name="category_select">類別選擇</string>
     <string name="current_location">現在位置</string>
-
     <string name="no_results_found">沒有符合的結果 :(</string>
     <string name="try_different_filter">請選擇其他地點或類別</string>
 
@@ -74,13 +73,26 @@
     <string name="share_failed">分享失敗</string>
     <string name="nav_text_more">張</string>
 
+    <!-- Map -->
+    <string name="directions">規劃路綫</string>
+    <string name="open_in_google_maps">開啟GOOGLE地圖</string>
+
     <!-- Buy Dialog -->
-    <string name="single_price">單價</string>
-    <string name="quantity">數量</string>
     <string name="payment_method">付款方法</string>
-    <string name="total_price">總價</string>
-    <string name="cancel">取消</string>
-    <string name="confirm_purchase">確定</string>
+    <string name="coupon_price">價格</string>
+    <string name="total_price">總價格</string>
+    <string name="current_credit">現有Credit: $7</string>
+    <string name="mickle_credit_text">Mickle Credit</string>
+    <string name="confirm_purchase">確認購買</string>
+    <string name="no_charge_msg">不收取費用!</string>
+
+
+    <!-- Success Purchase Dialog -->
+    <string name="success_purchase_title">成功購買!</string>
+    <string name="success_purchase_msg">要兌換優惠時,按下\"兌換此優惠券\"向商戶展示認證畫面</string>
+    <string name="share_to_fb">分享到Facebook</string>
+    <string name="share_to_fb_purchase">為答謝你的購買,分享給你的朋友後你將會獲得 $1 Mickle Credit</string>
+    <string name="share_to_fb_free">分享給你的朋友!</string>
 
     <!-- Redeem Dialog -->
 <!--
@@ -118,6 +130,11 @@
     <string name="scan_your_card">掃描信用卡</string>
     <string name="credit_card_number">信用卡號碼</string>
     <string name="enter_card_save">儲存</string>
+    <string name="invalid_card_number">請輸入有效信用卡號碼</string>
+    <string name="invalid_card_mm">請輸入正確到期月份</string>
+    <string name="invalid_card_yy">請輸入正確到期年份</string>
+    <string name="invalid_card_cvv">請輸入正確安全碼</string>
+    <string name="invalid_card_zip_code">請輸入正確郵區號碼</string>
 
 
     <!-- Settings -->
@@ -144,6 +161,8 @@
     <string name="free">免費</string>
     <string name="ok">確定</string>
     <string name="no_save">目前沒有儲存任何優惠券</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">確認</string>
 
     <!-- Login -->
     <string name="or">或</string>

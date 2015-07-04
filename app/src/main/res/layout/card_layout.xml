@@ -57,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/card_image"
             android:layout_toLeftOf="@id/card_price"
+            android:fontFamily="sans-serif-condensed"
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingLeft="4dp"
@@ -73,11 +74,11 @@
             android:ellipsize="marquee"
             android:paddingBottom="4dp"
             android:paddingLeft="4dp"
+            style="@style/MediumBoldTextStyle"
             android:singleLine="true"
             android:textColor="@color/lightGrayTextColor"
             android:textSize="@dimen/sp_15"
-            card_view:minTextSize="@dimen/sp_14"
-            android:textStyle="bold" />
+            card_view:minTextSize="@dimen/sp_14"/>
 
 
 

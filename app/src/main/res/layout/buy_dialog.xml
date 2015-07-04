@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="18dp">
+    android:padding="@dimen/dialog_padding">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/dialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        card_view:cardPreventCornerOverlap="false"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="10dp"
         card_view:cardUseCompatPadding="true">
@@ -40,8 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="19sp"
-                android:textColor="@color/lightBlackTextColor"
+                android:textSize="@dimen/sp_17"
+                android:textColor="@color/defaultTextColor"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="16dp"
@@ -52,9 +53,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="17sp"
-                android:textStyle="bold"
+                android:textSize="@dimen/sp_17"
                 android:textColor="@color/lightBlackTextColor"
+                android:textStyle="bold"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="8dp" />
@@ -92,7 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/sp_17"
                             android:textColor="@color/defaultTextColor"
                             android:text="@string/payment_method" />
 
@@ -100,6 +101,7 @@
                             android:id="@+id/creditCardIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="-6dp"
                             android:scaleX="0.6"
                             android:scaleY="0.6"/>
 
@@ -108,10 +110,10 @@
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
                             android:text="1234"
-                            android:includeFontPadding="true"
+                            android:includeFontPadding="false"
                             android:drawablePadding="8dp"
                             android:drawableRight="@drawable/ic_right_arrow_small"
-                            android:textSize="15sp"/>
+                            android:textSize="@dimen/sp_15"/>
 
                     </LinearLayout>
 
@@ -130,7 +132,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/sp_17"
                             android:textColor="@color/defaultTextColor"
                             android:text="@string/coupon_price" />
 
@@ -140,7 +142,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="19sp" />
+                            android:textSize="@dimen/sp_19" />
 
                     </LinearLayout>
 
@@ -159,7 +161,7 @@
                             android:id="@+id/mickleCreditText"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:textSize="17sp"
+                            android:textSize="@dimen/sp_17"
                             android:textColor="@color/defaultTextColor"
                             android:text="@string/mickle_credit_text" />
 
@@ -167,6 +169,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/mickleCreditText"
                             android:layout_width="wrap_content"
+                            android:textSize="@dimen/sp_14"
                             android:text="@string/current_credit" />
 
                         <TextView
@@ -176,7 +179,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="19sp" />
+                            android:textSize="@dimen/sp_19" />
 
                     </RelativeLayout>
 
@@ -193,7 +196,7 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
+                        android:paddingBottom="10dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -203,7 +206,7 @@
                             android:text="@string/total_price"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="17sp" />
+                            android:textSize="@dimen/sp_17"/>
 
                         <TextView
                             android:id="@+id/totalPrice"
@@ -211,7 +214,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="19sp" />
+                            android:textSize="@dimen/sp_19" />
 
                     </LinearLayout>
 
@@ -224,6 +227,7 @@
                         android:paddingBottom="8dp"
                         android:textColor="@color/lightGrayTextColor"
                         android:text="@string/no_charge_msg"
+                        android:visibility="gone"
                         android:layout_gravity="right"
                         android:textStyle="italic"
                         android:textSize="14sp" />
@@ -249,6 +253,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="90dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:paddingLeft="16dp"

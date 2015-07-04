@@ -16,17 +16,19 @@
     <integer name="dp_width_level">0</integer><!-- 0 = phone, 1 = sw600dp, 2 = sw800dp -->
 
 
-    <dimen name="sp_11">10sp</dimen>
-    <dimen name="sp_12">11sp</dimen>
-    <dimen name="sp_13">12sp</dimen>
-    <dimen name="sp_14">13sp</dimen>
-    <dimen name="sp_15">14sp</dimen>
-    <dimen name="sp_16">15sp</dimen>
-    <dimen name="sp_17">16sp</dimen>
-    <dimen name="sp_18">17sp</dimen>
-    <dimen name="sp_19">18sp</dimen>
-    <dimen name="sp_20">19sp</dimen>
+    <dimen name="sp_11">9sp</dimen>
+    <dimen name="sp_12">10sp</dimen>
+    <dimen name="sp_13">11sp</dimen>
+    <dimen name="sp_14">12sp</dimen>
+    <dimen name="sp_15">13sp</dimen>
+    <dimen name="sp_16">14sp</dimen>
+    <dimen name="sp_17">15sp</dimen>
+    <dimen name="sp_18">16sp</dimen>
+    <dimen name="sp_19">17sp</dimen>
+    <dimen name="sp_20">18sp</dimen>
 
+
+    <dimen name="dialog_padding">8dp</dimen>
 
     <dimen name="card_button_width">70dp</dimen>
     <dimen name="card_button_padding">3dp</dimen>

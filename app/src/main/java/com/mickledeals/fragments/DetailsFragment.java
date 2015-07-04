@@ -188,6 +188,7 @@ public class DetailsFragment extends BaseFragment {
                     public void onLoginSuccess() {
 
                         if (mHolder.mPrice == 0) {
+                            showBoughtStatus();
                             Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
                             startActivity(newIntent);
                         } else {
@@ -347,6 +348,7 @@ public class DetailsFragment extends BaseFragment {
                 showBoughtStatus();
 
                 Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
+                newIntent.putExtra("pay", mHolder.mPrice != 0);
                 startActivity(newIntent);
             } else if (requestCode == REQUEST_CODE_REDEEM) {
 

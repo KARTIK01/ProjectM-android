@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="18dp">
+    android:padding="@dimen/dialog_padding">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/dialogContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        card_view:cardPreventCornerOverlap="false"
         card_view:cardCornerRadius="3dp"
         card_view:cardElevation="10dp"
         card_view:cardUseCompatPadding="true">
@@ -112,6 +113,7 @@
                                         android:textColor="@color/defaultTextColor"
                                         android:gravity="center"
                                         android:paddingTop="6dp"
+                                        android:fontFamily="sans-serif-light"
                                         android:paddingBottom="10dp"
                                         android:textSize="@dimen/sp_16"
                                         android:text="@string/add_paypal" />
@@ -147,6 +149,7 @@
                                         android:paddingBottom="8dp"
                                         android:paddingRight="4dp"
                                         android:paddingLeft="4dp"
+                                        android:fontFamily="sans-serif-light"
                                         android:textSize="@dimen/sp_15"
                                         android:text="@string/add_card" />
 
@@ -181,6 +184,7 @@
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
                         android:textColor="@color/defaultTextColor"
                         android:text="@string/your_mickle_credit" />
 
@@ -192,6 +196,7 @@
                         android:textSize="16sp"
                         android:textColor="@color/themeTextColor"
                         android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
                         android:onClick="getMoreCreditClick"
                         android:text="@string/get_more_credit" />
 
