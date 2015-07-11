@@ -95,6 +95,10 @@
     <string name="share_to_fb_free">分享給你的朋友!</string>
 
     <!-- Redeem Dialog -->
+
+    <string name="confirm_redeem_title">你確定現在要兌換這優惠嗎?</string>
+    <string name="confirm_redeem_msg">優惠</string>
+    <string name="redeem_now">立即兌換</string>
 <!--
     <string name="redeem_dialog_header">感謝你購買此優惠券，你將獲得</string>
     <string name="expires_in">離過期還剩 </string>
