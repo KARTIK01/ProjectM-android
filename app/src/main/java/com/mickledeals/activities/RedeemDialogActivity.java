@@ -1,8 +1,12 @@
 package com.mickledeals.activities;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.mickledeals.R;
@@ -31,7 +35,7 @@ public class RedeemDialogActivity extends DialogSwipeDismissActivity {
         discLong.setText(getIntent().getStringExtra("couponDesc"));
         mExpiredTime = (TextView) findViewById(R.id.expireTime);
 
-        mRedeemTime = System.currentTimeMillis();
+        mRedeemTime = getIntent().getLongExtra("expiredTime", 0);
 
         mHandler = new Handler();
         mHandler.removeCallbacks(mUpdatetimerThread);
@@ -53,6 +57,28 @@ public class RedeemDialogActivity extends DialogSwipeDismissActivity {
             mHandler.postDelayed(this, 0);
         }
     };
+
+    public void markUsedClick(View v) {
+        AlertDialog dialog = new AlertDialog.Builder(RedeemDialogActivity.this, R.style.AppCompatAlertDialogStyle)
+                .setMessage(R.string.mark_as_used_confirm)
+                .setPositiveButton(R.string.mark_as_used_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        //send request then finish activity
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.mark_as_used_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
 
     @Override
     protected int getLayoutResource() {

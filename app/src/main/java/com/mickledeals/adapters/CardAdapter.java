@@ -1,5 +1,6 @@
 package com.mickledeals.adapters;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -28,6 +29,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     protected List<TestDataHolder> mDataset;
     protected int mLayoutRes;
     protected FragmentActivity mFragmentActivity;
+    protected Fragment mFragment;
     protected int mListType;
 
     private boolean mClickable = true;//to prevent multilpe click
@@ -57,10 +59,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         }
     }
 
-    public CardAdapter(FragmentActivity fragmentActivity, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+    public CardAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+        mFragment = fragment;
         mLayoutRes = layoutRes;
         mDataset = myDataset;
-        mFragmentActivity = fragmentActivity;
+        mFragmentActivity = fragment.getActivity();
         mListType = listType;
     }
 

@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
+import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
@@ -46,6 +47,7 @@ public class DetailsFragment extends BaseFragment {
     private static final long INTIIAL_REMAINING_TIME = 2 * 60 * 60 * 1000;
     private static final int REQUEST_CODE_BUY = 1;
     private static final int REQUEST_CODE_REDEEM = 2;
+    private static final int REQUEST_CODE_CONFIRM_REDEEM = 3;
 
     private TestDataHolder mHolder;
 
@@ -56,6 +58,7 @@ public class DetailsFragment extends BaseFragment {
     private ImageView mImageView;
     private View mBuyBtn;
     private TextView mBuyBtnText;
+    private TextView mRedeemBtnText;
     private View mRedeemBtn;
     private View mSaveBtn;
     private View mBusinessInfoBtn;
@@ -72,7 +75,6 @@ public class DetailsFragment extends BaseFragment {
     private TextView mNavMidText;
     private TextView mNavRightText;
     private Handler mHandler = new Handler();
-    private TextView mExpiredTime;
     private NotifyingScrollView mDetailsScrollView;
     private NotifyingScrollView.OnScrollChangedListener mScrollListener;
 
@@ -107,6 +109,7 @@ public class DetailsFragment extends BaseFragment {
         mBoughtDate = (TextView) view.findViewById(R.id.boughtDate);
         mBuyBtn = view.findViewById(R.id.buyBtn);
         mBuyBtnText = (TextView) view.findViewById(R.id.buyBtnText);
+        mRedeemBtnText = (TextView) view.findViewById(R.id.redeemBtnText);
         mRedeemBtn = view.findViewById(R.id.redeemBtn);
         mBusinessInfoBtn = view.findViewById(R.id.businessInfoButton);
         mSaveBtn = view.findViewById(R.id.savedButton);
@@ -209,11 +212,18 @@ public class DetailsFragment extends BaseFragment {
         mRedeemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, RedeemDialogActivity.class);
-                i.putExtra("storeName", mHolder.mStoreName);
-                i.putExtra("couponDesc", mHolder.mDescription);
-                startActivityForResult(i, REQUEST_CODE_REDEEM);
-
+                if (mHolder.mRedeemTime == 0) {
+                    Intent i = new Intent(mContext, ConfirmRedeemDialogActivity.class);
+                    i.putExtra("storeName", mHolder.mStoreName);
+                    i.putExtra("couponDesc", mHolder.mDescription);
+                    startActivityForResult(i, REQUEST_CODE_CONFIRM_REDEEM);
+                } else {
+                    Intent i = new Intent(mContext, RedeemDialogActivity.class);
+                    i.putExtra("storeName", mHolder.mStoreName);
+                    i.putExtra("couponDesc", mHolder.mDescription);
+                    i.putExtra("expiredTime", mHolder.mRedeemTime);
+                    startActivityForResult(i, REQUEST_CODE_REDEEM);
+                }
             }
         });
 
@@ -303,7 +313,13 @@ public class DetailsFragment extends BaseFragment {
     }
 
     private void showAvailableStatus() {
-
+        mHolder.mRedeemTime = 0;
+        mHandler.removeCallbacks(mUpdatetimerThread);
+        mRedeemBtnText.setText(R.string.redeem_coupon);
+        mPrice.setVisibility(View.VISIBLE);
+        mBuyBtn.setVisibility(View.VISIBLE);
+        mRedeemBtn.setVisibility(View.GONE);
+        mBoughtDate.setVisibility(View.GONE);
     }
 
     private void showExpiredStatus() {
@@ -351,20 +367,32 @@ public class DetailsFragment extends BaseFragment {
                 newIntent.putExtra("pay", mHolder.mPrice != 0);
                 startActivity(newIntent);
             } else if (requestCode == REQUEST_CODE_REDEEM) {
+                showAvailableStatus();
+            } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
 
+                mHolder.mRedeemTime = System.currentTimeMillis();
+
+                Intent i = new Intent(mContext, RedeemDialogActivity.class);
+                i.putExtra("storeName", mHolder.mStoreName);
+                i.putExtra("couponDesc", mHolder.mDescription);
+                i.putExtra("expiredTime", mHolder.mRedeemTime);
+                startActivityForResult(i, REQUEST_CODE_REDEEM);
+
+                mHandler.removeCallbacks(mUpdatetimerThread);
+                mHandler.postDelayed(mUpdatetimerThread, 0);
             }
         }
     }
 
     public void showNavPanelHint() {
-        mHandler.postDelayed(mHideNavHintPanelRunnable, 2000);
+        mHandler.postDelayed(mHideNavHintPanelRunnable, 1600);
     }
 
     private Runnable mHideNavHintPanelRunnable = new Runnable() {
         @Override
         public void run() {
             ObjectAnimator anim = ObjectAnimator.ofFloat(mNavigationHintPanel, "alpha", 1f, 0f);
-            anim.setDuration(1000);
+            anim.setDuration(800);
             anim.start();
         }
     };
@@ -397,7 +425,7 @@ public class DetailsFragment extends BaseFragment {
     private Runnable mUpdatetimerThread = new Runnable() {
         @Override
         public void run() {
-            mExpiredTime.setText(getExpiredTimerValue());
+            mRedeemBtnText.setText(getString(R.string.redeem_in) + getExpiredTimerValue());
             mHandler.postDelayed(this, 0);
         }
     };

@@ -68,6 +68,7 @@
     <string name="fine_print">條款</string>
     <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠</string>
+    <string name="redeem_in">"兌換時間剩 "</string>
     <string name="share_subject">一張來自MickleDeals的絕佳優惠券!</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
@@ -91,19 +92,22 @@
     <string name="success_purchase_title">成功購買!</string>
     <string name="success_purchase_msg">要兌換優惠時,按下\"兌換此優惠券\"向商戶展示認證畫面</string>
     <string name="share_to_fb">分享到Facebook</string>
-    <string name="share_to_fb_purchase">為答謝你的購買,分享給你的朋友後你將會獲得 $1 Mickle Credit</string>
+    <string name="share_to_fb_purchase">為答謝你的購買,分享到Facebook後你將會獲得 $1 Mickle Credit</string>
     <string name="share_to_fb_free">分享給你的朋友!</string>
 
     <!-- Redeem Dialog -->
 
-    <string name="confirm_redeem_title">你確定現在要兌換這優惠嗎?</string>
-    <string name="confirm_redeem_msg">優惠</string>
+    <string name="confirm_redeem_title">你確定現在要兌換此優惠嗎?</string>
+    <string name="confirm_redeem_msg">優惠將於兌換後2小時逾期</string>
     <string name="redeem_now">立即兌換</string>
-<!--
-    <string name="redeem_dialog_header">感謝你購買此優惠券，你將獲得</string>
+    <string name="mark_as_used">標記為已使用</string>
+    <string name="mark_as_used_confirm">你是否已經兌換此優惠?</string>
+    <string name="mark_as_used_yes">是, 標記已使用</string>
+    <string name="mark_as_used_no">還未兌換</string>
+    <string name="redeem_dialog_header">感謝你使用此優惠券，你將獲得</string>
     <string name="expires_in">離過期還剩 </string>
-    <string name="redeem_dialog_footer">請在兌換優惠時向商戶展示此認證畫面</string>
--->
+    <string name="redeem_dialog_footer">"請在兌換優惠時向商戶展示此認證畫面          "</string>
+
     <!-- Business Page -->
     <string name="news">最新消息</string>
     <string name="photos">相片</string>

@@ -453,6 +453,7 @@
                 card_view:cardUseCompatPadding="true">
 
                 <TextView
+                    android:id="@+id/redeemBtnText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/green_button_selector_bg"

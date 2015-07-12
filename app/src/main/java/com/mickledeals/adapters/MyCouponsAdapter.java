@@ -1,12 +1,15 @@
 package com.mickledeals.adapters;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.activities.ConfirmRedeemDialogActivity;
+import com.mickledeals.fragments.MyCouponsFragment;
 import com.mickledeals.tests.TestDataHolder;
 
 import java.util.List;
@@ -41,8 +44,8 @@ public class MyCouponsAdapter extends CardAdapter {
         }
     }
 
-    public MyCouponsAdapter(FragmentActivity fragmentActivity, List<TestDataHolder> myDataset, int listType, int layoutRes) {
-        super(fragmentActivity, myDataset, listType, layoutRes);
+    public MyCouponsAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+        super(fragment, myDataset, listType, layoutRes);
     }
 
     // Create new views (invoked by the layout manager)
@@ -51,14 +54,14 @@ public class MyCouponsAdapter extends CardAdapter {
                                                    int viewType) {
         if (viewType == TYPE_COUPONS) {
             MyCouponViewHolder holder = (MyCouponViewHolder)super.onCreateViewHolder(parent, viewType);
-            holder.mCardButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //redeem or buy again
-
-
-                }
-            });
+//            holder.mCardButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //redeem or buy again
+//
+//
+//                }
+//            });
             return holder;
 
         } else if (viewType == TYPE_HEADER) {
@@ -100,6 +103,16 @@ public class MyCouponsAdapter extends CardAdapter {
             final TestDataHolder dataHolder = mDataset.get(position);
 
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
+            vh.mCardButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mFragmentActivity, ConfirmRedeemDialogActivity.class);
+                    i.putExtra("storeName", dataHolder.mStoreName);
+                    i.putExtra("couponDesc", dataHolder.mDescription);
+                    mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_CONFIRM_REDEEM);
+                }
+            });
+
             if (position > 4) {
                 vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
 //                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.buy_again));

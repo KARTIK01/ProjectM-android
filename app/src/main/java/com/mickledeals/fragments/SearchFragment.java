@@ -82,7 +82,7 @@ public class SearchFragment extends ListResultBaseFragment{
         } else {
             mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         }
-        mListResultRecyclerView.setAdapter(new CardAdapter(getActivity(), mDataList, Constants.TYPE_SEARCH_RESULT_LIST, R.layout.card_layout_search));
+        mListResultRecyclerView.setAdapter(new CardAdapter(this, mDataList, Constants.TYPE_SEARCH_RESULT_LIST, R.layout.card_layout_search));
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 }

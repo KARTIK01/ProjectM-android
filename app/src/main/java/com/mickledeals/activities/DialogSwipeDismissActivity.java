@@ -3,6 +3,7 @@ package com.mickledeals.activities;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,13 +23,21 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
 
         getWindow().setWindowAnimations(0);
 
-        findViewById(R.id.dialogContainer).setOnClickListener(new View.OnClickListener() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                //to dismiss dialog when tap on empty space
-                finish();
+            public void run() {
+                //delay 1 second to prevent accidentally dismiss
+                findViewById(R.id.dialogContainer).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //to dismiss dialog when tap on empty space
+                        finish();
+                    }
+                });
             }
-        });
+        }, 1000);
+
+
         findViewById(R.id.dialogContent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,12 +54,21 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
             }
 
         });
-        colorAnimation.setDuration(500);
+        colorAnimation.setDuration(getDimmingDuration());
         colorAnimation.start();
+        if (useTranslateAnim()) {
+            final Animation transAnim = AnimationUtils.loadAnimation(this,
+                    R.anim.translate_anim);
+            findViewById(R.id.dialogContainer).startAnimation(transAnim);
+        }
+    }
 
-        final Animation transAnim = AnimationUtils.loadAnimation(this,
-                R.anim.translate_anim);
-        findViewById(R.id.dialogContainer).startAnimation(transAnim);
+    protected boolean useTranslateAnim() {
+        return true;
+    }
+
+    protected int getDimmingDuration() {
+        return 500;
     }
 
     //    @Override

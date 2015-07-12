@@ -1,11 +1,10 @@
 package com.mickledeals.activities;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.mickledeals.R;
@@ -57,7 +56,7 @@ public class SettingsActivity extends SwipeDismissActivity {
     }
 
     public void languageRowClick(View v) {
-        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AppCompatAlertDialogStyle)
                 .setSingleChoiceItems(getResources().getStringArray(R.array.language_list), language, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -79,10 +78,6 @@ public class SettingsActivity extends SwipeDismissActivity {
                     }
                 })
                 .create();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.6F;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
     }
 
@@ -98,7 +93,7 @@ public class SettingsActivity extends SwipeDismissActivity {
     public void signoutClick(View v) {
         String msg = getString(R.string.log_out_confirm, MDLoginManager.getNameOrEmail());
 
-        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AppCompatAlertDialogStyle)
                 .setMessage(msg)
                 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
@@ -119,10 +114,6 @@ public class SettingsActivity extends SwipeDismissActivity {
                     }
                 })
                 .create();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.6F;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
     }
 
@@ -131,7 +122,7 @@ public class SettingsActivity extends SwipeDismissActivity {
     }
 
     public void clearSearchClick(View v) {
-        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AppCompatAlertDialogStyle)
                 .setMessage(R.string.clear_search_history_confirm)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -146,15 +137,11 @@ public class SettingsActivity extends SwipeDismissActivity {
                     }
                 })
                 .create();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.6F;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
     }
 
     public void clearUsedCouponClick(View v) {
-        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.AppCompatAlertDialogStyle)
                 .setMessage(R.string.clear_used_coupon_history_confirm)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -169,10 +156,6 @@ public class SettingsActivity extends SwipeDismissActivity {
                     }
                 })
                 .create();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.6F;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
     }
 

@@ -56,7 +56,7 @@ public class NearbyFragment extends ListResultBaseFragment {
 
         final int column = mContext.getResources().getInteger(R.integer.dp_width_level) > 0 ? 3 : 2;
         mListResultRecyclerView.setLayoutManager(new GridLayoutManager(mContext, column));
-        mListResultRecyclerView.setAdapter(new CardAdapter(getActivity(), mDataList, Constants.TYPE_NEARBY_LIST, R.layout.card_layout));
+        mListResultRecyclerView.setAdapter(new CardAdapter(this, mDataList, Constants.TYPE_NEARBY_LIST, R.layout.card_layout));
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mListResultRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

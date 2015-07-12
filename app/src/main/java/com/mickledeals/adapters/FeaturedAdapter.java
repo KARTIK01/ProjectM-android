@@ -1,6 +1,6 @@
 package com.mickledeals.adapters;
 
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,8 +34,8 @@ public class FeaturedAdapter extends CardAdapter {
         }
     }
 
-    public FeaturedAdapter(FragmentActivity fragmentActivity, List<TestDataHolder> myDataset, int listType, int layoutRes) {
-        super(fragmentActivity, myDataset, listType, layoutRes);
+    public FeaturedAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+        super(fragment, myDataset, listType, layoutRes);
     }
 
     // Create new views (invoked by the layout manager)
@@ -64,7 +64,7 @@ public class FeaturedAdapter extends CardAdapter {
 
             RecyclerView mAddedCouponRecyclerView = (RecyclerView) v.findViewById(R.id.addedCouponRecyclerView);
             mAddedCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
-            mAddedCouponRecyclerView.setAdapter(new CardAdapter(mFragmentActivity, DataListModel.getInstance().getNewAddedCouponList(), Constants.TYPE_NEW_ADDED_LIST, R.layout.card_layout_new));
+            mAddedCouponRecyclerView.setAdapter(new CardAdapter(mFragment, DataListModel.getInstance().getNewAddedCouponList(), Constants.TYPE_NEW_ADDED_LIST, R.layout.card_layout_new));
             mAddedCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //            RecyclerView mPopularCouponRecyclerView = (RecyclerView) v.findViewById(R.id.popularCouponRecyclerView);
 //            mPopularCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));

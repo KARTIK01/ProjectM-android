@@ -74,6 +74,7 @@
     <string name="fine_print">Fine Print</string>
     <string name="unlock_coupon">Get this Coupon for %s</string>
     <string name="redeem_coupon">Redeem this Offer</string>
+    <string name="redeem_in">"Redeem in "</string>
     <string name="share_subject">A great coupon from MickleDeals!</string>
     <string name="share_to">Share to...</string>
     <string name="share_failed">Share Failed</string>
@@ -107,7 +108,13 @@
     <string name="confirm_redeem_title">Are you sure you want to Redeem now?</string>
     <string name="confirm_redeem_msg">The offer will expire in 2 hours once you redeem.</string>
     <string name="redeem_now">Redeem Now</string>
-    <string name="redeem_dialog_header">Thanks for purchasing coupon for</string>
+    <string name="mark_as_used">Mark as Used</string>
+    <string name="mark_as_used_confirm">Are you done redeeming your offer?</string>
+    <string name="mark_as_used_yes">Yes, Mark as Used</string>
+    <string name="mark_as_used_no">Not Yet</string>
+
+
+    <string name="redeem_dialog_header">Thanks for using this coupon for</string>
     <string name="expires_in">Expires in </string>
     <string name="redeem_dialog_footer">Show this verification screen to the business when redeeming your offer.</string>
 

@@ -1,7 +1,7 @@
 package com.mickledeals.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -105,7 +104,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
 
     public void getMoreCreditClick(View v) {
 
-        AlertDialog dialog = new AlertDialog.Builder(PaymentActivity.this)
+        AlertDialog dialog = new AlertDialog.Builder(PaymentActivity.this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(R.string.get_more_credit_dialog_title)
                 .setMessage(R.string.get_more_credit_dialog_msg)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -115,10 +114,6 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
                     }
                 })
                 .create();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.dimAmount = 0.6F;
-        dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
     }
 

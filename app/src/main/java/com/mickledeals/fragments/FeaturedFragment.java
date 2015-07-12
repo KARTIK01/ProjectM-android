@@ -60,7 +60,7 @@ public class FeaturedFragment extends BaseFragment {
         }
 
         mFeatureRecyclerView.setLayoutManager(mLayoutManager);
-        mFeatureAdapter = new FeaturedAdapter(getActivity(), DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout_featured);
+        mFeatureAdapter = new FeaturedAdapter(this, DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout_featured);
         mFeatureRecyclerView.setAdapter(mFeatureAdapter);
         mFeatureRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mFeatureRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
