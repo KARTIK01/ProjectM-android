@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
+import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.fragments.MyCouponsFragment;
 import com.mickledeals.tests.TestDataHolder;
+import com.mickledeals.utils.Constants;
 
 import java.util.List;
 
@@ -20,15 +22,20 @@ import java.util.List;
 public class MyCouponsAdapter extends CardAdapter {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_COUPONS = 1;
+    private int mAvailableListSize;
+    private int mExpiredListSize;
+    private int mUsedListSize;
 
     //extends because onCreateViewHolder returns MainViewHolder, performance impact is very little
     public static class HeaderViewHolder extends MainViewHolder {
         public TextView mHeaderText;
-        public TextView mClearText;
+        public View mHeaderRow;
+//        public TextView mClearText;
         public HeaderViewHolder(View v) {
             super(v);
             mHeaderText = (TextView) v.findViewById(R.id.header);
-            mClearText = (TextView) v.findViewById(R.id.clear);
+            mHeaderRow =  v.findViewById(R.id.header_row);
+//            mClearText = (TextView) v.findViewById(R.id.clear);
         }
     }
 
@@ -46,6 +53,16 @@ public class MyCouponsAdapter extends CardAdapter {
 
     public MyCouponsAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
         super(fragment, myDataset, listType, layoutRes);
+    }
+
+    public void setSectionListSize(int availableListSize, int expiredListSize, int usedListSize) {
+        mAvailableListSize = availableListSize;
+        mExpiredListSize = expiredListSize;
+        mUsedListSize = usedListSize;
+        //add header count
+        if (mAvailableListSize > 0) mAvailableListSize++;
+        if (mExpiredListSize > 0) mExpiredListSize++;
+        if (mUsedListSize > 0) mUsedListSize++;
     }
 
     // Create new views (invoked by the layout manager)
@@ -81,20 +98,16 @@ public class MyCouponsAdapter extends CardAdapter {
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        if (isPositionHeader(position)) {
+        String headerStr = getPositionHeader(position);
+        if (headerStr != null) {
             HeaderViewHolder hvh = (HeaderViewHolder)holder;
-            if (position == 0) {
-                hvh.mHeaderText.setText(hvh.mHeaderText.getResources().getString(R.string.expiring));
-                hvh.mClearText.setVisibility(View.GONE);
-            } else if (position == 2) {
-                hvh.mHeaderText.setText(hvh.mHeaderText.getResources().getString(R.string.available));
-                hvh.mClearText.setVisibility(View.GONE);
-            } else if (position == 5) {
-                hvh.mHeaderText.setText(hvh.mHeaderText.getResources().getString(R.string.expired));
-                hvh.mClearText.setVisibility(View.VISIBLE);
-            } else if (position == 8) {
-                hvh.mHeaderText.setText(hvh.mHeaderText.getResources().getString(R.string.used));
-                hvh.mClearText.setVisibility(View.VISIBLE);
+            if (headerStr.equals("")) {
+                hvh.mHeaderRow.setVisibility(View.GONE);
+                hvh.mHeaderText.setVisibility(View.GONE);
+            } else {
+                hvh.mHeaderRow.setVisibility(View.VISIBLE);
+                hvh.mHeaderText.setVisibility(View.VISIBLE);
+                hvh.mHeaderText.setText(headerStr);
             }
         } else {
             super.onBindViewHolder(holder, position);
@@ -106,46 +119,47 @@ public class MyCouponsAdapter extends CardAdapter {
             vh.mCardButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(mFragmentActivity, ConfirmRedeemDialogActivity.class);
-                    i.putExtra("storeName", dataHolder.mStoreName);
-                    i.putExtra("couponDesc", dataHolder.mDescription);
-                    mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_CONFIRM_REDEEM);
+                    if (dataHolder.mRedeemTime == 0) {
+                        Intent i = new Intent(mFragmentActivity, ConfirmRedeemDialogActivity.class);
+                        i.putExtra("storeName", dataHolder.mStoreName);
+                        i.putExtra("couponDesc", dataHolder.mDescription);
+                        i.putExtra("id", dataHolder.mId);
+                        mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_CONFIRM_REDEEM);
+                    } else {
+                        Intent i = new Intent(mFragmentActivity, RedeemDialogActivity.class);
+                        i.putExtra("storeName", dataHolder.mStoreName);
+                        i.putExtra("couponDesc", dataHolder.mDescription);
+                        i.putExtra("redeemTime", dataHolder.mRedeemTime);
+                        mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_REDEEM);
+                    }
                 }
             });
 
-            if (position > 4) {
-                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
-//                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.buy_again));
-            }
-            else {
+            if (dataHolder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
                 vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
-            }
-
-            if (position < 3) {
-                dataHolder.mBought = true;
-                vh.mCardButton.setVisibility(View.VISIBLE);
-            } else {
-                vh.mCardButton.setVisibility(View.GONE);
-            }
-
-            if (position == 3 || position == 4 || position == 7) {
-                vh.mCardDealEnded.setVisibility(View.VISIBLE);
-                dataHolder.mExpired = true;
-            } else {
                 vh.mCardDealEnded.setVisibility(View.GONE);
+                vh.mCardButton.setVisibility(View.VISIBLE);
+            } else if (dataHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
+                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
+                vh.mCardDealEnded.setVisibility(View.VISIBLE);
+                vh.mCardButton.setVisibility(View.GONE);
+            } else {
+                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
+                vh.mCardDealEnded.setVisibility(View.GONE);
+                vh.mCardButton.setVisibility(View.GONE);
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size() + 4;
+        return mAvailableListSize + mUsedListSize + mExpiredListSize;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (isPositionHeader(position))
+        if (getPositionHeader(position) != null)
             return TYPE_HEADER;
 
         return TYPE_COUPONS;
@@ -153,21 +167,31 @@ public class MyCouponsAdapter extends CardAdapter {
 
     @Override
     protected int convertListPosToDataPos(int position) {
-
-        if (position == 1) position = 0;
-        else if (position == 3) position = 1;
-        else if (position == 4) position = 2;
-        else if (position == 6) position = 3;
-        else if (position == 7) position = 4;
-        else if (position == 9) position = 5;
-        else if (position == 10) position = 6;
-        else if (position == 11) position = 7;
-
-        return position;
+        if (position < (mAvailableListSize + 1)) {
+            return position - 1;
+        } else if (position < (mAvailableListSize + mExpiredListSize + 2)) {
+            return position - 2;
+        } else {
+            return position - 3;
+        }
     }
 
-    private boolean isPositionHeader(int position) {
-        return position == 0 || position == 2 || position == 5 || position == 8;
+    private String getPositionHeader(int position) {
+        String availableStr = mFragmentActivity.getResources().getString(R.string.available);
+        String expiredStr = mFragmentActivity.getResources().getString(R.string.expired);
+        String usedStr = mFragmentActivity.getResources().getString(R.string.used);
+        if (position == 0) {
+            if (mAvailableListSize != 0) return availableStr;
+            else if (mExpiredListSize != 0) return expiredStr;
+            else return usedStr;
+        } else if (position == mAvailableListSize) {
+            if (mExpiredListSize != 0) return expiredStr;
+            else return usedStr;
+        } else if (position == mAvailableListSize + mExpiredListSize) {
+            if (mUsedListSize != 0) return usedStr;
+            else return usedStr;
+        }
+        return null;
     }
 
 

@@ -1,5 +1,6 @@
 package com.mickledeals.tests;
 
+import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.Utils;
 
 import java.io.Serializable;
@@ -25,10 +26,9 @@ public class TestDataHolder implements Serializable{
     public String mOpenHours;
     public String mDetails;
     public int mCategoryId;
+    public int mStatus = Constants.COUPON_STATUS_DEFAULT;
 
     public boolean mSaved;
-    public boolean mBought;
-    public boolean mExpired;
 
     public long mRedeemTime;
 

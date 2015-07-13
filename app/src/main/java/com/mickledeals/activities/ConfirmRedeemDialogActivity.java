@@ -29,6 +29,7 @@ public class ConfirmRedeemDialogActivity extends DialogSwipeDismissActivity {
         Intent i = new Intent(ConfirmRedeemDialogActivity.this, RedeemDialogActivity.class);
         i.putExtra("storeName", getIntent().getStringExtra("storeName"));
         i.putExtra("couponDesc", getIntent().getStringExtra("couponDesc"));
+        i.putExtra("id", getIntent().getIntExtra("id", 0));
 
         setResult(Activity.RESULT_OK, i);
         finish();

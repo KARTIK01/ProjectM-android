@@ -221,7 +221,7 @@ public class DetailsFragment extends BaseFragment {
                     Intent i = new Intent(mContext, RedeemDialogActivity.class);
                     i.putExtra("storeName", mHolder.mStoreName);
                     i.putExtra("couponDesc", mHolder.mDescription);
-                    i.putExtra("expiredTime", mHolder.mRedeemTime);
+                    i.putExtra("redeemTime", mHolder.mRedeemTime);
                     startActivityForResult(i, REQUEST_CODE_REDEEM);
                 }
             }
@@ -305,9 +305,9 @@ public class DetailsFragment extends BaseFragment {
 
 
 
-        if (mHolder.mExpired) {
+        if (mHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
             showExpiredStatus();
-        } else if (mHolder.mBought) {
+        } else if (mHolder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
             showBoughtStatus();
         }
     }
@@ -375,7 +375,7 @@ public class DetailsFragment extends BaseFragment {
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
                 i.putExtra("storeName", mHolder.mStoreName);
                 i.putExtra("couponDesc", mHolder.mDescription);
-                i.putExtra("expiredTime", mHolder.mRedeemTime);
+                i.putExtra("redeemTime", mHolder.mRedeemTime);
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
 
                 mHandler.removeCallbacks(mUpdatetimerThread);

@@ -29,20 +29,23 @@ import java.util.List;
 public class MyCouponsFragment extends BaseFragment {
 
     public static final int REQUEST_CODE_CONFIRM_REDEEM = 1;
-    private static final int REQUEST_CODE_REDEEM = 2;
+    public static final int REQUEST_CODE_REDEEM = 2;
+    private MyCouponsAdapter mAdapter;
     private RecyclerView mRecyclerView;
 
     private List<TestDataHolder> mBoughtList;
+
+    private int mAvailableListSize;
+    private int mExpiredListSize;
+    private int mUsedListSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBoughtList = DataListModel.getInstance().getBoughtList();
         mBoughtList.clear();
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
-            if (holder.mId == 4 || holder.mId == 1 || holder.mId == 5 || holder.mId == 10
-            || holder.mId == 15 || holder.mId == 9 || holder.mId == 16 || holder.mId == 13) mBoughtList.add(holder);
-        }
+        //temporary, get it from server
+        getMyCouponLists();
     }
 
     @Override
@@ -62,8 +65,38 @@ public class MyCouponsFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mRecyclerView.setAdapter(new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons));
+        mAdapter = new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
+        mAdapter.setSectionListSize(mAvailableListSize, mExpiredListSize, mUsedListSize);
+        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    public void getMyCouponLists() {
+        mAvailableListSize = 0;
+        mExpiredListSize = 0;
+        mUsedListSize = 0;
+
+        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+
+            if (holder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
+                mBoughtList.add(holder);
+                mAvailableListSize++;
+            }
+        }
+        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+
+            if (holder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
+                mBoughtList.add(holder);
+                mExpiredListSize++;
+            }
+        }
+        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+
+            if (holder.mId == 9 || holder.mId == 16 || holder.mId == 14) {
+                mBoughtList.add(holder);
+                mUsedListSize++;
+            }
+        }
     }
 
     @Override
@@ -73,9 +106,18 @@ public class MyCouponsFragment extends BaseFragment {
             if (requestCode == REQUEST_CODE_REDEEM) {
                 //put it to used
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
+
+                for (TestDataHolder holder : mBoughtList) {
+                    if (holder.mId == data.getIntExtra("id", 0)) {
+                        holder.mRedeemTime = System.currentTimeMillis();
+                    }
+                    break;
+                }
+
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
                 i.putExtra("storeName", data.getStringExtra("storeName"));
                 i.putExtra("couponDesc", data.getStringExtra("couponDesc"));
+                i.putExtra("redeemTime", System.currentTimeMillis());
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
             }
         }

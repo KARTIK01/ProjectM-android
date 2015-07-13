@@ -35,7 +35,7 @@ public class RedeemDialogActivity extends DialogSwipeDismissActivity {
         discLong.setText(getIntent().getStringExtra("couponDesc"));
         mExpiredTime = (TextView) findViewById(R.id.expireTime);
 
-        mRedeemTime = getIntent().getLongExtra("expiredTime", 0);
+        mRedeemTime = getIntent().getLongExtra("redeemTime", 0);
 
         mHandler = new Handler();
         mHandler.removeCallbacks(mUpdatetimerThread);

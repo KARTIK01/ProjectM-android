@@ -2,6 +2,7 @@ package com.mickledeals.datamodel;
 
 import com.mickledeals.R;
 import com.mickledeals.tests.TestDataHolder;
+import com.mickledeals.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -212,6 +213,7 @@ public class DataListModel {
         holder.mCategoryId = 2;
         holder.mShortDescriptionCh = "免費1局保齡球遊戲";
         holder.mDescriptionCh = "買3局遊戲或以上即送1局";
+        holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
         mDataList.put(holder.mId, holder);
 
         holder = new TestDataHolder();
@@ -246,6 +248,7 @@ public class DataListModel {
         holder.mShortDescriptionCh = "9折優惠";
         holder.mDescriptionCh = "結帳時享有9折優惠";
         holder.mStoreNameCh ="餛飩之城";
+        holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
         mDataList.put(holder.mId, holder);
 
         holder.mPrice = 1;
@@ -361,6 +364,7 @@ public class DataListModel {
         holder.mCategoryId = 1;
         holder.mShortDescriptionCh = "免費餐湯一客";
         holder.mDescriptionCh = "消費滿$30以上即有免費番茄餐湯一客";
+        holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
         mDataList.put(holder.mId, holder);
 
         holder = new TestDataHolder();
@@ -394,6 +398,7 @@ public class DataListModel {
         holder.mShortDescriptionCh = "9折優惠";
         holder.mDescriptionCh = "結帳時享有9折優惠";
         holder.mStoreNameCh ="超速卡丁車場";
+        holder.mStatus = Constants.COUPON_STATUS_EXPIRED;
         mDataList.put(holder.mId, holder);
 
 
@@ -460,6 +465,7 @@ public class DataListModel {
         holder.mCategoryId = 1;
         holder.mShortDescriptionCh = "9折優惠";
         holder.mDescriptionCh = "結帳時享有9折優惠";
+        holder.mStatus = Constants.COUPON_STATUS_EXPIRED;
         mDataList.put(holder.mId, holder);
 
         holder = new TestDataHolder();
