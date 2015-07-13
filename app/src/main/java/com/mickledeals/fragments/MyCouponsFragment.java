@@ -35,15 +35,15 @@ public class MyCouponsFragment extends BaseFragment {
 
     private List<TestDataHolder> mBoughtList;
 
-    private int mAvailableListSize;
-    private int mExpiredListSize;
-    private int mUsedListSize;
+    private int mCurrentIndex = 0;
+    private int mAvailableListIndex = -1;
+    private int mExpiredListIndex = -1;
+    private int mUsedListIndex = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBoughtList = DataListModel.getInstance().getBoughtList();
-        mBoughtList.clear();
         //temporary, get it from server
         getMyCouponLists();
     }
@@ -66,35 +66,47 @@ public class MyCouponsFragment extends BaseFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
-        mAdapter.setSectionListSize(mAvailableListSize, mExpiredListSize, mUsedListSize);
+        mAdapter.setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     public void getMyCouponLists() {
-        mAvailableListSize = 0;
-        mExpiredListSize = 0;
-        mUsedListSize = 0;
 
+        mCurrentIndex = 0;
+        mAvailableListIndex = -1;
+        mExpiredListIndex = -1;
+        mUsedListIndex = -1;
+        mBoughtList.clear();
         for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
 
             if (holder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
                 mBoughtList.add(holder);
-                mAvailableListSize++;
+                if (mAvailableListIndex == -1) {
+                    mAvailableListIndex = mCurrentIndex;
+                    mCurrentIndex++;
+                }
+                mCurrentIndex++;
             }
         }
         for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
 
             if (holder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
                 mBoughtList.add(holder);
-                mExpiredListSize++;
+                if (mExpiredListIndex == -1) {
+                    mExpiredListIndex = mCurrentIndex;
+                    mCurrentIndex++;
+                }
+                mCurrentIndex++;
             }
         }
         for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
 
             if (holder.mId == 9 || holder.mId == 16 || holder.mId == 14) {
                 mBoughtList.add(holder);
-                mUsedListSize++;
+                if (mUsedListIndex == -1) {
+                    mUsedListIndex = mCurrentIndex;
+                }
             }
         }
     }
@@ -104,14 +116,24 @@ public class MyCouponsFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_REDEEM) {
-                //put it to used
+                //put available coupon to used coupon after redeem
+                for (TestDataHolder holder : mBoughtList) {
+                    if (holder.mId == data.getIntExtra("id", 0)) {
+                        holder.mRedeemTime = 0;
+                        holder.mStatus = Constants.COUPON_STATUS_DEFAULT;
+                        getMyCouponLists();
+                        mAdapter.setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
 
                 for (TestDataHolder holder : mBoughtList) {
                     if (holder.mId == data.getIntExtra("id", 0)) {
                         holder.mRedeemTime = System.currentTimeMillis();
+                        break;
                     }
-                    break;
                 }
 
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);

@@ -2,6 +2,7 @@ package com.mickledeals.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -65,8 +66,10 @@ public class RedeemDialogActivity extends DialogSwipeDismissActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        Intent i = new Intent();
+                        i.putExtra("id", getIntent().getIntExtra("id", 0));
                         //send request then finish activity
-                        setResult(Activity.RESULT_OK);
+                        setResult(Activity.RESULT_OK, i);
                         finish();
                     }
                 })

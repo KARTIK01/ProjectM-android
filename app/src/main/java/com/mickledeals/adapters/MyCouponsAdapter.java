@@ -22,9 +22,10 @@ import java.util.List;
 public class MyCouponsAdapter extends CardAdapter {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_COUPONS = 1;
-    private int mAvailableListSize;
-    private int mExpiredListSize;
-    private int mUsedListSize;
+
+    private int mAvailableListIndex = -1;
+    private int mExpiredListIndex = -1;
+    private int mUsedListIndex = -1;
 
     //extends because onCreateViewHolder returns MainViewHolder, performance impact is very little
     public static class HeaderViewHolder extends MainViewHolder {
@@ -55,14 +56,10 @@ public class MyCouponsAdapter extends CardAdapter {
         super(fragment, myDataset, listType, layoutRes);
     }
 
-    public void setSectionListSize(int availableListSize, int expiredListSize, int usedListSize) {
-        mAvailableListSize = availableListSize;
-        mExpiredListSize = expiredListSize;
-        mUsedListSize = usedListSize;
-        //add header count
-        if (mAvailableListSize > 0) mAvailableListSize++;
-        if (mExpiredListSize > 0) mExpiredListSize++;
-        if (mUsedListSize > 0) mUsedListSize++;
+    public void setSectionListIndex(int availableListIndex, int expiredListIndex, int usedListIndex) {
+        mAvailableListIndex = availableListIndex;
+        mExpiredListIndex = expiredListIndex;
+        mUsedListIndex = usedListIndex;
     }
 
     // Create new views (invoked by the layout manager)
@@ -101,14 +98,7 @@ public class MyCouponsAdapter extends CardAdapter {
         String headerStr = getPositionHeader(position);
         if (headerStr != null) {
             HeaderViewHolder hvh = (HeaderViewHolder)holder;
-            if (headerStr.equals("")) {
-                hvh.mHeaderRow.setVisibility(View.GONE);
-                hvh.mHeaderText.setVisibility(View.GONE);
-            } else {
-                hvh.mHeaderRow.setVisibility(View.VISIBLE);
-                hvh.mHeaderText.setVisibility(View.VISIBLE);
-                hvh.mHeaderText.setText(headerStr);
-            }
+            hvh.mHeaderText.setText(headerStr);
         } else {
             super.onBindViewHolder(holder, position);
 
@@ -130,6 +120,7 @@ public class MyCouponsAdapter extends CardAdapter {
                         i.putExtra("storeName", dataHolder.mStoreName);
                         i.putExtra("couponDesc", dataHolder.mDescription);
                         i.putExtra("redeemTime", dataHolder.mRedeemTime);
+                        i.putExtra("id", dataHolder.mId);
                         mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_REDEEM);
                     }
                 }
@@ -154,7 +145,11 @@ public class MyCouponsAdapter extends CardAdapter {
 
     @Override
     public int getItemCount() {
-        return mAvailableListSize + mUsedListSize + mExpiredListSize;
+        int headerCount = 0;
+        if (mAvailableListIndex != -1) headerCount++;
+        if (mExpiredListIndex != -1) headerCount++;
+        if (mUsedListIndex != -1) headerCount++;
+        return mDataset.size() + headerCount;
     }
 
     @Override
@@ -167,31 +162,21 @@ public class MyCouponsAdapter extends CardAdapter {
 
     @Override
     protected int convertListPosToDataPos(int position) {
-        if (position < (mAvailableListSize + 1)) {
-            return position - 1;
-        } else if (position < (mAvailableListSize + mExpiredListSize + 2)) {
-            return position - 2;
-        } else {
-            return position - 3;
-        }
+
+        int headerCount = 0;
+
+        if (position > mAvailableListIndex && mAvailableListIndex != -1) headerCount++;
+        if (position > mExpiredListIndex && mExpiredListIndex != -1) headerCount++;
+        if (position > mUsedListIndex && mUsedListIndex != -1) headerCount++;
+
+        return position - headerCount;
     }
 
     private String getPositionHeader(int position) {
-        String availableStr = mFragmentActivity.getResources().getString(R.string.available);
-        String expiredStr = mFragmentActivity.getResources().getString(R.string.expired);
-        String usedStr = mFragmentActivity.getResources().getString(R.string.used);
-        if (position == 0) {
-            if (mAvailableListSize != 0) return availableStr;
-            else if (mExpiredListSize != 0) return expiredStr;
-            else return usedStr;
-        } else if (position == mAvailableListSize) {
-            if (mExpiredListSize != 0) return expiredStr;
-            else return usedStr;
-        } else if (position == mAvailableListSize + mExpiredListSize) {
-            if (mUsedListSize != 0) return usedStr;
-            else return usedStr;
-        }
-        return null;
+        if (position == mAvailableListIndex) return mFragmentActivity.getResources().getString(R.string.available);
+        else if (position == mExpiredListIndex) return mFragmentActivity.getResources().getString(R.string.expired);
+        else if (position == mUsedListIndex) return mFragmentActivity.getResources().getString(R.string.used);
+        else return null;
     }
 
 
