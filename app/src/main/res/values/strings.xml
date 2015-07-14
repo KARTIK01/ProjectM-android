@@ -81,7 +81,7 @@
     <string name="nav_text_more">More</string>
 
     <!-- Map -->
-    <string name="directions">DIRECTIONS</string>
+    <string name="directions">Directions</string>
     <string name="open_in_google_maps">Open in Google Maps</string>
 
     <!-- Buy Dialog -->

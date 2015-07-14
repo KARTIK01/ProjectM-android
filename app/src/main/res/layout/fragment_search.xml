@@ -56,10 +56,11 @@
                             android:layout_weight="1"
                             android:text="@string/recent_searches"
                             android:textColor="@color/defaultTextColor"
-                            android:textSize="17sp"/>
+                            android:textSize="17sp" />
 
                         <TextView
                             android:id="@+id/clearAll"
+                            android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/clear_all"
@@ -106,15 +107,23 @@
                 android:layout_height="match_parent"
                 android:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listResultRecyclerView"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingTop="@dimen/card_margin"
-                android:scrollbarStyle="outsideOverlay"
-                android:scrollbars="vertical"
-                android:background="@color/defaultLightGrayBg" />
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listResultRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingTop="@dimen/card_margin"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:scrollbars="vertical"
+                    android:background="@color/defaultLightGrayBg" />
+
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
             <LinearLayout
                 android:id="@+id/noResultLayout"
@@ -132,7 +141,7 @@
                     android:padding="30dp"
                     android:textStyle="bold"
                     android:textColor="@color/lighterGrayTextColor"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -141,12 +150,10 @@
                     android:text="@string/empty_search_msg"
                     android:textSize="17sp"
                     android:padding="30dp"
-                    android:textColor="@color/lighterGrayTextColor"/>
+                    android:textColor="@color/lighterGrayTextColor" />
             </LinearLayout>
 
         </FrameLayout>
-
-
 
 
         <include

@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by Nicky on 5/20/2015.
  */
-public class SearchActivity extends SwipeDismissActivity {
+public class SearchActivity extends BaseActivity {
 
     //temporary
     private String[] mRecentList = {"sushi", "spa", "Savory Steak House", "seafood", "steak"};
@@ -251,10 +251,10 @@ public class SearchActivity extends SwipeDismissActivity {
         return R.layout.activity_search;
     }
 
-    @Override
-    protected int getLayoutType() {
-        return LAYOUT_TYPE_DIALOG_SWIPE;
-    }
+//    @Override
+//    protected int getLayoutType() {
+//        return LAYOUT_TYPE_DIALOG_SWIPE;
+//    }
 
     @Override
     public void finish() {

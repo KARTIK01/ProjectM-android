@@ -1,6 +1,10 @@
 package com.mickledeals.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -73,5 +77,32 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 .title(mData.getStoreName())
                 .snippet(mData.mAddress)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.md_pin)));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 1, 0, R.string.directions)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.add(0, 2, 0, R.string.open_in_google_maps)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == 1) {
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("http://maps.google.com/maps?daddr=" + mData.mLatLng.replace(" ", "")));
+            startActivity(intent);
+        } else {
+            Uri gmmIntentUri = Uri.parse("geo:" + mData.mLatLng.replace(" ", "") + "?q=" + mData.mAddress.replace(" ", "+") + "&z=16");
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

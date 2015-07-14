@@ -12,7 +12,7 @@ import com.mickledeals.R;
  */
 public class AspectRatioImageView extends ImageView {
 
-    private float mRatio = 9f / 14;
+    private float mRatio = 9f / 14;//0.6428
 
     public AspectRatioImageView(Context context) {
         super(context);

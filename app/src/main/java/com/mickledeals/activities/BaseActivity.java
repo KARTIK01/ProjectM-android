@@ -44,6 +44,7 @@ public abstract class BaseActivity extends ActionBarActivity{
         if (layoutType == LAYOUT_TYPE_NORMAL) {
             setContentView(getLayoutResource());
         } else if (layoutType == LAYOUT_TYPE_FULLSCREEN_SWIPE) {
+            //this is for a simple screen with a scroll view
             setContentView(R.layout.activity_swipe_fullscreen_dismiss_base);
             getLayoutInflater().inflate(getLayoutResource(), (ViewGroup) findViewById(R.id.detailsScrollView), true);
         } else if (layoutType == LAYOUT_TYPE_DIALOG_SWIPE) {

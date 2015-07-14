@@ -1,7 +1,9 @@
 package com.mickledeals.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     private Spinner mCategorySpinner;
     protected Spinner mLocationSpinner;
     private Spinner mSortSpinner;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     protected RecyclerView mListResultRecyclerView;
     private ImageView mMapToggleView;
     private FrameLayout mMapContainer;
@@ -63,6 +66,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        setHasOptionsMenu(true);
         mLocationManager = LocationManager.getInstance(mContext);
         mLocationManager.registerCallback(this);
         mDataList = getDataList();
@@ -85,6 +89,16 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mCategorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
         mLocationSpinner = (Spinner) view.findViewById(R.id.locationSpinner);
         mSortSpinner = (Spinner) view.findViewById(R.id.sortSpinner);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.requestDisallowInterceptTouchEvent(false);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary1, R.color.colorPrimary4);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initiateRefresh();
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter;
         if (mCategorySpinner != null) {
@@ -387,4 +401,50 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     public abstract void setRecyclerView();
 
     public abstract String getNoResultToastMessage();
+
+
+
+    private void initiateRefresh() {
+        new DummyBackgroundTask().execute();
+    }
+
+    private void onRefreshComplete() {
+//        Log.i(LOG_TAG, "onRefreshComplete");
+//
+//        // Remove all items from the ListAdapter, and then replace them with the new items
+//        mListAdapter.clear();
+//        for (String cheese : result) {
+//            mListAdapter.add(cheese);
+//        }
+
+        // Stop the refreshing indicator
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private class DummyBackgroundTask extends AsyncTask<Void, Void, Void> {
+
+        static final int TASK_DURATION = 3 * 1000; // 3 seconds
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Sleep for a small amount of time to simulate a background-task
+            try {
+                Thread.sleep(TASK_DURATION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Return a new random list of cheeses
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            // Tell the Fragment that the refresh has completed
+            onRefreshComplete();
+        }
+
+    }
 }
