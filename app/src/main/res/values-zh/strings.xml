@@ -49,6 +49,7 @@
     <string name="buy_again">再買一次</string>
     <string name="redeem">兌換</string>
     <string name="deal_ended">優惠已結束</string>
+    <string name="no_my_coupons_msg">你還未有任何優惠券</string>
 
     <!-- Save -->
     <string name="empty_save_msg">請在任何優惠券按下星號以顯示在這收藏夾中</string>
@@ -171,6 +172,9 @@
     <string name="no_save">目前沒有儲存任何優惠券</string>
     <string name="cancel">取消</string>
     <string name="confirm">確認</string>
+    <string name="network_error_msg1">連接不到伺服器:(</string>
+    <string name="network_error_msg2">請檢查網絡後再重試 </string>
+    <string name="network_error_retry">按此重試 </string>
 
     <!-- Login -->
     <string name="or">或</string>

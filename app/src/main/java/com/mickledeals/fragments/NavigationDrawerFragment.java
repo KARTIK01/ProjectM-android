@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDLoginManager;
@@ -86,7 +87,6 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
         mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         mSelectableBgResId = outValue.resourceId;
 
-        Utils.loadMenuItems();
         selectItem(0);
     }
 
@@ -150,9 +150,9 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
 //        });
 
         mMenuContainer = (LinearLayout) view.findViewById(R.id.menuContainer);
-        for (int i = 0; i < Utils.sNavMenuList.size(); i++) {
+        for (int i = 0; i < MDApplication.sNavMenuList.size(); i++) {
             final int pos = i;
-            NavMenuItem item = Utils.sNavMenuList.get(i);
+            NavMenuItem item = MDApplication.sNavMenuList.get(i);
             if (item.getTitleRes() == 0) {
                 View divider = new View(mContext);
                 divider.setBackgroundColor(getResources().getColor(R.color.light_divider));

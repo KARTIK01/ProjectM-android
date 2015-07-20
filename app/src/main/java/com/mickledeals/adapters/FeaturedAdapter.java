@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.mickledeals.R;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.Utils;
 import com.mickledeals.views.MyLinearLayoutManager;
 import com.mickledeals.views.PagerIndicator;
 
@@ -51,7 +51,7 @@ public class FeaturedAdapter extends CardAdapter {
             ViewPager pager = (ViewPager) v.findViewById(R.id.featurePager);
             View pagerLayout = v.findViewById(R.id.pagerLayout);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) pagerLayout.getLayoutParams();
-            params.height = Utils.getDeviceWidth(mFragmentActivity) * 9 / 16;
+            params.height = MDApplication.sDeviceWidth * 9 / 16;
             pagerLayout.setLayoutParams(params);
             if (mFeatureSliderAdapter == null) {
                 mFeatureSliderAdapter = new FeatureSliderAdapter(mFragmentActivity,

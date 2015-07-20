@@ -21,7 +21,6 @@ import com.mickledeals.fragments.NavigationDrawerFragment;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.PreferenceHelper;
-import com.mickledeals.utils.Utils;
 
 
 public class HomeActivity extends BaseActivity
@@ -157,7 +156,7 @@ public class HomeActivity extends BaseActivity
     public void onNavigationDrawerItemSelected(int position) {
 
         DLog.d(this, "onNavigationDrawerItemSelected pos = " + position);
-        NavMenuItem item = Utils.sNavMenuList.get(position);
+        NavMenuItem item = MDApplication.sNavMenuList.get(position);
 
 
         Class navClass = item.getNavClass();

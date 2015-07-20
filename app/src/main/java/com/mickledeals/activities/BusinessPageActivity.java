@@ -60,7 +60,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mRoundedImageView = (RoundedImageView) findViewById(R.id.roundImageView);
         mShadow = findViewById(R.id.toolbarShadow);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRoundedImageView.getLayoutParams();
-        params.topMargin = Utils.getDeviceWidth(this) * 336 / 540 - Utils.getPixelsFromDip(50f, getResources());
+        params.topMargin = MDApplication.sDeviceWidth * 336 / 540 - Utils.getPixelsFromDip(50f, getResources());
         mRoundedImageView.setLayoutParams(params);
 
         mPhotoViewPager = (ViewPager) findViewById(R.id.photoViewPager);
@@ -147,7 +147,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
     }
 
     private void setToolBarTransparency(int scrollPos) {
-        final int headerHeight = Utils.getDeviceWidth(this) * 336 / 540;
+        final int headerHeight = MDApplication.sDeviceWidth * 336 / 540;
         final float ratio = (float) Math.min(Math.max(scrollPos, 0), headerHeight) / headerHeight;
         final int newAlpha = (int) (ratio * 255);
         mToolBar.getBackground().mutate().setAlpha(newAlpha);

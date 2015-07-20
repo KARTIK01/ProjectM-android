@@ -26,6 +26,7 @@ import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.activities.DetailsActivity;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.activities.SuccessDialogActivity;
@@ -173,7 +174,7 @@ public class DetailsFragment extends BaseFragment {
 
         mImageView = (ImageView) view.findViewById(R.id.imageView);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
-        params.height = Utils.getDeviceWidth(mContext) * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
+        params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
         mImageView.setLayoutParams(params);
         mImageView.setImageResource(mHolder.mImageResId);
         if (Build.VERSION.SDK_INT >= 21) {

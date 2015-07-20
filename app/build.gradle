@@ -32,4 +32,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:7.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.2.0'
     compile files('libs/PayPalAndroidSDK-2.9.7.jar')
+    compile project(':volley')
 }

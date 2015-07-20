@@ -1,5 +1,6 @@
 package com.mickledeals.adapters;
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,12 +34,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     protected FragmentActivity mFragmentActivity;
     protected Fragment mFragment;
     protected int mListType;
+    protected boolean mAnimate;
 
     private boolean mClickable = true;//to prevent multilpe click
 
     private AspectRatioImageView mDummpyImageView;
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
+
+        public View mCardView;
         public TextView mCardTitle;
         public TextView mCardDescription;
         public AspectRatioImageView mCardImage;
@@ -46,8 +52,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         public TextView mCardCity;
         public RelativeLayout mCardBaseLayout;
 
+
         public MainViewHolder(View v) {
             super(v);
+            mCardView = v.findViewById(R.id.card_view);
             mCardBaseLayout = (RelativeLayout) v.findViewById(R.id.card_base_layout);
             mCardImage = (AspectRatioImageView) v.findViewById(R.id.card_image);
             mCardDescription = (TextView) v.findViewById(R.id.card_description);
@@ -121,9 +129,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 //                viewholder.mCardView.setLayoutParams(params);
 //            }
 
-        position = convertListPosToDataPos(position);
+        final int newPos  = convertListPosToDataPos(position);
 
-        final TestDataHolder dataHolder = mDataset.get(position);
+        final TestDataHolder dataHolder = mDataset.get(newPos);
 
         if (holder.mCardBaseLayout != null)
             holder.mCardBaseLayout.removeView(mDummpyImageView);
@@ -165,6 +173,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                         }
                     }
                     PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
+
+                    if (mListType == Constants.TYPE_SAVED_LIST && !dataHolder.mSaved) {
+                        //confirm dialog
+                        //remove from recycler view
+                        mDataset.remove(newPos);
+                        notifyItemRemoved(newPos);
+                    }
                 }
             });
         }
@@ -180,6 +195,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                 holder.mCardDist.setText(dist + " mi");
             }
         }
+        setAnimation(holder.mCardView);
     }
 
     @Override
@@ -190,5 +206,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
     protected int convertListPosToDataPos(int position) {
         return position;
+    }
+
+
+    public void setPendingAnimated() {
+        mAnimate = true;
+    }
+
+    private void setAnimation(View viewToAnimate)
+    {
+        if (mAnimate)
+        {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAnimate = false;
+                }
+            }, 200);
+            Animation animation = AnimationUtils.loadAnimation(mFragmentActivity, R.anim.card_layout_enter_anim);
+            viewToAnimate.startAnimation(animation);
+        }
     }
 }

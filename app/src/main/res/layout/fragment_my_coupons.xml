@@ -13,9 +13,25 @@
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical" />
 
-    <View
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/toolbar_shadow" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/no_my_coupons_msg"
+        android:textSize="19sp"
+        android:padding="30dp"
+        android:textColor="@color/lighterGrayTextColor" />
+
+    <ViewStub
+        android:id="@+id/noNetworkStub"
+        android:layout="@layout/no_network_layout"
+        android:inflatedId="@+id/noNetworkLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/toolbarShadow"
+        layout="@layout/toolbar_shadow"
+        />
 
 </FrameLayout>

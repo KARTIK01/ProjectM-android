@@ -3,7 +3,6 @@ package com.mickledeals.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,14 +25,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.mickledeals.R;
 import com.mickledeals.activities.DetailsActivity;
-import com.mickledeals.activities.NotificationActivity;
-import com.mickledeals.activities.PaymentActivity;
-import com.mickledeals.activities.SettingsActivity;
-import com.mickledeals.bean.NavMenuItem;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.fragments.HomeFragment;
-import com.mickledeals.fragments.MyCouponsFragment;
-import com.mickledeals.fragments.SavedCouponsFragment;
 import com.mickledeals.tests.TestDataHolder;
 
 import java.io.File;
@@ -42,83 +34,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Nicky on 11/28/2014.
  */
 public class Utils {
 
-    public static ArrayList<NavMenuItem> sNavMenuList = new ArrayList<NavMenuItem>();
-    private static int sDeviceWidth;
-    private static int sDeviceHeight;
-    public static Locale mCurrentLocale = Locale.ENGLISH;
-
-    public static void loadMenuItems() {
-        sNavMenuList.clear();
-        sNavMenuList.add(new NavMenuItem(HomeFragment.class, R.string.menu_home, R.drawable.ic_home));
-        sNavMenuList.add(new NavMenuItem(MyCouponsFragment.class, R.string.menu_my_deals, R.drawable.ic_coupons));
-        sNavMenuList.add(new NavMenuItem(SavedCouponsFragment.class, R.string.menu_saved_deals, R.drawable.ic_save));
-//        sNavMenuList.add(new NavMenuItem(RandomCouponsFragment.class, R.string.menu_random, R.drawable.ic_random));
-        sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
-        sNavMenuList.add(new NavMenuItem(NotificationActivity.class, R.string.menu_notification, R.drawable.ic_bell));
-        sNavMenuList.add(new NavMenuItem(PaymentActivity.class, R.string.menu_account, R.drawable.ic_payment));
-//        sNavMenuList.add(new NavMenuItem(RedeemActivity.class, R.string.menu_redeem, R.drawable.ic_gift));
-        sNavMenuList.add(new NavMenuItem(SettingsActivity.class, R.string.menu_settings, R.drawable.ic_setting));
-        sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_faq, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_promote, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_feedback, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_rate, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_about, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_terms, 0));
-    }
-
-    public static int getDeviceWidth(Context context) {
-        if (sDeviceWidth == 0) {
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            sDeviceWidth = displayMetrics.widthPixels;
-        }
-        return sDeviceWidth;
-    }
-
-    public static int getDeviceHeight(Context context) {
-        if (sDeviceHeight == 0) {
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-            sDeviceHeight = displayMetrics.heightPixels;
-        }
-        return sDeviceHeight;
-    }
-
     public static int getPixelsFromDip(float dips, Resources res) {
-        return Math.round(dips * res.getDisplayMetrics().density);
+        return Math.round(dips * MDApplication.sDeviceDensity);
     }
 
     public static float getDipFromPixels(int pixel, Resources res) {
-        return pixel / res.getDisplayMetrics().density;
+        return pixel / MDApplication.sDeviceDensity;
     }
 
     public static boolean isChineseLocale() {
-        return Utils.mCurrentLocale.getLanguage().equals("zh");
-    }
-
-    public static void setLocaleWithLang(int language, Context context) {
-
-        if (language == Constants.LANG_ENG) {
-            mCurrentLocale = Locale.ENGLISH;
-        } else if (language == Constants.LANG_CHT) {
-            mCurrentLocale = Locale.CHINESE;
-        } else { //use default locale
-            mCurrentLocale = Locale.getDefault();
-            return;
-        }
-        Configuration config = new Configuration();
-        config.locale = mCurrentLocale;
-        context.getResources().updateConfiguration(config,
-                context.getResources().getDisplayMetrics());
+        return MDApplication.sCurrentLocale.getLanguage().equals("zh");
     }
 
     public static List<TestDataHolder> getListFromType(int listType) {
@@ -234,7 +167,7 @@ public class Utils {
 
         Context context = rootLayout.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        int maxWidth = Utils.getDeviceWidth(context) - context.getResources().getDimensionPixelSize(R.dimen.suggestion_card_left_padding);
+        int maxWidth = MDApplication.sDeviceWidth - context.getResources().getDimensionPixelSize(R.dimen.suggestion_card_left_padding);
         int widthSoFar = 0;
         boolean isFirstTime = true;
         LinearLayout subLL = null;
@@ -285,7 +218,7 @@ public class Utils {
         v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-        Bitmap bitmap = Bitmap.createBitmap(Utils.getDeviceWidth(activity), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(MDApplication.sDeviceWidth, v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bitmap);
         v.draw(c);
         File file = Utils.getImageFileLocation();

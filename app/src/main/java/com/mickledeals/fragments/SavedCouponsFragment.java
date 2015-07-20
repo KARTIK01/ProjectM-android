@@ -1,6 +1,7 @@
 package com.mickledeals.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,7 +31,12 @@ public class SavedCouponsFragment extends ListResultBaseFragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sendUpdateRequest();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                sendRequest();
+            }
+        });
     }
 
     public List<TestDataHolder> getDataList() {
@@ -51,7 +57,7 @@ public class SavedCouponsFragment extends ListResultBaseFragment{
         return R.layout.fragment_saved_deals;
     }
 
-    public String getNoResultToastMessage() {
+    public String getNoResultMessage() {
         return getString(R.string.no_results_found) + " " + getString(R.string.try_different_filter);
     }
 

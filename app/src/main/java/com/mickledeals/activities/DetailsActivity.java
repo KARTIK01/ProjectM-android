@@ -146,7 +146,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
 
 
     private void setToolBarTransparency(int scrollPos) {
-        final int headerHeight = Utils.getDeviceWidth(DetailsActivity.this) * 9 / 16;
+        final int headerHeight = MDApplication.sDeviceWidth * 9 / 16;
         final float ratio = (float) Math.min(Math.max(scrollPos, 0), headerHeight) / headerHeight;
         final int newAlpha = (int) (ratio * 255);
         mToolBar.getBackground().mutate().setAlpha(newAlpha);

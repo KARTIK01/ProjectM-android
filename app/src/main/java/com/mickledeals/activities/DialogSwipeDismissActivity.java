@@ -58,7 +58,7 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
         colorAnimation.start();
         if (useTranslateAnim()) {
             final Animation transAnim = AnimationUtils.loadAnimation(this,
-                    R.anim.translate_anim);
+                    R.anim.dialog_enter_anim);
             findViewById(R.id.dialogContainer).startAnimation(transAnim);
         }
     }

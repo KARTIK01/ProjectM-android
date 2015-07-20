@@ -1,1 +1,1 @@
-include ':app', ':library', ':facebook'
+include ':app', ':library', ':facebook', ':volley'

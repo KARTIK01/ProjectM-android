@@ -200,7 +200,7 @@ public class SearchActivity extends BaseActivity {
 
         Context context = rootLayout.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        int maxWidth = Utils.getDeviceWidth(context) - context.getResources().getDimensionPixelSize(R.dimen.suggestion_card_left_padding);;
+        int maxWidth = MDApplication.sDeviceWidth - context.getResources().getDimensionPixelSize(R.dimen.suggestion_card_left_padding);;
         int widthSoFar = 0;
         boolean isFirstTime = true;
         LinearLayout subLL = null;

@@ -1,6 +1,5 @@
 package com.mickledeals.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -28,10 +29,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
+import com.mickledeals.activities.MDApplication;
+import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.LocationManager;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.Utils;
 
 import java.util.HashMap;
@@ -96,7 +100,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initiateRefresh();
+                sendRequest();
             }
         });
 
@@ -287,8 +291,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
             if (anim)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, Utils.getPixelsFromDip(50f, getResources())));
             else
-                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, Utils.getDeviceWidth(mContext),
-                        Utils.getDeviceHeight(mContext) - Utils.getPixelsFromDip(56 + 48, mContext.getResources()), Utils.getPixelsFromDip(50f, getResources())));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, MDApplication.sDeviceWidth,
+                        MDApplication.sDeviceHeight - Utils.getPixelsFromDip(56 + 48, mContext.getResources()), Utils.getPixelsFromDip(50f, getResources())));
         }
     }
 
@@ -299,7 +303,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         DLog.d(this, "onItemSelected");
-        sendUpdateRequest();
+        sendRequest();
     }
 
     @Override
@@ -308,44 +312,65 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     }
 
 
-    public void sendUpdateRequest() {
-        mNeedPopularMapOverlays = true;
-        List<TestDataHolder> temporaryDataList = getTemporaryDataList();
-        mDataList.clear();
+    public void sendRequest() {
 
-        //call api
-        //temporrary
-        for (int i = 0; i < temporaryDataList.size(); i++) {
-            boolean matchCategory = false;
-            boolean matchLocation = false;
-            TestDataHolder holder = temporaryDataList.get(i);
-            int categoryPos = 0;
-            if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
-            if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
-                matchCategory = true;
+        mSwipeRefreshLayout.setRefreshing(true);
+        MDApiManager.sendStringRequest(getRequestURL(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                mNeedPopularMapOverlays = true;
+                List<TestDataHolder> temporaryDataList = getTemporaryDataList();
+                mDataList.clear();
+
+                //call api
+                //temporrary
+                for (int i = 0; i < temporaryDataList.size(); i++) {
+                    boolean matchCategory = false;
+                    boolean matchLocation = false;
+                    TestDataHolder holder = temporaryDataList.get(i);
+                    int categoryPos = 0;
+                    if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
+                    if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
+                        matchCategory = true;
+                    }
+                    int locationPos = mLocationSpinner.getSelectedItemPosition();
+                    String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
+                    String[] addrToken = holder.mAddress.split(",");
+                    String cityName = addrToken[addrToken.length - 1].trim();
+                    if (locationPos == 0 || cityName.equals(targetCityName)) {
+                        matchLocation = true;
+                    }
+                    if (matchCategory && matchLocation) {
+                        mDataList.add(holder);
+                    }
+                }
+                mListResultRecyclerView.getAdapter().notifyDataSetChanged();
+                ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
+                if (mDataList.size() == 0) {
+                    if (mMapContainer.getVisibility() == View.VISIBLE) {
+                        Toast.makeText(mContext, getNoResultMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        mNoResultLayout.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    mNoResultLayout.setVisibility(View.GONE);
+                }
+                if (mMapContainer.getVisibility() == View.VISIBLE) populateMapOverlays(true);
+
+
+
+                onRefreshComplete();
             }
-            int locationPos = mLocationSpinner.getSelectedItemPosition();
-            String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
-            String[] addrToken = holder.mAddress.split(",");
-            String cityName = addrToken[addrToken.length - 1].trim();
-            if (locationPos == 0 || cityName.equals(targetCityName)) {
-                matchLocation = true;
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onRefreshComplete();
             }
-            if (matchCategory && matchLocation) {
-                mDataList.add(holder);
-            }
-        }
-        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
-        if (mDataList.size() == 0) {
-            if (mMapContainer.getVisibility() == View.VISIBLE) {
-                Toast.makeText(mContext, getNoResultToastMessage(), Toast.LENGTH_LONG).show();
-            } else {
-                mNoResultLayout.setVisibility(View.VISIBLE);
-            }
-        } else {
-            mNoResultLayout.setVisibility(View.GONE);
-        }
-        if (mMapContainer.getVisibility() == View.VISIBLE) populateMapOverlays(true);
+        });
+
+
     }
 
     @Override
@@ -371,7 +396,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     @Override
     public void onConnected() {
-        sendUpdateRequest();
+        sendRequest();
     }
 
     public void onConnectionFailed() {
@@ -400,15 +425,15 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     public abstract void setRecyclerView();
 
-    public abstract String getNoResultToastMessage();
+    public abstract String getNoResultMessage();
 
 
 
-    private void initiateRefresh() {
-        new DummyBackgroundTask().execute();
+    protected String getRequestURL() {
+        return "http://www.cycon.com.mo/cafe_version_update.txt";
     }
 
-    private void onRefreshComplete() {
+    protected void onRefreshComplete() {
 //        Log.i(LOG_TAG, "onRefreshComplete");
 //
 //        // Remove all items from the ListAdapter, and then replace them with the new items
@@ -419,32 +444,6 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
         // Stop the refreshing indicator
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    private class DummyBackgroundTask extends AsyncTask<Void, Void, Void> {
-
-        static final int TASK_DURATION = 3 * 1000; // 3 seconds
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // Sleep for a small amount of time to simulate a background-task
-            try {
-                Thread.sleep(TASK_DURATION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Return a new random list of cheeses
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            // Tell the Fragment that the refresh has completed
-            onRefreshComplete();
-        }
 
     }
 }

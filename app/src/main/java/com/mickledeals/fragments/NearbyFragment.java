@@ -46,7 +46,7 @@ public class NearbyFragment extends ListResultBaseFragment {
         return R.layout.fragment_nearby;
     }
 
-    public String getNoResultToastMessage() {
+    public String getNoResultMessage() {
         return getString(R.string.no_results_found) + " " + getString(R.string.try_different_filter);
     }
 
@@ -69,5 +69,10 @@ public class NearbyFragment extends ListResultBaseFragment {
                 outRect.bottom = bottomMargin;
             }
         });
+    }
+
+    @Override
+    protected void onRefreshComplete() {
+        super.onRefreshComplete();
     }
 }

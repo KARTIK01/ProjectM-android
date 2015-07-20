@@ -11,7 +11,6 @@ import com.mickledeals.R;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
-import com.mickledeals.utils.Utils;
 
 import java.util.Locale;
 
@@ -39,7 +38,7 @@ public class SettingsActivity extends SwipeDismissActivity {
         setLoginBtnState();
 
         mLanguageText = (TextView) findViewById(R.id.languageText);
-        if (Utils.mCurrentLocale.getLanguage().equals("zh")) language = Constants.LANG_CHT;
+        if (MDApplication.sCurrentLocale.getLanguage().equals("zh")) language = Constants.LANG_CHT;
         mLanguageText.setText(getResources().getStringArray(R.array.language_list)[language]);
     }
 
@@ -69,7 +68,7 @@ public class SettingsActivity extends SwipeDismissActivity {
                         }
                         mLanguageText.setText(getResources().getStringArray(R.array.language_list)[which]);
                         language = which;
-                        Utils.setLocaleWithLang(which, SettingsActivity.this.getBaseContext());
+//                        MDApplication.initLocale();
                         dialog.dismiss();
                         Intent i = new Intent(SettingsActivity.this, HomeActivity.class);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

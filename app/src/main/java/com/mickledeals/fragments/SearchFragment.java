@@ -56,7 +56,7 @@ public class SearchFragment extends ListResultBaseFragment{
             mTemporaryList.add(DataListModel.getInstance().getDataList().get(2));
             mTemporaryList.add(DataListModel.getInstance().getDataList().get(11));
         }
-        sendUpdateRequest();
+        sendRequest();
     }
 
     public List<TestDataHolder> getDataList() {
@@ -72,7 +72,7 @@ public class SearchFragment extends ListResultBaseFragment{
         return R.layout.fragment_search;
     }
 
-    public String getNoResultToastMessage() {
+    public String getNoResultMessage() {
         return mNoResultMsg.getText().toString();
     }
 
