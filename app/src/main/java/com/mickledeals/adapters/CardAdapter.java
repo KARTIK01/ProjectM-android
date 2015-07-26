@@ -18,7 +18,7 @@ import com.mickledeals.R;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.LocationManager;
+import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.AspectRatioImageView;
@@ -188,14 +188,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         }
         if (holder.mCardDist != null) {
             holder.mCardDist.setVisibility(View.VISIBLE);
-            float dist = LocationManager.getInstance(mFragmentActivity).getDistanceFromCurLocation(dataHolder);
+            float dist = MDLocationManager.getInstance(mFragmentActivity).getDistanceFromCurLocation(dataHolder);
             if (dist < 0) {
                 holder.mCardDist.setVisibility(View.GONE);
             } else {
                 holder.mCardDist.setText(dist + " mi");
             }
         }
-        setAnimation(holder.mCardView);
+        setAnimation(holder.mCardView, position);
     }
 
     @Override
@@ -211,19 +211,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
     public void setPendingAnimated() {
         mAnimate = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAnimate = false;
+            }
+        }, 200);
     }
 
-    private void setAnimation(View viewToAnimate)
+    protected void setAnimation(View viewToAnimate, int pos)
     {
-        if (mAnimate)
-        {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mAnimate = false;
-                }
-            }, 200);
+        if (mAnimate) {
             Animation animation = AnimationUtils.loadAnimation(mFragmentActivity, R.anim.card_layout_enter_anim);
+            if (mListType == Constants.TYPE_NEARBY_LIST) {
+                animation.setStartOffset(pos / 2 * 2 * 70);
+            } else if (mListType == Constants.TYPE_BEST_LIST) {
+                animation.setStartOffset((pos + 3)* 50 ); //add 3 for header offset
+            } else {
+                animation.setStartOffset(pos * 50);
+            }
             viewToAnimate.startAnimation(animation);
         }
     }

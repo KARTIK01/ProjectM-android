@@ -20,7 +20,9 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class SearchFragment extends ListResultBaseFragment{
+public class SearchFragment extends ListMapBaseFragment {
+
+    private String mSearchStr;
 
     private TextView mNoResultMsg;
     //temporary
@@ -56,7 +58,15 @@ public class SearchFragment extends ListResultBaseFragment{
             mTemporaryList.add(DataListModel.getInstance().getDataList().get(2));
             mTemporaryList.add(DataListModel.getInstance().getDataList().get(11));
         }
+        mSearchStr = str;
         sendRequest();
+    }
+
+    @Override
+    public void sendRequest() {
+        if (mSearchStr == null) return;
+
+        super.sendRequest();
     }
 
     public List<TestDataHolder> getDataList() {

@@ -12,29 +12,29 @@ import com.mickledeals.tests.TestDataHolder;
 /**
  * Created by Nicky on 5/18/2015.
  */
-public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class MDLocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public static interface LocationConnectionCallback {
-        void onConnected();
+        void onUpdateLocation(Location lastLocation);
+
         void onConnectionFailed();
     }
 
     private Context mContext;
     private LocationConnectionCallback mCallback;
-    private static LocationManager sManager;
+    private static MDLocationManager sManager;
     private Location mLastLocation;
-//    private boolean isConnecting;
 
     private GoogleApiClient mGoogleApiClient;
 
-    private LocationManager(Context context) {
+    private MDLocationManager(Context context) {
         mContext = context;
         buildGoogleApiClient();
     }
 
-    public static LocationManager getInstance(Context context) {
+    public static MDLocationManager getInstance(Context context) {
         if (sManager == null) {
-            sManager = new LocationManager(context);
+            sManager = new MDLocationManager(context);
         }
         return sManager;
     }
@@ -44,12 +44,27 @@ public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, Go
     }
 
     public Location getLastLocation() {
-        //adding this logic may not be needed and could be error prone
-//        if (mLastLocation == null && !isConnecting) {
-//            isConnecting = true;
-//            connect();
-//        }
         return mLastLocation;
+    }
+
+    public void requestUpdateLocation(LocationConnectionCallback callback) {
+        mCallback = callback;
+        updateLocationAndSendCallback();
+    }
+
+    private void updateLocationAndSendCallback() {
+        Location location = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (location != null) {
+            mLastLocation = location;
+            if (mCallback != null) mCallback.onUpdateLocation(mLastLocation);
+            mCallback = null; //need to set it to null otherwise it will keep calling sendRequest
+        } else if (!mGoogleApiClient.isConnected()) {
+            connect();
+        } else {
+            if (mCallback != null) mCallback.onConnectionFailed();
+            mCallback = null;
+        }
     }
 
     public float getDistanceFromCurLocation(TestDataHolder holder) {
@@ -74,28 +89,28 @@ public class LocationManager implements  GoogleApiClient.ConnectionCallbacks, Go
     @Override
     public void onConnected(Bundle bundle) {
         DLog.d(this, "onConnected");
-//        isConnecting = false;
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mCallback != null) mCallback.onConnected();
+        updateLocationAndSendCallback();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         DLog.d(this, "onConnectionFailed");
-//        isConnecting = false;
         if (mCallback != null) mCallback.onConnectionFailed();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         DLog.d(this, "onConnectionSuspended");
-//        isConnecting = false;
         if (mCallback != null) mCallback.onConnectionFailed();
     }
 
     public void connect() {
-        mGoogleApiClient.connect();
+        DLog.d(this, "connect");
+        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
+
+            DLog.d(this, "real connect");
+            mGoogleApiClient.connect();
+        }
     }
 
     public void disconnect() {

@@ -2,6 +2,7 @@ package com.mickledeals.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -247,6 +249,20 @@ public class Utils {
                 Uri.fromFile(file));
         shareIntent.setType("image/*");
         activity.startActivity(Intent.createChooser(shareIntent, activity.getResources().getText(R.string.share_to)));
+    }
+
+    public static void showRetryDialog(Context context) {
+        new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                .setTitle(R.string.network_error_title)
+                .setMessage(R.string.network_error_msg)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
     }
 
 

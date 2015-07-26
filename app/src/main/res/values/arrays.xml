@@ -20,7 +20,7 @@
     <string-array name="sort_options">
         <item>Sort by Distance</item>
         <item>Sort by Date Added</item>
-        <item>Random</item>
+        <item>Sort Randomly</item>
     </string-array>
     <string-array name="language_list">
         <item>English</item>

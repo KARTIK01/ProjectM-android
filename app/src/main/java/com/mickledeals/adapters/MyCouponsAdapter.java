@@ -99,6 +99,7 @@ public class MyCouponsAdapter extends CardAdapter {
         if (headerStr != null) {
             HeaderViewHolder hvh = (HeaderViewHolder)holder;
             hvh.mHeaderText.setText(headerStr);
+            setAnimation(hvh.mHeaderText, position);
         } else {
             super.onBindViewHolder(holder, position);
 

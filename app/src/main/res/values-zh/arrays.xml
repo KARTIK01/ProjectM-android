@@ -8,7 +8,7 @@
         <item>服務行業</item>
     </string-array>
     <string-array name="city_name">
-        <item>目前位置</item>
+        <item>所有地區</item>
         <item>San Francisco</item>
         <item>Daly City</item>
         <item>South San Francisco</item>
@@ -21,7 +21,7 @@
     <string-array name="sort_options">
         <item>按距離排序</item>
         <item>按日期排序</item>
-        <item>隨機顯示</item>
+        <item>隨機排序</item>
     </string-array>
 
     <string-array name="hot_list">

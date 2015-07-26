@@ -27,6 +27,7 @@ public class FeaturedAdapter extends CardAdapter {
     private static final int TYPE_TOP_SECTION = 0;
     private static final int TYPE_BEST_COUPONS = 1;
     private FeatureSliderAdapter mFeatureSliderAdapter;
+    private ViewGroup mTopSectionLayout;
 
     public static class HeaderViewHolder extends CardAdapter.MainViewHolder {
         public HeaderViewHolder(View v) {
@@ -48,6 +49,7 @@ public class FeaturedAdapter extends CardAdapter {
         } else if (viewType == TYPE_TOP_SECTION) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.featured_top_section, parent, false);
+            mTopSectionLayout = (ViewGroup)v;
             ViewPager pager = (ViewPager) v.findViewById(R.id.featurePager);
             View pagerLayout = v.findViewById(R.id.pagerLayout);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) pagerLayout.getLayoutParams();
@@ -77,7 +79,12 @@ public class FeaturedAdapter extends CardAdapter {
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        if (isPositionHeader(position)) return;
+        if (isPositionHeader(position)) {
+            for (int i = 0; i < mTopSectionLayout.getChildCount(); i++) {
+                setAnimation(mTopSectionLayout.getChildAt(i), i - 3);
+            }
+            return;
+        }
         super.onBindViewHolder(holder, position);
     }
 

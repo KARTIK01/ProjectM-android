@@ -1,12 +1,11 @@
 package com.mickledeals.fragments;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -15,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -30,12 +27,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
-import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
-import com.mickledeals.utils.LocationManager;
-import com.mickledeals.utils.MDApiManager;
+import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.Utils;
 
 import java.util.HashMap;
@@ -44,16 +39,13 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public abstract class ListResultBaseFragment extends BaseFragment implements AdapterView.OnItemSelectedListener,
-        LocationManager.LocationConnectionCallback {
+public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment implements AdapterView.OnItemSelectedListener {
 
     private static final double LAT_DEFAULT = 37.752814;
     private static final double LONG_DEFAULT = -122.440690;
     private Spinner mCategorySpinner;
     protected Spinner mLocationSpinner;
-    private Spinner mSortSpinner;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    protected RecyclerView mListResultRecyclerView;
+    protected Spinner mSortSpinner;
     private ImageView mMapToggleView;
     private FrameLayout mMapContainer;
     private MapView mMapView;
@@ -61,30 +53,26 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
     private BitmapDescriptor mPinBitmap;
     protected List<TestDataHolder> mDataList;
-    private View mNoResultLayout;
     private boolean mNeedPopularMapOverlays;
 
-    protected LocationManager mLocationManager;
+    protected View mNoLocationLayout;
+    protected ViewStub mNoLocationStub;
+    protected MDLocationManager mLocationManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 //        setHasOptionsMenu(true);
-        mLocationManager = LocationManager.getInstance(mContext);
-        mLocationManager.registerCallback(this);
+        mLocationManager = MDLocationManager.getInstance(mContext);
+        mLocationManager.connect();
         mDataList = getDataList();
+//        sendRequest(); //cannot send request here, otherwise no refresh dialog
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        DLog.d(this, "onCreateView");
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                getFragmentLayoutRes(), container, false);
-
-        return rootView;
+    protected boolean isSortByLocation() {
+        if (mSortSpinner == null) return true;
+        return mSortSpinner.getSelectedItemPosition() == 0;
     }
 
     @Override
@@ -93,16 +81,6 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mCategorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
         mLocationSpinner = (Spinner) view.findViewById(R.id.locationSpinner);
         mSortSpinner = (Spinner) view.findViewById(R.id.sortSpinner);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.requestDisallowInterceptTouchEvent(false);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary1, R.color.colorPrimary4);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                sendRequest();
-            }
-        });
 
         ArrayAdapter<CharSequence> adapter;
         if (mCategorySpinner != null) {
@@ -114,7 +92,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
                 @Override
                 public void run() {
                     //prevent onitem listener get called
-                    mCategorySpinner.setOnItemSelectedListener(ListResultBaseFragment.this);
+                    mCategorySpinner.setOnItemSelectedListener(ListMapBaseFragment.this);
                 }
             });
         }
@@ -126,7 +104,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mLocationSpinner.post(new Runnable() {
             @Override
             public void run() {
-                mLocationSpinner.setOnItemSelectedListener(ListResultBaseFragment.this);
+                mLocationSpinner.setOnItemSelectedListener(ListMapBaseFragment.this);
             }
         });
         if (mSortSpinner != null) {
@@ -142,13 +120,10 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mSortSpinner.post(new Runnable() {
             @Override
             public void run() {
-                mSortSpinner.setOnItemSelectedListener(ListResultBaseFragment.this);
+                mSortSpinner.setOnItemSelectedListener(ListMapBaseFragment.this);
             }
         });
 
-        mListResultRecyclerView = (RecyclerView) view.findViewById(R.id.listResultRecyclerView);
-        setRecyclerView();
-        mNoResultLayout = view.findViewById(R.id.noResultLayout);
         mMapContainer = (FrameLayout) view.findViewById(R.id.mapContainer);
         mMapToggleView = (ImageView) view.findViewById(R.id.mapToggleView);
         mMapToggleView.setOnClickListener(new View.OnClickListener() {
@@ -162,6 +137,8 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
                 }
             }
         });
+
+        mNoLocationStub = (ViewStub) view.findViewById(R.id.noLocationStub);
     }
 
     @Override
@@ -190,7 +167,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
         mListResultRecyclerView.setVisibility(View.VISIBLE);
         mMapContainer.setVisibility(View.GONE);
         mMapContainer.removeView(mMapView);
-        if (mDataList.size() == 0) {
+        if (mDataList.size() == 0 && !(mNoNetworkLayout != null && mNoNetworkLayout.isShown())) {
             mNoResultLayout.setVisibility(View.VISIBLE);
         }
         if (mMapView != null) mMapView.onPause();
@@ -293,6 +270,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
             else
                 mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, MDApplication.sDeviceWidth,
                         MDApplication.sDeviceHeight - Utils.getPixelsFromDip(56 + 48, mContext.getResources()), Utils.getPixelsFromDip(50f, getResources())));
+            //action bar height + map panel height
         }
     }
 
@@ -311,65 +289,115 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     }
 
-
+    @Override
     public void sendRequest() {
+        DLog.d(this, "sendRequest");
+        if (mNoLocationLayout != null) mNoLocationLayout.setVisibility(View.GONE);
+        if (isSortByLocation()) {
 
-        mSwipeRefreshLayout.setRefreshing(true);
-        MDApiManager.sendStringRequest(getRequestURL(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-
-                mNeedPopularMapOverlays = true;
-                List<TestDataHolder> temporaryDataList = getTemporaryDataList();
-                mDataList.clear();
-
-                //call api
-                //temporrary
-                for (int i = 0; i < temporaryDataList.size(); i++) {
-                    boolean matchCategory = false;
-                    boolean matchLocation = false;
-                    TestDataHolder holder = temporaryDataList.get(i);
-                    int categoryPos = 0;
-                    if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
-                    if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
-                        matchCategory = true;
-                    }
-                    int locationPos = mLocationSpinner.getSelectedItemPosition();
-                    String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
-                    String[] addrToken = holder.mAddress.split(",");
-                    String cityName = addrToken[addrToken.length - 1].trim();
-                    if (locationPos == 0 || cityName.equals(targetCityName)) {
-                        matchLocation = true;
-                    }
-                    if (matchCategory && matchLocation) {
-                        mDataList.add(holder);
-                    }
+            mLocationManager.requestUpdateLocation(new MDLocationManager.LocationConnectionCallback() {
+                @Override
+                public void onUpdateLocation(Location lastLocation) {
+                    DLog.d(this, "onUpdateLocation");
+                    ListMapBaseFragment.super.sendRequest();
                 }
-                mListResultRecyclerView.getAdapter().notifyDataSetChanged();
-                ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
-                if (mDataList.size() == 0) {
-                    if (mMapContainer.getVisibility() == View.VISIBLE) {
-                        Toast.makeText(mContext, getNoResultMessage(), Toast.LENGTH_LONG).show();
-                    } else {
-                        mNoResultLayout.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    mNoResultLayout.setVisibility(View.GONE);
+
+                @Override
+                public void onConnectionFailed() {
+                    DLog.d(this, "onConnectionFailed");
+                    inflateNoLocationLayout();
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
-                if (mMapContainer.getVisibility() == View.VISIBLE) populateMapOverlays(true);
+            });
 
+        } else {
+            super.sendRequest();
+        }
+    }
 
+    private void inflateNoLocationLayout() {
 
-                onRefreshComplete();
-            }
-        }, new Response.ErrorListener() {
+        if (mNoLocationLayout == null) mNoLocationLayout = mNoLocationStub.inflate();
+        mNoLocationLayout.setVisibility(View.VISIBLE);
+
+        mNoLocationLayout.findViewById(R.id.locationErrorRetry).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                onRefreshComplete();
+            public void onClick(View v) {
+                sendRequest();
             }
         });
+        mNoLocationLayout.findViewById(R.id.locationErrorOpenSettings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent locationIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(locationIntent);
+            }
+        });
+        mNoLocationLayout.findViewById(R.id.locationErrorSortDate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSortSpinner.setSelection(1);
+//                sendRequest();
+            }
+        });
+        mNoLocationLayout.findViewById(R.id.locationErrorSortRandom).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSortSpinner.setSelection(2);
+//                sendRequest();
+            }
+        });
+    }
 
+    public String getRequestURL() {
+
+        if (isSortByLocation()) {
+            Location location = mLocationManager.getLastLocation();
+        }
+
+        return "http://www.cycon.com.mo/cafe_version_update.txt";
+    }
+
+
+    @Override
+    public void onSuccessResponse() {
+        super.onSuccessResponse();
+
+        mNeedPopularMapOverlays = true;
+        List<TestDataHolder> temporaryDataList = getTemporaryDataList();
+        mDataList.clear();
+
+        //temporrary
+        for (int i = 0; i < temporaryDataList.size(); i++) {
+            boolean matchCategory = false;
+            boolean matchLocation = false;
+            TestDataHolder holder = temporaryDataList.get(i);
+            int categoryPos = 0;
+            if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
+            if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
+                matchCategory = true;
+            }
+            int locationPos = mLocationSpinner.getSelectedItemPosition();
+            String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
+            String[] addrToken = holder.mAddress.split(",");
+            String cityName = addrToken[addrToken.length - 1].trim();
+            if (locationPos == 0 || cityName.equals(targetCityName)) {
+                matchLocation = true;
+            }
+            if (matchCategory && matchLocation) {
+                mDataList.add(holder);
+            }
+        }
+        if (mDataList.size() == 0) {
+            if (mMapContainer.getVisibility() == View.VISIBLE) {
+                Toast.makeText(mContext, getNoResultMessage(), Toast.LENGTH_LONG).show();
+            } else {
+                mNoResultLayout.setVisibility(View.VISIBLE);
+            }
+        } else {
+            mNoResultLayout.setVisibility(View.GONE);
+        }
+        if (mMapContainer.getVisibility() == View.VISIBLE) populateMapOverlays(true);
 
     }
 
@@ -395,19 +423,11 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
     }
 
     @Override
-    public void onConnected() {
-        sendRequest();
-    }
-
-    public void onConnectionFailed() {
-    }
-
-    @Override
     public void onStart() { // this is actually the same lifecycle as its activity
         super.onStart();
         DLog.d(this, "onStart");
         //no need get location here, going back to activity(onstart) should not request another update
-//        mLocationManager.connect();
+        mLocationManager.connect();
     }
 
     @Override
@@ -421,29 +441,7 @@ public abstract class ListResultBaseFragment extends BaseFragment implements Ada
 
     public abstract List<TestDataHolder> getTemporaryDataList();
 
-    public abstract int getFragmentLayoutRes();
-
-    public abstract void setRecyclerView();
-
     public abstract String getNoResultMessage();
 
 
-
-    protected String getRequestURL() {
-        return "http://www.cycon.com.mo/cafe_version_update.txt";
-    }
-
-    protected void onRefreshComplete() {
-//        Log.i(LOG_TAG, "onRefreshComplete");
-//
-//        // Remove all items from the ListAdapter, and then replace them with the new items
-//        mListAdapter.clear();
-//        for (String cheese : result) {
-//            mListAdapter.add(cheese);
-//        }
-
-        // Stop the refreshing indicator
-        mSwipeRefreshLayout.setRefreshing(false);
-
-    }
 }

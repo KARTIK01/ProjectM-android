@@ -34,7 +34,7 @@ import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
-import com.mickledeals.utils.LocationManager;
+import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
@@ -165,7 +165,7 @@ public class DetailsFragment extends BaseFragment {
         String priceText = mHolder.mPrice == 0 ? getString(R.string.free) : "$" + (int) (mHolder.mPrice);
         mBuyBtnText.setText(getString(R.string.unlock_coupon, priceText));
         mPrice.setText(priceText);
-        float dist = LocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
+        float dist = MDLocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
         String addrShort = mHolder.mAddressShort;
         if (dist > 0) {
             addrShort += " • " + dist + " mi";

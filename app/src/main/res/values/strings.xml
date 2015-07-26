@@ -183,9 +183,15 @@
     <string name="no_save">You do not have any saved coupons yet.</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="network_error_msg">We could not connect to server at the moment :(</string>
-    <string name="network_error_msg2">Please check your connection and try again. </string>
-    <string name="network_error_retry">Tap here to Retry</string>
+    <string name="network_error_title">Connection Problem</string>
+    <string name="network_error_msg">We could not connect to server at the moment. Please check your connection and try again. </string>
+    <string name="network_error_retry">Retry</string>
+    <string name="location_error_msg1">We could not get your current location. \nPlease confirm your location service is on and try again</string>
+    <string name="location_error_msg2">or sort by other options</string>
+    <string name="location_error_choice1">Retry</string>
+    <string name="location_error_choice2">Open Settings</string>p
+    <string name="location_error_choice3">Sort By Date Added</string>
+    <string name="location_error_choice4">Sort Randomly</string>
 
     <!-- Login -->
     <string name="or">or</string>

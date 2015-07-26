@@ -5,27 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:visibility="gone"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/network_error_msg1"
-        android:textSize="22sp"
-        android:padding="30dp"
-        android:textStyle="bold"
-        android:textColor="@color/lighterGrayTextColor"
-        android:layout_marginTop="20dp" />
+    android:orientation="vertical"
+    android:background="@color/defaultLightGrayBg">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/network_error_msg2"
+        android:text="@string/network_error_msg"
         android:textSize="17sp"
         android:padding="30dp"
-        android:textColor="@color/lighterGrayTextColor" />
+        android:textColor="@color/lightBlackTextColor" />
+
+    <Button
+        android:id="@+id/retryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="retryRequestClick"
+        android:clickable="true"
+        android:text="@string/network_error_retry"/>
 
 
 </LinearLayout>

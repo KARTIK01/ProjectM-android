@@ -172,9 +172,15 @@
     <string name="no_save">目前沒有儲存任何優惠券</string>
     <string name="cancel">取消</string>
     <string name="confirm">確認</string>
-    <string name="network_error_msg1">連接不到伺服器:(</string>
-    <string name="network_error_msg2">請檢查網絡後再重試 </string>
-    <string name="network_error_retry">按此重試 </string>
+    <string name="network_error_title">連線失敗</string>
+    <string name="network_error_msg">連接不到伺服器, 請檢查網絡後再重試 </string>
+    <string name="network_error_retry">重試</string>
+    <string name="location_error_msg1">我們暫時未能尋找你的所在地。請檢查定位服務是否開啟後再重試</string>
+    <string name="location_error_msg2">或以其他方式排序</string>
+    <string name="location_error_choice1">重試</string>
+    <string name="location_error_choice2">開啟設定</string>
+    <string name="location_error_choice3">按日期排序</string>
+    <string name="location_error_choice4">隨機排序</string>
 
     <!-- Login -->
     <string name="or">或</string>

@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.RedeemDialogActivity;
@@ -17,7 +15,6 @@ import com.mickledeals.adapters.MyCouponsAdapter;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.DLog;
 
 import java.util.List;
 
@@ -26,12 +23,14 @@ import java.util.List;
  */
 
 
-public class MyCouponsFragment extends BaseFragment {
+public class MyCouponsFragment extends SwipeRefreshBaseFragment {
 
     public static final int REQUEST_CODE_CONFIRM_REDEEM = 1;
     public static final int REQUEST_CODE_REDEEM = 2;
+
+    private TextView mNoCouponText;
+
     private MyCouponsAdapter mAdapter;
-    private RecyclerView mRecyclerView;
 
     private List<TestDataHolder> mBoughtList;
 
@@ -49,26 +48,9 @@ public class MyCouponsFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        DLog.d(this, "onCreateView");
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_my_coupons, container, false);
-
-        return rootView;
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
-        mAdapter.setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mNoCouponText = (TextView) view.findViewById(R.id.noCouponsText);
     }
 
     public void getMyCouponLists() {
@@ -143,5 +125,37 @@ public class MyCouponsFragment extends BaseFragment {
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
             }
         }
+    }
+
+    @Override
+    public void sendRequest() {
+        super.sendRequest();
+        mNoCouponText.setVisibility(View.GONE);
+    }
+
+    @Override
+    public int getFragmentLayoutRes() {
+        return R.layout.fragment_my_coupons;
+    }
+
+    public String getRequestURL() {
+        return "http://www.cycon.com.mo/cafe_version_update.txt";
+    }
+
+    @Override
+    public void onSuccessResponse() {
+        super.onSuccessResponse();
+
+        if (mBoughtList.size() == 0) {
+            mNoCouponText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setRecyclerView() {
+        mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter = new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
+        mAdapter.setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
+        mListResultRecyclerView.setAdapter(mAdapter);
+        mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 }

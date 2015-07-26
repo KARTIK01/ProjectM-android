@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class NearbyFragment extends ListResultBaseFragment {
+public class NearbyFragment extends ListMapBaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,10 +69,5 @@ public class NearbyFragment extends ListResultBaseFragment {
                 outRect.bottom = bottomMargin;
             }
         });
-    }
-
-    @Override
-    protected void onRefreshComplete() {
-        super.onRefreshComplete();
     }
 }

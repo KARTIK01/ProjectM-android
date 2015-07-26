@@ -14,14 +14,13 @@ import com.mickledeals.R;
 /**
  * Created by Nicky on 11/23/2014.
  */
-public abstract class BaseActivity extends ActionBarActivity{
+public abstract class BaseActivity extends ActionBarActivity {
 
     protected static final int LAYOUT_TYPE_NORMAL = 1;
     protected static final int LAYOUT_TYPE_FULLSCREEN_SWIPE = 2;
     protected static final int LAYOUT_TYPE_DIALOG_SWIPE = 3;
 
     protected Toolbar mToolBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,4 +94,13 @@ public abstract class BaseActivity extends ActionBarActivity{
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    //lets see how many activities need this
+//    public void retryRequestClick(View v) {
+//        sendRequest();
+//    }
+//
+//    public void sendRequest() {
+//
+//    }
 }

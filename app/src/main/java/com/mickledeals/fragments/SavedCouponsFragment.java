@@ -1,7 +1,6 @@
 package com.mickledeals.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,23 +19,22 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class SavedCouponsFragment extends ListResultBaseFragment{
+public class SavedCouponsFragment extends ListMapBaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //send request here, no need to wait for view created, use default spinner settings
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                sendRequest();
-            }
-        });
+        mSortSpinner.setSelection(1); //set to date added
+    }
+
+    protected boolean isSortByLocation() {
+        if (mSortSpinner == null) return false;
+        return super.isSortByLocation();
     }
 
     public List<TestDataHolder> getDataList() {

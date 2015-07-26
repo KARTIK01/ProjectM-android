@@ -3,18 +3,15 @@ package com.mickledeals.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
 
 import org.json.JSONObject;
@@ -27,18 +24,12 @@ public class MDApiManager {
     private static RequestQueue sQueue;
     private static ImageLoader mImageLoader;
     private static Context sContext = MDApplication.sAppContext;
-    private static Response.ErrorListener mErrorListener;
 
     public static void initVolley() {
         sQueue = Volley.newRequestQueue(sContext);
-        mErrorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(sContext, R.string.network_error_msg, Toast.LENGTH_SHORT).show();
-            }
-        };
     }
 
+    //another solution is implement interface for activity and fragment, pass in this and the interface to this method
     public static void sendStringRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, listener, errorListener);
         sendRequest(stringRequest);
@@ -62,5 +53,9 @@ public class MDApiManager {
     private static void sendRequest(Request request) {
         sQueue.add(request);
     }
+
+
+
+
 
 }
