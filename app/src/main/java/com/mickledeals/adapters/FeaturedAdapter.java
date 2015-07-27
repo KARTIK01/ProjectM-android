@@ -43,10 +43,10 @@ public class FeaturedAdapter extends CardAdapter {
     @Override
     public CardAdapter.MainViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        if (viewType == TYPE_BEST_COUPONS) {
+        if (viewType != TYPE_TOP_SECTION) {
             return super.onCreateViewHolder(parent, viewType);
 
-        } else if (viewType == TYPE_TOP_SECTION) {
+        } else  {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.featured_top_section, parent, false);
             mTopSectionLayout = (ViewGroup)v;
@@ -74,7 +74,6 @@ public class FeaturedAdapter extends CardAdapter {
 //            mPopularCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
             return hvh;
         }
-        return null;
     }
 
     @Override
@@ -95,10 +94,11 @@ public class FeaturedAdapter extends CardAdapter {
 
     @Override
     public int getItemViewType(int position) {
+
         if (isPositionHeader(position))
             return TYPE_TOP_SECTION;
 
-        return TYPE_BEST_COUPONS;
+        return super.getItemViewType(position);
     }
 
 

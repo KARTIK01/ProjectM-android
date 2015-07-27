@@ -66,7 +66,7 @@ public class MyCouponsAdapter extends CardAdapter {
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        if (viewType == TYPE_COUPONS) {
+        if (viewType != TYPE_HEADER) { //could be progress type
             MyCouponViewHolder holder = (MyCouponViewHolder)super.onCreateViewHolder(parent, viewType);
 //            holder.mCardButton.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -78,14 +78,13 @@ public class MyCouponsAdapter extends CardAdapter {
 //            });
             return holder;
 
-        } else if (viewType == TYPE_HEADER) {
+        } else {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.coupon_section_row_dropdown, parent, false);
 
             HeaderViewHolder hvh = new HeaderViewHolder(v);
             return hvh;
         }
-        return null;
     }
 
     @Override
@@ -158,7 +157,7 @@ public class MyCouponsAdapter extends CardAdapter {
         if (getPositionHeader(position) != null)
             return TYPE_HEADER;
 
-        return TYPE_COUPONS;
+        return super.getItemViewType(position);
     }
 
     @Override

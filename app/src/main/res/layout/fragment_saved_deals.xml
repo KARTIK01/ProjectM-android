@@ -54,17 +54,19 @@
         </LinearLayout>
 
 
-        <ViewStub
-            android:id="@+id/noNetworkStub"
-            android:layout="@layout/no_network_layout"
-            android:inflatedId="@+id/noNetworkLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <ViewStub
             android:id="@+id/noLocationStub"
             android:layout="@layout/no_location_layout"
             android:inflatedId="@+id/noLocationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <ViewStub
+            android:id="@+id/noNetworkStub"
+            android:layout="@layout/no_network_layout"
+            android:inflatedId="@+id/noNetworkLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

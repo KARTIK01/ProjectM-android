@@ -15,8 +15,6 @@ import com.mickledeals.utils.Constants;
  */
 public class FeaturedFragment extends SwipeRefreshBaseFragment {
 
-    private FeaturedAdapter mFeatureAdapter;
-
     @Override
     public void onPause() {
         super.onPause();
@@ -26,16 +24,15 @@ public class FeaturedFragment extends SwipeRefreshBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mFeatureAdapter.notifyDataSetChanged();
         startAutoSliding();
     }
 
     public void stopAutoSliding() {
-        if (mFeatureAdapter != null) mFeatureAdapter.stopAutoSliding();
+        if (mAdapter != null) ((FeaturedAdapter)mAdapter).stopAutoSliding();
     }
 
     public void startAutoSliding() {
-        if (mFeatureAdapter != null) mFeatureAdapter.startAutoSliding();
+        if (mAdapter != null) ((FeaturedAdapter)mAdapter).startAutoSliding();
     }
 
     @Override
@@ -68,8 +65,8 @@ public class FeaturedFragment extends SwipeRefreshBaseFragment {
         }
 
         mListResultRecyclerView.setLayoutManager(layoutManager);
-        mFeatureAdapter = new FeaturedAdapter(this, DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout_featured);
-        mListResultRecyclerView.setAdapter(mFeatureAdapter);
+        mAdapter = new FeaturedAdapter(this, DataListModel.getInstance().getBestCouponList(), Constants.TYPE_BEST_LIST, R.layout.card_layout_featured);
+        mListResultRecyclerView.setAdapter(mAdapter);
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mFeatureRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
 //            @Override

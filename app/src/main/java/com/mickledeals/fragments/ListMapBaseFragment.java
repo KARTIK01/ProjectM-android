@@ -404,7 +404,6 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
     @Override
     public void onResume() {
         super.onResume();
-        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
         if (mMapView != null && mMapContainer.getVisibility() == View.VISIBLE) {
             mMapView.onResume();
         }

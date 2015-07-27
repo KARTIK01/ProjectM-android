@@ -28,6 +28,7 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     protected ViewStub mNoNetworkStub;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected RecyclerView mListResultRecyclerView;
+    protected CardAdapter mAdapter;
 
 
     @Override
@@ -129,4 +130,10 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     public abstract int getFragmentLayoutRes();
 
     public abstract void setRecyclerView();
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
+    }
 }

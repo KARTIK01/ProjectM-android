@@ -30,8 +30,6 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
 
     private TextView mNoCouponText;
 
-    private MyCouponsAdapter mAdapter;
-
     private List<TestDataHolder> mBoughtList;
 
     private int mCurrentIndex = 0;
@@ -104,7 +102,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                         holder.mRedeemTime = 0;
                         holder.mStatus = Constants.COUPON_STATUS_DEFAULT;
                         getMyCouponLists();
-                        mAdapter.setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
+                        ((MyCouponsAdapter)mAdapter).setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
                         mAdapter.notifyDataSetChanged();
                         break;
                     }
@@ -154,7 +152,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
     public void setRecyclerView() {
         mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter = new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
-        mAdapter.setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
+        ((MyCouponsAdapter)mAdapter).setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
         mListResultRecyclerView.setAdapter(mAdapter);
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }

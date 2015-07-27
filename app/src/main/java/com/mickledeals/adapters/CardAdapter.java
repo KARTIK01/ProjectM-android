@@ -29,6 +29,10 @@ import java.util.List;
  * Created by Nicky on 12/7/2014.
  */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder> {
+
+    public final static int VIEW_ITEM = 11;
+    public final static int VIEW_PROGRESS = 12;
+
     protected List<TestDataHolder> mDataset;
     protected int mLayoutRes;
     protected FragmentActivity mFragmentActivity;
@@ -39,6 +43,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     private boolean mClickable = true;//to prevent multilpe click
 
     private AspectRatioImageView mDummpyImageView;
+
+//    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+//        public View mProgressLayout;
+//        public ProgressViewHolder(View v) {
+//            super(v);
+//            mProgressLayout = v.findViewById(R.id.progressBarLayout);
+//        }
+//    }
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
 
@@ -78,42 +90,53 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     @Override
     public CardAdapter.MainViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(mLayoutRes, parent, false);
-        final MainViewHolder vh = createViewHolder(v);
 
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mClickable) return;
-                mClickable = false;
-                int pos = convertListPosToDataPos(vh.getAdapterPosition());
-                mDummpyImageView = new AspectRatioImageView(v.getContext());
-                mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
-                mDummpyImageView.setRatio(vh.mCardImage.getRatio());
-                mDummpyImageView.setImageResource(mDataset.get(pos).mSmallImageResId);
-                mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
-                vh.mCardBaseLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        vh.mCardBaseLayout.removeView(mDummpyImageView);
-                        vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
-                    }
-                }, 1500);
-                v.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mClickable = true;
-                    }
-                }, 2000);
-                String transition = "cardImage" + mDataset.get(pos).mId;
-                //doesnt seem to need below line
+        if (viewType == VIEW_PROGRESS) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.progress_footer, parent, false);
+            // no need another viewholder coz we are not setting anything to progressbar
+            final MainViewHolder vh = createViewHolder(v);
+            return vh;
+        } else {
+
+
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(mLayoutRes, parent, false);
+            final MainViewHolder vh = createViewHolder(v);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!mClickable) return;
+                    mClickable = false;
+                    int pos = convertListPosToDataPos(vh.getAdapterPosition());
+                    mDummpyImageView = new AspectRatioImageView(v.getContext());
+                    mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
+                    mDummpyImageView.setRatio(vh.mCardImage.getRatio());
+                    mDummpyImageView.setImageResource(mDataset.get(pos).mSmallImageResId);
+                    mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
+                    vh.mCardBaseLayout.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            vh.mCardBaseLayout.removeView(mDummpyImageView);
+                            vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
+                        }
+                    }, 1500);
+                    v.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mClickable = true;
+                        }
+                    }, 2000);
+                    String transition = "cardImage" + mDataset.get(pos).mId;
+                    //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
-                Utils.transitDetailsActivity(mFragmentActivity, pos, mListType, v.findViewById(R.id.card_image), transition);
-            }
-        });
-        return vh;
+                    Utils.transitDetailsActivity(mFragmentActivity, pos, mListType, v.findViewById(R.id.card_image), transition);
+                }
+            });
+            return vh;
+        }
     }
 
     protected MainViewHolder createViewHolder(View v) {
@@ -128,6 +151,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 //                params.rightMargin = viewholder.mCardView.getResources().getDimensionPixelSize(R.dimen.card_margin);
 //                viewholder.mCardView.setLayoutParams(params);
 //            }
+
+        if (holder == null) return; //if holder is null, it is progressbar layout
 
         final int newPos  = convertListPosToDataPos(position);
 
@@ -196,6 +221,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             }
         }
         setAnimation(holder.mCardView, position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mDataset.get(position)!=null? VIEW_ITEM: VIEW_PROGRESS;
     }
 
     @Override

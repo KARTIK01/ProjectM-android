@@ -65,7 +65,8 @@ public class SavedCouponsFragment extends ListMapBaseFragment {
         } else {
             mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         }
-        mListResultRecyclerView.setAdapter(new CardAdapter(this, mDataList, Constants.TYPE_SAVED_LIST, R.layout.card_layout_save));
+        mAdapter = new CardAdapter(this, mDataList, Constants.TYPE_SAVED_LIST, R.layout.card_layout_save);
+        mListResultRecyclerView.setAdapter(mAdapter);
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 }
