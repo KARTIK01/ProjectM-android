@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:padding="6dp"
                         android:clickable="true"
-                        android:text="@string/full_details"
+                        android:text="@string/fine_print_redeem"
                         android:textColor="@color/white"
                         android:onClick="fullDetailsClick"
                         android:textSize="@dimen/sp_12" />

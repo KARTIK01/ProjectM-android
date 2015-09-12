@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mickledeals">
+    package="com.mickledeals"
+    android:versionCode="1"
+    android:versionName="@string/versionNo" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -82,6 +84,8 @@
         <activity android:name=".activities.ConfirmRedeemDialogActivity"
             android:theme="@style/AppTheme.Base.Transcluent" />
         <activity android:name=".activities.RedeemDetailsDialogActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
+        <activity android:name=".activities.WebPageActivity"
             android:theme="@style/AppTheme.Base.Transcluent" />
         <activity android:name=".activities.SearchActivity"
             android:theme="@style/AppTheme.Base.Transcluent"

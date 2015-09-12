@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
+import com.mickledeals.activities.WebPageActivity;
 import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDLoginManager;
@@ -72,6 +73,10 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
     private View mLoginArea;
     private TextView mUserEmail;
     private TextView mUserName;
+
+    private TextView mVersionNumber;
+    private TextView mTerms;
+    private TextView mPrivacy;
 
     private int mSelectedBgIndex;
 
@@ -122,6 +127,28 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
         mUserInfo = view.findViewById(R.id.userInfo);
         mUserEmail = (TextView) view.findViewById(R.id.userEmail);
         mUserName = (TextView) view.findViewById(R.id.userName);
+        mVersionNumber = (TextView) view.findViewById(R.id.versionNumber);
+        mTerms = (TextView) view.findViewById(R.id.terms);
+        mPrivacy = (TextView) view.findViewById(R.id.privacy);
+
+        mTerms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, WebPageActivity.class);
+                i.putExtra("webContent", "terms");
+                mContext.startActivity(i);
+            }
+        });
+        mPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, WebPageActivity.class);
+                i.putExtra("webContent", "privacy");
+                mContext.startActivity(i);
+            }
+        });
+
+        mVersionNumber.setText(getString(R.string.version) + " " + getString(R.string.versionNo));
 
         MDLoginManager.registerCallback(this);
 

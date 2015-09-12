@@ -59,10 +59,10 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:fontFamily="sans-serif-light"
                 android:text="@string/business_description"
-                android:textColor="@color/defaultTextColor"
-                android:textSize="14sp"
-                android:textStyle="italic" />
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"

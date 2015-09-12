@@ -64,7 +64,7 @@
     <string name="save">收藏</string>
     <string name="saved">已收藏</string>
     <string name="share">分享</string>
-    <string name="business_info">商戶專頁</string>
+    <string name="business_info">商戶資料</string>
     <string name="more_coupon">更多此商戶的優惠</string>
     <string name="fine_print">條款</string>
     <string name="unlock_coupon">%s換領此優惠券</string>
@@ -85,9 +85,11 @@
     <string name="total_price">總價格</string>
     <string name="current_credit">現有Credit: $7</string>
     <string name="mickle_credit_text">Mickle Credit</string>
+    <string name="review_order">預覽你的訂購</string>
     <string name="confirm_purchase">確認購買</string>
     <string name="no_charge_msg">不收取費用!</string>
-
+    <string name="agreeTermsWhenPurchase">通過確認購買,本人同意 MickleDeals</string>
+    <string name="and">及</string>
 
     <!-- Success Purchase Dialog -->
     <string name="success_purchase_title">成功購買!</string>
@@ -183,6 +185,13 @@
     <string name="location_error_choice2">開啟設定</string>
     <string name="location_error_choice3">按日期排序</string>
     <string name="location_error_choice4">隨機排序</string>
+
+    <string name="all_rights_reserved">MickleDeals LLC © 版權所有</string>
+    <string name="version">版本</string>
+    <string name="terms">服務條款</string>
+    <string name="privacy">私隱政策</string>
+    <string name="terms_u"><u>服務條款</u></string>
+    <string name="privacy_u"><u>私隱政策</u></string>
 
     <!-- Login -->
     <string name="or">或</string>

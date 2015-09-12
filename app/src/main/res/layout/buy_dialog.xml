@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialogContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="@dimen/dialog_padding">
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingLeft="@dimen/dialog_padding"
+    android:paddingRight="@dimen/dialog_padding">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -29,24 +33,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:gravity="center"
-                android:text="@string/confirm_purchase"
-                android:textAllCaps="true"
+                android:text="@string/review_order"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:background="@color/colorPrimary" />
-
-            <TextView
-                android:id="@+id/storeName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="@dimen/sp_19"
-                android:textColor="@color/black"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="8dp" />
 
             <TextView
                 android:id="@+id/couponDescription"
@@ -56,9 +47,21 @@
                 android:fontFamily="sans-serif-light"
                 android:textSize="@dimen/sp_17"
                 android:textColor="@color/black"
+                android:paddingTop="14dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingBottom="8dp"/>
+                android:paddingBottom="7dp"/>
+
+            <TextView
+                android:id="@+id/storeName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/sp_18"
+                android:textColor="@color/black"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="7dp" />
 
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -86,14 +89,14 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
+                        android:paddingBottom="6dp"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textSize="@dimen/sp_17"
+                            android:textSize="@dimen/sp_16"
                             android:textColor="@color/defaultTextColor"
                             android:text="@string/payment_method" />
 
@@ -132,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:textSize="@dimen/sp_17"
+                            android:textSize="@dimen/sp_16"
                             android:textColor="@color/defaultTextColor"
                             android:text="@string/coupon_price" />
 
@@ -142,7 +145,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="@dimen/sp_19" />
+                            android:textSize="@dimen/sp_18" />
 
                     </LinearLayout>
 
@@ -161,7 +164,7 @@
                             android:id="@+id/mickleCreditText"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:textSize="@dimen/sp_17"
+                            android:textSize="@dimen/sp_16"
                             android:textColor="@color/defaultTextColor"
                             android:text="@string/mickle_credit_text" />
 
@@ -179,7 +182,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="@dimen/sp_19" />
+                            android:textSize="@dimen/sp_18" />
 
                     </RelativeLayout>
 
@@ -206,7 +209,7 @@
                             android:text="@string/total_price"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="@dimen/sp_17"/>
+                            android:textSize="@dimen/sp_16"/>
 
                         <TextView
                             android:id="@+id/totalPrice"
@@ -214,7 +217,7 @@
                             android:layout_width="wrap_content"
                             android:textColor="@color/defaultTextColor"
                             android:textStyle="bold"
-                            android:textSize="@dimen/sp_19" />
+                            android:textSize="@dimen/sp_18" />
 
                     </LinearLayout>
 
@@ -239,34 +242,84 @@
             </android.support.v7.widget.CardView>
 
 
-            <android.support.v7.widget.CardView
-                android:layout_gravity="center_horizontal"
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="@string/agreeTermsWhenPurchase"
+                android:textSize="@dimen/sp_11" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="4dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_u"
+                    android:textSize="@dimen/sp_12" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/and"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:textSize="@dimen/sp_11" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_u"
+                    android:textSize="@dimen/sp_12" />
+
+                </LinearLayout>
+
+
+            <android.support.v7.widget.CardView
+
+                android:layout_margin="8dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:layout_marginBottom="16dp"
                 android:onClick="confirmClick"
                 card_view:cardCornerRadius="2dp"
                 card_view:cardElevation="2dp"
                 card_view:cardUseCompatPadding="true">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minWidth="90dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     android:gravity="center"
                     android:background="@drawable/button_selector_bg"
-                    android:text="@string/confirm"
+                    android:text="@string/confirm_purchase"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
             </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="@string/secure_transmitted_msg"
+                android:drawableLeft="@drawable/ic_lock"
+                android:layout_marginBottom="6dp"
+                android:drawablePadding="4dp"
+                android:textSize="@dimen/sp_11" />
 
 
 
