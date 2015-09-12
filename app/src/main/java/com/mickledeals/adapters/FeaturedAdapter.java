@@ -98,7 +98,7 @@ public class FeaturedAdapter extends CardAdapter {
         if (isPositionHeader(position))
             return TYPE_TOP_SECTION;
 
-        return super.getItemViewType(position);
+        return super.getItemViewType(position - 1);
     }
 
 

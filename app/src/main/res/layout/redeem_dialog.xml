@@ -1,95 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dialogContainer"
+<RelativeLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/baseLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/dialogContent"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/baseContent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="#FFDF6D2F"
-        card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="10dp"
-        card_view:cardUseCompatPadding="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@drawable/magnifier_bg">
 
-        <RelativeLayout
+
+        <LinearLayout
+            android:id="@+id/orangeContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
-            <ImageView
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignBottom="@+id/baseContent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/water_mark_bg"
-                android:adjustViewBounds="false" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom|center_horizontal"
+                android:paddingBottom="6dp"
+                android:text="@string/redeem_dialog_header"
+                android:textSize="@dimen/sp_13"
+                android:textColor="@color/white" />
 
-            <LinearLayout
-                android:id="@+id/baseContent"
+            <android.support.v7.widget.CardView
+                android:id="@+id/contentCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:layout_centerVertical="true"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp">
 
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/redeem_dialog_header"
-                    android:textSize="16sp"
-                    android:textColor="@color/white" />
+                    android:orientation="vertical"
+                    android:padding="@dimen/redeem_coupon_card_padding">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="5dp"
-                    card_view:cardElevation="5dp"
-                    card_view:cardUseCompatPadding="true"
-                    android:layout_marginTop="16dp">
-
-                    <LinearLayout
+                    <com.mickledeals.views.AutofitTextView
+                        android:id="@+id/discLong"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/defaultTextColor"
+                        android:textStyle="bold"
+                        android:maxLines="3"
+                        android:textSize="@dimen/sp_22"
+                        card_view:minTextSize="14sp" />
 
-                        <com.mickledeals.views.AutofitTextView
-                            android:id="@+id/storeName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:textColor="@color/defaultTextColor"
-                            android:textSize="36sp"
-                            android:maxLines="2"
-                            card_view:minTextSize="22sp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp"
-                            android:textStyle="bold" />
 
-                        <com.mickledeals.views.AutofitTextView
-                            android:id="@+id/discLong"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:textColor="@color/defaultTextColor"
-                            android:padding="8dp"
-                            android:textStyle="bold"
-                            android:maxLines="3"
-                            android:textSize="24sp"
-                            card_view:minTextSize="16sp"/>
+                    <com.mickledeals.views.AutofitTextView
+                        android:id="@+id/storeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="8dp"
+                        android:textColor="@color/defaultTextColor"
+                        android:textSize="@dimen/sp_17"
+                        android:maxLines="1"
+                        card_view:minTextSize="8sp" />
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -97,6 +88,7 @@
                     android:layout_marginTop="16dp"
                     android:background="#FF0000"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:padding="4dp">
 
                     <TextView
@@ -118,10 +110,12 @@
 
 
                 <TextView
+                    android:id="@+id/redeemHintString"
                     android:selectAllOnFocus="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="46dp"
+                    android:layout_marginRight="46dp"
                     android:singleLine="true"
                     android:ellipsize="marquee"
                     android:marqueeRepeatLimit="marquee_forever"
@@ -130,41 +124,60 @@
                     android:text="@string/redeem_dialog_footer"
                     android:gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/sp_15"/>
 
 
-                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_gravity="center_horizontal"
-                    android:onClick="markUsedClick"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:paddingRight="26dp"
+                    android:paddingLeft="26dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    card_view:cardBackgroundColor="@color/defaultLightGrayBg"
-                    card_view:cardCornerRadius="2dp"
-                    card_view:cardElevation="2dp"
-                    card_view:cardUseCompatPadding="true">
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/couponNumber"
+                        android:padding="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_12" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minWidth="80dp"
-                        android:paddingTop="6dp"
-                        android:paddingBottom="6dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:gravity="center"
-                        android:textAllCaps="true"
-                        android:text="@string/mark_as_used"
-                        android:textColor="@color/themeTextColor"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        android:padding="6dp"
+                        android:clickable="true"
+                        android:text="@string/full_details"
+                        android:textColor="@color/white"
+                        android:onClick="fullDetailsClick"
+                        android:textSize="@dimen/sp_12" />
 
-                </android.support.v7.widget.CardView>
-
-
+                </LinearLayout>
             </LinearLayout>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/markAsUsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:textAllCaps="true"
+            android:text="@string/mark_as_used"
+            android:onClick="markUsedClick"
+            android:clickable="true"
+            android:textColor="@color/marked_as_used_text_color"
+            android:textSize="@dimen/sp_19"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>

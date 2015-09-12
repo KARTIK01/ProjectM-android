@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,9 +36,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Nicky on 11/28/2014.
@@ -263,6 +267,35 @@ public class Utils {
                 })
                 .create()
                 .show();
+    }
+
+    public static void replaceFont(String staticTypefaceFieldName,
+                                      final Typeface newTypeface) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Map<String, Typeface> newMap = new HashMap<String, Typeface>();
+            newMap.put("sans-serif", newTypeface);
+            try {
+                final Field staticField = Typeface.class
+                        .getDeclaredField("sSystemFontMap");
+                staticField.setAccessible(true);
+                staticField.set(null, newMap);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                final Field staticField = Typeface.class
+                        .getDeclaredField(staticTypefaceFieldName);
+                staticField.setAccessible(true);
+                staticField.set(null, newTypeface);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

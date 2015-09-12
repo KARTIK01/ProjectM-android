@@ -51,8 +51,8 @@
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
                             android:paddingTop="8dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:textColor="@color/defaultTextColor"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="@color/black"
                             android:textSize="20sp" />
 
 
@@ -65,8 +65,8 @@
                             android:paddingRight="16dp"
 
                             style="@style/MediumBoldTextStyle"
-                            android:textColor="@color/lightGrayTextColor"
-                            android:textSize="18sp"/>
+                            android:textColor="@color/lightBlackTextColor"
+                            android:textSize="17sp"/>
 
                         <TextView
                             android:id="@+id/addressDist"
@@ -243,72 +243,7 @@
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
-                        android:text="@string/fine_print_description"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/expire_date"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/fine_print_description"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/expire_date"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/fine_print_description"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/expire_date"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:paddingTop="8dp"
+                        android:fontFamily="sans-serif-light"
                         android:text="@string/fine_print_description"
                         android:textColor="@color/defaultTextColor"
                         android:textSize="14sp" />

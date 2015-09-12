@@ -315,7 +315,7 @@ public class DetailsFragment extends BaseFragment {
 
     private void showAvailableStatus() {
         mHolder.mRedeemTime = 0;
-        mHandler.removeCallbacks(mUpdatetimerThread);
+//        mHandler.removeCallbacks(mUpdatetimerThread);
         mRedeemBtnText.setText(R.string.redeem_coupon);
         mPrice.setVisibility(View.VISIBLE);
         mBuyBtn.setVisibility(View.VISIBLE);
@@ -379,8 +379,8 @@ public class DetailsFragment extends BaseFragment {
                 i.putExtra("redeemTime", mHolder.mRedeemTime);
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
 
-                mHandler.removeCallbacks(mUpdatetimerThread);
-                mHandler.postDelayed(mUpdatetimerThread, 0);
+//                mHandler.removeCallbacks(mUpdatetimerThread);
+//                mHandler.postDelayed(mUpdatetimerThread, 0);
             }
         }
     }
@@ -423,13 +423,13 @@ public class DetailsFragment extends BaseFragment {
 
     }
 
-    private Runnable mUpdatetimerThread = new Runnable() {
-        @Override
-        public void run() {
-            mRedeemBtnText.setText(getString(R.string.redeem_in) + getExpiredTimerValue());
-            mHandler.postDelayed(this, 0);
-        }
-    };
+//    private Runnable mUpdatetimerThread = new Runnable() {
+//        @Override
+//        public void run() {
+//            mRedeemBtnText.setText(getString(R.string.redeem_in) + getExpiredTimerValue());
+//            mHandler.postDelayed(this, 0);
+//        }
+//    };
 
 
     @Override

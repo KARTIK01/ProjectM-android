@@ -103,11 +103,13 @@
     <string name="redeem_now">立即兌換</string>
     <string name="mark_as_used">標記為已使用</string>
     <string name="mark_as_used_confirm">你是否已經兌換此優惠?</string>
+    <string name="mark_as_used_confirm_msg">當你標記為已使用後,此優惠券不能再使用</string>
     <string name="mark_as_used_yes">是, 標記已使用</string>
     <string name="mark_as_used_no">還未兌換</string>
     <string name="redeem_dialog_header">感謝你使用此優惠券，你將獲得</string>
     <string name="expires_in">離過期還剩 </string>
     <string name="redeem_dialog_footer">"請在兌換優惠時向商戶展示此認證畫面          "</string>
+    <string name="full_details"><u>詳細條款</u></string>
 
     <!-- Business Page -->
     <string name="news">最新消息</string>

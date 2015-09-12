@@ -2,7 +2,6 @@ package com.mickledeals.fragments;
 
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,6 @@ import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.DLog;
-import com.mickledeals.utils.EndlessRecyclerOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,27 +82,6 @@ public class NearbyFragment extends ListMapBaseFragment {
                 outRect.bottom = bottomMargin;
             }
         });
-        mListResultRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(gridLayoutManager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                    DLog.d(NearbyFragment.this, "onloadmore page = " + currentPage);
-                mDataList.add(null);
-                mAdapter.notifyItemInserted(mDataList.size());
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //remove progress bar
-                        mDataList.remove(mDataList.size() - 1);
-                        mAdapter.notifyItemRemoved(mDataList.size());
-                        for (int i = 1; i < DataListModel.getInstance().getDataList().size(); i++) {
-                            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
-                            mDataList.add(holder);
-                            mListResultRecyclerView.getAdapter().notifyItemInserted(mDataList.size());
-                        }
-                    }
-                }, 3000);
 
-            }
-        });
     }
 }

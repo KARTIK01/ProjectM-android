@@ -355,7 +355,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
             Location location = mLocationManager.getLastLocation();
         }
 
-        return "http://www.cycon.com.mo/cafe_version_update.txt";
+        return "http://www.google.com";
     }
 
 

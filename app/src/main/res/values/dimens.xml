@@ -26,8 +26,13 @@
     <dimen name="sp_18">16sp</dimen>
     <dimen name="sp_19">17sp</dimen>
     <dimen name="sp_20">18sp</dimen>
+    <dimen name="sp_21">19sp</dimen>
+    <dimen name="sp_22">20sp</dimen>
+    <dimen name="sp_23">21sp</dimen>
+    <dimen name="sp_24">22sp</dimen>
 
 
+    <dimen name="redeem_coupon_card_padding">4dp</dimen>
     <dimen name="dialog_padding">8dp</dimen>
 
     <dimen name="card_button_width">70dp</dimen>

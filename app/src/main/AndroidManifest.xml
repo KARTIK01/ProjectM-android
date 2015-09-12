@@ -81,6 +81,8 @@
             android:theme="@style/AppTheme.Base.Transcluent" />
         <activity android:name=".activities.ConfirmRedeemDialogActivity"
             android:theme="@style/AppTheme.Base.Transcluent" />
+        <activity android:name=".activities.RedeemDetailsDialogActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
         <activity android:name=".activities.SearchActivity"
             android:theme="@style/AppTheme.Base.Transcluent"
             android:windowSoftInputMode="stateVisible"/>

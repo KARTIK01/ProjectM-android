@@ -167,9 +167,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.getStoreName());
         if (holder.mCardImage != null)
             holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
-        if (holder.mCardPrice != null)
-            holder.mCardPrice.setText(dataHolder.mPrice == 0 ? "Free" : "$" + (int) dataHolder.mPrice);
         if (holder.mCardPrice != null) {
+            String displayPrice;
+            if (dataHolder.mPrice == 0) {
+                displayPrice = "Free";
+            } else if (dataHolder.mPrice < 1) {
+                displayPrice = "50¢";
+            } else {
+                displayPrice = "$" + (int) dataHolder.mPrice;
+            }
+            holder.mCardPrice.setText(displayPrice);
 
             int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
             int sp18 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_18);
@@ -177,7 +184,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
             boolean extraSize = false;
             if (mListType == Constants.TYPE_BEST_LIST) extraSize = true;
-            if (dataHolder.mPrice == 0) {
+            if (dataHolder.mPrice < 1) {
                 holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp18 : sp17);
             } else {
                 holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
@@ -225,6 +232,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
     @Override
     public int getItemViewType(int position) {
+        if (position >= mDataset.size()) return VIEW_ITEM; //prevent index oob
         return mDataset.get(position)!=null? VIEW_ITEM: VIEW_PROGRESS;
     }
 

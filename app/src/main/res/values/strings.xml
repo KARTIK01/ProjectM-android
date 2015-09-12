@@ -107,17 +107,22 @@
     <!-- Redeem Dialog -->
 
     <string name="confirm_redeem_title">Are you sure you want to Redeem now?</string>
-    <string name="confirm_redeem_msg">The offer will expire in 2 hours once you redeem.</string>
+    <string name="confirm_redeem_msg">This offer will be used once you redeemed</string>
     <string name="redeem_now">Redeem Now</string>
     <string name="mark_as_used">Mark as Used</string>
-    <string name="mark_as_used_confirm">Are you done redeeming your offer?</string>
+    <string name="mark_as_used_confirm">Are you done redeeming this offer?</string>
+    <string name="mark_as_used_confirm_msg">Once you mark this offer as used, you will not be able to redeem again.</string>
     <string name="mark_as_used_yes">Yes, Mark as Used</string>
     <string name="mark_as_used_no">Not Yet</string>
-
 
     <string name="redeem_dialog_header">Thanks for using this coupon for</string>
     <string name="expires_in">Expires in </string>
     <string name="redeem_dialog_footer">Show this verification screen to the business when redeeming your offer.</string>
+    <string name="full_details"><u>Full Details</u></string>
+
+    <!-- Redeem Full Details Dialog -->
+    <string name="coupon_description">Coupon Description</string>
+    <string name="business_name">Business Name</string>
 
     <!-- Business Page -->
     <string name="news">News</string>
@@ -215,7 +220,7 @@
     <string name="used_date">Used on 06/14/15</string>
     <string name="bought_date">You bought this coupon on 05/30/15 for %s</string>
     <string name="obtain_date">You obtained this coupon on 05/30/15 for Free</string>
-    <string name="fine_print_description">Limit 1 per table. Only valid for Dine in.</string>
+    <string name="fine_print_description">Promotional value expires 120 days after purchase. Amount paid never expires. Limit 1 per person, may buy 3 additional as gifts. Limit 2 per visit. Valid only for option purchased. Pre-order required at least 48 hours in advance; subject to availability. Valid for in-store purchases only. Valid toward any assorted flavors. Excludes gluten-free cupcakes. Must use promotional value in 1 visit. Merchant is solely responsible to purchasers for the care and quality of the advertised goods and services.</string>
     <string name="business_description">
 Savory Steakhouse is a fine dining interpretation of the classic American steakhouse with hints of Japanese influence laced into the menu.
 It is a welcome addition to the dining scene, receiving numerous awards and accolades since its opening in 2005.</string>

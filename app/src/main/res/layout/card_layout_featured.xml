@@ -58,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/card_price"
             android:layout_toRightOf="@id/card_image"
-            android:fontFamily="sans-serif"
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingLeft="8dp"

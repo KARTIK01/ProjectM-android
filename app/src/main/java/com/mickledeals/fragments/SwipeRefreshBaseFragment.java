@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.Button;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -47,7 +46,31 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mListResultRecyclerView = (RecyclerView) view.findViewById(R.id.listResultRecyclerView);
+        mListResultRecyclerView.setVisibility(View.GONE); //TODO: REMOVE
         setRecyclerView();
+//        mListResultRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mListResultRecyclerView.getLayoutManager()) {
+//            @Override
+//            public void onLoadMore(int currentPage) {
+//                DLog.d(SwipeRefreshBaseFragment.this, "onloadmore page = " + currentPage);
+//                mDataList.add(null);
+//                mAdapter.notifyItemInserted(mDataList.size());
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //remove progress bar
+//                        mDataList.remove(mDataList.size() - 1);
+//                        mAdapter.notifyItemRemoved(mDataList.size());
+//                        for (int i = 1; i < DataListModel.getInstance().getDataList().size(); i++) {
+//                            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
+//                            mDataList.add(holder);
+//                            mListResultRecyclerView.getAdapter().notifyItemInserted(mDataList.size());
+//                        }
+//                    }
+//                }, 3000);
+//
+//            }
+//        });
+
 
         mNoResultLayout = view.findViewById(R.id.noResultLayout);
         mNoNetworkStub = (ViewStub) view.findViewById(R.id.noNetworkStub);
@@ -83,24 +106,45 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
             @Override
             public void onResponse(String response) {
 
-                onSuccessResponse();
-                mSwipeRefreshLayout.setRefreshing(false);
+                //remove handler please
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        onSuccessResponse();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(this, error.getMessage());
-                if (mNoNetworkLayout == null) mNoNetworkLayout = mNoNetworkStub.inflate();
-                mNoNetworkLayout.setVisibility(View.VISIBLE);
 
-                Button retryButton = (Button) mNoNetworkLayout.findViewById(R.id.retryButton);
-                retryButton.setOnClickListener(new View.OnClickListener() {
+                //UNCOMMENT IT
+
+//                DLog.e(this, error.getMessage());
+//                if (mNoNetworkLayout == null) mNoNetworkLayout = mNoNetworkStub.inflate();
+//                mNoNetworkLayout.setVisibility(View.VISIBLE);
+//
+//                Button retryButton = (Button) mNoNetworkLayout.findViewById(R.id.retryButton);
+//                retryButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        sendRequest();
+//                    }
+//                });
+//                mSwipeRefreshLayout.setRefreshing(false);
+
+
+                //remove this please
+                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void onClick(View v) {
-                        sendRequest();
+                    public void run() {
+
+                        onSuccessResponse();
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
-                });
-                mSwipeRefreshLayout.setRefreshing(false);
+                }, 1000);
             }
         });
     }
@@ -121,6 +165,8 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     public void onSuccessResponse() {
 
         mListResultRecyclerView.getAdapter().notifyDataSetChanged();
+
+        mListResultRecyclerView.setVisibility(View.VISIBLE); //TODO: REMOVE
         ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
     }
 

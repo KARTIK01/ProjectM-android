@@ -120,6 +120,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                 i.putExtra("storeName", data.getStringExtra("storeName"));
                 i.putExtra("couponDesc", data.getStringExtra("couponDesc"));
                 i.putExtra("redeemTime", System.currentTimeMillis());
+//                i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
             }
         }
