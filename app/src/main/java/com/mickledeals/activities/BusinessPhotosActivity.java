@@ -30,6 +30,7 @@ public class BusinessPhotosActivity extends BaseActivity {
     private ArrayList<BusinessPhoto> mList;
     private PagerIndicator mIndicator;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
