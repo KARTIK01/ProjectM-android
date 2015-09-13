@@ -1,5 +1,8 @@
 package com.mickledeals.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,9 +19,12 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.datamodel.BusinessPhoto;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.Utils;
 import com.mickledeals.views.PagerIndicator;
 
 import java.util.ArrayList;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by Nicky on 12/27/2014.
@@ -114,7 +120,19 @@ public class BusinessPhotosActivity extends BaseActivity {
                     R.layout.business_photo_fullscreen_slide_page, container, false);
             ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
             TextView description = (TextView) rootView.findViewById(R.id.slider_text);
+
+            PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
+
+            //temp
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), photo.mResId);
+            //
+
+            if (Build.VERSION.SDK_INT >= 17) {
+                ImageView imageViewBg = (ImageView) rootView.findViewById(R.id.slider_blurry_image);
+                imageViewBg.setImageBitmap(Utils.blur(rootView.getContext(), bm));
+            }
             imageView.setImageResource(photo.mResId);
+            attacher.update();
             description.setText(photo.mPhotoDescription);
 
 

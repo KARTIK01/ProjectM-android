@@ -33,4 +33,5 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.2.0'
     compile files('libs/PayPalAndroidSDK-2.9.7.jar')
     compile project(':volley')
+    compile project(':photoview')
 }
