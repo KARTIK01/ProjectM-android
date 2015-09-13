@@ -73,6 +73,8 @@
         <activity android:name=".activities.BusinessPageActivity"
             android:theme="@style/AppTheme.Base.Transcluent"
             />
+        <activity android:name=".activities.BusinessPhotosActivity"
+            android:theme="@style/AppTheme.Base.Transcluent" />
         <activity android:name=".activities.MapActivity"
             android:theme="@style/AppTheme.Base.ActionBar" />
         <activity android:name=".activities.RedeemDialogActivity"

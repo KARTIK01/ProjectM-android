@@ -37,13 +37,15 @@ public abstract class DialogSwipeDismissActivity extends SwipeDismissActivity {
             }
         }, 1000);
 
-
-        findViewById(R.id.dialogContent).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //to prevent dialog dismiss when tapping content
-            }
-        });
+        View content = findViewById(R.id.dialogContent);
+        if (content != null) {
+            content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //to prevent dialog dismiss when tapping content
+                }
+            });
+        }
 
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), getResources().getColor(android.R.color.transparent), getResources().getColor(R.color.transparentViewPagerBg));
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

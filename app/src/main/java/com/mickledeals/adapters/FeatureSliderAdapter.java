@@ -38,7 +38,6 @@ public class FeatureSliderAdapter extends PagerAdapter implements
         mActivity = activity;
         mList = DataListModel.getInstance().getFeatureSliderCouponList();
         mIndicator = indicator;
-        mIndicator.setSize(mList.size());
         mViewPager = viewPager;
         mHandler = new Handler();
         mHandler.removeCallbacks(mSlidePageThread);
@@ -87,6 +86,7 @@ public class FeatureSliderAdapter extends PagerAdapter implements
 
     @Override
     public int getCount() {
+        if (mIndicator != null) mIndicator.setSize(mList.size());
         return mList.size();
     }
 

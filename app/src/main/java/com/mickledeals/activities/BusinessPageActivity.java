@@ -26,7 +26,6 @@ import com.mickledeals.views.PagerIndicator;
 import com.mickledeals.views.RoundedImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Nicky on 2/21/2015.
@@ -69,7 +68,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mPhotoViewPager = (ViewPager) findViewById(R.id.photoViewPager);
 
         //create adapter after fetching data
-        List photoList = new ArrayList<BusinessPhoto>();
+        ArrayList photoList = new ArrayList<BusinessPhoto>();
         BusinessPhoto photo = new BusinessPhoto();
         photo.mResId = R.drawable.pic_business_1;
         photo.mPhotoDescription = getString(R.string.business_photo1);
@@ -87,13 +86,13 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         photo.mPhotoDescription = getString(R.string.business_photo4);
         photoList.add(photo);
 
-        BusinessPhotoSliderAdapter adapter = new BusinessPhotoSliderAdapter(getSupportFragmentManager(),
+        BusinessPhotoSliderAdapter adapter = new BusinessPhotoSliderAdapter(this,
                 (PagerIndicator) findViewById(R.id.pagerIndicator), photoList);
 
         //temp above
 
         mPhotoViewPager.setAdapter(adapter);
-        mPhotoViewPager.setOnPageChangeListener(adapter);
+        mPhotoViewPager.addOnPageChangeListener(adapter);
         mPhotoViewPager.setPageMargin(Utils.getPixelsFromDip(6f, getResources()));
 
 
