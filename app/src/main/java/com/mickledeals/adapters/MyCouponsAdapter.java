@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.fragments.MyCouponsFragment;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public class MyCouponsAdapter extends CardAdapter {
         }
     }
 
-    public MyCouponsAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+    public MyCouponsAdapter(Fragment fragment, List<CouponInfo> myDataset, int listType, int layoutRes) {
         super(fragment, myDataset, listType, layoutRes);
     }
 
@@ -103,7 +103,7 @@ public class MyCouponsAdapter extends CardAdapter {
             super.onBindViewHolder(holder, position);
 
             position = convertListPosToDataPos(position);
-            final TestDataHolder dataHolder = mDataset.get(position);
+            final CouponInfo dataHolder = mDataset.get(position);
 
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
             vh.mCardButton.setOnClickListener(new View.OnClickListener() {

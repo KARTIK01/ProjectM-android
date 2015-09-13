@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.mickledeals.R;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.fragments.DetailsFragment;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 
@@ -26,7 +26,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
     private ViewPager mDetailsViewPager;
     private int mListType;
     private int mInitialIndex;
-    private List<TestDataHolder> mList;
+    private List<CouponInfo> mList;
     private View mShadow;
 
     @Override

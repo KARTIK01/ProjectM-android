@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.views.MyLinearLayoutManager;
 import com.mickledeals.views.PagerIndicator;
@@ -35,7 +35,7 @@ public class FeaturedAdapter extends CardAdapter {
         }
     }
 
-    public FeaturedAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+    public FeaturedAdapter(Fragment fragment, List<CouponInfo> myDataset, int listType, int layoutRes) {
         super(fragment, myDataset, listType, layoutRes);
     }
 

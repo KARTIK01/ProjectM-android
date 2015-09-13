@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.adapters.MyCouponsAdapter;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
 
     private TextView mNoCouponText;
 
-    private List<TestDataHolder> mBoughtList;
+    private List<CouponInfo> mBoughtList;
 
     private int mCurrentIndex = 0;
     private int mAvailableListIndex = -1;
@@ -58,7 +58,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
         mExpiredListIndex = -1;
         mUsedListIndex = -1;
         mBoughtList.clear();
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 
             if (holder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
                 mBoughtList.add(holder);
@@ -69,7 +69,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                 mCurrentIndex++;
             }
         }
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 
             if (holder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
                 mBoughtList.add(holder);
@@ -80,7 +80,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                 mCurrentIndex++;
             }
         }
-        for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 
             if (holder.mId == 9 || holder.mId == 16 || holder.mId == 14) {
                 mBoughtList.add(holder);
@@ -97,7 +97,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_REDEEM) {
                 //put available coupon to used coupon after redeem
-                for (TestDataHolder holder : mBoughtList) {
+                for (CouponInfo holder : mBoughtList) {
                     if (holder.mId == data.getIntExtra("id", 0)) {
                         holder.mRedeemTime = 0;
                         holder.mStatus = Constants.COUPON_STATUS_DEFAULT;
@@ -109,7 +109,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                 }
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
 
-                for (TestDataHolder holder : mBoughtList) {
+                for (CouponInfo holder : mBoughtList) {
                     if (holder.mId == data.getIntExtra("id", 0)) {
                         holder.mRedeemTime = System.currentTimeMillis();
                         break;

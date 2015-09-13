@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.PreferenceHelper;
@@ -33,7 +33,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     public final static int VIEW_ITEM = 11;
     public final static int VIEW_PROGRESS = 12;
 
-    protected List<TestDataHolder> mDataset;
+    protected List<CouponInfo> mDataset;
     protected int mLayoutRes;
     protected FragmentActivity mFragmentActivity;
     protected Fragment mFragment;
@@ -79,7 +79,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         }
     }
 
-    public CardAdapter(Fragment fragment, List<TestDataHolder> myDataset, int listType, int layoutRes) {
+    public CardAdapter(Fragment fragment, List<CouponInfo> myDataset, int listType, int layoutRes) {
         mFragment = fragment;
         mLayoutRes = layoutRes;
         mDataset = myDataset;
@@ -156,7 +156,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
         final int newPos  = convertListPosToDataPos(position);
 
-        final TestDataHolder dataHolder = mDataset.get(newPos);
+        final CouponInfo dataHolder = mDataset.get(newPos);
 
         if (holder.mCardBaseLayout != null)
             holder.mCardBaseLayout.removeView(mDummpyImageView);
@@ -198,7 +198,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                     dataHolder.mSaved = !dataHolder.mSaved;
                     ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
                     StringBuilder sb = new StringBuilder();
-                    for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+                    for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
                         if (holder.mSaved) {
                             sb.append(holder.mId);
                             sb.append("|");

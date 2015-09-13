@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class SearchFragment extends ListMapBaseFragment {
 
     private TextView mNoResultMsg;
     //temporary
-    private List<TestDataHolder> mTemporaryList = new ArrayList<TestDataHolder>();
+    private List<CouponInfo> mTemporaryList = new ArrayList<CouponInfo>();
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -69,12 +69,12 @@ public class SearchFragment extends ListMapBaseFragment {
         super.sendRequest();
     }
 
-    public List<TestDataHolder> getDataList() {
-        List<TestDataHolder> list = DataListModel.getInstance().getSearchResultList();
+    public List<CouponInfo> getDataList() {
+        List<CouponInfo> list = DataListModel.getInstance().getSearchResultList();
         return list;
     }
 
-    public List<TestDataHolder> getTemporaryDataList() {
+    public List<CouponInfo> getTemporaryDataList() {
         return mTemporaryList;
     }
 

@@ -29,8 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.mickledeals.R;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MDApplication;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,7 +60,7 @@ public class Utils {
         return MDApplication.sCurrentLocale.getLanguage().equals("zh");
     }
 
-    public static List<TestDataHolder> getListFromType(int listType) {
+    public static List<CouponInfo> getListFromType(int listType) {
         DataListModel dataModel = DataListModel.getInstance();
         switch (listType) {
             case Constants.TYPE_NEARBY_LIST:
@@ -164,7 +164,7 @@ public class Utils {
         return result;
     }
 
-    public static LatLng getLatLngFromDataHolder(TestDataHolder holder) {
+    public static LatLng getLatLngFromDataHolder(CouponInfo holder) {
         String[] tokens = holder.mLatLng.split(",");
         return new LatLng(Double.parseDouble(tokens[0].trim()), Double.parseDouble(tokens[1].trim()));
     }

@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
-import com.mickledeals.tests.TestDataHolder;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDLocationManager;
@@ -52,7 +52,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
     private BitmapDescriptor mPinBitmap;
-    protected List<TestDataHolder> mDataList;
+    protected List<CouponInfo> mDataList;
     private boolean mNeedPopularMapOverlays;
 
     protected View mNoLocationLayout;
@@ -237,7 +237,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 
         for (int i = 0; i < mDataList.size(); i++) {
 
-            TestDataHolder dataHolder = mDataList.get(i);
+            CouponInfo dataHolder = mDataList.get(i);
             LatLng ll = Utils.getLatLngFromDataHolder(dataHolder);
 
             Marker marker = mMap.addMarker(new MarkerOptions()
@@ -364,14 +364,14 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         super.onSuccessResponse();
 
         mNeedPopularMapOverlays = true;
-        List<TestDataHolder> temporaryDataList = getTemporaryDataList();
+        List<CouponInfo> temporaryDataList = getTemporaryDataList();
         mDataList.clear();
 
         //temporrary
         for (int i = 0; i < temporaryDataList.size(); i++) {
             boolean matchCategory = false;
             boolean matchLocation = false;
-            TestDataHolder holder = temporaryDataList.get(i);
+            CouponInfo holder = temporaryDataList.get(i);
             int categoryPos = 0;
             if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
             if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
@@ -436,9 +436,9 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         mLocationManager.disconnect();
     }
 
-    public abstract List<TestDataHolder> getDataList();
+    public abstract List<CouponInfo> getDataList();
 
-    public abstract List<TestDataHolder> getTemporaryDataList();
+    public abstract List<CouponInfo> getTemporaryDataList();
 
     public abstract String getNoResultMessage();
 

@@ -15,10 +15,10 @@ import android.view.View;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.fragments.BaseFragment;
 import com.mickledeals.fragments.NavigationDrawerFragment;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.PreferenceHelper;
 
@@ -102,7 +102,7 @@ public class HomeActivity extends BaseActivity
             for (String token : tokens) {
                 if (token.length() != 0) {
                     int id = Integer.parseInt(token);
-                    TestDataHolder data = DataListModel.getInstance().getDataList().get(id);
+                    CouponInfo data = DataListModel.getInstance().getDataList().get(id);
                     data.mSaved = true;
                 }
             }

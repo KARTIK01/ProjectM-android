@@ -30,8 +30,8 @@ import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.activities.SuccessDialogActivity;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDLocationManager;
@@ -50,7 +50,7 @@ public class DetailsFragment extends BaseFragment {
     private static final int REQUEST_CODE_REDEEM = 2;
     private static final int REQUEST_CODE_CONFIRM_REDEEM = 3;
 
-    private TestDataHolder mHolder;
+    private CouponInfo mHolder;
 
     private int mListType;
     private TextView mBusinessName;
@@ -239,7 +239,7 @@ public class DetailsFragment extends BaseFragment {
                 mSaveBtnText.setCompoundDrawablesWithIntrinsicBounds(mHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off, 0, 0, 0);
 
                 StringBuilder sb = new StringBuilder();
-                for (TestDataHolder holder : DataListModel.getInstance().getDataList().values()) {
+                for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
                     if (holder.mSaved) {
                         sb.append(holder.mId);
                         sb.append("|");
@@ -298,7 +298,7 @@ public class DetailsFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
-            TestDataHolder otherCouponData = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
+            CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
             ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
             ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
             ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));

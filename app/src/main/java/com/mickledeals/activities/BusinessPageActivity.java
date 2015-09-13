@@ -16,13 +16,17 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.BusinessPhotoSliderAdapter;
+import com.mickledeals.datamodel.BusinessPhoto;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
 import com.mickledeals.views.RoundedImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nicky on 2/21/2015.
@@ -32,7 +36,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
     private RoundedImageView mRoundedImageView;
     private ViewPager mPhotoViewPager;
     private View mShadow;
-    private TestDataHolder mHolder;
+    private CouponInfo mHolder;
 
     private TextView mOpenHours;
     private TextView mAddress;
@@ -63,8 +67,31 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mRoundedImageView.setLayoutParams(params);
 
         mPhotoViewPager = (ViewPager) findViewById(R.id.photoViewPager);
+
+        //create adapter after fetching data
+        List photoList = new ArrayList<BusinessPhoto>();
+        BusinessPhoto photo = new BusinessPhoto();
+        photo.mResId = R.drawable.pic_business_1;
+        photo.mPhotoDescription = getString(R.string.business_photo1);
+        photoList.add(photo);
+        photo = new BusinessPhoto();
+        photo.mResId = R.drawable.pic_business_2;
+        photo.mPhotoDescription = getString(R.string.business_photo2);
+        photoList.add(photo);
+        photo = new BusinessPhoto();
+        photo.mResId = R.drawable.pic_business_3;
+        photo.mPhotoDescription = getString(R.string.business_photo3);
+        photoList.add(photo);
+        photo = new BusinessPhoto();
+        photo.mResId = R.drawable.pic_business_4;
+        photo.mPhotoDescription = getString(R.string.business_photo4);
+        photoList.add(photo);
+
         BusinessPhotoSliderAdapter adapter = new BusinessPhotoSliderAdapter(getSupportFragmentManager(),
-                (PagerIndicator) findViewById(R.id.pagerIndicator), mPhotoViewPager);
+                (PagerIndicator) findViewById(R.id.pagerIndicator), photoList);
+
+        //temp above
+
         mPhotoViewPager.setAdapter(adapter);
         mPhotoViewPager.setOnPageChangeListener(adapter);
         mPhotoViewPager.setPageMargin(Utils.getPixelsFromDip(6f, getResources()));
@@ -114,7 +141,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
             }
         });
 
-        TestDataHolder otherCouponData = DataListModel.getInstance().getDataList().get(2);
+        CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(2);
         ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
         ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
         ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
@@ -133,7 +160,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
                 startActivity(i);
             }
         });
-        TestDataHolder otherCouponData2 = DataListModel.getInstance().getDataList().get(3);
+        CouponInfo otherCouponData2 = DataListModel.getInstance().getDataList().get(3);
         ((ImageView) otherCoupon2.findViewById(R.id.card_image)).setImageResource(otherCouponData2.mSmallImageResId);
         ((TextView) otherCoupon2.findViewById(R.id.card_description)).setText(otherCouponData2.getDescription());
         ((TextView) otherCoupon2.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData2.mPrice));

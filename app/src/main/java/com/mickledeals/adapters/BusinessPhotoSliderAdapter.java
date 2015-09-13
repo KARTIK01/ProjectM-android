@@ -1,7 +1,10 @@
 package com.mickledeals.adapters;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,8 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.activities.BusinessPhotosActivity;
+import com.mickledeals.datamodel.BusinessPhoto;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.views.PagerIndicator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nicky on 12/26/2014.
@@ -24,23 +32,14 @@ import com.mickledeals.views.PagerIndicator;
 public class BusinessPhotoSliderAdapter extends FragmentPagerAdapter implements
         ViewPager.OnPageChangeListener {
 
-    private static final int PHOTO_WIDTH_DP = 300;
-
-    private static final long REFRESH_PERIOD = 5000;
-//    private List<TestDataHolder> mList;
+    private ArrayList<BusinessPhoto> mList;
     private PagerIndicator mIndicator;
-    private ViewPager mViewPager;
-//    private Handler mHandler;
 
-    public BusinessPhotoSliderAdapter(FragmentManager fm, PagerIndicator indicator, ViewPager viewPager) {
+    public BusinessPhotoSliderAdapter(FragmentManager fm, PagerIndicator indicator, ArrayList<BusinessPhoto> photoList) {
         super(fm);
-//        mList = DataListModel.getInstance().getFeatureSliderCouponList();
         mIndicator = indicator;
-        mIndicator.setSize(4);
-        mViewPager = viewPager;
-//        mHandler = new Handler();
-//        mHandler.removeCallbacks(mSlidePageThread);
-//        mHandler.postDelayed(mSlidePageThread, REFRESH_PERIOD);
+        mIndicator.setSize(mList.size());
+        mList = photoList;
     }
 
     @Override
@@ -49,41 +48,19 @@ public class BusinessPhotoSliderAdapter extends FragmentPagerAdapter implements
         DLog.d(this, "Featured Fragment getItem()");
         Fragment fragment = new SlidePageFragment();
         Bundle args = new Bundle();
-        int imageResId = 0;
-        int photoStringResId = 0;
-        if (position == 0) {
-            imageResId = R.drawable.pic_business_1;
-            photoStringResId = R.string.business_photo1;
-        } else if (position == 1) {
-            imageResId = R.drawable.pic_business_2;
-            photoStringResId = R.string.business_photo2;
-        } else if (position == 2) {
-            imageResId = R.drawable.pic_business_3;
-            photoStringResId = R.string.business_photo3;
-        } else if (position == 3) {
-            imageResId = R.drawable.pic_business_4;
-            photoStringResId = R.string.business_photo4;
-        }
-
-        args.putInt("imageResId", imageResId);
-        args.putInt("photoDescription", photoStringResId);
+        args.putSerializable("photoObject", mList.get(position));
+        args.putInt("position", position);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return mList.size();
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-//        if (state == ViewPager.SCROLL_STATE_IDLE) {
-//            mHandler.removeCallbacks(mSlidePageThread);
-//            mHandler.postDelayed(mSlidePageThread, REFRESH_PERIOD);
-//        } else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-//            mHandler.removeCallbacks(mSlidePageThread);
-//        }
     }
 
     @Override
@@ -98,27 +75,44 @@ public class BusinessPhotoSliderAdapter extends FragmentPagerAdapter implements
         }
     }
 
-//    private Runnable mSlidePageThread = new Runnable() {
-//        @Override
-//        public void run() {
-//            int cur = mViewPager.getCurrentItem();
-//            mViewPager.setCurrentItem(cur == getCount() - 1 ? 0 : cur + 1, true);
-//            mHandler.postDelayed(this, REFRESH_PERIOD);
-//        }
-//    };
-
     public static class SlidePageFragment extends Fragment {
 
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+            BusinessPhoto photo = (BusinessPhoto) getArguments().getSerializable("photoObject");
+            final int pos = getArguments().getInt("position");
+
             DLog.d(this, "onCreateView");
             ViewGroup rootView = (ViewGroup) inflater.inflate(
                     R.layout.business_photo_slide_page, container, false);
             ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
-            imageView.setImageResource(getArguments().getInt("imageResId"));
             TextView description = (TextView) rootView.findViewById(R.id.slider_text);
-            description.setText(getString(getArguments().getInt("photoDescription")));
+            imageView.setImageResource(photo.mResId);
+            description.setText(photo.mPhotoDescription);
+
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String transition = "cardImage" + pos;
+
+                    Intent i = new Intent(v.getContext(), BusinessPhotosActivity.class);
+                    i.putExtra("photoList", mList);
+                    i.putStringArrayListExtra("photoList", mList);
+                    i.putExtra("position", pos);
+
+                    if (Build.VERSION.SDK_INT < 16 || v == null) {
+                        v.getContext().startActivity(i); //use default animation
+                    } else if (Build.VERSION.SDK_INT >= 21) { //use tranistion animation
+                        Bundle scaledBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(SlidePageFragment.this.getActivity(), v, transition).toBundle();
+                        v.getContext().startActivity(i, scaledBundle);
+                    } else { //use scale up animation
+                        Bundle scaledBundle = ActivityOptionsCompat.makeScaleUpAnimation(v, 0, 0, v.getWidth(), v.getHeight()).toBundle();
+                        v.getContext().startActivity(i, scaledBundle);
+                    }
+                }
+            });
+
             return rootView;
 
         }

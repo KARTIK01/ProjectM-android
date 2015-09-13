@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.Utils;
@@ -28,7 +28,7 @@ public class FeatureSliderAdapter extends PagerAdapter implements
         ViewPager.OnPageChangeListener {
 
     private static final long REFRESH_PERIOD = 5000;
-    private List<TestDataHolder> mList;
+    private List<CouponInfo> mList;
     private PagerIndicator mIndicator;
     private ViewPager mViewPager;
     private Handler mHandler;

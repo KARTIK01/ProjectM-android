@@ -9,8 +9,8 @@ import android.view.View;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 
 import java.util.ArrayList;
@@ -28,15 +28,15 @@ public class NearbyFragment extends ListMapBaseFragment {
         mLocationManager.connect();
     }
 
-    public List<TestDataHolder> getDataList() {
+    public List<CouponInfo> getDataList() {
         return DataListModel.getInstance().getNearbyList();
     }
 
-    public List<TestDataHolder> getTemporaryDataList() {
+    public List<CouponInfo> getTemporaryDataList() {
         //temporary
-        List<TestDataHolder> list = new ArrayList<TestDataHolder>();
+        List<CouponInfo> list = new ArrayList<CouponInfo>();
         for (int i = 1; i < DataListModel.getInstance().getDataList().size(); i++) {
-            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
+            CouponInfo holder = DataListModel.getInstance().getDataList().get(i);
             list.add(holder);
         }
         return list;

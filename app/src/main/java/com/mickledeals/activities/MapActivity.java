@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
-import com.mickledeals.tests.TestDataHolder;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.Utils;
 
 /**
@@ -28,7 +28,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private SupportMapFragment mMapFragment;
     private static final int DIRECTIONS_MENU_ID = 0;
     private static final int SHOW_GOOGLE_MAP_MENU_ID = 1;
-    private TestDataHolder mData;
+    private CouponInfo mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
 
-        mData = (TestDataHolder) getIntent().getSerializableExtra("dataObject");
+        mData = (CouponInfo) getIntent().getSerializableExtra("dataObject");
         setTitle(mData.getStoreName());
     }
 

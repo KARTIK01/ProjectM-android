@@ -1,7 +1,6 @@
 package com.mickledeals.datamodel;
 
 import com.mickledeals.R;
-import com.mickledeals.tests.TestDataHolder;
 import com.mickledeals.utils.Constants;
 
 import java.util.ArrayList;
@@ -16,19 +15,19 @@ public class DataListModel {
 
     private static DataListModel sInstance;
 
-    private Map<Integer, TestDataHolder> mDataList = new HashMap<Integer, TestDataHolder>();
-    private List<TestDataHolder> mFeatureSliderCouponList = new ArrayList<TestDataHolder>();
-    private List<TestDataHolder> mNewAddedCouponList = new ArrayList<TestDataHolder>();
-    private List<TestDataHolder> mPopularList = new ArrayList<TestDataHolder>();
-    private List<TestDataHolder> mBestCouponList = new ArrayList<TestDataHolder>();
+    private Map<Integer, CouponInfo> mDataList = new HashMap<Integer, CouponInfo>();
+    private List<CouponInfo> mFeatureSliderCouponList = new ArrayList<CouponInfo>();
+    private List<CouponInfo> mNewAddedCouponList = new ArrayList<CouponInfo>();
+    private List<CouponInfo> mPopularList = new ArrayList<CouponInfo>();
+    private List<CouponInfo> mBestCouponList = new ArrayList<CouponInfo>();
 
 
-    private List<TestDataHolder> mNearbyList = new ArrayList<TestDataHolder>();
-    private List<TestDataHolder> mSavedList = new ArrayList<TestDataHolder>();
-    private List<TestDataHolder> mBoughtList = new ArrayList<TestDataHolder>();
+    private List<CouponInfo> mNearbyList = new ArrayList<CouponInfo>();
+    private List<CouponInfo> mSavedList = new ArrayList<CouponInfo>();
+    private List<CouponInfo> mBoughtList = new ArrayList<CouponInfo>();
 
-    private List<TestDataHolder> mMoreCouponsList = new ArrayList<TestDataHolder>();
-    private List<TestDataHolder> mSearchResultList = new ArrayList<TestDataHolder>();
+    private List<CouponInfo> mMoreCouponsList = new ArrayList<CouponInfo>();
+    private List<CouponInfo> mSearchResultList = new ArrayList<CouponInfo>();
 
     public static DataListModel getInstance() {
         if (sInstance == null) {
@@ -49,43 +48,43 @@ public class DataListModel {
         initBestCoupon();
     }
 
-    public Map<Integer, TestDataHolder> getDataList() {
+    public Map<Integer, CouponInfo> getDataList() {
         return mDataList;
     }
 
-    public List<TestDataHolder> getFeatureSliderCouponList() {
+    public List<CouponInfo> getFeatureSliderCouponList() {
         return mFeatureSliderCouponList;
     }
 
-    public List<TestDataHolder> getNewAddedCouponList() {
+    public List<CouponInfo> getNewAddedCouponList() {
         return mNewAddedCouponList;
     }
 
-    public List<TestDataHolder> getPopularCouponList() {
+    public List<CouponInfo> getPopularCouponList() {
         return mPopularList;
     }
 
-    public List<TestDataHolder> getBestCouponList() {
+    public List<CouponInfo> getBestCouponList() {
         return mBestCouponList;
     }
 
-    public List<TestDataHolder> getNearbyList() {
+    public List<CouponInfo> getNearbyList() {
         return mNearbyList;
     }
 
-    public List<TestDataHolder> getSavedList() {
+    public List<CouponInfo> getSavedList() {
         return mSavedList;
     }
 
-    public List<TestDataHolder> getBoughtList() {
+    public List<CouponInfo> getBoughtList() {
         return mBoughtList;
     }
 
-    public List<TestDataHolder> getMoreCouponsList() {
+    public List<CouponInfo> getMoreCouponsList() {
         return mMoreCouponsList;
     }
 
-    public List<TestDataHolder> getSearchResultList() {
+    public List<CouponInfo> getSearchResultList() {
         return mSearchResultList;
     }
 
@@ -129,7 +128,7 @@ public class DataListModel {
 
 
     private void initTestData() {
-        TestDataHolder holder = new TestDataHolder();
+        CouponInfo holder = new CouponInfo();
         holder.mId = 1;
         holder.mImageResId = R.drawable.pic_1;
         holder.mSmallImageResId = R.drawable.pic_1_s;
@@ -147,7 +146,7 @@ public class DataListModel {
 
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 2;
         holder.mImageResId = R.drawable.pic_8;
         holder.mSmallImageResId = R.drawable.pic_8_s;
@@ -164,7 +163,7 @@ public class DataListModel {
         //this steakhouse should not have a chinese name, no need mStoreNameCh
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 3;
         holder.mImageResId = R.drawable.pic_21;
         holder.mSmallImageResId = R.drawable.pic_21_s;
@@ -182,7 +181,7 @@ public class DataListModel {
 
 
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 8;
         holder.mImageResId = R.drawable.pic_2;
         holder.mSmallImageResId = R.drawable.pic_2_s;
@@ -199,7 +198,7 @@ public class DataListModel {
         holder.mStoreNameCh ="網天卡拉OK";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 4;
         holder.mImageResId = R.drawable.pic_3;
         holder.mSmallImageResId = R.drawable.pic_3_s;
@@ -216,7 +215,7 @@ public class DataListModel {
         holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 21;
         holder.mImageResId = R.drawable.pic_4;
         holder.mSmallImageResId = R.drawable.pic_4_s;
@@ -233,7 +232,7 @@ public class DataListModel {
         holder.mStoreNameCh ="茶壺天堂";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 5;
         holder.mImageResId = R.drawable.pic_5;
         holder.mSmallImageResId = R.drawable.pic_5_s;
@@ -252,7 +251,7 @@ public class DataListModel {
         mDataList.put(holder.mId, holder);
 
         holder.mPrice = 1;
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 6;
         holder.mImageResId = R.drawable.pic_6;
         holder.mSmallImageResId = R.drawable.pic_6_s;
@@ -268,7 +267,7 @@ public class DataListModel {
         holder.mDescriptionCh = "結帳時享有8折優惠";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 7;
         holder.mImageResId = R.drawable.pic_7;
         holder.mSmallImageResId = R.drawable.pic_7_s;
@@ -285,7 +284,7 @@ public class DataListModel {
         holder.mStoreNameCh ="綠日水療";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 9;
         holder.mImageResId = R.drawable.pic_9;
         holder.mSmallImageResId = R.drawable.pic_9_s;
@@ -302,7 +301,7 @@ public class DataListModel {
         holder.mStoreNameCh ="火鍋宮殿";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 10;
         holder.mImageResId = R.drawable.pic_10;
         holder.mSmallImageResId = R.drawable.pic_10_s;
@@ -318,7 +317,7 @@ public class DataListModel {
         holder.mDescriptionCh = "結帳時享有9折優惠";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 11;
         holder.mImageResId = R.drawable.pic_11;
         holder.mSmallImageResId = R.drawable.pic_11_s;
@@ -334,7 +333,7 @@ public class DataListModel {
         holder.mDescriptionCh = "點任吃套餐即送牛小排一份";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 12;
         holder.mImageResId = R.drawable.pic_12;
         holder.mSmallImageResId = R.drawable.pic_12_s;
@@ -350,7 +349,7 @@ public class DataListModel {
         holder.mDescriptionCh = "消費滿$80以上享有85折優惠";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 13;
         holder.mImageResId = R.drawable.pic_13;
         holder.mSmallImageResId = R.drawable.pic_13_s;
@@ -367,7 +366,7 @@ public class DataListModel {
         holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 14;
         holder.mImageResId = R.drawable.pic_14;
         holder.mSmallImageResId = R.drawable.pic_14_s;
@@ -383,7 +382,7 @@ public class DataListModel {
         holder.mDescriptionCh = "結帳時享有9折優惠";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 15;
         holder.mImageResId = R.drawable.pic_15;
         holder.mSmallImageResId = R.drawable.pic_15_s;
@@ -402,7 +401,7 @@ public class DataListModel {
         mDataList.put(holder.mId, holder);
 
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 16;
         holder.mImageResId = R.drawable.pic_16;
         holder.mSmallImageResId = R.drawable.pic_16_s;
@@ -418,7 +417,7 @@ public class DataListModel {
         holder.mDescriptionCh = "8pm後每隻生蠔降至$1";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 17;
         holder.mImageResId = R.drawable.pic_17;
         holder.mSmallImageResId = R.drawable.pic_17_s;
@@ -434,7 +433,7 @@ public class DataListModel {
         holder.mDescriptionCh = "結帳時享有9折優惠";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 18;
         holder.mImageResId = R.drawable.pic_18;
         holder.mSmallImageResId = R.drawable.pic_18_s;
@@ -451,7 +450,7 @@ public class DataListModel {
         holder.mStoreNameCh ="珊珊髮廊";
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 19;
         holder.mImageResId = R.drawable.pic_19;
         holder.mSmallImageResId = R.drawable.pic_19_s;
@@ -468,7 +467,7 @@ public class DataListModel {
         holder.mStatus = Constants.COUPON_STATUS_EXPIRED;
         mDataList.put(holder.mId, holder);
 
-        holder = new TestDataHolder();
+        holder = new CouponInfo();
         holder.mId = 20;
         holder.mImageResId = R.drawable.pic_20;
         holder.mSmallImageResId = R.drawable.pic_20_s;

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.mickledeals.tests.TestDataHolder;
+import com.mickledeals.datamodel.CouponInfo;
 
 /**
  * Created by Nicky on 5/18/2015.
@@ -67,7 +67,7 @@ public class MDLocationManager implements GoogleApiClient.ConnectionCallbacks, G
         }
     }
 
-    public float getDistanceFromCurLocation(TestDataHolder holder) {
+    public float getDistanceFromCurLocation(CouponInfo holder) {
         if (mLastLocation == null) return -1;
         Location dataLocation = new Location("");
         String[] tokens = holder.mLatLng.split(",");
