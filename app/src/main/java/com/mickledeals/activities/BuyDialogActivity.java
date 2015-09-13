@@ -61,6 +61,18 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
         finish();
     }
 
+    public void termsClick(View v) {
+        Intent i = new Intent(this, WebPageActivity.class);
+        i.putExtra("webContent", "terms");
+        startActivity(i);
+    }
+
+    public void privacyClick(View v) {
+        Intent i = new Intent(this, WebPageActivity.class);
+        i.putExtra("webContent", "privacy");
+        startActivity(i);
+    }
+
     @Override
     protected int getLayoutResource() {
         return R.layout.buy_dialog;

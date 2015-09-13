@@ -24,6 +24,8 @@ import com.mickledeals.views.PagerIndicator;
 public class BusinessPhotoSliderAdapter extends FragmentPagerAdapter implements
         ViewPager.OnPageChangeListener {
 
+    private static final int PHOTO_WIDTH_DP = 300;
+
     private static final long REFRESH_PERIOD = 5000;
 //    private List<TestDataHolder> mList;
     private PagerIndicator mIndicator;

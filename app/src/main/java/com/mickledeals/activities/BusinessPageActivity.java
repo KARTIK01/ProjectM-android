@@ -29,7 +29,6 @@ import com.mickledeals.views.RoundedImageView;
  */
 public class BusinessPageActivity extends SwipeDismissActivity {
 
-
     private RoundedImageView mRoundedImageView;
     private ViewPager mPhotoViewPager;
     private View mShadow;

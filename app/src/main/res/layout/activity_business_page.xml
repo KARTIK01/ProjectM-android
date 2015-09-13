@@ -112,7 +112,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/photoViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
+                android:layout_height="225dp"
                 android:clipToPadding="false"
                 android:paddingLeft="26dp"
                 android:paddingRight="26dp" />

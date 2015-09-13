@@ -38,7 +38,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/confirm_redeem_msg"
-                android:visibility="gone"
                 android:textColor="@color/black"
                 android:fontFamily="sans-serif-light"
                 android:layout_marginTop="16dp"

@@ -111,7 +111,7 @@
     <!-- Redeem Dialog -->
 
     <string name="confirm_redeem_title">Are you sure you want to Redeem now?</string>
-    <string name="confirm_redeem_msg">This offer will be used once you redeemed</string>
+    <string name="confirm_redeem_msg">This coupon cannot be reused once you leave the verification screen</string>
     <string name="redeem_now">Redeem Now</string>
     <string name="mark_as_used">Mark as Used</string>
     <string name="mark_as_used_confirm">Are you done redeeming this offer?</string>
@@ -127,7 +127,7 @@
     <!-- Redeem Full Details Dialog -->
     <string name="coupon_description">Coupon Description</string>
     <string name="business_name">Business Name</string>
-    <string name="fine_print_redeem">Fine Print</string>
+    <string name="fine_print_redeem"><u>Fine Print</u></string>
 
     <!-- Business Page -->
     <string name="news">News</string>

@@ -101,7 +101,7 @@
     <!-- Redeem Dialog -->
 
     <string name="confirm_redeem_title">你確定現在要兌換此優惠嗎?</string>
-    <string name="confirm_redeem_msg">優惠將於兌換後2小時逾期</string>
+    <string name="confirm_redeem_msg">此優惠券將於離開認證畫面後失效</string>
     <string name="redeem_now">立即兌換</string>
     <string name="mark_as_used">標記為已使用</string>
     <string name="mark_as_used_confirm">你是否已經兌換此優惠?</string>
