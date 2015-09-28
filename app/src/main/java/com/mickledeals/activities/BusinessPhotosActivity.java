@@ -45,6 +45,7 @@ public class BusinessPhotosActivity extends BaseActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         mInitialIndex = getIntent().getIntExtra("position", 0);
         mList = (ArrayList) getIntent().getSerializableExtra("photoList");
         mViewPager = (ViewPager) findViewById(R.id.viewpager);

@@ -138,7 +138,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
     }
 
     public String getRequestURL() {
-        return "http://www.cycon.com.mo/cafe_version_update.txt";
+        return "http://www.google.com";
     }
 
     @Override

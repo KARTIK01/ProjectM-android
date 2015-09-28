@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.mickledeals.R;
@@ -43,6 +45,37 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        boolean isFirstLaunch = PreferenceHelper.getPreferenceValueBoolean(this, "firstLaunch", true);
+        if (isFirstLaunch) {
+            Intent i = new Intent(this, LaunchScreen.class);
+            startActivity(i);
+            finish();
+            return;
+        }
+
+        final View launchBg = findViewById(R.id.launchBg);
+        final View fullLogo = findViewById(R.id.fullLogo);
+        fullLogo.setVisibility(View.VISIBLE);
+        AlphaAnimation anim = new AlphaAnimation(1, 0);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                launchBg.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        anim.setDuration(500);
+        anim.setStartOffset(1000);
+        launchBg.startAnimation(anim);
 
         mToolBarLogo = mToolBar.findViewById(R.id.toolbar_logo);
         mSlidingTab = mToolBar.findViewById(R.id.sliding_tabs);

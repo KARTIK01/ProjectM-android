@@ -206,7 +206,6 @@ public class DetailsFragment extends BaseFragment {
                 });
 
 
-
             }
         });
 
@@ -305,7 +304,6 @@ public class DetailsFragment extends BaseFragment {
         }
 
 
-
         if (mHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
             showExpiredStatus();
         } else if (mHolder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
@@ -338,7 +336,7 @@ public class DetailsFragment extends BaseFragment {
         if (mHolder.mPrice == 0) {
             mBoughtDate.setText(getString(R.string.obtain_date));
         } else {
-            mBoughtDate.setText(getString(R.string.bought_date,  "$" + (int) (mHolder.mPrice)));
+            mBoughtDate.setText(getString(R.string.bought_date, "$" + (int) (mHolder.mPrice)));
         }
         mBoughtDate.setVisibility(View.VISIBLE);
 
@@ -443,7 +441,11 @@ public class DetailsFragment extends BaseFragment {
         int id = item.getItemId();
 
         if (id == R.id.action_share) {
-            Utils.shareScreenShot(getActivity(), mDetailsScrollView, getString(R.string.share_subject), mHolder.getDescription() + "\n" + mHolder.getStoreName());
+            String title = "MickleDeals offer: " + mHolder.getDescription() + " in " + mHolder.getStoreName() + "!";
+            String content = mHolder.getDescription() + "\n" + mHolder.getStoreName() + "\n\n"
+                    + getString(R.string.share_msg) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
+            Utils.shareScreenShot(getActivity(), mDetailsScrollView, title, content);
+
         }
 
         return super.onOptionsItemSelected(item);

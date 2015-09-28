@@ -3,7 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-
     <dimen name="card_margin">4dp</dimen>
     <dimen name="card_margin_bottom">2dp</dimen>
     <dimen name="suggestion_card_margin_bottom">0dp</dimen>
@@ -40,4 +39,6 @@
     <dimen name="thumbnail_image_width">110dp</dimen>
     <dimen name="thumbnail_small_image_width">90dp</dimen> <!-- used in save, other coupon -->
 
+    <dimen name="business_photo_width">250dp</dimen>
+    <dimen name="business_photo_height">188dp</dimen>
 </resources>

@@ -199,7 +199,11 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_share) {
-            Utils.shareScreenShot(this, mDetailsScrollView, getString(R.string.share_subject), mHolder.getDescription() + "\n" + mHolder.getStoreName());
+
+
+            String title = mHolder.getStoreName() + " on MickleDeals!";
+            String content = getString(R.string.share_business_page_msg, mHolder.getStoreName()) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
+            Utils.shareScreenShot(this, mDetailsScrollView, title, content);
         }
 
         return super.onOptionsItemSelected(item);

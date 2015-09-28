@@ -7,6 +7,11 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_search">Search</string>
+    <string name="google_play_link">"https://play.google.com/store/apps/details?id=com.mickledeals"</string>
+    <string name="itunes_link"></string>
+
+    <!-- Launch Screen -->
+    <string name="continue_in_launch">Get Started!</string>
 
     <!-- Menu -->
 
@@ -78,6 +83,10 @@
     <string name="redeem_coupon">Redeem this Offer</string>
     <string name="redeem_in">"Redeem in "</string>
     <string name="share_subject">A great coupon from MickleDeals!</string>
+    <string name="share_msg">Let\'s check out the deal in the MickleDeals App now!</string>
+    <string name="share_business_page_msg">Let\'s check out %s\'s profile and see what it offers in the MickleDeals App now!</string>
+    <string name="share_google_play">"Google Play Store: "</string>
+    <string name="share_itunes">"iTunes App Store: "</string>
     <string name="share_to">Share to...</string>
     <string name="share_failed">Share Failed</string>
     <string name="nav_text_more">More</string>
@@ -204,6 +213,7 @@
     <string name="location_error_choice4">Sort Randomly</string>
 
     <string name="all_rights_reserved">MickleDeals LLC © All rights reserved</string>
+    <string name="full_all_rights_reserved">Copyright © MickleDeals LLC. All rights reserved.</string>
     <string name="version">Version</string>
     <string name="terms">Terms of Use</string>
     <string name="privacy">Privacy Policy</string>

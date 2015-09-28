@@ -70,7 +70,6 @@
     <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠</string>
     <string name="redeem_in">"兌換時間剩 "</string>
-    <string name="share_subject">一張來自MickleDeals的絕佳優惠券!</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
     <string name="nav_text_more">張</string>
@@ -98,6 +97,10 @@
     <string name="share_to_fb_purchase">為答謝你的購買,分享到Facebook後你將會獲得 $1 Mickle Credit</string>
     <string name="share_to_fb_free">分享給你的朋友!</string>
 
+
+    <!-- Launch Screen -->
+
+    <string name="continue_in_launch">開始使用</string>
     <!-- Redeem Dialog -->
 
     <string name="confirm_redeem_title">你確定現在要兌換此優惠嗎?</string>

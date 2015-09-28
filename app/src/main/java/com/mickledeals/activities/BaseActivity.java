@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mickledeals.R;
+import com.mickledeals.utils.PreferenceHelper;
 
 /**
  * Created by Nicky on 11/23/2014.
@@ -25,6 +26,13 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean isFirstLaunch = PreferenceHelper.getPreferenceValueBoolean(this, "firstLaunch", true);
+        if (isFirstLaunch) {
+            //to skip home activity and do launch screen
+            return;
+        }
+
         if (savedInstanceState != null) {
             boolean isKilled = savedInstanceState.getBoolean("isKilled");
             if (isKilled && !(this instanceof HomeActivity)) {

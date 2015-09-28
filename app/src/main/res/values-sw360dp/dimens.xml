@@ -37,4 +37,7 @@
     <dimen name="card_button_padding">5dp</dimen>
     <dimen name="thumbnail_image_width">120dp</dimen>
     <dimen name="thumbnail_small_image_width">100dp</dimen> <!-- used in save, other coupon -->
+
+    <dimen name="business_photo_width">300dp</dimen>
+    <dimen name="business_photo_height">225dp</dimen>
 </resources>

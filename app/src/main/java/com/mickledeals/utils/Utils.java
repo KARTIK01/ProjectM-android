@@ -225,8 +225,8 @@ public class Utils {
 
         scrollView.scrollTo(0, 0);
 
-        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
         Bitmap bitmap = Bitmap.createBitmap(MDApplication.sDeviceWidth, v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bitmap);

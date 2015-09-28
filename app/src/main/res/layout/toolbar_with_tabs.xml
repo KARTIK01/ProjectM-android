@@ -8,7 +8,7 @@
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/toolbar_extra_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,11 +20,15 @@
 
         <ImageView
             android:id="@+id/toolbar_logo"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/full_logo"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:alpha="0" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>
