@@ -17,8 +17,6 @@ import android.view.animation.Animation;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
-import com.mickledeals.datamodel.CouponInfo;
-import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.fragments.BaseFragment;
 import com.mickledeals.fragments.NavigationDrawerFragment;
 import com.mickledeals.utils.DLog;
@@ -56,7 +54,7 @@ public class HomeActivity extends BaseActivity
         }
 
         final View launchBg = findViewById(R.id.launchBg);
-        final View fullLogo = findViewById(R.id.fullLogo);
+        final View fullLogo = findViewById(R.id.fullLogoHome);
         fullLogo.setVisibility(View.VISIBLE);
         AlphaAnimation anim = new AlphaAnimation(1, 0);
         anim.setAnimationListener(new Animation.AnimationListener() {
@@ -129,17 +127,17 @@ public class HomeActivity extends BaseActivity
         });
 
 
-        String saveListStr = PreferenceHelper.getPreferenceValueStr(this, "saveList", "");
-        if (!saveListStr.equals("")) {
-            String[] tokens = saveListStr.split("\\|");
-            for (String token : tokens) {
-                if (token.length() != 0) {
-                    int id = Integer.parseInt(token);
-                    CouponInfo data = DataListModel.getInstance().getDataList().get(id);
-                    data.mSaved = true;
-                }
-            }
-        }
+//        String saveListStr = PreferenceHelper.getPreferenceValueStr(this, "saveList", "");
+//        if (!saveListStr.equals("")) {
+//            String[] tokens = saveListStr.split("\\|");
+//            for (String token : tokens) {
+//                if (token.length() != 0) {
+//                    int id = Integer.parseInt(token);
+//                    CouponInfo data = DataListModel.getInstance().getDataList().get(id);
+//                    data.mSaved = true;
+//                }
+//            }
+//        }
     }
 
     @Override

@@ -101,7 +101,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mOpenHours = (TextView) findViewById(R.id.openHours);
         mOpenHours.setText(getString(R.string.open_hours) + ": 10:00AM to 11:00PM");
         mAddress = (TextView) findViewById(R.id.address);
-        mAddress.setText(mHolder.mAddress);
+        mAddress.setText(mHolder.mBusinessInfo.getFullAddress());
         mAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,12 +115,13 @@ public class BusinessPageActivity extends SwipeDismissActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?daddr=" + mHolder.mLatLng.replace(" ", "")));
+                        Uri.parse("http://maps.google.com/maps?daddr=" + mHolder.mBusinessInfo.mLat + ","
+                                + mHolder.mBusinessInfo.mLng));
                 startActivity(intent);
             }
         });
 
-        getSupportActionBar().setTitle(mHolder.getStoreName());
+        getSupportActionBar().setTitle(mHolder.mBusinessInfo.getStoreName());
         setToolBarTransparency(0);
 
 
@@ -201,8 +202,8 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         if (id == R.id.action_share) {
 
 
-            String title = mHolder.getStoreName() + " on MickleDeals!";
-            String content = getString(R.string.share_business_page_msg, mHolder.getStoreName()) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
+            String title = mHolder.mBusinessInfo.getStoreName() + " on MickleDeals!";
+            String content = getString(R.string.share_business_page_msg, mHolder.mBusinessInfo.getStoreName()) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
             Utils.shareScreenShot(this, mDetailsScrollView, title, content);
         }
 

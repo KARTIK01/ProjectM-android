@@ -7,13 +7,21 @@ import android.support.v7.widget.RecyclerView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.FeaturedAdapter;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+
+import java.util.List;
 
 /**
  * Created by Nicky on 11/28/2014.
  */
 public class FeaturedFragment extends SwipeRefreshBaseFragment {
+
+
+    public List<CouponInfo> getDataList() {
+        return DataListModel.getInstance().getBestCouponList();
+    }
 
     @Override
     public void onPause() {

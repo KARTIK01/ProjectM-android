@@ -53,7 +53,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
 
 //        mDetailsViewPager.setPageMarginDrawable(R.drawable.water_mark_bg);
 //        mDetailsViewPager.setPageMarginDrawable(R.color.transparentViewPagerDivider);
-        getSupportActionBar().setTitle(mList.get(mInitialIndex).getStoreName());
+        getSupportActionBar().setTitle(mList.get(mInitialIndex).mBusinessInfo.getStoreName());
         setToolBarTransparency(0);
     }
 
@@ -78,7 +78,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mList.get(position).getStoreName();
+            return mList.get(position).mBusinessInfo.getStoreName();
         }
 
         @Override
@@ -120,7 +120,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
             }
             setToolBarTransparency(scrollPos);
 
-            getSupportActionBar().setTitle(mList.get(position).getStoreName());
+            getSupportActionBar().setTitle(mList.get(position).mBusinessInfo.getStoreName());
             prevPosition = position;
         }
 

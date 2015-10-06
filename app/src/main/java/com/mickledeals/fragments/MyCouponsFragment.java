@@ -51,6 +51,10 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
         mNoCouponText = (TextView) view.findViewById(R.id.noCouponsText);
     }
 
+    public List<CouponInfo> getDataList() {
+        return DataListModel.getInstance().getBoughtList();
+    }
+
     public void getMyCouponLists() {
 
         mCurrentIndex = 0;
@@ -99,7 +103,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                 //put available coupon to used coupon after redeem
                 for (CouponInfo holder : mBoughtList) {
                     if (holder.mId == data.getIntExtra("id", 0)) {
-                        holder.mRedeemTime = 0;
+//                        holder.mRedeemTime = 0;
                         holder.mStatus = Constants.COUPON_STATUS_DEFAULT;
                         getMyCouponLists();
                         ((MyCouponsAdapter)mAdapter).setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
@@ -109,12 +113,12 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
                 }
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
 
-                for (CouponInfo holder : mBoughtList) {
-                    if (holder.mId == data.getIntExtra("id", 0)) {
-                        holder.mRedeemTime = System.currentTimeMillis();
-                        break;
-                    }
-                }
+//                for (CouponInfo holder : mBoughtList) {
+//                    if (holder.mId == data.getIntExtra("id", 0)) {
+//                        holder.mRedeemTime = System.currentTimeMillis();
+//                        break;
+//                    }
+//                }
 
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
                 i.putExtra("storeName", data.getStringExtra("storeName"));

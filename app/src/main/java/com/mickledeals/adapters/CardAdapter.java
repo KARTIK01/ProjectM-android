@@ -164,7 +164,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             holder.mCardDescription.setText(dataHolder.getDescription());
             holder.mCardDescription.setSelected(true);
         }
-        if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.getStoreName());
+        if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
         if (holder.mCardImage != null)
             holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
         if (holder.mCardPrice != null) {
@@ -216,7 +216,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             });
         }
         if (holder.mCardCity != null) {
-            holder.mCardCity.setText(dataHolder.mAddressShort.replace("San Francisco", "SF"));
+//            holder.mCardCity.setText(dataHolder.mAddressShort.replace("San Francisco", "SF"));
         }
         if (holder.mCardDist != null) {
             holder.mCardDist.setVisibility(View.VISIBLE);

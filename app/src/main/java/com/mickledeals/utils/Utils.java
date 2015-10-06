@@ -169,8 +169,7 @@ public class Utils {
     }
 
     public static LatLng getLatLngFromDataHolder(CouponInfo holder) {
-        String[] tokens = holder.mLatLng.split(",");
-        return new LatLng(Double.parseDouble(tokens[0].trim()), Double.parseDouble(tokens[1].trim()));
+        return new LatLng(holder.mBusinessInfo.mLat, holder.mBusinessInfo.mLng);
     }
 
     public static void wrapStringsIntoLinearLayout(String[] strings, LinearLayout rootLayout, int layoutRes) {

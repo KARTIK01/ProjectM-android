@@ -3,11 +3,11 @@ package com.mickledeals.fragments;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,10 +22,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
-import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
-import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
@@ -63,6 +61,8 @@ public class DetailsFragment extends BaseFragment {
     private View mRedeemBtn;
     private View mSaveBtn;
     private View mBusinessInfoBtn;
+    private TextView mExpiredDate;
+    private TextView mFinePrint;
     private TextView mBoughtDate;
     private TextView mDealEndedText;
     private TextView mSaveBtnText;
@@ -116,6 +116,8 @@ public class DetailsFragment extends BaseFragment {
         mSaveBtn = view.findViewById(R.id.savedButton);
         mBusinessInfoBtnText = (TextView) view.findViewById(R.id.businessInfoButtonText);
         mSaveBtnText = (TextView) view.findViewById(R.id.savedButtonText);
+        mExpiredDate = (TextView) view.findViewById(R.id.expiredDate);
+        mFinePrint = (TextView) view.findViewById(R.id.finePrint);
         mAddressBtn = view.findViewById(R.id.address);
         mCallBtn = view.findViewById(R.id.call);
         mBuyPanel = view.findViewById(R.id.buyPanel);
@@ -158,15 +160,15 @@ public class DetailsFragment extends BaseFragment {
             mNavRightText.setVisibility(View.VISIBLE);
         }
 
-        mBusinessName.setText(mHolder.getStoreName());
+        mBusinessName.setText(mHolder.mBusinessInfo.getStoreName());
         mDescription.setText(mHolder.getDescription());
-        ((TextView) view.findViewById(R.id.address)).setText(mHolder.mAddress);
+        ((TextView) view.findViewById(R.id.address)).setText(mHolder.mBusinessInfo.getShortAddress());
 
         String priceText = mHolder.mPrice == 0 ? getString(R.string.free) : "$" + (int) (mHolder.mPrice);
         mBuyBtnText.setText(getString(R.string.unlock_coupon, priceText));
         mPrice.setText(priceText);
         float dist = MDLocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
-        String addrShort = mHolder.mAddressShort;
+        String addrShort = mHolder.mBusinessInfo.getDisplayedCity();
         if (dist > 0) {
             addrShort += " • " + dist + " mi";
         }
@@ -198,7 +200,7 @@ public class DetailsFragment extends BaseFragment {
                         } else {
                             Intent i = new Intent(mContext, BuyDialogActivity.class);
                             i.putExtra("price", mHolder.mPrice);
-                            i.putExtra("store_name", mHolder.getStoreName());
+                            i.putExtra("store_name", mHolder.mBusinessInfo.getStoreName());
                             i.putExtra("coupon_description", mHolder.getDescription());
                             startActivityForResult(i, REQUEST_CODE_BUY);
                         }
@@ -212,18 +214,18 @@ public class DetailsFragment extends BaseFragment {
         mRedeemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mHolder.mRedeemTime == 0) {
-                    Intent i = new Intent(mContext, ConfirmRedeemDialogActivity.class);
-                    i.putExtra("storeName", mHolder.mStoreName);
-                    i.putExtra("couponDesc", mHolder.mDescription);
-                    startActivityForResult(i, REQUEST_CODE_CONFIRM_REDEEM);
-                } else {
-                    Intent i = new Intent(mContext, RedeemDialogActivity.class);
-                    i.putExtra("storeName", mHolder.mStoreName);
-                    i.putExtra("couponDesc", mHolder.mDescription);
-                    i.putExtra("redeemTime", mHolder.mRedeemTime);
-                    startActivityForResult(i, REQUEST_CODE_REDEEM);
-                }
+//                if (mHolder.mRedeemTime == 0) {
+                Intent i = new Intent(mContext, ConfirmRedeemDialogActivity.class);
+                i.putExtra("storeName", mHolder.mBusinessInfo.mName);
+                i.putExtra("couponDesc", mHolder.mDescription);
+                startActivityForResult(i, REQUEST_CODE_CONFIRM_REDEEM);
+//                } else {
+//                    Intent i = new Intent(mContext, RedeemDialogActivity.class);
+//                    i.putExtra("storeName", mHolder.mStoreName);
+//                    i.putExtra("couponDesc", mHolder.mDescription);
+//                    i.putExtra("redeemTime", mHolder.mRedeemTime);
+//                    startActivityForResult(i, REQUEST_CODE_REDEEM);
+//                }
             }
         });
 
@@ -248,6 +250,19 @@ public class DetailsFragment extends BaseFragment {
             }
         });
 
+        String expiredStr = null;
+        if (mHolder.mExpiredDate != 0) {
+            expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
+        } else if (mHolder.mExpiredDays != 0) {
+            expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays); //need format
+        } else {
+            mExpiredDate.setVisibility(View.GONE);
+        }
+        if (expiredStr != null) {
+            mExpiredDate.setText(expiredStr);
+        }
+        mFinePrint.setText(mHolder.getFinePrint());
+
         mAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -260,48 +275,44 @@ public class DetailsFragment extends BaseFragment {
         mCallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String uri = "tel:" + mHolder.mBusinessInfo.mPhone.replaceAll("(-|\\(|\\))", "").trim();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
             }
         });
 
-//        mShareBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                shareCoupon();
-//            }
-//        });
 
-
-        if (mHolder.mId == 2 || mHolder.mId == 3) {
-            mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(mContext, BusinessPageActivity.class);
-                    i.putExtra("storeId", mHolder.mId);
-                    startActivity(i);
-                }
-            });
-
-            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
-            View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
-            mMoreCouponRow.setVisibility(View.VISIBLE);
-            mMoreCouponRow.addView(otherCoupon);
-            otherCoupon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(mContext, DetailsActivity.class);
-                    DataListModel.getInstance().getMoreCouponsList().clear();
-                    DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
-                    i.putExtra("listIndex", 0);
-                    i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
-                    startActivity(i);
-                }
-            });
-            CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
-            ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
-            ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
-            ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
-        }
+//        if (mHolder.mId == 2 || mHolder.mId == 3) {
+//            mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent i = new Intent(mContext, BusinessPageActivity.class);
+//                    i.putExtra("storeId", mHolder.mId);
+//                    startActivity(i);
+//                }
+//            });
+//
+//            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
+//            View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
+//            mMoreCouponRow.setVisibility(View.VISIBLE);
+//            mMoreCouponRow.addView(otherCoupon);
+//            otherCoupon.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent i = new Intent(mContext, DetailsActivity.class);
+//                    DataListModel.getInstance().getMoreCouponsList().clear();
+//                    DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
+//                    i.putExtra("listIndex", 0);
+//                    i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+//                    startActivity(i);
+//                }
+//            });
+//            CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
+//            ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
+//            ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
+//            ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
+//        }
 
 
         if (mHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
@@ -312,7 +323,6 @@ public class DetailsFragment extends BaseFragment {
     }
 
     private void showAvailableStatus() {
-        mHolder.mRedeemTime = 0;
 //        mHandler.removeCallbacks(mUpdatetimerThread);
         mRedeemBtnText.setText(R.string.redeem_coupon);
         mPrice.setVisibility(View.VISIBLE);
@@ -369,12 +379,10 @@ public class DetailsFragment extends BaseFragment {
                 showAvailableStatus();
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
 
-                mHolder.mRedeemTime = System.currentTimeMillis();
-
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
-                i.putExtra("storeName", mHolder.mStoreName);
+                i.putExtra("storeName", mHolder.mBusinessInfo.mName);
                 i.putExtra("couponDesc", mHolder.mDescription);
-                i.putExtra("redeemTime", mHolder.mRedeemTime);
+//                i.putExtra("redeemTime", mHolder.mRedeemTime);
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
 
 //                mHandler.removeCallbacks(mUpdatetimerThread);
@@ -413,13 +421,13 @@ public class DetailsFragment extends BaseFragment {
         return mDetailsScrollView.getScrollY();
     }
 
-    private String getExpiredTimerValue() {
-
-        long timeDiff = System.currentTimeMillis() - mHolder.mRedeemTime;
-        long timeRemainingInSecs = (INTIIAL_REMAINING_TIME - timeDiff) / 1000;
-        return DateUtils.formatElapsedTime(timeRemainingInSecs);
-
-    }
+//    private String getExpiredTimerValue() {
+//
+//        long timeDiff = System.currentTimeMillis() - mHolder.mRedeemTime;
+//        long timeRemainingInSecs = (INTIIAL_REMAINING_TIME - timeDiff) / 1000;
+//        return DateUtils.formatElapsedTime(timeRemainingInSecs);
+//
+//    }
 
 //    private Runnable mUpdatetimerThread = new Runnable() {
 //        @Override
@@ -441,8 +449,8 @@ public class DetailsFragment extends BaseFragment {
         int id = item.getItemId();
 
         if (id == R.id.action_share) {
-            String title = "MickleDeals offer: " + mHolder.getDescription() + " in " + mHolder.getStoreName() + "!";
-            String content = mHolder.getDescription() + "\n" + mHolder.getStoreName() + "\n\n"
+            String title = "MickleDeals offer: " + mHolder.getDescription() + " in " + mHolder.mBusinessInfo.getStoreName() + "!";
+            String content = mHolder.getDescription() + "\n" + mHolder.mBusinessInfo.getStoreName() + "\n\n"
                     + getString(R.string.share_msg) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
             Utils.shareScreenShot(getActivity(), mDetailsScrollView, title, content);
 

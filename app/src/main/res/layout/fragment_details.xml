@@ -226,17 +226,18 @@
 
 
                     <TextView
+                        android:id="@+id/expiredDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
-                        android:text="@string/expire_date"
                         android:textColor="@color/defaultTextColor"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <TextViewTextView
+                        android:id="@+id/finePrint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="8dp"
@@ -244,7 +245,6 @@
                         android:paddingRight="16dp"
                         android:paddingTop="8dp"
                         android:fontFamily="sans-serif-light"
-                        android:text="@string/fine_print_description"
                         android:textColor="@color/defaultTextColor"
                         android:textSize="14sp" />
 

@@ -40,7 +40,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         mMapFragment.getMapAsync(this);
 
         mData = (CouponInfo) getIntent().getSerializableExtra("dataObject");
-        setTitle(mData.getStoreName());
+        setTitle(mData.mBusinessInfo.getStoreName());
     }
 
     @Override
@@ -74,8 +74,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         final Marker marker = map.addMarker(new MarkerOptions()
                 .position(latLng)
-                .title(mData.getStoreName())
-                .snippet(mData.mAddress)
+                .title(mData.mBusinessInfo.getStoreName())
+                .snippet(mData.mBusinessInfo.getShortAddress())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.md_pin)));
     }
 
@@ -94,10 +94,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         if (id == 1) {
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse("http://maps.google.com/maps?daddr=" + mData.mLatLng.replace(" ", "")));
+                    Uri.parse("http://maps.google.com/maps?daddr=" + mData.mBusinessInfo.mLat + ","
+                            + mData.mBusinessInfo.mLng));
             startActivity(intent);
         } else {
-            Uri gmmIntentUri = Uri.parse("geo:" + mData.mLatLng.replace(" ", "") + "?q=" + mData.mAddress.replace(" ", "+") + "&z=16");
+            Uri gmmIntentUri = Uri.parse("geo:" + mData.mBusinessInfo.mLat + ","
+                    + mData.mBusinessInfo.mLng + "?q=" + mData.mBusinessInfo.getShortAddress().replace(" ", "+") + "&z=16");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);

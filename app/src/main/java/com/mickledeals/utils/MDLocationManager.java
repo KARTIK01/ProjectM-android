@@ -68,11 +68,10 @@ public class MDLocationManager implements GoogleApiClient.ConnectionCallbacks, G
     }
 
     public float getDistanceFromCurLocation(CouponInfo holder) {
-        if (mLastLocation == null) return -1;
+        if (mLastLocation == null || holder.mBusinessInfo.mLat == 0 || holder.mBusinessInfo.mLng == 0) return -1;
         Location dataLocation = new Location("");
-        String[] tokens = holder.mLatLng.split(",");
-        dataLocation.setLatitude(Double.parseDouble(tokens[0].trim()));
-        dataLocation.setLongitude(Double.parseDouble(tokens[1].trim()));
+        dataLocation.setLatitude(holder.mBusinessInfo.mLat);
+        dataLocation.setLongitude(holder.mBusinessInfo.mLng);
         float meters = mLastLocation.distanceTo(dataLocation);
         float miles = Math.round(meters / 1609 * 10) / 10f;
         return miles;

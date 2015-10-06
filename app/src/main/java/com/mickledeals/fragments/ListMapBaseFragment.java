@@ -34,7 +34,6 @@ import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.Utils;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Nicky on 11/28/2014.
@@ -52,7 +51,6 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
     private GoogleMap mMap;
     private HashMap<Marker, Integer> mMarkersHashMap = new HashMap<Marker, Integer>();
     private BitmapDescriptor mPinBitmap;
-    protected List<CouponInfo> mDataList;
     private boolean mNeedPopularMapOverlays;
 
     protected View mNoLocationLayout;
@@ -66,7 +64,6 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 //        setHasOptionsMenu(true);
         mLocationManager = MDLocationManager.getInstance(mContext);
         mLocationManager.connect();
-        mDataList = getDataList();
 //        sendRequest(); //cannot send request here, otherwise no refresh dialog
     }
 
@@ -78,6 +75,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mCategorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
         mLocationSpinner = (Spinner) view.findViewById(R.id.locationSpinner);
         mSortSpinner = (Spinner) view.findViewById(R.id.sortSpinner);
@@ -129,7 +127,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         mMapToggleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListResultRecyclerView.getVisibility() == View.VISIBLE) {
+                if (mSwipeRefreshLayout.getVisibility() == View.VISIBLE) {
                     if (mMapView == null) initMapView();
                     showMap();
                 } else {
@@ -143,7 +141,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 
     @Override
     public boolean handleBackPressed() { //only get called when its current active fragment
-        if (mListResultRecyclerView.getVisibility() != View.VISIBLE) {
+        if (mSwipeRefreshLayout.getVisibility() != View.VISIBLE) {
             hideMap();
             return true;
         }
@@ -164,7 +162,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 
     private void hideMap() {
         mMapToggleView.setImageResource(R.drawable.ic_map);
-        mListResultRecyclerView.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         mMapContainer.setVisibility(View.GONE);
         mMapContainer.removeView(mMapView);
         if (mDataList.size() == 0 && !(mNoNetworkLayout != null && mNoNetworkLayout.isShown())) {
@@ -175,7 +173,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 
     private void showMap() {
         mMapToggleView.setImageResource(R.drawable.ic_list);
-        mListResultRecyclerView.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setVisibility(View.GONE);
         mMapContainer.setVisibility(View.VISIBLE);
         mMapContainer.addView(mMapView);
         mMapView.onResume();
@@ -242,7 +240,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(ll)
-                    .title(dataHolder.getStoreName())
+                    .title(dataHolder.mBusinessInfo.getStoreName())
                     .snippet(dataHolder.getDescription())
                     .icon(mPinBitmap));
 
@@ -364,30 +362,29 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         super.onSuccessResponse();
 
         mNeedPopularMapOverlays = true;
-        List<CouponInfo> temporaryDataList = getTemporaryDataList();
-        mDataList.clear();
+//        List<CouponInfo> temporaryDataList = getTemporaryDataList();
 
-        //temporrary
-        for (int i = 0; i < temporaryDataList.size(); i++) {
-            boolean matchCategory = false;
-            boolean matchLocation = false;
-            CouponInfo holder = temporaryDataList.get(i);
-            int categoryPos = 0;
-            if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
-            if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
-                matchCategory = true;
-            }
-            int locationPos = mLocationSpinner.getSelectedItemPosition();
-            String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
-            String[] addrToken = holder.mAddress.split(",");
-            String cityName = addrToken[addrToken.length - 1].trim();
-            if (locationPos == 0 || cityName.equals(targetCityName)) {
-                matchLocation = true;
-            }
-            if (matchCategory && matchLocation) {
-                mDataList.add(holder);
-            }
-        }
+//        //temporrary
+//        for (int i = 0; i < temporaryDataList.size(); i++) {
+//            boolean matchCategory = false;
+//            boolean matchLocation = false;
+//            CouponInfo holder = temporaryDataList.get(i);
+//            int categoryPos = 0;
+//            if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
+//            if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
+//                matchCategory = true;
+//            }
+//            int locationPos = mLocationSpinner.getSelectedItemPosition();
+//            String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
+//            String[] addrToken = holder.mAddress.split(",");
+//            String cityName = addrToken[addrToken.length - 1].trim();
+//            if (locationPos == 0 || cityName.equals(targetCityName)) {
+//                matchLocation = true;
+//            }
+//            if (matchCategory && matchLocation) {
+//                mDataList.add(holder);
+//            }
+//        }
         if (mDataList.size() == 0) {
             if (mMapContainer.getVisibility() == View.VISIBLE) {
                 Toast.makeText(mContext, getNoResultMessage(), Toast.LENGTH_LONG).show();
@@ -435,10 +432,6 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         DLog.d(this, "onStop");
         mLocationManager.disconnect();
     }
-
-    public abstract List<CouponInfo> getDataList();
-
-    public abstract List<CouponInfo> getTemporaryDataList();
 
     public abstract String getNoResultMessage();
 

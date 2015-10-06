@@ -66,6 +66,8 @@
     <string name="share">分享</string>
     <string name="business_info">商戶資料</string>
     <string name="more_coupon">更多此商戶的優惠</string>
+    <string name="expired_in_days">換領後%d日到期</string>
+    <string name="expired_date">於 %s 過期</string>
     <string name="fine_print">條款</string>
     <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠</string>

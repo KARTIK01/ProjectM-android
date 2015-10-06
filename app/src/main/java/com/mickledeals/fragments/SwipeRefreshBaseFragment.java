@@ -5,20 +5,18 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 
-import org.json.JSONArray;
+import java.util.List;
 
 /**
  * Created by Nicky on 7/23/2015.
@@ -32,6 +30,14 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     protected RecyclerView mListResultRecyclerView;
     protected CardAdapter mAdapter;
 
+    protected List<CouponInfo> mDataList;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mDataList = getDataList();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,54 +107,78 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     public void sendRequest() {
         DLog.d(this, "sendRequest");
 //        String request = getRequestURL();
-        String request = "www.google.com";
+        String request = "http://www.mickledeals.com/api/coupons";
         if (request == null) return;
 
         if (mNoNetworkLayout != null) mNoNetworkLayout.setVisibility(View.GONE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
-        MDApiManager.sendJSONArrayRequest(request, new Response.Listener<JSONArray>() {
+
+        MDApiManager.fetchCouponInfoList(request, new MDApiManager.MDResponseListener<List<CouponInfo>>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onMDSuccessResponse(List<CouponInfo> resultList) {
 
-
-                Log.d("ZZZ", "reponse= " + response);
-
+                mDataList.clear();
+                mDataList.addAll(resultList);
                 onSuccessResponse();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onMDNetworkErrorResponse(String errorMessage) {
 
-                //UNCOMMENT IT
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
 
-                DLog.e(this, "message = " + error.getMessage());
+            @Override
+            public void onMDErrorResponse(String errorMessage) {
 
-
-//                if (mNoNetworkLayout == null) mNoNetworkLayout = mNoNetworkStub.inflate();
-//                mNoNetworkLayout.setVisibility(View.VISIBLE);
-//
-//                Button retryButton = (Button) mNoNetworkLayout.findViewById(R.id.retryButton);
-//                retryButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        sendRequest();
-//                    }
-//                });
-//                mSwipeRefreshLayout.setRefreshing(false);
-
-
-                //remove this please
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        onSuccessResponse();
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 1000);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+
+//        MDApiManager.sendJSONArrayRequest(request, new Response.Listener<JSONArray>() {
+//            @Override
+//            public void onResponse(JSONArray response) {
+//
+//
+//                Log.d("ZZZ", "reponse= " + response);
+//
+//                onSuccessResponse();
+//                mSwipeRefreshLayout.setRefreshing(false);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//                //UNCOMMENT IT
+//
+//                DLog.e(this, "message = " + error.getMessage());
+//
+//
+////                if (mNoNetworkLayout == null) mNoNetworkLayout = mNoNetworkStub.inflate();
+////                mNoNetworkLayout.setVisibility(View.VISIBLE);
+////
+////                Button retryButton = (Button) mNoNetworkLayout.findViewById(R.id.retryButton);
+////                retryButton.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View v) {
+////                        sendRequest();
+////                    }
+////                });
+////                mSwipeRefreshLayout.setRefreshing(false);
+//
+//
+//                //remove this please
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        onSuccessResponse();
+//                        mSwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }, 1000);
+//            }
+//        });
     }
 
     @Override
@@ -178,6 +208,8 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     public abstract int getFragmentLayoutRes();
 
     public abstract void setRecyclerView();
+
+    public abstract List<CouponInfo> getDataList();
 
     @Override
     public void onResume() {

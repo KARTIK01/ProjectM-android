@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
-import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.fragments.MyCouponsFragment;
 import com.mickledeals.utils.Constants;
@@ -109,20 +108,20 @@ public class MyCouponsAdapter extends CardAdapter {
             vh.mCardButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (dataHolder.mRedeemTime == 0) {
+//                    if (dataHolder.mRedeemTime == 0) {
                         Intent i = new Intent(mFragmentActivity, ConfirmRedeemDialogActivity.class);
-                        i.putExtra("storeName", dataHolder.mStoreName);
+                        i.putExtra("storeName", dataHolder.mBusinessInfo.mName);
                         i.putExtra("couponDesc", dataHolder.mDescription);
                         i.putExtra("id", dataHolder.mId);
                         mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_CONFIRM_REDEEM);
-                    } else {
-                        Intent i = new Intent(mFragmentActivity, RedeemDialogActivity.class);
-                        i.putExtra("storeName", dataHolder.mStoreName);
-                        i.putExtra("couponDesc", dataHolder.mDescription);
-                        i.putExtra("redeemTime", dataHolder.mRedeemTime);
-                        i.putExtra("id", dataHolder.mId);
-                        mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_REDEEM);
-                    }
+//                    } else {
+//                        Intent i = new Intent(mFragmentActivity, RedeemDialogActivity.class);
+//                        i.putExtra("storeName", dataHolder.mStoreName);
+//                        i.putExtra("couponDesc", dataHolder.mDescription);
+//                        i.putExtra("redeemTime", dataHolder.mRedeemTime);
+//                        i.putExtra("id", dataHolder.mId);
+//                        mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_REDEEM);
+//                    }
                 }
             });
 

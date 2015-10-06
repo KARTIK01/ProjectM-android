@@ -34,8 +34,10 @@ public class MDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Montserrat-Light.otf");
-//        Utils.replaceFont("serif", tf);
+
+
+        PreferenceHelper.savePreferencesBoolean(this, "firstLaunch", false);
+
         sAppContext = this;
         initLocale();
         initDeviceInfo();
