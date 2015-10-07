@@ -168,10 +168,6 @@ public class Utils {
         return result;
     }
 
-    public static LatLng getLatLngFromDataHolder(CouponInfo holder) {
-        return new LatLng(holder.mBusinessInfo.mLat, holder.mBusinessInfo.mLng);
-    }
-
     public static void wrapStringsIntoLinearLayout(String[] strings, LinearLayout rootLayout, int layoutRes) {
 
         Context context = rootLayout.getContext();

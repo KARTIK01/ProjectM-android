@@ -12,8 +12,8 @@ import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,14 +41,9 @@ public class SavedCouponsFragment extends ListMapBaseFragment {
         return DataListModel.getInstance().getSavedList();
     }
 
-    public List<CouponInfo> getTemporaryDataList() {
-        //temporary
-        List<CouponInfo> list = new ArrayList<CouponInfo>();
-        for (int i = 1; i <= DataListModel.getInstance().getDataList().size(); i++) {
-            CouponInfo holder = DataListModel.getInstance().getDataList().get(i);
-            if (holder.mSaved) list.add(holder);
-        }
-        return list;
+    @Override
+    public void sendRequest() {
+        MDApiManager.fetchSavedCoupons(this);
     }
 
     public int getFragmentLayoutRes() {

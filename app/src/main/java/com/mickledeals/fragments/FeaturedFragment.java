@@ -10,6 +10,7 @@ import com.mickledeals.adapters.FeaturedAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 
 import java.util.List;
 
@@ -48,13 +49,9 @@ public class FeaturedFragment extends SwipeRefreshBaseFragment {
         return R.layout.fragment_featured;
     }
 
-    public String getRequestURL() {
-        return "http://www.mickledeals.com/api/coupons";
-    }
-
     @Override
-    public void onSuccessResponse() {
-        super.onSuccessResponse();
+    public void sendRequest() {
+        MDApiManager.fetchFeatureList(this);
     }
 
     public void setRecyclerView() {

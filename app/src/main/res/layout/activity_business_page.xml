@@ -40,6 +40,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/businessName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -48,11 +49,11 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="Savory SteakHouse"
                 android:textColor="@color/defaultTextColor"
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/businessDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
@@ -60,7 +61,6 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/business_description"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -77,22 +77,12 @@
                 android:textStyle="italic" />
 
             <TextView
+                android:id="@+id/businessNews"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="@string/business_news1"
-                android:textColor="@color/defaultTextColor"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingBottom="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/business_news2"
                 android:textColor="@color/defaultTextColor"
                 android:textSize="15sp" />
 
@@ -180,8 +170,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:drawableLeft="@drawable/ic_call"
-                            android:text="(415)723-9412" />
+                            android:drawableLeft="@drawable/ic_call" />
 
                         <TextView
                             android:id="@+id/website"

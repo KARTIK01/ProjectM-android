@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by Nicky on 7/23/2015.
  */
-public abstract class SwipeRefreshBaseFragment extends BaseFragment {
+public abstract class SwipeRefreshBaseFragment extends BaseFragment implements MDApiManager.MDResponseListener<List<CouponInfo>>{
 
     protected View mNoResultLayout;
     protected View mNoNetworkLayout;
@@ -55,7 +55,6 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mListResultRecyclerView = (RecyclerView) view.findViewById(R.id.listResultRecyclerView);
-        mListResultRecyclerView.setVisibility(View.GONE); //TODO: REMOVE
         setRecyclerView();
 //        mListResultRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mListResultRecyclerView.getLayoutManager()) {
 //            @Override
@@ -91,7 +90,7 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    sendRequest();
+                    prepareSendRequest();
                 }
             });
         }
@@ -99,42 +98,18 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                sendRequest();
+                prepareSendRequest();
             }
         });
     }
 
-    public void sendRequest() {
-        DLog.d(this, "sendRequest");
-//        String request = getRequestURL();
-        String request = "http://www.mickledeals.com/api/coupons";
-        if (request == null) return;
+    public void prepareSendRequest() {
+        DLog.d(this, "prepareSendRequest");
 
         if (mNoNetworkLayout != null) mNoNetworkLayout.setVisibility(View.GONE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
 
-        MDApiManager.fetchCouponInfoList(request, new MDApiManager.MDResponseListener<List<CouponInfo>>() {
-            @Override
-            public void onMDSuccessResponse(List<CouponInfo> resultList) {
-
-                mDataList.clear();
-                mDataList.addAll(resultList);
-                onSuccessResponse();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onMDNetworkErrorResponse(String errorMessage) {
-
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onMDErrorResponse(String errorMessage) {
-
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        sendRequest();
 
 //        MDApiManager.sendJSONArrayRequest(request, new Response.Listener<JSONArray>() {
 //            @Override
@@ -162,7 +137,7 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
 ////                retryButton.setOnClickListener(new View.OnClickListener() {
 ////                    @Override
 ////                    public void onClick(View v) {
-////                        sendRequest();
+////                        prepareSendRequest();
 ////                    }
 ////                });
 ////                mSwipeRefreshLayout.setRefreshing(false);
@@ -182,6 +157,29 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
     }
 
     @Override
+    public void onMDSuccessResponse(List<CouponInfo> resultList) {
+        mDataList.clear();
+        mDataList.addAll(resultList);
+        onSuccessResponse();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onMDNetworkErrorResponse(String errorMessage) {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onMDErrorResponse(String errorMessage) {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void onSuccessResponse() {
+        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
+        ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
@@ -194,16 +192,7 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment {
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public void onSuccessResponse() {
-
-        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
-
-        mListResultRecyclerView.setVisibility(View.VISIBLE); //TODO: REMOVE
-        ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
-    }
-
-
-    public abstract String getRequestURL();
+    public abstract void sendRequest();
 
     public abstract int getFragmentLayoutRes();
 

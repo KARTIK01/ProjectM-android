@@ -2,6 +2,7 @@ package com.mickledeals.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.util.Base64;
 import android.widget.ImageView;
 
@@ -38,6 +39,7 @@ public class MDApiManager {
         public void onMDErrorResponse(String errorMessage);
     }
 
+    private static final int PAGE_SIZE = 14;
     private static RequestQueue sQueue;
     private static ImageLoader mImageLoader;
     private static Context sContext = MDApplication.sAppContext;
@@ -73,8 +75,15 @@ public class MDApiManager {
 
 
 
-    public static void sendJSONArrayRequest(String url, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, listener, errorListener) {
+    public static void sendJSONArrayRequest(int method, String url, JSONObject body, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        if (body != null) {
+            try {
+                if (MDLoginManager.mUserId != null) body.put("userId", MDLoginManager.mUserId);
+            } catch (JSONException e) {
+                DLog.e(MDApiManager.class, e.toString());
+            }
+        }
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(method, url, body, listener, errorListener) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -103,7 +112,7 @@ public class MDApiManager {
 
 
 
-    static Map<String, String> createBasicAuthHeader(String username, String password) {
+    private static Map<String, String> createBasicAuthHeader(String username, String password) {
         Map<String, String> headerMap = new HashMap<String, String>();
         username = "nickyfantasy@gmail.com";
         password = "123321";
@@ -116,10 +125,17 @@ public class MDApiManager {
         return headerMap;
     }
 
+    private static void fetchCouponInfoList(int method, String request, JSONObject body, final MDResponseListener<List<CouponInfo>> listener) {
 
+        if (body != null) {
+            try {
+                if (MDLoginManager.mUserId != null) body.put("userId", MDLoginManager.mUserId);
+            } catch (JSONException e) {
+                DLog.e(MDApiManager.class, e.toString());
+            }
+        }
 
-    public static void fetchCouponInfoList(String request, final MDResponseListener<List<CouponInfo>> listener) {
-        sendJSONArrayRequest(request, new Response.Listener<JSONArray>() {
+        sendJSONArrayRequest(method, request, body, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 List<CouponInfo> list = new ArrayList<CouponInfo>();
@@ -148,6 +164,46 @@ public class MDApiManager {
                 }
             }
         });
+    }
+
+
+    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int page, final MDResponseListener<List<CouponInfo>> listener) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("active", true);
+            body.put("city", city);
+            body.put("primaryCategoryId", categoryId);
+            if (location != null) {
+                body.put("latitude", location.getLatitude());
+                body.put("longitude", location.getLongitude());
+            }
+            if (searchText != null) {
+                body.put("searchText", searchText);
+            }
+            body.put("page", page);
+            body.put("size", PAGE_SIZE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = "http://www.mickledeals.com/api/coupons/search";
+        fetchCouponInfoList(Request.Method.POST, url, body, listener);
+    }
+
+    public static void fetchFeatureList(final MDResponseListener<List<CouponInfo>> listener) {
+        String url = "http://www.mickledeals.com/api/featuredCoupons";
+        fetchCouponInfoList(Request.Method.GET, url, null, listener);
+    }
+
+    public static void fetchSavedCoupons(int page, final MDResponseListener<List<CouponInfo>> listener) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("page", page);
+            body.put("size", PAGE_SIZE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = "http://www.mickledeals.com/api/userses/getSavedCoupons";
+        fetchCouponInfoList(Request.Method.POST, url, body, listener);
     }
 
 }

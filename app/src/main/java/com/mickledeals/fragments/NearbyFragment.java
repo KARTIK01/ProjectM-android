@@ -12,8 +12,8 @@ import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,16 +30,6 @@ public class NearbyFragment extends ListMapBaseFragment {
 
     public List<CouponInfo> getDataList() {
         return DataListModel.getInstance().getNearbyList();
-    }
-
-    public List<CouponInfo> getTemporaryDataList() {
-        //temporary
-        List<CouponInfo> list = new ArrayList<CouponInfo>();
-        for (int i = 1; i < DataListModel.getInstance().getDataList().size(); i++) {
-            CouponInfo holder = DataListModel.getInstance().getDataList().get(i);
-            list.add(holder);
-        }
-        return list;
     }
 
     public int getFragmentLayoutRes() {

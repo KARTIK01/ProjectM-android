@@ -30,6 +30,7 @@ import com.mickledeals.activities.MDApplication;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.Utils;
 
@@ -64,7 +65,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 //        setHasOptionsMenu(true);
         mLocationManager = MDLocationManager.getInstance(mContext);
         mLocationManager.connect();
-//        sendRequest(); //cannot send request here, otherwise no refresh dialog
+//        prepareSendRequest(); //cannot send request here, otherwise no refresh dialog
     }
 
     protected boolean isSortByLocation() {
@@ -236,17 +237,18 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         for (int i = 0; i < mDataList.size(); i++) {
 
             CouponInfo dataHolder = mDataList.get(i);
-            LatLng ll = Utils.getLatLngFromDataHolder(dataHolder);
+
+            LatLng latLng = new LatLng(dataHolder.mBusinessInfo.mLat, dataHolder.mBusinessInfo.mLng);
 
             Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(ll)
+                    .position(latLng)
                     .title(dataHolder.mBusinessInfo.getStoreName())
                     .snippet(dataHolder.getDescription())
                     .icon(mPinBitmap));
 
             mMarkersHashMap.put(marker, i);
 
-            boundsBuilder.include(ll);
+            boundsBuilder.include(latLng);
         }
 
 
@@ -256,10 +258,12 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
             else
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LAT_DEFAULT, LONG_DEFAULT), 12));
         } else if (mDataList.size() == 1) {
+
+            LatLng latLng = new LatLng(mDataList.get(0).mBusinessInfo.mLat, mDataList.get(0).mBusinessInfo.mLng);
             if (anim) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mDataList.get(0)), 15));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             } else {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Utils.getLatLngFromDataHolder(mDataList.get(0)), 15));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             }
         } else {
             LatLngBounds bounds = boundsBuilder.build();
@@ -279,7 +283,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         DLog.d(this, "onItemSelected");
-        sendRequest();
+        prepareSendRequest();
     }
 
     @Override
@@ -289,7 +293,12 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
 
     @Override
     public void sendRequest() {
-        DLog.d(this, "sendRequest");
+        MDApiManager.fetchSearchCouponList(this);
+    }
+
+    @Override
+    public void prepareSendRequest() {
+        DLog.d(this, "prepareSendRequest");
         if (mNoLocationLayout != null) mNoLocationLayout.setVisibility(View.GONE);
         if (isSortByLocation()) {
 
@@ -297,7 +306,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
                 @Override
                 public void onUpdateLocation(Location lastLocation) {
                     DLog.d(this, "onUpdateLocation");
-                    ListMapBaseFragment.super.sendRequest();
+                    ListMapBaseFragment.super.prepareSendRequest();
                 }
 
                 @Override
@@ -309,7 +318,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
             });
 
         } else {
-            super.sendRequest();
+            super.prepareSendRequest();
         }
     }
 
@@ -321,7 +330,7 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
         mNoLocationLayout.findViewById(R.id.locationErrorRetry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest();
+                prepareSendRequest();
             }
         });
         mNoLocationLayout.findViewById(R.id.locationErrorOpenSettings).setOnClickListener(new View.OnClickListener() {
@@ -335,25 +344,16 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
             @Override
             public void onClick(View v) {
                 mSortSpinner.setSelection(1);
-//                sendRequest();
+//                prepareSendRequest();
             }
         });
         mNoLocationLayout.findViewById(R.id.locationErrorSortRandom).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSortSpinner.setSelection(2);
-//                sendRequest();
+//                prepareSendRequest();
             }
         });
-    }
-
-    public String getRequestURL() {
-
-        if (isSortByLocation()) {
-            Location location = mLocationManager.getLastLocation();
-        }
-
-        return "http://www.google.com";
     }
 
 

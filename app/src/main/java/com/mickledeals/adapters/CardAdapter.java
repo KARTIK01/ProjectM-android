@@ -167,28 +167,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
         if (holder.mCardImage != null)
             holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
-        if (holder.mCardPrice != null) {
-            String displayPrice;
-            if (dataHolder.mPrice == 0) {
-                displayPrice = "Free";
-            } else if (dataHolder.mPrice < 1) {
-                displayPrice = "50¢";
-            } else {
-                displayPrice = "$" + (int) dataHolder.mPrice;
-            }
-            holder.mCardPrice.setText(displayPrice);
 
-            int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
-            int sp18 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_18);
-            int sp19 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_19);
+        holder.mCardPrice.setText(dataHolder.getDisplayedPrice());
 
-            boolean extraSize = false;
-            if (mListType == Constants.TYPE_BEST_LIST) extraSize = true;
-            if (dataHolder.mPrice < 1) {
-                holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp18 : sp17);
-            } else {
-                holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
-            }
+        int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
+        int sp18 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_18);
+        int sp19 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_19);
+
+        boolean extraSize = false;
+        if (mListType == Constants.TYPE_BEST_LIST) extraSize = true;
+        if (!dataHolder.getDisplayedPrice().contains("$")) { //FREE and cents should be smaller
+            holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp18 : sp17);
+        } else {
+            holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
         }
         if (holder.mCardSave != null) {
             holder.mCardSave.setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);

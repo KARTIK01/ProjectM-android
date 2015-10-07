@@ -17,8 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
-import com.mickledeals.datamodel.CouponInfo;
-import com.mickledeals.utils.Utils;
+import com.mickledeals.datamodel.BusinessInfo;
 
 /**
  * Created by Nicky on 4/18/2015.
@@ -28,7 +27,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private SupportMapFragment mMapFragment;
     private static final int DIRECTIONS_MENU_ID = 0;
     private static final int SHOW_GOOGLE_MAP_MENU_ID = 1;
-    private CouponInfo mData;
+    private BusinessInfo mBusinessInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +38,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
 
-        mData = (CouponInfo) getIntent().getSerializableExtra("dataObject");
-        setTitle(mData.mBusinessInfo.getStoreName());
+        mBusinessInfo = (BusinessInfo) getIntent().getSerializableExtra("dataObject");
+        setTitle(mBusinessInfo.getStoreName());
     }
 
     @Override
@@ -51,7 +50,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng latLng = Utils.getLatLngFromDataHolder(mData);
+        LatLng latLng = new LatLng(mBusinessInfo.mLat, mBusinessInfo.mLng);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         map.setMyLocationEnabled(true);
         map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -74,8 +73,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         final Marker marker = map.addMarker(new MarkerOptions()
                 .position(latLng)
-                .title(mData.mBusinessInfo.getStoreName())
-                .snippet(mData.mBusinessInfo.getShortAddress())
+                .title(mBusinessInfo.getStoreName())
+                .snippet(mBusinessInfo.getFullAddress())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.md_pin)));
     }
 
@@ -94,12 +93,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         if (id == 1) {
             Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                    Uri.parse("http://maps.google.com/maps?daddr=" + mData.mBusinessInfo.mLat + ","
-                            + mData.mBusinessInfo.mLng));
+                    Uri.parse("http://maps.google.com/maps?daddr=" + mBusinessInfo.mLat + ","
+                            + mBusinessInfo.mLng));
             startActivity(intent);
         } else {
-            Uri gmmIntentUri = Uri.parse("geo:" + mData.mBusinessInfo.mLat + ","
-                    + mData.mBusinessInfo.mLng + "?q=" + mData.mBusinessInfo.getShortAddress().replace(" ", "+") + "&z=16");
+            Uri gmmIntentUri = Uri.parse("geo:" + mBusinessInfo.mLat + ","
+                    + mBusinessInfo.mLng + "?q=" + mBusinessInfo.getShortAddress().replace(" ", "+") + "&z=16");
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);

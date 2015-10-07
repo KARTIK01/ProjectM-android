@@ -1,5 +1,7 @@
 package com.mickledeals.datamodel;
 
+import com.mickledeals.R;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.Utils;
 
@@ -80,7 +82,8 @@ public class BusinessInfo implements Serializable {
     }
 
     public String getDisplayedCity() {
-        return ((mDistrict == null) ? "" : (mDistrict + " ? ")) + mCity;
+        String centerDot = MDApplication.sAppContext.getResources().getString(R.string.center_dot_symbol);
+        return ((mDistrict == null || mDistrict.equals("")) ? "" : (mDistrict + centerDot)) + mCity;
     }
 
     public String getShortDisplayedCity() {
@@ -90,8 +93,8 @@ public class BusinessInfo implements Serializable {
     public String getFullAddress() {
         StringBuilder sb = new StringBuilder();
         if (!mAddress.equals("")) sb.append(mAddress + "\n");
-        if (!mCity.equals("")) sb.append(mCity + ", ");
         if (mDistrict != null) sb.append(mDistrict + ", ");
+        if (!mCity.equals("")) sb.append(mCity + ", ");
         if (!mState.equals("")) sb.append(mState + " ");
         if (!mZipCode.equals("")) sb.append(mZipCode + " ");
         return sb.toString();
@@ -99,8 +102,8 @@ public class BusinessInfo implements Serializable {
 
     public String getShortAddress() {
         StringBuilder sb = new StringBuilder();
-        if (!mAddress.equals("")) sb.append(mAddress + ",");
-        if (!mCity.equals("")) sb.append(mCity + ", ");
+        if (!mAddress.equals("")) sb.append(mAddress + ", ");
+        if (!mCity.equals("")) sb.append(mCity);
         return sb.toString();
     }
 }

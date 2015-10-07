@@ -236,7 +236,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextViewTextView
+                    <TextView
                         android:id="@+id/finePrint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

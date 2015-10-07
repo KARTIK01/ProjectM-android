@@ -105,10 +105,10 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     //lets see how many activities need this
 //    public void retryRequestClick(View v) {
-//        sendRequest();
+//        prepareSendRequest();
 //    }
 //
-//    public void sendRequest() {
+//    public void prepareSendRequest() {
 //
 //    }
 }

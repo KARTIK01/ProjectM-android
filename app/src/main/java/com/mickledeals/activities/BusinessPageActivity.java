@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -16,10 +15,8 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.BusinessPhotoSliderAdapter;
+import com.mickledeals.datamodel.BusinessInfo;
 import com.mickledeals.datamodel.BusinessPhoto;
-import com.mickledeals.datamodel.CouponInfo;
-import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
@@ -35,11 +32,17 @@ public class BusinessPageActivity extends SwipeDismissActivity {
     private RoundedImageView mRoundedImageView;
     private ViewPager mPhotoViewPager;
     private View mShadow;
-    private CouponInfo mHolder;
+    private BusinessInfo mBusinessInfo;
+
+    private TextView mName;
+    private TextView mDescription;
+    private TextView mNews;
 
     private TextView mOpenHours;
     private TextView mAddress;
     private TextView mDirection;
+    private TextView mCall;
+    private TextView mWebsite;
 
     private LinearLayout mMoreCouponRow;
     private NotifyingScrollView mDetailsScrollView;
@@ -51,6 +54,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
 
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
+        mBusinessInfo = (BusinessInfo) getIntent().getSerializableExtra("businessInfo");
 
         mDetailsScrollView = (NotifyingScrollView) findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
@@ -96,17 +100,27 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mPhotoViewPager.setPageMargin(Utils.getPixelsFromDip(6f, getResources()));
 
 
-        mHolder = DataListModel.getInstance().getDataList().get(getIntent().getIntExtra("storeId", 0));
+        mName = (TextView) findViewById(R.id.businessName);
+        mDescription = (TextView) findViewById(R.id.businessDescription);
+        mNews = (TextView) findViewById(R.id.businessNews);
+
+        mName.setText(mBusinessInfo.getStoreName());
+        mDescription.setText(mBusinessInfo.getDescription());
+        mNews.setText(mBusinessInfo.getNews());
 
         mOpenHours = (TextView) findViewById(R.id.openHours);
-        mOpenHours.setText(getString(R.string.open_hours) + ": 10:00AM to 11:00PM");
+        if (mBusinessInfo.mHours == null) {
+            mOpenHours.setVisibility(View.GONE);
+        } else {
+            mOpenHours.setText(mBusinessInfo.mHours);
+        }
         mAddress = (TextView) findViewById(R.id.address);
-        mAddress.setText(mHolder.mBusinessInfo.getFullAddress());
+        mAddress.setText(mBusinessInfo.getFullAddress());
         mAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(BusinessPageActivity.this, MapActivity.class);
-                i.putExtra("dataObject", mHolder);
+                i.putExtra("dataObject", mBusinessInfo);
                 startActivity(i);
             }
         });
@@ -115,55 +129,89 @@ public class BusinessPageActivity extends SwipeDismissActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?daddr=" + mHolder.mBusinessInfo.mLat + ","
-                                + mHolder.mBusinessInfo.mLng));
+                        Uri.parse("http://maps.google.com/maps?daddr=" + mBusinessInfo.mLat + ","
+                                + mBusinessInfo.mLng));
                 startActivity(intent);
             }
         });
+        mCall = (TextView) findViewById(R.id.call);
+        if (mBusinessInfo.mPhone == null) {
+            mCall.setVisibility(View.GONE);
+        } else {
+            mCall.setText(mBusinessInfo.mPhone);
+            mCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String uri = "tel:" + mBusinessInfo.mPhone.replaceAll("(-|\\(|\\))", "").trim();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(uri));
+                    startActivity(intent);
+                }
+            });
+        }
+        mWebsite = (TextView) findViewById(R.id.website);
+        if (mBusinessInfo.mWebSiteAddr == null) {
+            mWebsite.setVisibility(View.GONE);
+        } else {
+            mWebsite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = mBusinessInfo.mWebSiteAddr;
+                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                        url = "http://" + url;
+                    }
 
-        getSupportActionBar().setTitle(mHolder.mBusinessInfo.getStoreName());
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        }
+
+
+        getSupportActionBar().setTitle(mBusinessInfo.getStoreName());
         setToolBarTransparency(0);
 
 
         mMoreCouponRow = (LinearLayout) findViewById(R.id.moreCouponRow);
-        View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
-        mMoreCouponRow.setVisibility(View.VISIBLE);
-        mMoreCouponRow.addView(otherCoupon);
-        otherCoupon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
-                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
-                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
-                i.putExtra("listIndex", 0);
-                i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
-                startActivity(i);
-            }
-        });
-
-        CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(2);
-        ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
-        ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
-        ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
-
-        View otherCoupon2 = getLayoutInflater().inflate(R.layout.card_layout_others, null);
-        mMoreCouponRow.setVisibility(View.VISIBLE);
-        mMoreCouponRow.addView(otherCoupon2);
-        otherCoupon2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
-                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
-                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
-                i.putExtra("listIndex", 0);
-                i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
-                startActivity(i);
-            }
-        });
-        CouponInfo otherCouponData2 = DataListModel.getInstance().getDataList().get(3);
-        ((ImageView) otherCoupon2.findViewById(R.id.card_image)).setImageResource(otherCouponData2.mSmallImageResId);
-        ((TextView) otherCoupon2.findViewById(R.id.card_description)).setText(otherCouponData2.getDescription());
-        ((TextView) otherCoupon2.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData2.mPrice));
+//        View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
+//        mMoreCouponRow.setVisibility(View.VISIBLE);
+//        mMoreCouponRow.addView(otherCoupon);
+//        otherCoupon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
+//                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
+//                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
+//                i.putExtra("listIndex", 0);
+//                i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+//                startActivity(i);
+//            }
+//        });
+//
+//        CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(2);
+//        ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
+//        ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
+//        ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
+//
+//        View otherCoupon2 = getLayoutInflater().inflate(R.layout.card_layout_others, null);
+//        mMoreCouponRow.setVisibility(View.VISIBLE);
+//        mMoreCouponRow.addView(otherCoupon2);
+//        otherCoupon2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
+//                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
+//                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
+//                i.putExtra("listIndex", 0);
+//                i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+//                startActivity(i);
+//            }
+//        });
+//        CouponInfo otherCouponData2 = DataListModel.getInstance().getDataList().get(3);
+//        ((ImageView) otherCoupon2.findViewById(R.id.card_image)).setImageResource(otherCouponData2.mSmallImageResId);
+//        ((TextView) otherCoupon2.findViewById(R.id.card_description)).setText(otherCouponData2.getDescription());
+//        ((TextView) otherCoupon2.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData2.mPrice));
 
     }
 
@@ -202,8 +250,8 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         if (id == R.id.action_share) {
 
 
-            String title = mHolder.mBusinessInfo.getStoreName() + " on MickleDeals!";
-            String content = getString(R.string.share_business_page_msg, mHolder.mBusinessInfo.getStoreName()) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
+            String title = mBusinessInfo.getStoreName() + " on MickleDeals!";
+            String content = getString(R.string.share_business_page_msg, mBusinessInfo.getStoreName()) + "\n\n" + getString(R.string.share_google_play) + getString(R.string.google_play_link);
             Utils.shareScreenShot(this, mDetailsScrollView, title, content);
         }
 

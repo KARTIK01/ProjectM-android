@@ -13,6 +13,7 @@ import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,14 +60,19 @@ public class SearchFragment extends ListMapBaseFragment {
             mTemporaryList.add(DataListModel.getInstance().getDataList().get(11));
         }
         mSearchStr = str;
-        sendRequest();
+        prepareSendRequest();
+    }
+
+    @Override
+    public void prepareSendRequest() {
+        if (mSearchStr == null) return;
+
+        super.prepareSendRequest();
     }
 
     @Override
     public void sendRequest() {
-        if (mSearchStr == null) return;
-
-        super.sendRequest();
+        MDApiManager.fetchBrowseCouponList(this);
     }
 
     public List<CouponInfo> getDataList() {

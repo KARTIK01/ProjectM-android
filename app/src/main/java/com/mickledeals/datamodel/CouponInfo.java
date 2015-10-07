@@ -1,5 +1,7 @@
 package com.mickledeals.datamodel;
 
+import com.mickledeals.R;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.Utils;
@@ -26,7 +28,7 @@ public class CouponInfo implements Serializable{
     public float mPrice;
     public String mFinePrint;
     public String mFinePrintCh;
-    public long mExpiredDate;
+    public String mExpiredDate;
     public int mExpiredDays;
 
     public boolean mSaved;
@@ -54,7 +56,7 @@ public class CouponInfo implements Serializable{
             mLimited = jsonobject.getBoolean("limited");
             mActive = jsonobject.getBoolean("active");
             mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
-            mExpiredDate = jsonobject.getLong("expireDate");
+            mExpiredDate = jsonobject.getString("expireDate");
             mExpiredDays = jsonobject.getInt("expireDays");
         } catch (JSONException e) {
             DLog.e(this, e.toString());
@@ -71,7 +73,38 @@ public class CouponInfo implements Serializable{
 
     public String getDisplayedPrice() {
 //        MDApplication.sAppContext.getResources().getString(R.string.free)
-         return mPrice == 0 ? "Free" : "$" + mPrice;
+
+        String str = null;
+
+        if (mPrice == 0) {
+            str = "Free";
+        } else if (mPrice < 1) {
+            str = (int)(mPrice * 100) + MDApplication.sAppContext.getResources().getString(R.string.cent_symbol);
+        } else if (mPrice * 10 % 10 == 0) {
+            str = "$" + (int) mPrice;
+        } else {
+            str = "$" + mPrice;
+        }
+
+         return str;
+    }
+
+
+    public String getLocaledDisplayedPrice() {
+
+        String str = null;
+
+        if (mPrice == 0) {
+            str = MDApplication.sAppContext.getResources().getString(R.string.free);
+        } else if (mPrice < 1) {
+            str = (int)(mPrice * 100) + MDApplication.sAppContext.getResources().getString(R.string.cent_symbol);
+        } else if (mPrice * 10 % 10 == 0) {
+            str = "$" + (int) mPrice;
+        } else {
+            str = "$" + mPrice;
+        }
+
+        return str;
     }
 
 

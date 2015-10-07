@@ -15,6 +15,7 @@ import com.mickledeals.adapters.MyCouponsAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 
 import java.util.List;
 
@@ -131,8 +132,8 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
     }
 
     @Override
-    public void sendRequest() {
-        super.sendRequest();
+    public void prepareSendRequest() {
+        super.prepareSendRequest();
         mNoCouponText.setVisibility(View.GONE);
     }
 
@@ -141,8 +142,9 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
         return R.layout.fragment_my_coupons;
     }
 
-    public String getRequestURL() {
-        return "http://www.google.com";
+    @Override
+    public void sendRequest() {
+        MDApiManager.fetchFeatureList(this);
     }
 
     @Override

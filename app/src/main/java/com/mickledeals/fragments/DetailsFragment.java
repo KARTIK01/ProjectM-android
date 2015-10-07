@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.activities.MDApplication;
@@ -30,7 +31,6 @@ import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.activities.SuccessDialogActivity;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
-import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
@@ -67,8 +67,8 @@ public class DetailsFragment extends BaseFragment {
     private TextView mDealEndedText;
     private TextView mSaveBtnText;
     private TextView mBusinessInfoBtnText;
-    private View mAddressBtn;
-    private View mCallBtn;
+    private TextView mAddressBtn;
+    private TextView mCallBtn;
     private View mBuyPanel;
     private LinearLayout mMoreCouponRow;
     private View mNavigationHintPanel;
@@ -118,8 +118,8 @@ public class DetailsFragment extends BaseFragment {
         mSaveBtnText = (TextView) view.findViewById(R.id.savedButtonText);
         mExpiredDate = (TextView) view.findViewById(R.id.expiredDate);
         mFinePrint = (TextView) view.findViewById(R.id.finePrint);
-        mAddressBtn = view.findViewById(R.id.address);
-        mCallBtn = view.findViewById(R.id.call);
+        mAddressBtn = (TextView) view.findViewById(R.id.address);
+        mCallBtn = (TextView) view.findViewById(R.id.call);
         mBuyPanel = view.findViewById(R.id.buyPanel);
         mNavigationHintPanel = view.findViewById(R.id.navigateHintPanel);
         mNavLeftText = (TextView) view.findViewById(R.id.navLeftText);
@@ -162,15 +162,17 @@ public class DetailsFragment extends BaseFragment {
 
         mBusinessName.setText(mHolder.mBusinessInfo.getStoreName());
         mDescription.setText(mHolder.getDescription());
-        ((TextView) view.findViewById(R.id.address)).setText(mHolder.mBusinessInfo.getShortAddress());
+        mAddressBtn.setText(mHolder.mBusinessInfo.getShortAddress());
+        mCallBtn.setText(mHolder.mBusinessInfo.mPhone);
 
-        String priceText = mHolder.mPrice == 0 ? getString(R.string.free) : "$" + (int) (mHolder.mPrice);
+        String priceText = mHolder.getLocaledDisplayedPrice();
         mBuyBtnText.setText(getString(R.string.unlock_coupon, priceText));
         mPrice.setText(priceText);
         float dist = MDLocationManager.getInstance(mContext).getDistanceFromCurLocation(mHolder);
         String addrShort = mHolder.mBusinessInfo.getDisplayedCity();
         if (dist > 0) {
-            addrShort += " • " + dist + " mi";
+            String centerDot = getString(R.string.center_dot_symbol);
+            addrShort += centerDot + dist + " mi";
         }
         ((TextView) view.findViewById(R.id.addressDist)).setText(addrShort);
 
@@ -203,6 +205,7 @@ public class DetailsFragment extends BaseFragment {
                             i.putExtra("store_name", mHolder.mBusinessInfo.getStoreName());
                             i.putExtra("coupon_description", mHolder.getDescription());
                             startActivityForResult(i, REQUEST_CODE_BUY);
+
                         }
                     }
                 });
@@ -251,7 +254,7 @@ public class DetailsFragment extends BaseFragment {
         });
 
         String expiredStr = null;
-        if (mHolder.mExpiredDate != 0) {
+        if (mHolder.mExpiredDate != null) {
             expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
         } else if (mHolder.mExpiredDays != 0) {
             expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays); //need format
@@ -267,7 +270,7 @@ public class DetailsFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(mContext, MapActivity.class);
-                i.putExtra("dataObject", mHolder);
+                i.putExtra("dataObject", mHolder.mBusinessInfo);
                 startActivity(i);
             }
         });
@@ -282,16 +285,17 @@ public class DetailsFragment extends BaseFragment {
             }
         });
 
+        mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mContext, BusinessPageActivity.class);
+                    i.putExtra("businessInfo", mHolder.mBusinessInfo);
+                    startActivity(i);
+                }
+        });
 
 //        if (mHolder.mId == 2 || mHolder.mId == 3) {
-//            mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent i = new Intent(mContext, BusinessPageActivity.class);
-//                    i.putExtra("storeId", mHolder.mId);
-//                    startActivity(i);
-//                }
-//            });
+
 //
 //            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
 //            View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
@@ -315,10 +319,10 @@ public class DetailsFragment extends BaseFragment {
 //        }
 
 
-        if (mHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
-            showExpiredStatus();
-        } else if (mHolder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
+        if (mHolder.mPurchased) {
             showBoughtStatus();
+        } else if (!mHolder.mActive) {
+            showExpiredStatus();
         }
     }
 
@@ -346,7 +350,8 @@ public class DetailsFragment extends BaseFragment {
         if (mHolder.mPrice == 0) {
             mBoughtDate.setText(getString(R.string.obtain_date));
         } else {
-            mBoughtDate.setText(getString(R.string.bought_date, "$" + (int) (mHolder.mPrice)));
+            //bought price
+//            mBoughtDate.setText(getString(R.string.bought_date, "$" + (int) (mHolder.mPrice)));
         }
         mBoughtDate.setVisibility(View.VISIBLE);
 

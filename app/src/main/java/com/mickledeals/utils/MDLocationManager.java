@@ -58,7 +58,7 @@ public class MDLocationManager implements GoogleApiClient.ConnectionCallbacks, G
         if (location != null) {
             mLastLocation = location;
             if (mCallback != null) mCallback.onUpdateLocation(mLastLocation);
-            mCallback = null; //need to set it to null otherwise it will keep calling sendRequest
+            mCallback = null; //need to set it to null otherwise it will keep calling prepareSendRequest
         } else if (!mGoogleApiClient.isConnected()) {
             connect();
         } else {
