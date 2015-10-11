@@ -13,9 +13,7 @@ import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.MDApiManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +24,6 @@ public class SearchFragment extends ListMapBaseFragment {
     private String mSearchStr;
 
     private TextView mNoResultMsg;
-    //temporary
-    private List<CouponInfo> mTemporaryList = new ArrayList<CouponInfo>();
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -35,30 +31,10 @@ public class SearchFragment extends ListMapBaseFragment {
         mNoResultMsg = (TextView) view.findViewById(R.id.noResultMsg);
     }
 
-    //temporary
     public void doSearch(String str) {
         if (mLocationSpinner.getSelectedItemPosition() == 0) mNoResultMsg.setText(getString(R.string.no_results_found_in_search, str));
         else mNoResultMsg.setText(getString(R.string.no_results_found_in_search_in_location, str, mLocationSpinner.getSelectedItem().toString()));
         str = str.toLowerCase().trim();
-        mTemporaryList.clear();
-        if (str.equals("sushi")) {
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(14));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(16));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(17));
-        } else if (str.equals("seafood")) {
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(2));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(3));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(12));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(13));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(14));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(16));
-        } else if (str.equals("spa")) {
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(7));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(18));
-        } else if (str.equals("steak")) {
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(2));
-            mTemporaryList.add(DataListModel.getInstance().getDataList().get(11));
-        }
         mSearchStr = str;
         prepareSendRequest();
     }
@@ -70,18 +46,13 @@ public class SearchFragment extends ListMapBaseFragment {
         super.prepareSendRequest();
     }
 
-    @Override
-    public void sendRequest() {
-        MDApiManager.fetchBrowseCouponList(this);
+    protected String getSearchText() {
+        return mSearchStr;
     }
 
     public List<CouponInfo> getDataList() {
         List<CouponInfo> list = DataListModel.getInstance().getSearchResultList();
         return list;
-    }
-
-    public List<CouponInfo> getTemporaryDataList() {
-        return mTemporaryList;
     }
 
     public int getFragmentLayoutRes() {

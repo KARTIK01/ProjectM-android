@@ -34,6 +34,9 @@ public class BusinessPageActivity extends SwipeDismissActivity {
     private View mShadow;
     private BusinessInfo mBusinessInfo;
 
+    private View mNewsLabel;
+    private View mPhotoLabel;
+
     private TextView mName;
     private TextView mDescription;
     private TextView mNews;
@@ -99,17 +102,23 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mPhotoViewPager.addOnPageChangeListener(adapter);
         mPhotoViewPager.setPageMargin(Utils.getPixelsFromDip(6f, getResources()));
 
-
+        mNewsLabel = findViewById(R.id.newsLabel);
+        mPhotoLabel = findViewById(R.id.photoLabel);
         mName = (TextView) findViewById(R.id.businessName);
         mDescription = (TextView) findViewById(R.id.businessDescription);
         mNews = (TextView) findViewById(R.id.businessNews);
 
         mName.setText(mBusinessInfo.getStoreName());
         mDescription.setText(mBusinessInfo.getDescription());
-        mNews.setText(mBusinessInfo.getNews());
+        if (!mBusinessInfo.getNews().isEmpty()) {
+            mNews.setText(mBusinessInfo.getNews());
+        } else {
+            mNewsLabel.setVisibility(View.GONE);
+            mNews.setVisibility(View.GONE);
+        }
 
         mOpenHours = (TextView) findViewById(R.id.openHours);
-        if (mBusinessInfo.mHours == null) {
+        if (!mBusinessInfo.mHours.isEmpty()) {
             mOpenHours.setVisibility(View.GONE);
         } else {
             mOpenHours.setText(mBusinessInfo.mHours);

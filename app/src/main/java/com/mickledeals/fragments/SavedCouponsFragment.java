@@ -42,7 +42,7 @@ public class SavedCouponsFragment extends ListMapBaseFragment {
     }
 
     @Override
-    public void sendRequest() {
+    public void sendRequest(boolean loadMore) {
         MDApiManager.fetchSavedCoupons(this);
     }
 

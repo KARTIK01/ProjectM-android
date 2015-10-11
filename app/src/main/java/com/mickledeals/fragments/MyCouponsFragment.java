@@ -143,7 +143,7 @@ public class MyCouponsFragment extends SwipeRefreshBaseFragment {
     }
 
     @Override
-    public void sendRequest() {
+    public void sendRequest(boolean loadMore) {
         MDApiManager.fetchFeatureList(this);
     }
 

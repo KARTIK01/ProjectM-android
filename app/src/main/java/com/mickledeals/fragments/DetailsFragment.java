@@ -254,9 +254,9 @@ public class DetailsFragment extends BaseFragment {
         });
 
         String expiredStr = null;
-        if (mHolder.mExpiredDate != null) {
+        if (!mHolder.mExpiredDate.isEmpty()) {
             expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
-        } else if (mHolder.mExpiredDays != 0) {
+        } else if (!mHolder.mExpiredDays.isEmpty()) {
             expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays); //need format
         } else {
             mExpiredDate.setVisibility(View.GONE);

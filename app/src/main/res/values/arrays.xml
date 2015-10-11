@@ -7,6 +7,13 @@
         <item>Beauty &amp; Spa</item>
         <item>Local Services</item>
     </string-array>
+    <string-array name="category_id">
+        <item>0</item>
+        <item>6</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
     <string-array name="city_name">
         <item>All Locations</item>
         <item>San Francisco</item>

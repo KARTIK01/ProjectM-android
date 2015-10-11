@@ -10,7 +10,6 @@ import com.mickledeals.adapters.FeaturedAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.MDApiManager;
 
 import java.util.List;
 
@@ -50,8 +49,9 @@ public class FeaturedFragment extends SwipeRefreshBaseFragment {
     }
 
     @Override
-    public void sendRequest() {
-        MDApiManager.fetchFeatureList(this);
+    public void sendRequest(boolean loadMore) {
+
+//        MDApiManager.fetchFeatureList(this);
     }
 
     public void setRecyclerView() {

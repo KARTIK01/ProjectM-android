@@ -109,7 +109,7 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment implements M
         if (mNoNetworkLayout != null) mNoNetworkLayout.setVisibility(View.GONE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
 
-        sendRequest();
+        sendRequest(false);
 
 //        MDApiManager.sendJSONArrayRequest(request, new Response.Listener<JSONArray>() {
 //            @Override
@@ -192,7 +192,7 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment implements M
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public abstract void sendRequest();
+    public abstract void sendRequest(boolean loadMore);
 
     public abstract int getFragmentLayoutRes();
 

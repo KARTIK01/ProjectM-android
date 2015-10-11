@@ -292,8 +292,20 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
     }
 
     @Override
-    public void sendRequest() {
-        MDApiManager.fetchSearchCouponList(this);
+    public void sendRequest(boolean loadMore) {
+        int categoryId = 0;
+        if (mCategorySpinner != null) {
+            categoryId = getResources().getIntArray(R.array.category_id)[mCategorySpinner.getSelectedItemPosition()];
+        }
+        String city = mLocationSpinner.getSelectedItemPosition() == 0 ? null : (String) mLocationSpinner.getSelectedItem();
+        Location location = mSortSpinner.getSelectedItemPosition() == 0 ? MDLocationManager.getInstance(mContext).getLastLocation() : null;
+        String searchText = getSearchText();
+        int currentSize = loadMore ? mDataList.size() : 0;
+        MDApiManager.fetchSearchCouponList(categoryId, city, location, searchText, currentSize, this);
+    }
+
+    protected String getSearchText() {
+        return null;
     }
 
     @Override

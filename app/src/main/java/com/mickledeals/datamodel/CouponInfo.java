@@ -21,22 +21,22 @@ public class CouponInfo implements Serializable{
     public int mSmallImageResId; //temp
 
     public int mId;
-    public String mCoverPhotoUrl;
-    public String mThumbnailPhotoUrl;
-    public String mDescription;
-    public String mDescriptionCh;
+    public String mCoverPhotoUrl = "";
+    public String mThumbnailPhotoUrl = "";
+    public String mDescription = "";
+    public String mDescriptionCh = "";
     public float mPrice;
-    public String mFinePrint;
-    public String mFinePrintCh;
-    public String mExpiredDate;
-    public int mExpiredDays;
+    public String mFinePrint = "";
+    public String mFinePrintCh = "";
+    public String mExpiredDate = "";
+    public String mExpiredDays = "";
 
     public boolean mSaved;
     public boolean mLimited;
     public boolean mActive;
 
     public boolean mPurchased;
-    public String mPurchaseId;
+    public String mPurchaseId = "";
 
     public BusinessInfo mBusinessInfo;
 
@@ -57,18 +57,18 @@ public class CouponInfo implements Serializable{
             mActive = jsonobject.getBoolean("active");
             mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
             mExpiredDate = jsonobject.getString("expireDate");
-            mExpiredDays = jsonobject.getInt("expireDays");
+            mExpiredDays = jsonobject.getString("expireDays");
         } catch (JSONException e) {
             DLog.e(this, e.toString());
         }
     }
 
     public String getDescription() {
-        return (Utils.isChineseLocale() && mDescriptionCh != null) ? mDescriptionCh : mDescription;
+        return (Utils.isChineseLocale() && !(mDescriptionCh == null || mDescriptionCh.trim().isEmpty())) ? mDescriptionCh : mDescription;
     }
 
     public String getFinePrint() {
-        return (Utils.isChineseLocale() && mFinePrintCh != null) ? mFinePrintCh : mFinePrint;
+        return (Utils.isChineseLocale() && !(mFinePrintCh == null || mFinePrintCh.trim().isEmpty())) ? mFinePrintCh : mFinePrint;
     }
 
     public String getDisplayedPrice() {

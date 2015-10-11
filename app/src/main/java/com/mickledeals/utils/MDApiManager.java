@@ -83,6 +83,7 @@ public class MDApiManager {
                 DLog.e(MDApiManager.class, e.toString());
             }
         }
+        DLog.d(MDApiManager.class, "url = " + url + "\n" + "body = " + body);
         JsonArrayRequest jsonRequest = new JsonArrayRequest(method, url, body, listener, errorListener) {
 
             @Override
@@ -167,12 +168,16 @@ public class MDApiManager {
     }
 
 
-    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int page, final MDResponseListener<List<CouponInfo>> listener) {
+    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int currentSize, final MDResponseListener<List<CouponInfo>> listener) {
         JSONObject body = new JSONObject();
         try {
             body.put("active", true);
-            body.put("city", city);
-            body.put("primaryCategoryId", categoryId);
+            if (city != null) {
+                body.put("city", city);
+            }
+            if (categoryId != 0) {
+                body.put("primaryCategoryId", categoryId);
+            }
             if (location != null) {
                 body.put("latitude", location.getLatitude());
                 body.put("longitude", location.getLongitude());
@@ -180,6 +185,7 @@ public class MDApiManager {
             if (searchText != null) {
                 body.put("searchText", searchText);
             }
+            int page = currentSize / PAGE_SIZE + 1;
             body.put("page", page);
             body.put("size", PAGE_SIZE);
         } catch (JSONException e) {
@@ -194,14 +200,14 @@ public class MDApiManager {
         fetchCouponInfoList(Request.Method.GET, url, null, listener);
     }
 
-    public static void fetchSavedCoupons(int page, final MDResponseListener<List<CouponInfo>> listener) {
+    public static void fetchSavedCoupons(final MDResponseListener<List<CouponInfo>> listener) {
         JSONObject body = new JSONObject();
-        try {
-            body.put("page", page);
-            body.put("size", PAGE_SIZE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            body.put("page", page);
+//            body.put("size", PAGE_SIZE);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         String url = "http://www.mickledeals.com/api/userses/getSavedCoupons";
         fetchCouponInfoList(Request.Method.POST, url, body, listener);
     }

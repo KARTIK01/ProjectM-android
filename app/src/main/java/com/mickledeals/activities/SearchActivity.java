@@ -211,14 +211,14 @@ public class SearchActivity extends BaseActivity {
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (string.equals("Savory Steak House")) {
-                        Utils.toggleKeyboard(false, mSearchEdit, SearchActivity.this);
-                        Intent i = new Intent(SearchActivity.this, BusinessPageActivity.class);
-                        i.putExtra("storeId", 2);
-                        startActivity(i);
-                    } else {
+//                    if (string.equals("Savory Steak House")) {
+//                        Utils.toggleKeyboard(false, mSearchEdit, SearchActivity.this);
+//                        Intent i = new Intent(SearchActivity.this, BusinessPageActivity.class);
+//                        i.putExtra("storeId", 2);
+//                        startActivity(i);
+//                    } else {
                         sendSearchRequest(string);
-                    }
+//                    }
                 }
             });
             TextView tv = (TextView) cardView.findViewById(R.id.tv);
