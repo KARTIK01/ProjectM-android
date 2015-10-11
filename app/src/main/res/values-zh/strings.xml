@@ -181,6 +181,21 @@
     <string name="no_save">目前沒有儲存任何優惠券</string>
     <string name="cancel">取消</string>
     <string name="confirm">確認</string>
+
+    <string name="all_rights_reserved">MickleDeals LLC © 版權所有</string>
+    <string name="version">版本</string>
+    <string name="terms">服務條款</string>
+    <string name="privacy">私隱政策</string>
+    <string name="terms_u"><u>服務條款</u></string>
+    <string name="privacy_u"><u>私隱政策</u></string>
+
+    <!-- Error Response -->
+    <string name="response_error_title">Error</string>
+    <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
+    <string name="user_already_registered">This email is already registered. Please login with this email.</string>
+    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button. If you forgot your password, tap Forgot password below.</string>
+
+
     <string name="network_error_title">連線失敗</string>
     <string name="network_error_msg">連接不到伺服器, 請檢查網絡後再重試 </string>
     <string name="network_error_retry">重試</string>
@@ -190,13 +205,6 @@
     <string name="location_error_choice2">開啟設定</string>
     <string name="location_error_choice3">按日期排序</string>
     <string name="location_error_choice4">隨機排序</string>
-
-    <string name="all_rights_reserved">MickleDeals LLC © 版權所有</string>
-    <string name="version">版本</string>
-    <string name="terms">服務條款</string>
-    <string name="privacy">私隱政策</string>
-    <string name="terms_u"><u>服務條款</u></string>
-    <string name="privacy_u"><u>私隱政策</u></string>
 
     <!-- Login -->
     <string name="or">或</string>

@@ -1,5 +1,6 @@
 package com.mickledeals.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,9 +17,11 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.mickledeals.R;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -69,7 +72,7 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
                                     String name = me.optString("name");
                                     String birthday = me.optString("birthday");
                                     String gender = me.optString("gender");
-                                    MDLoginManager.setUserInfo(LoginDialogActivity.this, id, email, name);
+//                                    MDLoginManager.setUserInfo(LoginDialogActivity.this, id, email, name);
                                     DLog.d(LoginDialogActivity.this, "email = " + email + " id = " + id + "name = "
                                     + name + "birthday = " + birthday + "gender = " + gender);
                                     // send email and id to your web server
@@ -148,10 +151,7 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
     }
 
     public void signupBtnClick(View v) {
-        finish();
-        MDLoginManager.setUserInfo(LoginDialogActivity.this, "user1", "testing@gmail.com", "Testing");
-        MDLoginManager.onLoginSuccess();
-//        validateAndSubmit(true);
+        validateAndSubmit(true);
     }
 
     public void loginBtnClick(View v) {
@@ -159,15 +159,83 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
     }
 
     private void validateAndSubmit(boolean signup) {
-        String emailStr = mEmail.getText().toString().trim();
+        final String emailStr = mEmail.getText().toString().trim();
+        String passwordStr = mPassword.getText().toString().trim();
         if (!validateEmail(emailStr)) {
             Toast.makeText(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             return;
-        } else if (mPassword.getText().toString().length() < 6) {
+        } else if (passwordStr.length() < 6) {
             Toast.makeText(this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
             return;
         } else {
-//            AsyncTaskHelper.executeWithResultBoolean(new SubmitFeedBackTask(dialog, context));
+            final ProgressDialog pDialog = ProgressDialog.show(this, null, getString(R.string.loading_login));
+            if (signup) {
+                MDApiManager.registerUserWithEmail(emailStr, passwordStr, new MDApiManager.MDResponseListener<JSONObject>() {
+                    @Override
+                    public void onMDSuccessResponse(JSONObject object) {
+                        int id = 0;
+                        try {
+                            id = object.getInt("id");
+                            // get promotion object from json
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        MDLoginManager.setUserInfo(LoginDialogActivity.this, id, emailStr, null);
+                        MDLoginManager.onLoginSuccess();
+                        finish();
+                        pDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onMDNetworkErrorResponse(String errorMessage) {
+                        Utils.showNetworkErrorDialog(LoginDialogActivity.this);
+                        pDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onMDErrorResponse(String errorMessage) {
+                        int errorMessageRes = R.string.response_error_message_unknown;
+                        if (errorMessage != null) {
+                            if (errorMessage.equals("DUPLICATE_USER")) {
+                                errorMessageRes = R.string.user_already_registered;
+                            }
+                        }
+                        Utils.showAlertDialog(LoginDialogActivity.this, R.string.response_error_title, errorMessageRes);
+                        pDialog.dismiss();
+                    }
+                });
+            } else {
+                MDApiManager.loginUserWithEmail(emailStr, passwordStr, new MDApiManager.MDResponseListener<Integer>() {
+                    @Override
+                    public void onMDSuccessResponse(Integer id) {
+
+                        MDLoginManager.setUserInfo(LoginDialogActivity.this, id, emailStr, null);
+                        MDLoginManager.onLoginSuccess();
+                        finish();
+                        pDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onMDNetworkErrorResponse(String errorMessage) {
+                        Utils.showNetworkErrorDialog(LoginDialogActivity.this);
+                        pDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onMDErrorResponse(String errorMessage) {
+                        int errorMessageRes = R.string.response_error_message_unknown;
+                        if (errorMessage != null) {
+                            if (errorMessage.equals("INVLIDA_LOGIN")) {
+                                errorMessageRes = R.string.user_invalid_login;
+                            }
+                        }
+                        Utils.showAlertDialog(LoginDialogActivity.this, R.string.response_error_title, errorMessageRes);
+                        pDialog.dismiss();
+                    }
+                });
+            }
+
         }
     }
 

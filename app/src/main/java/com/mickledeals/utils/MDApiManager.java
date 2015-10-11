@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -35,7 +36,9 @@ import java.util.Map;
 public class MDApiManager {
     public interface MDResponseListener<T> {
         public void onMDSuccessResponse(T object);
+
         public void onMDNetworkErrorResponse(String errorMessage);
+
         public void onMDErrorResponse(String errorMessage);
     }
 
@@ -48,7 +51,6 @@ public class MDApiManager {
         sQueue = Volley.newRequestQueue(sContext);
     }
 
-    //another solution is implement interface for activity and fragment, pass in this and the interface to this method
     public static void sendStringRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, listener, errorListener) {
 
@@ -61,8 +63,16 @@ public class MDApiManager {
         sendRequest(stringRequest);
     }
 
-    public static void sendJSONRequest(String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null, listener, errorListener) {
+    public static void sendJSONRequest(String url, JSONObject body, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        if (body != null) {
+            try {
+                if (MDLoginManager.mUserId != 0) body.put("userId", MDLoginManager.mUserId);
+            } catch (JSONException e) {
+                DLog.e(MDApiManager.class, e.toString());
+            }
+        }
+        DLog.d(MDApiManager.class, "url = " + url + "\n" + "body = " + body);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, body, listener, errorListener) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -74,11 +84,10 @@ public class MDApiManager {
     }
 
 
-
     public static void sendJSONArrayRequest(int method, String url, JSONObject body, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         if (body != null) {
             try {
-                if (MDLoginManager.mUserId != null) body.put("userId", MDLoginManager.mUserId);
+                if (MDLoginManager.mUserId != 0) body.put("userId", MDLoginManager.mUserId);
             } catch (JSONException e) {
                 DLog.e(MDApiManager.class, e.toString());
             }
@@ -100,17 +109,9 @@ public class MDApiManager {
         sendRequest(imageRequest);
     }
 
-    public static void sendStringRequestWithPOST(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, listener, errorListener);
-        sendRequest(stringRequest);
-    }
-
     private static void sendRequest(Request request) {
         sQueue.add(request);
     }
-
-
-
 
 
     private static Map<String, String> createBasicAuthHeader(String username, String password) {
@@ -128,14 +129,6 @@ public class MDApiManager {
 
     private static void fetchCouponInfoList(int method, String request, JSONObject body, final MDResponseListener<List<CouponInfo>> listener) {
 
-        if (body != null) {
-            try {
-                if (MDLoginManager.mUserId != null) body.put("userId", MDLoginManager.mUserId);
-            } catch (JSONException e) {
-                DLog.e(MDApiManager.class, e.toString());
-            }
-        }
-
         sendJSONArrayRequest(method, request, body, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -152,17 +145,13 @@ public class MDApiManager {
                     }
                 }
 
-                if (listener != null) {
-                    listener.onMDSuccessResponse(list);
-                }
+                listener.onMDSuccessResponse(list);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (listener != null) {
-                    listener.onMDNetworkErrorResponse(error.getMessage());
-                }
+                listener.onMDNetworkErrorResponse(error.getMessage());
             }
         });
     }
@@ -189,7 +178,7 @@ public class MDApiManager {
             body.put("page", page);
             body.put("size", PAGE_SIZE);
         } catch (JSONException e) {
-            e.printStackTrace();
+            DLog.e(MDApiManager.class, e.toString());
         }
         String url = "http://www.mickledeals.com/api/coupons/search";
         fetchCouponInfoList(Request.Method.POST, url, body, listener);
@@ -210,6 +199,108 @@ public class MDApiManager {
 //        }
         String url = "http://www.mickledeals.com/api/userses/getSavedCoupons";
         fetchCouponInfoList(Request.Method.POST, url, body, listener);
+    }
+
+    public static void registerUserWithEmail(String email, String password, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/register";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("email", email);
+            body.put("password", password);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                boolean error = response.has("ERROR");
+                if (error) {
+                    try {
+                        String errorMessage = response.getString("ERROR");
+                        listener.onMDErrorResponse(errorMessage);
+                    } catch (JSONException e) {
+                    }
+                } else {
+                    int id = 0;
+                    try {
+                        id = response.getInt("id");
+                    } catch (JSONException e) {
+                    }
+                    if (id != 0) {
+                        listener.onMDSuccessResponse(response);
+                    } else {
+                        listener.onMDErrorResponse(null);
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ZZZ", "error message = " + error.getMessage(), new Exception());
+                listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
+    }
+
+    public static void loginUserWithEmail(String email, String password, final MDResponseListener<Integer> listener) {
+        String url = "http://www.mickledeals.com/api/userses/login";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("email", email);
+            body.put("password", password);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                boolean error = response.has("ERROR");
+                if (error) {
+                    try {
+                        String errorMessage = response.getString("ERROR");
+                        listener.onMDErrorResponse(errorMessage);
+                    } catch (JSONException e) {
+                    }
+                } else {
+                    int id = 0;
+                    try {
+                        id = response.getInt("id");
+                    } catch (JSONException e) {
+                    }
+                    if (id != 0) {
+                        listener.onMDSuccessResponse(id);
+                    } else {
+                        listener.onMDErrorResponse(null);
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
+    }
+
+    public static void loginUserWithFb(final MDResponseListener<List<CouponInfo>> listener) {
+
+    }
+
+    public static void addOrRemoveFavorite(int couponId, boolean add) {
+        String addUrl = "http://www.mickledeals.com/api/userses/saveCoupon";
+        String removeUrl = "http://www.mickledeals.com/api/userses/removeSaveCoupon";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("couponId", couponId);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(add ? addUrl : removeUrl, body, null, null);
     }
 
 }

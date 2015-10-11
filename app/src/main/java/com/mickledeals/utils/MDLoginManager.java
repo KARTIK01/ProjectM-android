@@ -22,7 +22,7 @@ public class MDLoginManager {
 
     public static String mEmailAddr;
     public static String mUserName;
-    public static String mUserId;
+    public static int mUserId;
 
     private static Set<LoginCallback> mCallbackSet = new HashSet<LoginCallback>();
     private static LoginCallback mPendingCallback;
@@ -44,20 +44,20 @@ public class MDLoginManager {
     }
 
     public static boolean isLogin() {
-        return mUserId != null;
+        return mUserId != 0;
     }
 
     public static void initFromPreference(Context context) {
-        mUserId = PreferenceHelper.getPreferenceValueStr(context, "user_id", null);
+        mUserId = PreferenceHelper.getPreferenceValueInt(context, "user_id", 0);
         mEmailAddr = PreferenceHelper.getPreferenceValueStr(context, "user_email", null);
         mUserName = PreferenceHelper.getPreferenceValueStr(context, "user_name", null);
     }
 
-    public static void setUserInfo(Context context, String userId, String email, String userName) {
+    public static void setUserInfo(Context context, int userId, String email, String userName) {
         mUserId = userId;
         mEmailAddr = email;
         mUserName = userName;
-        PreferenceHelper.savePreferencesStr(context, "user_id", userId);
+        PreferenceHelper.savePreferencesInt(context, "user_id", userId);
         PreferenceHelper.savePreferencesStr(context, "user_email", email);
         PreferenceHelper.savePreferencesStr(context, "user_name", userName);
     }
@@ -67,7 +67,7 @@ public class MDLoginManager {
         if (mIsFbLogin) {
             LoginManager.getInstance().logOut();
         }
-        setUserInfo(context, null, null, null);
+        setUserInfo(context, 0, null, null);
     }
 
     //this should call after user email and name received

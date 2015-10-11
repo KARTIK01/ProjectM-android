@@ -204,15 +204,6 @@
     <string name="no_save">You do not have any saved coupons yet.</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="network_error_title">Connection Problem</string>
-    <string name="network_error_msg">We could not connect to server at the moment. Please check your connection and try again. </string>
-    <string name="network_error_retry">Retry</string>
-    <string name="location_error_msg1">We could not get your current location. \nPlease confirm your location service is on and try again</string>
-    <string name="location_error_msg2">or sort by other options</string>
-    <string name="location_error_choice1">Retry</string>
-    <string name="location_error_choice2">Open Settings</string>p
-    <string name="location_error_choice3">Sort By Date Added</string>
-    <string name="location_error_choice4">Sort Randomly</string>
 
     <string name="all_rights_reserved">MickleDeals LLC © All rights reserved</string>
     <string name="full_all_rights_reserved">Copyright © MickleDeals LLC. All rights reserved.</string>
@@ -221,6 +212,27 @@
     <string name="privacy">Privacy Policy</string>
     <string name="terms_u"><u>Terms of Use</u></string>
     <string name="privacy_u"><u>Privacy Policy</u></string>
+
+    <!-- Error Response -->
+    <string name="response_error_title">Error</string>
+    <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
+    <string name="user_already_registered">This email is already registered. Please login with this email.</string>
+    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button. If you forgot your password, tap Forgot password below.</string>
+
+
+
+    <string name="network_error_title">Connection Problem</string>
+    <string name="network_error_msg">We could not connect to server at the moment. Please check your connection and try again. </string>
+    <string name="network_error_retry">Retry</string>
+    <string name="location_error_msg1">We could not get your current location. \nPlease confirm your location service is on and try again</string>
+    <string name="location_error_msg2">or sort by other options</string>
+    <string name="location_error_choice1">Retry</string>
+    <string name="location_error_choice2">Open Settings</string>
+    <string name="location_error_choice3">Sort By Date Added</string>
+    <string name="location_error_choice4">Sort Randomly</string>
+
+    <!-- Loading Dialog -->
+    <string name="loading_login">Logging in...</string>
 
     <!-- Login -->
     <string name="or">or</string>

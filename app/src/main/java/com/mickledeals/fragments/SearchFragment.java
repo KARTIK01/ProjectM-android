@@ -31,23 +31,26 @@ public class SearchFragment extends ListMapBaseFragment {
         mNoResultMsg = (TextView) view.findViewById(R.id.noResultMsg);
     }
 
-    public void doSearch(String str) {
-        if (mLocationSpinner.getSelectedItemPosition() == 0) mNoResultMsg.setText(getString(R.string.no_results_found_in_search, str));
-        else mNoResultMsg.setText(getString(R.string.no_results_found_in_search_in_location, str, mLocationSpinner.getSelectedItem().toString()));
-        str = str.toLowerCase().trim();
+    public void setSearchStr(String str) {
         mSearchStr = str;
-        prepareSendRequest();
+    }
+
+    public void clearDataListWhenLoading() {
+        mDataList.clear();
+        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
     public void prepareSendRequest() {
-        if (mSearchStr == null) return;
+        if (mSearchStr == null || mSearchStr.trim().length() == 0) return;
+        if (mLocationSpinner.getSelectedItemPosition() == 0) mNoResultMsg.setText(getString(R.string.no_results_found_in_search, mSearchStr));
+        else mNoResultMsg.setText(getString(R.string.no_results_found_in_search_in_location, mSearchStr, mLocationSpinner.getSelectedItem().toString()));
 
         super.prepareSendRequest();
     }
 
     protected String getSearchText() {
-        return mSearchStr;
+        return mSearchStr.trim().toLowerCase();
     }
 
     public List<CouponInfo> getDataList() {

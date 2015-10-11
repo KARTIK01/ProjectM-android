@@ -16,10 +16,9 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
-import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
-import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.AspectRatioImageView;
 
@@ -188,26 +187,26 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                 public void onClick(View v) {
                     dataHolder.mSaved = !dataHolder.mSaved;
                     ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
-                    StringBuilder sb = new StringBuilder();
-                    for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
-                        if (holder.mSaved) {
-                            sb.append(holder.mId);
-                            sb.append("|");
-                        }
-                    }
-                    PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
-
+//                    StringBuilder sb = new StringBuilder();
+//                    for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
+//                        if (holder.mSaved) {
+//                            sb.append(holder.mId);
+//                            sb.append("|");
+//                        }
+//                    }
+//                    PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
                     if (mListType == Constants.TYPE_SAVED_LIST && !dataHolder.mSaved) {
                         //confirm dialog
                         //remove from recycler view
                         mDataset.remove(newPos);
                         notifyItemRemoved(newPos);
                     }
+                    MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
                 }
             });
         }
         if (holder.mCardCity != null) {
-//            holder.mCardCity.setText(dataHolder.mAddressShort.replace("San Francisco", "SF"));
+            holder.mCardCity.setText(dataHolder.mBusinessInfo.getShortDisplayedCity());
         }
         if (holder.mCardDist != null) {
             holder.mCardDist.setVisibility(View.VISIBLE);

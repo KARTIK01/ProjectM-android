@@ -149,6 +149,7 @@ public class SearchActivity extends BaseActivity {
                     mSuggestionRecyclerView.setVisibility(View.GONE);
                     mRecentHotLayout.setVisibility(View.VISIBLE);
                 }
+                mSearchFragment.setSearchStr(s.toString());
                 suggestionSearch(s.toString());
             }
 
@@ -186,12 +187,14 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void sendSearchRequest(String str) {
+        if (str == null || str.trim().length() == 0) return;
         Utils.toggleKeyboard(false, mSearchEdit, SearchActivity.this);
         mSearchEdit.setText(str);
         mSearchEdit.setCursorVisible(false);
         mListMapContainer.setVisibility(View.VISIBLE);
         mMapToggleView.setVisibility(View.VISIBLE);
-        mSearchFragment.doSearch(str);
+        mSearchFragment.clearDataListWhenLoading();
+        mSearchFragment.prepareSendRequest();
 
     }
 

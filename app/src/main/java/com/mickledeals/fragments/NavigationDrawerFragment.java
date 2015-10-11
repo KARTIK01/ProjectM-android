@@ -4,6 +4,7 @@ package com.mickledeals.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
@@ -113,6 +114,12 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
 
     @Override
     public void onLoginSuccess() {
+        if (MDLoginManager.mUserName == null) {
+            mUserEmail.setTypeface(null, Typeface.BOLD);
+            mUserName.setVisibility(View.GONE);
+        } else {
+            mUserEmail.setTypeface(null, Typeface.NORMAL);
+        }
         mUserEmail.setText(MDLoginManager.mEmailAddr);
         mUserName.setText(MDLoginManager.mUserName);
         mUserInfo.setVisibility(View.VISIBLE);

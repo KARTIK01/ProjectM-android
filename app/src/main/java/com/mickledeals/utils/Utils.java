@@ -29,7 +29,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.mickledeals.R;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MDApplication;
@@ -297,7 +296,7 @@ public class Utils {
         }
     }
 
-
+    //this only get called above api level 17
     public static Bitmap blur(Context context, Bitmap image) {
 
         final float BITMAP_SCALE = 0.4f;
@@ -319,6 +318,36 @@ public class Utils {
 
         return outputBitmap;
     }
+
+    public static void showAlertDialog(Context context, int titleRes, int messageRes) {
+        AlertDialog dialog = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                .setTitle(titleRes)
+                .setMessage(messageRes)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+    public static void showNetworkErrorDialog(Context context) {
+        AlertDialog dialog = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                .setTitle(R.string.network_error_title)
+                .setMessage(R.string.network_error_msg)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+
 
 
 }
