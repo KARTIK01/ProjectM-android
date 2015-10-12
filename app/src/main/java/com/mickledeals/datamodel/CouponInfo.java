@@ -46,18 +46,18 @@ public class CouponInfo implements Serializable{
     public CouponInfo(JSONObject jsonobject) {
         try {
             mId = jsonobject.getInt("id");
-            mCoverPhotoUrl = jsonobject.getString("coverPhotoUrl");
-            mThumbnailPhotoUrl = jsonobject.getString("thumbnailPhotoUrl");
-            mDescription = jsonobject.getString("title");
-            mDescriptionCh = jsonobject.getString("chineseTitle");
-            mFinePrint = jsonobject.getString("finePrint");
-            mFinePrintCh = jsonobject.getString("chineseFinePrint");
+            if (!jsonobject.isNull("coverPhotoUrl")) mCoverPhotoUrl = jsonobject.getString("coverPhotoUrl");
+            if (!jsonobject.isNull("thumbnailPhotoUrl")) mThumbnailPhotoUrl = jsonobject.getString("thumbnailPhotoUrl");
+            if (!jsonobject.isNull("title")) mDescription = jsonobject.getString("title");
+            if (!jsonobject.isNull("chineseTitle")) mDescriptionCh = jsonobject.getString("chineseTitle");
+            if (!jsonobject.isNull("finePrint")) mFinePrint = jsonobject.getString("finePrint");
+            if (!jsonobject.isNull("chineseFinePrint")) mFinePrintCh = jsonobject.getString("chineseFinePrint");
             mPrice = (float) jsonobject.getDouble("price");
             mLimited = jsonobject.getBoolean("limited");
             mActive = jsonobject.getBoolean("active");
             mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
-            mExpiredDate = jsonobject.getString("expireDate");
-            mExpiredDays = jsonobject.getString("expireDays");
+            if (!jsonobject.isNull("expireDate")) mExpiredDate = jsonobject.getString("expireDate");
+            if (!jsonobject.isNull("expireDays")) mExpiredDays = jsonobject.getString("expireDays");
         } catch (JSONException e) {
             DLog.e(this, e.toString());
         }

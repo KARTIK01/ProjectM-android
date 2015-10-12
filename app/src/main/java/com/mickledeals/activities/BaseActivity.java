@@ -1,6 +1,6 @@
 package com.mickledeals.activities;
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mickledeals.R;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.PreferenceHelper;
+import com.mickledeals.utils.Utils;
 
 /**
  * Created by Nicky on 11/23/2014.
@@ -22,6 +24,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     protected static final int LAYOUT_TYPE_DIALOG_SWIPE = 3;
 
     protected Toolbar mToolBar;
+    protected ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,9 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (savedInstanceState != null) {
             boolean isKilled = savedInstanceState.getBoolean("isKilled");
             if (isKilled && !(this instanceof HomeActivity)) {
-                Intent i = new Intent(this, HomeActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-//                android.os.Process.killProcess(android.os.Process.myPid());
+                Utils.restartApp(this);
+                //need following line, otherwise there is illegalstateexception for nearbyfragment not attached
+                android.os.Process.killProcess(android.os.Process.myPid());
 //                System.exit(10);
 //                finish();
                 return;
@@ -103,12 +105,28 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
     }
 
-    //lets see how many activities need this
-//    public void retryRequestClick(View v) {
-//        prepareSendRequest();
-//    }
-//
-//    public void prepareSendRequest() {
-//
-//    }
+    protected class MDReponseListenerImpl<T> implements MDApiManager.MDResponseListener<T> {
+        @Override
+        public void onMDSuccessResponse(T object) {
+            if (mProgressDialog != null) mProgressDialog.dismiss();
+        }
+
+        @Override
+        public void onMDNetworkErrorResponse(String errorMessage) {
+            Utils.showNetworkErrorDialog(BaseActivity.this);
+            if (mProgressDialog != null) mProgressDialog.dismiss();
+        }
+
+        @Override
+        public void onMDErrorResponse(String errorMessage) {
+            int errorMessageRes = R.string.response_error_message_unknown;
+            Utils.showAlertDialog(BaseActivity.this, R.string.response_error_title, errorMessageRes);
+            if (mProgressDialog != null) mProgressDialog.dismiss();
+        }
+
+        public void onMDErrorResponse(int errorMessageRes) {
+            Utils.showAlertDialog(BaseActivity.this, R.string.response_error_title, errorMessageRes);
+            if (mProgressDialog != null) mProgressDialog.dismiss();
+        }
+    }
 }

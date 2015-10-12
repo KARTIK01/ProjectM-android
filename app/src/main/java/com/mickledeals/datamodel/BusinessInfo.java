@@ -45,25 +45,25 @@ public class BusinessInfo implements Serializable {
     public BusinessInfo(JSONObject jsonobject) {
         try {
             mId = jsonobject.getInt("id");
-            mCoverPhotoUrl = jsonobject.getString("coverPhotoUrl");
-            mLogoUrl = jsonobject.getString("iconUrl");
-            mName = jsonobject.getString("name");
-            mNameCh = jsonobject.getString("chineseName");
-            mDescription = jsonobject.getString("description");
-            mDescriptionCh = jsonobject.getString("chineseDescription");
-            mNews = jsonobject.getString("news");
-            mNewsCh = jsonobject.getString("chineseNews");
+            if (!jsonobject.isNull("coverPhotoUrl")) mCoverPhotoUrl = jsonobject.getString("coverPhotoUrl");
+            if (!jsonobject.isNull("iconUrl")) mLogoUrl = jsonobject.getString("iconUrl");
+            if (!jsonobject.isNull("name")) mName = jsonobject.getString("name");
+            if (!jsonobject.isNull("chineseName")) mNameCh = jsonobject.getString("chineseName");
+            if (!jsonobject.isNull("description")) mDescription = jsonobject.getString("description");
+            if (!jsonobject.isNull("chineseDescription")) mDescriptionCh = jsonobject.getString("chineseDescription");
+            if (!jsonobject.isNull("news")) mNews = jsonobject.getString("news");
+            if (!jsonobject.isNull("chineseNews")) mNewsCh = jsonobject.getString("chineseNews");
             mLat = jsonobject.getDouble("latitude");
             mLng = jsonobject.getDouble("longitude");
-            mAddress = jsonobject.getString("address");
-            mDistrict = jsonobject.getString("district");
-            mZipCode = jsonobject.getString("zipCode");
-            mPhone = jsonobject.getString("phone");
-            mWebSiteAddr = jsonobject.getString("link");
-            mHours = jsonobject.getString("hours");
+            if (!jsonobject.isNull("address")) mAddress = jsonobject.getString("address");
+            if (!jsonobject.isNull("district")) mDistrict = jsonobject.getString("district");
+            if (!jsonobject.isNull("zipCode")) mZipCode = jsonobject.getString("zipCode");
+            if (!jsonobject.isNull("phone")) mPhone = jsonobject.getString("phone");
+            if (!jsonobject.isNull("link")) mWebSiteAddr = jsonobject.getString("link");
+            if (!jsonobject.isNull("hours")) mHours = jsonobject.getString("hours");
             JSONObject locationObject = jsonobject.getJSONObject("location");
-            mCity = locationObject.getString("city");
-            mState = locationObject.getString("state");
+            if (!locationObject.isNull("city"))  mCity = locationObject.getString("city");
+            if (!locationObject.isNull("state")) mState = locationObject.getString("state");
         } catch (JSONException e) {
             DLog.e(this, e.toString());
         }

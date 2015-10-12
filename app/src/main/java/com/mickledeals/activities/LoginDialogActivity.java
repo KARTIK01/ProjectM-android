@@ -54,7 +54,9 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
         mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                finish();
+
+                mProgressDialog = ProgressDialog.show(LoginDialogActivity.this, null, getString(R.string.loading_login));
+//                finish();
 //                overridePendingTransition(0, R.anim.translate_anim_exit); //cannot use because bg not fade in
                 MDLoginManager.getInstance().setAccessToken(loginResult.getAccessToken());
                 String fbAuthToken = loginResult.getAccessToken().getToken();
@@ -68,20 +70,15 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
                                     DLog.e(LoginDialogActivity.this, response.getError().toString());
                                 } else {
                                     String email = me.optString("email");
-                                    String id = me.optString("id");
-                                    String name = me.optString("name");
+                                    String fbId = me.optString("id");
+                                    final String firstName = me.optString("first_name");
+                                    final String lastName = me.optString("last_name");
                                     String birthday = me.optString("birthday");
                                     String gender = me.optString("gender");
-//                                    MDLoginManager.setUserInfo(LoginDialogActivity.this, id, email, name);
-                                    DLog.d(LoginDialogActivity.this, "email = " + email + " id = " + id + "name = "
-                                    + name + "birthday = " + birthday + "gender = " + gender);
-                                    // send email and id to your web server
+                                    DLog.d(LoginDialogActivity.this, "email = " + email + " fbid = " + fbId + "name = "
+                                            + firstName + "lastName = " + lastName + "birthday = " + birthday + "gender = " + gender);
 
-
-                                    //wait for server response to ensure server received user id
-                                    //server needs error handling when user id does not exist in database
-                                    //while the app is using the user id as params for other request
-                                    MDLoginManager.onLoginSuccess();
+                                    MDApiManager.loginUserWithFb(fbId, email, firstName, lastName, gender, birthday, mMDReponseListener);
 
                                 }
                             }
@@ -110,7 +107,7 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
 //                currentProfile.getId();
 //            }
 //        };
-
+//
 //        mAccessTokenTracker = new AccessTokenTracker() {
 //            @Override
 //            protected void onCurrentAccessTokenChanged(
@@ -168,76 +165,55 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
             Toast.makeText(this, getString(R.string.invalid_password), Toast.LENGTH_SHORT).show();
             return;
         } else {
-            final ProgressDialog pDialog = ProgressDialog.show(this, null, getString(R.string.loading_login));
+            mProgressDialog = ProgressDialog.show(this, null, getString(R.string.loading_login));
             if (signup) {
-                MDApiManager.registerUserWithEmail(emailStr, passwordStr, new MDApiManager.MDResponseListener<JSONObject>() {
-                    @Override
-                    public void onMDSuccessResponse(JSONObject object) {
-                        int id = 0;
-                        try {
-                            id = object.getInt("id");
-                            // get promotion object from json
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        MDLoginManager.setUserInfo(LoginDialogActivity.this, id, emailStr, null);
-                        MDLoginManager.onLoginSuccess();
-                        finish();
-                        pDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onMDNetworkErrorResponse(String errorMessage) {
-                        Utils.showNetworkErrorDialog(LoginDialogActivity.this);
-                        pDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onMDErrorResponse(String errorMessage) {
-                        int errorMessageRes = R.string.response_error_message_unknown;
-                        if (errorMessage != null) {
-                            if (errorMessage.equals("DUPLICATE_USER")) {
-                                errorMessageRes = R.string.user_already_registered;
-                            }
-                        }
-                        Utils.showAlertDialog(LoginDialogActivity.this, R.string.response_error_title, errorMessageRes);
-                        pDialog.dismiss();
-                    }
-                });
+                MDApiManager.registerUserWithEmail(emailStr, passwordStr, mMDReponseListener);
             } else {
-                MDApiManager.loginUserWithEmail(emailStr, passwordStr, new MDApiManager.MDResponseListener<Integer>() {
-                    @Override
-                    public void onMDSuccessResponse(Integer id) {
-
-                        MDLoginManager.setUserInfo(LoginDialogActivity.this, id, emailStr, null);
-                        MDLoginManager.onLoginSuccess();
-                        finish();
-                        pDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onMDNetworkErrorResponse(String errorMessage) {
-                        Utils.showNetworkErrorDialog(LoginDialogActivity.this);
-                        pDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onMDErrorResponse(String errorMessage) {
-                        int errorMessageRes = R.string.response_error_message_unknown;
-                        if (errorMessage != null) {
-                            if (errorMessage.equals("INVLIDA_LOGIN")) {
-                                errorMessageRes = R.string.user_invalid_login;
-                            }
-                        }
-                        Utils.showAlertDialog(LoginDialogActivity.this, R.string.response_error_title, errorMessageRes);
-                        pDialog.dismiss();
-                    }
-                });
+                MDApiManager.loginUserWithEmail(emailStr, passwordStr, mMDReponseListener);
             }
-
         }
     }
+
+    private MDReponseListenerImpl<JSONObject> mMDReponseListener = new MDReponseListenerImpl<JSONObject>() {
+
+        @Override
+        public void onMDSuccessResponse(JSONObject object) {
+            super.onMDSuccessResponse(object);
+
+            int id = 0;
+            String email = null;
+            String name = null;
+            try {
+                id = object.getInt("id");
+                if (!object.isNull("email")) email = object.getString("email");
+                if (!object.isNull("firstName") && !object.isNull("lastName")) {
+                    name = object.getString("firstName") + " " + object.getString("lastName");
+                }
+                // get promotion object from json
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MDLoginManager.setUserInfo(LoginDialogActivity.this, id, email, name);
+            MDLoginManager.onLoginSuccess();
+            finish();
+            Utils.restartApp(LoginDialogActivity.this);
+        }
+
+        @Override
+        public void onMDErrorResponse(String errorMessage) {
+            if (errorMessage != null) {
+                if (errorMessage.equals("INVLIDA_LOGIN")) {
+                    onMDErrorResponse(R.string.user_invalid_login);
+                    return;
+                }
+                if (errorMessage.equals("DUPLICATE_USER")) {
+                    onMDErrorResponse(R.string.user_already_registered);
+                    return;
+                }
+            }
+            super.onMDErrorResponse(errorMessage);
+        }
+    };
 
     private static boolean validateEmail(String emailText) {
         String emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}";

@@ -35,8 +35,8 @@ public class MDApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-
-        PreferenceHelper.savePreferencesBoolean(this, "firstLaunch", false);
+        //temp
+        PreferenceHelper.savePreferencesBoolean(this, "firstLaunch", true);
 
         sAppContext = this;
         initLocale();

@@ -7,7 +7,7 @@ import com.mickledeals.R;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class RedeemActivity extends BaseActivity {
+public class GiftRedeemActivity extends BaseActivity {
 
 
     @Override

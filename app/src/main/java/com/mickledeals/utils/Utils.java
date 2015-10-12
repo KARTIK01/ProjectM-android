@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.DetailsActivity;
+import com.mickledeals.activities.HomeActivity;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
@@ -347,7 +348,14 @@ public class Utils {
         dialog.show();
     }
 
+    public static void restartApp(Context context) {
 
+        Intent i = new Intent(context, HomeActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
 
 
 }

@@ -1,7 +1,6 @@
 package com.mickledeals.activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -67,12 +66,10 @@ public class SettingsActivity extends SwipeDismissActivity {
                         }
                         mLanguageText.setText(getResources().getStringArray(R.array.language_list)[which]);
                         language = which;
-//                        MDApplication.initLocale();
+                        MDApplication.initLocale();
                         dialog.dismiss();
-                        Intent i = new Intent(SettingsActivity.this, HomeActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                        android.os.Process.killProcess(android.os.Process.myPid());
+                        Utils.restartApp(SettingsActivity.this);
+//                        android.os.Process.killProcess(android.os.Process.myPid());
                     }
                 })
                 .create();
@@ -98,10 +95,8 @@ public class SettingsActivity extends SwipeDismissActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         MDLoginManager.logout(SettingsActivity.this);
-                        Intent i = new Intent(SettingsActivity.this, HomeActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                        android.os.Process.killProcess(android.os.Process.myPid());
+                        Utils.restartApp(SettingsActivity.this);
+//                        android.os.Process.killProcess(android.os.Process.myPid());
 
                     }
                 })

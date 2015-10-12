@@ -72,6 +72,7 @@ public class MDLoginManager {
 
     //this should call after user email and name received
     public static void onLoginSuccess() {
+
         for (LoginCallback callback : mCallbackSet) {
             callback.onLoginSuccess();
         }

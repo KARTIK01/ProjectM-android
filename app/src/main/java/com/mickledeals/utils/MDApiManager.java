@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -35,14 +34,14 @@ import java.util.Map;
  */
 public class MDApiManager {
     public interface MDResponseListener<T> {
-        public void onMDSuccessResponse(T object);
+        void onMDSuccessResponse(T object);
 
-        public void onMDNetworkErrorResponse(String errorMessage);
+        void onMDNetworkErrorResponse(String errorMessage);
 
-        public void onMDErrorResponse(String errorMessage);
+        void onMDErrorResponse(String errorMessage);
     }
 
-    private static final int PAGE_SIZE = 14;
+    private static final int PAGE_SIZE = 4;
     private static RequestQueue sQueue;
     private static ImageLoader mImageLoader;
     private static Context sContext = MDApplication.sAppContext;
@@ -238,13 +237,12 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("ZZZ", "error message = " + error.getMessage(), new Exception());
                 listener.onMDNetworkErrorResponse(error.getMessage());
             }
         });
     }
 
-    public static void loginUserWithEmail(String email, String password, final MDResponseListener<Integer> listener) {
+    public static void loginUserWithEmail(String email, String password, final MDResponseListener<JSONObject> listener) {
         String url = "http://www.mickledeals.com/api/userses/login";
         JSONObject body = new JSONObject();
         try {
@@ -271,7 +269,7 @@ public class MDApiManager {
                     } catch (JSONException e) {
                     }
                     if (id != 0) {
-                        listener.onMDSuccessResponse(id);
+                        listener.onMDSuccessResponse(response);
                     } else {
                         listener.onMDErrorResponse(null);
                     }
@@ -287,8 +285,54 @@ public class MDApiManager {
         });
     }
 
-    public static void loginUserWithFb(final MDResponseListener<List<CouponInfo>> listener) {
+    public static void loginUserWithFb(String fbId, String email, String firstName, String lastName,
+                                       String gender, String birthday, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/login";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("facebookId", fbId);
+            if (email != null) body.put("email", email);
+            if (firstName != null) body.put("firstName", firstName);
+            if (lastName != null) body.put("lastName", lastName);
+            if (gender != null) {
+                if (gender.equals("male")) gender = "Male";
+                body.put("gender", gender);
+            }
+            if (birthday != null) body.put("birthday", birthday);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
 
+                boolean error = response.has("ERROR");
+                if (error) {
+                    try {
+                        String errorMessage = response.getString("ERROR");
+                        listener.onMDErrorResponse(errorMessage);
+                    } catch (JSONException e) {
+                    }
+                } else {
+                    int id = 0;
+                    try {
+                        id = response.getInt("id");
+                    } catch (JSONException e) {
+                    }
+                    if (id != 0) {
+                        listener.onMDSuccessResponse(response);
+                    } else {
+                        listener.onMDErrorResponse(null);
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                    listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
     }
 
     public static void addOrRemoveFavorite(int couponId, boolean add) {
