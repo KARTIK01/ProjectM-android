@@ -23,7 +23,7 @@ import com.mickledeals.views.PagerIndicator;
  */
 public class IntroScreen extends Activity {
 
-    private static final int PAGE_SIZE = 4;
+    private static final int PAGE_SIZE = 5;
     private ViewPager mViewPager;
     private PagerIndicator mIndicator;
     private String[] mIntroMessages;
@@ -31,6 +31,7 @@ public class IntroScreen extends Activity {
 
     private Typeface mTf;
     private LayerDrawable mBgLayer;
+    private View[] mImageViews = new View[PAGE_SIZE];
 
 
     @Override
@@ -54,18 +55,25 @@ public class IntroScreen extends Activity {
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true, adapter);
         mViewPager.addOnPageChangeListener(adapter);
+        mViewPager.setOffscreenPageLimit(PAGE_SIZE);
 
         mIndicator = (PagerIndicator) findViewById(R.id.pagerIndicator);
         mIndicator.setSize(PAGE_SIZE);
 
         mIntroMessages = getResources().getStringArray(R.array.intro_message_list);
 
-        mBgLayer = (LayerDrawable) mViewPager.getBackground();
-        mBgLayer.getDrawable(0).setAlpha(255);
-        mBgLayer.getDrawable(1).setAlpha(0);
-        mBgLayer.getDrawable(2).setAlpha(0);
-        mBgLayer.getDrawable(3).setAlpha(0);
+//        mBgLayer = (LayerDrawable) mViewPager.getBackground();
+//        mBgLayer.getDrawable(0).setAlpha(255);
+//        mBgLayer.getDrawable(1).setAlpha(0);
+//        mBgLayer.getDrawable(2).setAlpha(0);
+//        mBgLayer.getDrawable(3).setAlpha(0);
 //        mBgLayer.getDrawable(4).setAlpha(0);
+
+        mImageViews[0] = findViewById(R.id.introBg1);
+        mImageViews[1] = findViewById(R.id.introBg2);
+        mImageViews[2] = findViewById(R.id.introBg3);
+        mImageViews[3] = findViewById(R.id.introBg4);
+        mImageViews[4] = findViewById(R.id.introBg5);
     }
 
 
@@ -137,12 +145,17 @@ public class IntroScreen extends Activity {
             int index = (Integer) page.getTag();
             Drawable currentDrawableInLayerDrawable = mBgLayer.getDrawable(index);
 
+            View bgImage = mImageViews[index];
+
             if(position <= -1 || position >= 1) {
-                currentDrawableInLayerDrawable.setAlpha(0);
+                bgImage.setAlpha(0);
+                bgImage.setVisibility(View.GONE);
             } else if( position == 0 ) {
-                currentDrawableInLayerDrawable.setAlpha(255);
+                bgImage.setAlpha(1);
+                bgImage.setVisibility(View.VISIBLE);
             } else {
-                currentDrawableInLayerDrawable.setAlpha((int)(255 - Math.abs(position*255)));
+                bgImage.setAlpha(1 - Math.abs(position));
+                bgImage.setVisibility(View.VISIBLE);
             }
 
 

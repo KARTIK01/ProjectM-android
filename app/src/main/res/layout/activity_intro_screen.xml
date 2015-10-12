@@ -3,12 +3,46 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <ImageView
+        android:id="@+id/introBg1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/intro_bg1"
+        android:scaleType="centerCrop"/>
+    <ImageView
+        android:id="@+id/introBg2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/intro_bg2"
+        android:scaleType="centerCrop"
+        android:alpha="0"/>
+    <ImageView
+        android:id="@+id/introBg3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/intro_bg3"
+        android:scaleType="centerCrop"
+        android:alpha="0"/>
+    <ImageView
+        android:id="@+id/introBg4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/intro_bg4"
+        android:scaleType="centerCrop"
+        android:alpha="0"/>
+    <ImageView
+        android:id="@+id/introBg5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/intro_bg5"
+        android:scaleType="centerCrop"
+        android:alpha="0"/>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/intro_layer_bg"/>
+        android:layout_height="match_parent"/>
 
     <com.mickledeals.views.PagerIndicator
         android:id="@+id/pagerIndicator"
