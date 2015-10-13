@@ -18,6 +18,11 @@
     <string name="menu_about">關於我們</string>
     <string name="menu_terms">適用條款</string>
 
+    <!-- Launch Screen -->
+    <string name="continue_in_launch">開始使用!</string>
+    <string name="intro_signup_message">Sign up now and get free\ncredits to buy coupon</string>
+    <string name="intro_discover_message">Discover additional ways to\nreceive more credits while\nexploring MickleDeals</string>
+    <string name="skip">跳過</string>
 
     <!-- Home -->
     <string name="nearby_tab_text">瀏覽優惠</string>
@@ -99,10 +104,6 @@
     <string name="share_to_fb_purchase">為答謝你的購買,分享到Facebook後你將會獲得 $1 Mickle Credit</string>
     <string name="share_to_fb_free">分享給你的朋友!</string>
 
-
-    <!-- Launch Screen -->
-
-    <string name="continue_in_launch">開始使用</string>
     <!-- Redeem Dialog -->
 
     <string name="confirm_redeem_title">你確定現在要兌換此優惠嗎?</string>
@@ -138,8 +139,6 @@
     <string name="save_payment_hint">新增付款方式以獲得 $5 Mickle Credit</string>
     <string name="get_more_credit">如何獲得更多 Mickle Credit?</string>
     <string name="get_more_credit_dialog_title">如何獲得更多 Mickle Credit</string>
-    <string name="get_more_credit_dialog_msg">1. If you log in for 7 consecutive days, you will receive $2 Mickle Credit
-    \n\n2. After you purchased a coupon, tap on Facebook share button to share and you will receive $1 Mickle Credit</string>
     <string name="secure_transmitted_msg">所有資料都安全經用PayPal連接傳輸</string>
 
 
@@ -188,12 +187,14 @@
     <string name="privacy">私隱政策</string>
     <string name="terms_u"><u>服務條款</u></string>
     <string name="privacy_u"><u>私隱政策</u></string>
+    <string name="force_upgrade">這版本因太舊而不能運作。請到Google Play Store更新至最新版本</string>
+    <string name="play_store_update">到Google Play Store更新</string>
 
     <!-- Error Response -->
-    <string name="response_error_title">Error</string>
+    <string name="response_error_title">錯誤</string>
     <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
-    <string name="user_already_registered">This email is already registered. Please login with this email.</string>
-    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button. If you forgot your password, tap Forgot password below.</string>
+    <string name="user_already_registered">此電郵地址已被註冊, 請選擇登入</string>
+    <string name="user_invalid_login">電郵地址或密碼不正確。若你未進行註冊, 請按註冊。</string>
 
 
     <string name="network_error_title">連線失敗</string>

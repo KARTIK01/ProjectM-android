@@ -55,6 +55,7 @@ public class CouponInfo implements Serializable{
             mPrice = (float) jsonobject.getDouble("price");
             mLimited = jsonobject.getBoolean("limited");
             mActive = jsonobject.getBoolean("active");
+            mSaved = jsonobject.getBoolean("favorite");
             mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
             if (!jsonobject.isNull("expireDate")) mExpiredDate = jsonobject.getString("expireDate");
             if (!jsonobject.isNull("expireDays")) mExpiredDays = jsonobject.getString("expireDays");

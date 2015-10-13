@@ -106,6 +106,16 @@ public class LaunchScreen extends Activity {
 
         setLanguage();
 
+        //tap outside to dismiss the list
+        findViewById(R.id.launchBg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLanguageList.getVisibility() == View.VISIBLE) {
+                    mLanguageList.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
     }
 
     private void setLanguage() {

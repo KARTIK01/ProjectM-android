@@ -32,6 +32,7 @@ import com.mickledeals.activities.SuccessDialogActivity;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
@@ -241,15 +242,20 @@ public class DetailsFragment extends BaseFragment {
                 mHolder.mSaved = !mHolder.mSaved;
                 mSaveBtnText.setText(mHolder.mSaved ? R.string.saved : R.string.save);
                 mSaveBtnText.setCompoundDrawablesWithIntrinsicBounds(mHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off, 0, 0, 0);
-
-                StringBuilder sb = new StringBuilder();
-                for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
-                    if (holder.mSaved) {
-                        sb.append(holder.mId);
-                        sb.append("|");
+                MDLoginManager.loginIfNecessary(getActivity(), new MDLoginManager.LoginCallback() {
+                    @Override
+                    public void onLoginSuccess() {
+                        MDApiManager.addOrRemoveFavorite(mHolder.mId, mHolder.mSaved);
                     }
-                }
-                PreferenceHelper.savePreferencesStr(mContext, "saveList", sb.toString());
+                });
+//                StringBuilder sb = new StringBuilder();
+//                for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
+//                    if (holder.mSaved) {
+//                        sb.append(holder.mId);
+//                        sb.append("|");
+//                    }
+//                }
+//                PreferenceHelper.savePreferencesStr(mContext, "saveList", sb.toString());
             }
         });
 

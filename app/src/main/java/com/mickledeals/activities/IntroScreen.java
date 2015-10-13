@@ -1,10 +1,9 @@
 package com.mickledeals.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.views.PagerIndicator;
 
 /**
@@ -27,10 +27,9 @@ public class IntroScreen extends Activity {
     private ViewPager mViewPager;
     private PagerIndicator mIndicator;
     private String[] mIntroMessages;
-    private int[] mIntroContentRes = new int[PAGE_SIZE];
+    private int[] mIntroContentRes = new int[PAGE_SIZE - 1];
 
     private Typeface mTf;
-    private LayerDrawable mBgLayer;
     private View[] mImageViews = new View[PAGE_SIZE];
 
 
@@ -62,13 +61,6 @@ public class IntroScreen extends Activity {
 
         mIntroMessages = getResources().getStringArray(R.array.intro_message_list);
 
-//        mBgLayer = (LayerDrawable) mViewPager.getBackground();
-//        mBgLayer.getDrawable(0).setAlpha(255);
-//        mBgLayer.getDrawable(1).setAlpha(0);
-//        mBgLayer.getDrawable(2).setAlpha(0);
-//        mBgLayer.getDrawable(3).setAlpha(0);
-//        mBgLayer.getDrawable(4).setAlpha(0);
-
         mImageViews[0] = findViewById(R.id.introBg1);
         mImageViews[1] = findViewById(R.id.introBg2);
         mImageViews[2] = findViewById(R.id.introBg3);
@@ -76,6 +68,11 @@ public class IntroScreen extends Activity {
         mImageViews[4] = findViewById(R.id.introBg5);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 
     public class IntroAdapter extends PagerAdapter implements
             ViewPager.OnPageChangeListener, ViewPager.PageTransformer {
@@ -89,12 +86,44 @@ public class IntroScreen extends Activity {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             DLog.d(this, "onCreateView");
-            ViewGroup rootView = (ViewGroup) IntroScreen.this.getLayoutInflater().inflate(
-                    R.layout.intro_layout, null);
-            TextView introMessage = (TextView) rootView.findViewById(R.id.introMessage);
-            introMessage.setText(mIntroMessages[position]);
-            introMessage.setTypeface(mTf);
-            ImageView introImage = (ImageView) rootView.findViewById(R.id.introImage);
+            ViewGroup rootView = null;
+            if (position == getCount() - 1) {
+                rootView = (ViewGroup) IntroScreen.this.getLayoutInflater().inflate(
+                        R.layout.intro_last_layout, null);
+                TextView signupText = (TextView) rootView.findViewById(R.id.signupText);
+                signupText.setTypeface(mTf);
+                TextView discoverText = (TextView) rootView.findViewById(R.id.discoverText);
+                discoverText.setTypeface(mTf);
+                View loginBtn = rootView.findViewById(R.id.loginButton);
+                loginBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(IntroScreen.this, LoginDialogActivity.class);
+                        i.putExtra("fromIntroScreen", true);
+                        startActivity(i);
+                    }
+                });
+                TextView skipBtn = (TextView) rootView.findViewById(R.id.skip);
+                skipBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PreferenceHelper.savePreferencesBoolean(IntroScreen.this, "firstLaunch", false);
+                        Intent i = new Intent(IntroScreen.this, HomeActivity.class);
+                        i.putExtra("fromIntroScreen", true);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                skipBtn.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/Montserrat-UltraLight.otf"));
+            } else {
+                rootView = (ViewGroup) IntroScreen.this.getLayoutInflater().inflate(
+                        R.layout.intro_layout, null);
+                TextView introMessage = (TextView) rootView.findViewById(R.id.introMessage);
+                introMessage.setText(mIntroMessages[position]);
+                introMessage.setTypeface(mTf);
+                ImageView introImage = (ImageView) rootView.findViewById(R.id.introImage);
+            }
+
             ((ViewPager) container).addView(rootView, 0);
             rootView.setTag(position);
             return rootView;
@@ -111,7 +140,8 @@ public class IntroScreen extends Activity {
         }
 
         @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
         }
 
         @Override
@@ -130,20 +160,8 @@ public class IntroScreen extends Activity {
         @Override
         public void transformPage(View page, float position) {
 
-//            int currentPos = mViewPager.getCurrentItem();
-//
-//            Log.e("ZZZ", "pos = " + currentPos);
-//
-//            if (position > 0 && position <= 1) {
-//                mImageViews[currentPos].setAlpha(position);
-//            }
-//            if (position < 0 && position >= -1) {
-//                mImageViews[currentPos + 1].setAlpha(-position);
-//            }
-
 
             int index = (Integer) page.getTag();
-            Drawable currentDrawableInLayerDrawable = mBgLayer.getDrawable(index);
 
             View bgImage = mImageViews[index];
 

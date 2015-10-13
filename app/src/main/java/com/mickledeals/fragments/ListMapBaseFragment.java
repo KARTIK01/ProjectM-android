@@ -27,8 +27,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
+import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.CouponInfo;
-import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
@@ -39,7 +39,7 @@ import java.util.HashMap;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment implements AdapterView.OnItemSelectedListener {
+public abstract class ListMapBaseFragment extends ListBaseFragment implements AdapterView.OnItemSelectedListener {
 
     private static final double LAT_DEFAULT = 37.752814;
     private static final double LONG_DEFAULT = -122.440690;
@@ -215,8 +215,9 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @Override
                     public void onInfoWindowClick(Marker marker) {
+                        int listType = ((CardAdapter) mListResultRecyclerView.getAdapter()).getListType();
                         int pos = mMarkersHashMap.get(marker);
-                        Utils.transitDetailsActivity(getActivity(), pos, getListType(), null, null);
+                        Utils.transitDetailsActivity(getActivity(), pos, listType, null, null);
                     }
                 });
                 MapsInitializer.initialize(mContext.getApplicationContext());
@@ -274,10 +275,6 @@ public abstract class ListMapBaseFragment extends SwipeRefreshBaseFragment imple
                         MDApplication.sDeviceHeight - Utils.getPixelsFromDip(56 + 48, mContext.getResources()), Utils.getPixelsFromDip(50f, getResources())));
             //action bar height + map panel height
         }
-    }
-
-    protected int getListType() {
-        return Constants.TYPE_NEARBY_LIST;
     }
 
     @Override

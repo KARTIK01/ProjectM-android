@@ -19,6 +19,7 @@ import com.mickledeals.R;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLoginManager;
+import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 
 import org.json.JSONException;
@@ -196,7 +197,17 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
             MDLoginManager.setUserInfo(LoginDialogActivity.this, id, email, name);
             MDLoginManager.onLoginSuccess();
             finish();
-            Utils.restartApp(LoginDialogActivity.this);
+
+            if (getIntent().getBooleanExtra("fromIntroScreen", false)) {
+
+                PreferenceHelper.savePreferencesBoolean(LoginDialogActivity.this, "firstLaunch", false);
+                Intent i = new Intent(LoginDialogActivity.this, HomeActivity.class);
+                i.putExtra("fromIntroScreen", true);
+                LoginDialogActivity.this.startActivity(i);
+            } else {
+
+                Utils.restartApp(LoginDialogActivity.this);
+            }
         }
 
         @Override

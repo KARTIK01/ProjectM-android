@@ -35,9 +35,6 @@ public class MDApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //temp
-        PreferenceHelper.savePreferencesBoolean(this, "firstLaunch", true);
-
         sAppContext = this;
         initLocale();
         initDeviceInfo();
@@ -73,21 +70,20 @@ public class MDApplication extends Application {
 
     public static void initMenuItems() {
         sNavMenuList.clear();
-        sNavMenuList.add(new NavMenuItem(HomeFragment.class, R.string.menu_home, R.drawable.ic_home));
-        sNavMenuList.add(new NavMenuItem(MyCouponsFragment.class, R.string.menu_my_deals, R.drawable.ic_coupons));
-        sNavMenuList.add(new NavMenuItem(SavedCouponsFragment.class, R.string.menu_saved_deals, R.drawable.ic_save));
+        sNavMenuList.add(new NavMenuItem(HomeFragment.class, R.string.menu_home, R.drawable.ic_home, false));
+        sNavMenuList.add(new NavMenuItem(MyCouponsFragment.class, R.string.menu_my_deals, R.drawable.ic_coupons, true));
+        sNavMenuList.add(new NavMenuItem(SavedCouponsFragment.class, R.string.menu_saved_deals, R.drawable.ic_save, true));
 //        sNavMenuList.add(new NavMenuItem(RandomCouponsFragment.class, R.string.menu_random, R.drawable.ic_random));
-        sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
-        sNavMenuList.add(new NavMenuItem(NotificationActivity.class, R.string.menu_notification, R.drawable.ic_bell));
-        sNavMenuList.add(new NavMenuItem(PaymentActivity.class, R.string.menu_account, R.drawable.ic_payment));
+        sNavMenuList.add(new NavMenuItem(null, 0, 0, false)); //divider
+//        sNavMenuList.add(new NavMenuItem(NotificationActivity.class, R.string.menu_notification, R.drawable.ic_bell, true));
+        sNavMenuList.add(new NavMenuItem(PaymentActivity.class, R.string.menu_account, R.drawable.ic_payment, true));
 //        sNavMenuList.add(new NavMenuItem(RedeemActivity.class, R.string.menu_redeem, R.drawable.ic_gift));
-        sNavMenuList.add(new NavMenuItem(SettingsActivity.class, R.string.menu_settings, R.drawable.ic_setting));
-        sNavMenuList.add(new NavMenuItem(null, 0, 0)); //divider
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_faq, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_promote, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_feedback, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_rate, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_about, 0));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_terms, 0));
+        sNavMenuList.add(new NavMenuItem(SettingsActivity.class, R.string.menu_settings, R.drawable.ic_setting, false));
+        sNavMenuList.add(new NavMenuItem(null, 0, 0, false)); //divider
+        sNavMenuList.add(new NavMenuItem(null, R.string.menu_faq, 0, false));
+        sNavMenuList.add(new NavMenuItem(null, R.string.menu_promote, 0, false));
+        sNavMenuList.add(new NavMenuItem(null, R.string.menu_feedback, 0, false));
+        sNavMenuList.add(new NavMenuItem(null, R.string.menu_rate, 0, false));
+        sNavMenuList.add(new NavMenuItem(null, R.string.menu_about, 0, false));
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Nicky on 11/28/2014.
  */
-public class FeaturedFragment extends SwipeRefreshBaseFragment {
+public class FeaturedFragment extends ListBaseFragment {
 
 
     public List<CouponInfo> getDataList() {

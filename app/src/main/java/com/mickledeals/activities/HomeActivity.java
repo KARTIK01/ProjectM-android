@@ -20,6 +20,7 @@ import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.fragments.BaseFragment;
 import com.mickledeals.fragments.NavigationDrawerFragment;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
 
 
@@ -54,26 +55,30 @@ public class HomeActivity extends BaseActivity
         }
 
         final View launchBg = findViewById(R.id.launchBg);
-        final View fullLogo = findViewById(R.id.fullLogoHome);
-        fullLogo.setVisibility(View.VISIBLE);
-        AlphaAnimation anim = new AlphaAnimation(1, 0);
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
+        if (getIntent().getBooleanExtra("fromIntroScreen", false)) {
+            launchBg.setVisibility(View.GONE);
+        } else {
+            final View fullLogo = findViewById(R.id.fullLogoHome);
+            fullLogo.setVisibility(View.VISIBLE);
+            AlphaAnimation anim = new AlphaAnimation(1, 0);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                launchBg.setVisibility(View.GONE);
-            }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    launchBg.setVisibility(View.GONE);
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        anim.setDuration(500);
-        anim.setStartOffset(1000);
-        launchBg.startAnimation(anim);
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            anim.setDuration(500);
+            anim.setStartOffset(1000);
+            launchBg.startAnimation(anim);
+        }
 
         mToolBarLogo = mToolBar.findViewById(R.id.toolbar_logo);
         mSlidingTab = mToolBar.findViewById(R.id.sliding_tabs);
@@ -184,12 +189,27 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void onNavigationDrawerItemSelected(final int position) {
 
         DLog.d(this, "onNavigationDrawerItemSelected pos = " + position);
-        NavMenuItem item = MDApplication.sNavMenuList.get(position);
+        final NavMenuItem item = MDApplication.sNavMenuList.get(position);
+
+        if (item.needsLogin()) {
+
+            MDLoginManager.loginIfNecessary(this, new MDLoginManager.LoginCallback() {
+                @Override
+                public void onLoginSuccess() {
+                    launchFragmentOrActivity(item, position);
+                }
+            });
+        } else {
+            launchFragmentOrActivity(item, position);
+        }
 
 
+    }
+
+    private void launchFragmentOrActivity(NavMenuItem item, int position) {
         Class navClass = item.getNavClass();
         if (navClass == null) return;
         if (Activity.class.isAssignableFrom(navClass)) {
@@ -242,8 +262,6 @@ public class HomeActivity extends BaseActivity
             mCurrentPosition = position;
             resetTitle();
         }
-
-
     }
 
     public void restoreActionBar() {

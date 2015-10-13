@@ -19,6 +19,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
+import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.AspectRatioImageView;
 
@@ -181,12 +182,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
         }
         if (holder.mCardSave != null) {
-            holder.mCardSave.setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
-            holder.mCardSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dataHolder.mSaved = !dataHolder.mSaved;
-                    ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
+            if (!MDLoginManager.isLogin()) {
+                holder.mCardSave.setVisibility(View.GONE);
+            } else {
+                holder.mCardSave.setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
+                holder.mCardSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dataHolder.mSaved = !dataHolder.mSaved;
+                        ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
 //                    StringBuilder sb = new StringBuilder();
 //                    for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 //                        if (holder.mSaved) {
@@ -195,15 +199,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 //                        }
 //                    }
 //                    PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
-                    if (mListType == Constants.TYPE_SAVED_LIST && !dataHolder.mSaved) {
-                        //confirm dialog
-                        //remove from recycler view
-                        mDataset.remove(newPos);
-                        notifyItemRemoved(newPos);
+                        if (mListType == Constants.TYPE_SAVED_LIST && !dataHolder.mSaved) {
+                            //confirm dialog
+                            //remove from recycler view
+                            mDataset.remove(newPos);
+                            notifyItemRemoved(newPos);
+                        }
+                        MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
                     }
-                    MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
-                }
-            });
+                });
+            }
         }
         if (holder.mCardCity != null) {
             holder.mCardCity.setText(dataHolder.mBusinessInfo.getShortDisplayedCity());
@@ -260,5 +265,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             }
             viewToAnimate.startAnimation(animation);
         }
+    }
+
+    public int getListType() {
+        return mListType;
     }
 }

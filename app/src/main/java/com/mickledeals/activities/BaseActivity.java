@@ -1,16 +1,24 @@
 package com.mickledeals.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mickledeals.R;
+import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
+import com.mickledeals.utils.MDConnectManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 
@@ -26,12 +34,14 @@ public abstract class BaseActivity extends ActionBarActivity {
     protected Toolbar mToolBar;
     protected ProgressDialog mProgressDialog;
 
+    private static boolean mHasCheckVersioned;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         boolean isFirstLaunch = PreferenceHelper.getPreferenceValueBoolean(this, "firstLaunch", true);
-        if (isFirstLaunch) {
+        if (isFirstLaunch && this instanceof HomeActivity) {
             //to skip home activity and do launch screen
             return;
         }
@@ -74,6 +84,80 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+    }
+
+    private BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            DLog.d(this, "receive network change");
+            if (!mHasCheckVersioned && MDConnectManager.getInstance(BaseActivity.this).isNetworkAvailable()) {
+                sendCheckVersionRequest();
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mHasCheckVersioned) {
+            if (MDConnectManager.getInstance(this).isNetworkAvailable()) {
+                sendCheckVersionRequest();
+            } else {
+                DLog.d(this, "register network receiver");
+                registerReceiver(mNetworkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //throws exception if not registered
+        try {
+            unregisterReceiver(mNetworkReceiver);
+        } catch (Exception e) {
+        }
+    }
+
+    private void sendCheckVersionRequest() {
+        DLog.d(this, "sendCheckVersionRequest");
+        MDApiManager.checkVersion(getString(R.string.versionNo), new MDApiManager.MDResponseListener<Boolean>() {
+            @Override
+            public void onMDSuccessResponse(Boolean object) {
+                mHasCheckVersioned = true;
+                DLog.d(this, "need update = " + object);
+                if (object) {
+                    AlertDialog dialog = new AlertDialog.Builder(BaseActivity.this, R.style.AppCompatAlertDialogStyle)
+                            .setMessage(R.string.force_upgrade)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.play_store_update, null)
+                            .create();
+                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            final String appPackageName = getPackageName();
+                            DLog.d(this, "appPackageName = " + appPackageName);
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onMDNetworkErrorResponse(String errorMessage) {
+            }
+
+            @Override
+            public void onMDErrorResponse(String errorMessage) {
+            }
+        });
     }
 
     protected abstract int getLayoutResource();

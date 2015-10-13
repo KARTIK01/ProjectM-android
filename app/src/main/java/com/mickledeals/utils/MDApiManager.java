@@ -71,7 +71,7 @@ public class MDApiManager {
             }
         }
         DLog.d(MDApiManager.class, "url = " + url + "\n" + "body = " + body);
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, url, body, listener, errorListener) {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(body == null? Request.Method.GET : Request.Method.POST, url, body, listener, errorListener) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -83,7 +83,7 @@ public class MDApiManager {
     }
 
 
-    public static void sendJSONArrayRequest(int method, String url, JSONObject body, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+    public static void sendJSONArrayRequest(String url, JSONObject body, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
         if (body != null) {
             try {
                 if (MDLoginManager.mUserId != 0) body.put("userId", MDLoginManager.mUserId);
@@ -92,7 +92,7 @@ public class MDApiManager {
             }
         }
         DLog.d(MDApiManager.class, "url = " + url + "\n" + "body = " + body);
-        JsonArrayRequest jsonRequest = new JsonArrayRequest(method, url, body, listener, errorListener) {
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(body == null? Request.Method.GET : Request.Method.POST, url, body, listener, errorListener) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -126,9 +126,9 @@ public class MDApiManager {
         return headerMap;
     }
 
-    private static void fetchCouponInfoList(int method, String request, JSONObject body, final MDResponseListener<List<CouponInfo>> listener) {
+    private static void fetchCouponInfoList(String request, JSONObject body, final MDResponseListener<List<CouponInfo>> listener) {
 
-        sendJSONArrayRequest(method, request, body, new Response.Listener<JSONArray>() {
+        sendJSONArrayRequest(request, body, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 List<CouponInfo> list = new ArrayList<CouponInfo>();
@@ -180,12 +180,12 @@ public class MDApiManager {
             DLog.e(MDApiManager.class, e.toString());
         }
         String url = "http://www.mickledeals.com/api/coupons/search";
-        fetchCouponInfoList(Request.Method.POST, url, body, listener);
+        fetchCouponInfoList(url, body, listener);
     }
 
     public static void fetchFeatureList(final MDResponseListener<List<CouponInfo>> listener) {
         String url = "http://www.mickledeals.com/api/featuredCoupons";
-        fetchCouponInfoList(Request.Method.GET, url, null, listener);
+        fetchCouponInfoList(url, null, listener);
     }
 
     public static void fetchSavedCoupons(final MDResponseListener<List<CouponInfo>> listener) {
@@ -197,7 +197,7 @@ public class MDApiManager {
 //            e.printStackTrace();
 //        }
         String url = "http://www.mickledeals.com/api/userses/getSavedCoupons";
-        fetchCouponInfoList(Request.Method.POST, url, body, listener);
+        fetchCouponInfoList(url, body, listener);
     }
 
     public static void registerUserWithEmail(String email, String password, final MDResponseListener<JSONObject> listener) {
@@ -345,6 +345,32 @@ public class MDApiManager {
             DLog.e(MDApiManager.class, e.toString());
         }
         sendJSONRequest(add ? addUrl : removeUrl, body, null, null);
+    }
+
+    public static void checkVersion(String versionStr, final MDResponseListener<Boolean> listener) {
+        String url = "http://www.mickledeals.com/api/userses/versionCheck";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("version", versionStr);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    boolean updateRequired = response.getBoolean("updateRequired");
+                    listener.onMDSuccessResponse(updateRequired);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
 }

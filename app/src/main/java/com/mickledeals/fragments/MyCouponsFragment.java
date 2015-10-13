@@ -24,7 +24,7 @@ import java.util.List;
  */
 
 
-public class MyCouponsFragment extends SwipeRefreshBaseFragment {
+public class MyCouponsFragment extends ListBaseFragment {
 
     public static final int REQUEST_CODE_CONFIRM_REDEEM = 1;
     public static final int REQUEST_CODE_REDEEM = 2;

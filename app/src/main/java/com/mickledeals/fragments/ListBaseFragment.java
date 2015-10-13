@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by Nicky on 7/23/2015.
  */
-public abstract class SwipeRefreshBaseFragment extends BaseFragment implements MDApiManager.MDResponseListener<List<CouponInfo>>{
+public abstract class ListBaseFragment extends BaseFragment implements MDApiManager.MDResponseListener<List<CouponInfo>>{
 
     protected View mNoResultLayout;
     protected View mNoNetworkLayout;
@@ -177,6 +177,12 @@ public abstract class SwipeRefreshBaseFragment extends BaseFragment implements M
     public void onSuccessResponse() {
         mListResultRecyclerView.getAdapter().notifyDataSetChanged();
         ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override

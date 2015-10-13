@@ -12,7 +12,9 @@
 
     <!-- Launch Screen -->
     <string name="continue_in_launch">Get Started!</string>
-
+    <string name="intro_signup_message">Sign up now and get free\ncredits to buy coupon</string>
+    <string name="intro_discover_message">Discover additional ways to\nreceive more credits while\nexploring MickleDeals</string>
+    <string name="skip">SKIP</string>
     <!-- Menu -->
 
     <string name="menu_home">Home</string>
@@ -212,12 +214,14 @@
     <string name="privacy">Privacy Policy</string>
     <string name="terms_u"><u>Terms of Use</u></string>
     <string name="privacy_u"><u>Privacy Policy</u></string>
+    <string name="force_upgrade">This app version is too old to be functional. Please go to Google Play Store to update for the latest version.</string>
+    <string name="play_store_update">Go to Google Play Store</string>
 
     <!-- Error Response -->
     <string name="response_error_title">Error</string>
     <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
     <string name="user_already_registered">This email is already registered. Please login with this email.</string>
-    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button. If you forgot your password, tap Forgot password below.</string>
+    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button.</string>
 
 
 
