@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,17 +26,18 @@ import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
+import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.activities.SuccessDialogActivity;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
-import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 
@@ -259,6 +261,10 @@ public class DetailsFragment extends BaseFragment {
             }
         });
 
+        if (!MDLoginManager.isLogin()) {
+            mSaveBtn.setVisibility(View.GONE);
+        }
+
         String expiredStr = null;
         if (!mHolder.mExpiredDate.isEmpty()) {
             expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
@@ -300,35 +306,46 @@ public class DetailsFragment extends BaseFragment {
                 }
         });
 
-//        if (mHolder.mId == 2 || mHolder.mId == 3) {
-
-//
-//            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
-//            View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
-//            mMoreCouponRow.setVisibility(View.VISIBLE);
-//            mMoreCouponRow.addView(otherCoupon);
-//            otherCoupon.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent i = new Intent(mContext, DetailsActivity.class);
-//                    DataListModel.getInstance().getMoreCouponsList().clear();
-//                    DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
-//                    i.putExtra("listIndex", 0);
-//                    i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
-//                    startActivity(i);
-//                }
-//            });
-//            CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2);
-//            ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
-//            ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
-//            ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
-//        }
-
 
         if (mHolder.mPurchased) {
             showBoughtStatus();
         } else if (!mHolder.mActive) {
             showExpiredStatus();
+        }
+
+
+        if (mHolder.mBusinessInfo.mCoupons.size() > 1) {
+            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
+            mMoreCouponRow.setVisibility(View.VISIBLE);
+            for (final CouponInfo info : mHolder.mBusinessInfo.mCoupons) {
+                if (info == mHolder) continue;
+
+                View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
+                //load image
+                ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
+                TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
+                cardPrice.setText(info.getDisplayedPrice());
+
+                int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
+                int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);
+                if (!info.getDisplayedPrice().contains("$")) { //FREE and cents should be smaller
+                    cardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp20);
+                } else {
+                    cardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp19);
+                }
+                otherCoupon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(mContext, DetailsActivity.class);
+                        DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
+                        DataListModel.getInstance().getMoreCouponsList().add(info);
+                        i.putExtra("listIndex", 0);
+                        i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+                        startActivity(i);
+                    }
+                });
+                mMoreCouponRow.addView(otherCoupon);
+            }
         }
     }
 

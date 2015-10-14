@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:background="@color/defaultLightGrayBg">
 
-    <include layout="@layout/filter_panel" />
+    <include layout="@layout/filter_panel"
+        android:visibility="gone"/>
 
     <FrameLayout
         android:layout_width="match_parent"

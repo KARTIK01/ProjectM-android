@@ -41,7 +41,7 @@ public class MDApiManager {
         void onMDErrorResponse(String errorMessage);
     }
 
-    private static final int PAGE_SIZE = 4;
+    private static final int PAGE_SIZE = 12;
     private static RequestQueue sQueue;
     private static ImageLoader mImageLoader;
     private static Context sContext = MDApplication.sAppContext;
@@ -126,40 +126,15 @@ public class MDApiManager {
         return headerMap;
     }
 
-    private static void fetchCouponInfoList(String request, JSONObject body, final MDResponseListener<List<CouponInfo>> listener) {
-
-        sendJSONArrayRequest(request, body, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                List<CouponInfo> list = new ArrayList<CouponInfo>();
-
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        DLog.d(MDApiManager.class, "parsing pos = " + i);
-                        JSONObject jsonobject = response.getJSONObject(i);
-                        CouponInfo info = new CouponInfo(jsonobject);
-                        list.add(info);
-                    } catch (JSONException e) {
-                        DLog.e(MDApiManager.class, e.toString());
-                    }
-                }
-
-                listener.onMDSuccessResponse(list);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                listener.onMDNetworkErrorResponse(error.getMessage());
-            }
-        });
-    }
+    // ---- Search, Browse, Feature, Top Feature, Favorite API ----- //
 
 
     public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int currentSize, final MDResponseListener<List<CouponInfo>> listener) {
+        String url = "http://www.mickledeals.com/api/coupons/search";
         JSONObject body = new JSONObject();
         try {
             body.put("active", true);
+            body.put("available", true);
             if (city != null) {
                 body.put("city", city);
             }
@@ -179,26 +154,83 @@ public class MDApiManager {
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
+        fetchCouponInfoList(url, body, listener);
+    }
+
+    public static void fetchNewAddedCouponList(int pageSize, final MDResponseListener<List<CouponInfo>> listener) {
         String url = "http://www.mickledeals.com/api/coupons/search";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("active", true);
+            body.put("available", true);
+            body.put("page", 1);
+            body.put("size", pageSize);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
         fetchCouponInfoList(url, body, listener);
     }
 
     public static void fetchFeatureList(final MDResponseListener<List<CouponInfo>> listener) {
-        String url = "http://www.mickledeals.com/api/featuredCoupons";
-        fetchCouponInfoList(url, null, listener);
+        String url = "http://www.mickledeals.com/api/featuredCoupons/getFeaturedCoupons";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("active", true);
+            body.put("available", true);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        fetchCouponInfoList(url, body, listener);
+    }
+
+    public static void fetchTopFeatureList(final MDResponseListener<List<CouponInfo>> listener) {
+        String url = "http://www.mickledeals.com/api/topCoupons/getTopCoupons";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("active", true);
+            body.put("available", true);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        fetchCouponInfoList(url, body, listener);
     }
 
     public static void fetchSavedCoupons(final MDResponseListener<List<CouponInfo>> listener) {
-        JSONObject body = new JSONObject();
-//        try {
-//            body.put("page", page);
-//            body.put("size", PAGE_SIZE);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
         String url = "http://www.mickledeals.com/api/userses/getSavedCoupons";
+        JSONObject body = new JSONObject();
         fetchCouponInfoList(url, body, listener);
     }
+
+    private static void fetchCouponInfoList(String request, JSONObject body, final MDResponseListener<List<CouponInfo>> listener) {
+
+        sendJSONArrayRequest(request, body, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                DLog.d(MDApiManager.class, response.toString());
+                List<CouponInfo> list = new ArrayList<CouponInfo>();
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonobject = response.getJSONObject(i);
+                        CouponInfo info = new CouponInfo(jsonobject);
+                        list.add(info);
+                    } catch (JSONException e) {
+                        DLog.e(MDApiManager.class, e.toString());
+                    }
+                }
+
+                listener.onMDSuccessResponse(list);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
+    }
+
+    //----------Login / Register API ------//
 
     public static void registerUserWithEmail(String email, String password, final MDResponseListener<JSONObject> listener) {
         String url = "http://www.mickledeals.com/api/userses/register";
@@ -209,37 +241,7 @@ public class MDApiManager {
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
-        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                boolean error = response.has("ERROR");
-                if (error) {
-                    try {
-                        String errorMessage = response.getString("ERROR");
-                        listener.onMDErrorResponse(errorMessage);
-                    } catch (JSONException e) {
-                    }
-                } else {
-                    int id = 0;
-                    try {
-                        id = response.getInt("id");
-                    } catch (JSONException e) {
-                    }
-                    if (id != 0) {
-                        listener.onMDSuccessResponse(response);
-                    } else {
-                        listener.onMDErrorResponse(null);
-                    }
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                listener.onMDNetworkErrorResponse(error.getMessage());
-            }
-        });
+        sendLoginRegisterBaseRequest(url, body, listener);
     }
 
     public static void loginUserWithEmail(String email, String password, final MDResponseListener<JSONObject> listener) {
@@ -251,38 +253,7 @@ public class MDApiManager {
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
-        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                boolean error = response.has("ERROR");
-                if (error) {
-                    try {
-                        String errorMessage = response.getString("ERROR");
-                        listener.onMDErrorResponse(errorMessage);
-                    } catch (JSONException e) {
-                    }
-                } else {
-                    int id = 0;
-                    try {
-                        id = response.getInt("id");
-                    } catch (JSONException e) {
-                    }
-                    if (id != 0) {
-                        listener.onMDSuccessResponse(response);
-                    } else {
-                        listener.onMDErrorResponse(null);
-                    }
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                listener.onMDNetworkErrorResponse(error.getMessage());
-            }
-        });
+        sendLoginRegisterBaseRequest(url, body, listener);
     }
 
     public static void loginUserWithFb(String fbId, String email, String firstName, String lastName,
@@ -294,14 +265,15 @@ public class MDApiManager {
             if (email != null) body.put("email", email);
             if (firstName != null) body.put("firstName", firstName);
             if (lastName != null) body.put("lastName", lastName);
-            if (gender != null) {
-                if (gender.equals("male")) gender = "Male";
-                body.put("gender", gender);
-            }
+            if (gender != null) body.put("gender", gender);
             if (birthday != null) body.put("birthday", birthday);
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
+        sendLoginRegisterBaseRequest(url, body, listener);
+    }
+
+    private static void sendLoginRegisterBaseRequest(String url, JSONObject body, final MDResponseListener<JSONObject> listener) {
         sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -330,22 +302,12 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                    listener.onMDNetworkErrorResponse(error.getMessage());
+                listener.onMDNetworkErrorResponse(error.getMessage());
             }
         });
     }
+    //----------End Login / Register API ------//
 
-    public static void addOrRemoveFavorite(int couponId, boolean add) {
-        String addUrl = "http://www.mickledeals.com/api/userses/saveCoupon";
-        String removeUrl = "http://www.mickledeals.com/api/userses/removeSaveCoupon";
-        JSONObject body = new JSONObject();
-        try {
-            body.put("couponId", couponId);
-        } catch (JSONException e) {
-            DLog.e(MDApiManager.class, e.toString());
-        }
-        sendJSONRequest(add ? addUrl : removeUrl, body, null, null);
-    }
 
     public static void checkVersion(String versionStr, final MDResponseListener<Boolean> listener) {
         String url = "http://www.mickledeals.com/api/userses/versionCheck";
@@ -369,6 +331,28 @@ public class MDApiManager {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+            }
+        });
+    }
+
+    //no response
+    public static void addOrRemoveFavorite(int couponId, boolean add) {
+        String addUrl = "http://www.mickledeals.com/api/userses/saveCoupon";
+        String removeUrl = "http://www.mickledeals.com/api/userses/removeSaveCoupon";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("couponId", couponId);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(add ? addUrl : removeUrl, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                DLog.e(MDApiManager.class, error.getMessage());
             }
         });
     }

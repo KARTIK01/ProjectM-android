@@ -1,8 +1,10 @@
 package com.mickledeals.adapters;
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -168,7 +170,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         if (holder.mCardImage != null)
             holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
 
-        holder.mCardPrice.setText(dataHolder.getDisplayedPrice());
 
         int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
         int sp18 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_18);
@@ -176,11 +177,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
         boolean extraSize = false;
         if (mListType == Constants.TYPE_BEST_LIST) extraSize = true;
-        if (!dataHolder.getDisplayedPrice().contains("$")) { //FREE and cents should be smaller
-            holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp18 : sp17);
-        } else {
-            holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
+
+        if (holder.mCardPrice != null) {
+            holder.mCardPrice.setText(dataHolder.getDisplayedPrice());
+            if (!dataHolder.getDisplayedPrice().contains("$")) { //FREE and cents should be smaller
+                holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp18 : sp17);
+            } else {
+                holder.mCardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, extraSize ? sp19 : sp18);
+            }
         }
+
         if (holder.mCardSave != null) {
             if (!MDLoginManager.isLogin()) {
                 holder.mCardSave.setVisibility(View.GONE);
@@ -189,8 +195,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                 holder.mCardSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dataHolder.mSaved = !dataHolder.mSaved;
-                        ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
 //                    StringBuilder sb = new StringBuilder();
 //                    for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 //                        if (holder.mSaved) {
@@ -199,13 +203,32 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 //                        }
 //                    }
 //                    PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
-                        if (mListType == Constants.TYPE_SAVED_LIST && !dataHolder.mSaved) {
-                            //confirm dialog
-                            //remove from recycler view
-                            mDataset.remove(newPos);
-                            notifyItemRemoved(newPos);
-                        }
+                    if (mListType == Constants.TYPE_SAVED_LIST) {
+
+                        AlertDialog dialog = new AlertDialog.Builder(v.getContext(), R.style.AppCompatAlertDialogStyle)
+                                .setMessage(R.string.remove_save_msg)
+                                .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        MDApiManager.addOrRemoveFavorite(dataHolder.mId, !dataHolder.mSaved);
+                                        mDataset.remove(newPos);
+                                        notifyItemRemoved(newPos);
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .create();
+                        dialog.show();
+                    } else {
+                        dataHolder.mSaved = !dataHolder.mSaved;
+                        ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
                         MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
+                    }
                     }
                 });
             }

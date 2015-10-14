@@ -5,10 +5,12 @@ import com.mickledeals.activities.MDApplication;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +40,7 @@ public class BusinessInfo implements Serializable {
     public String mWebSiteAddr = "";
     public String mHours = "";
 
-    public List<CouponSimpleInfo> mCoupons;
+    public List<CouponInfo> mCoupons = new ArrayList<CouponInfo>();
 
     public List<BusinessPhoto> mPhotoIds;
 
@@ -64,6 +66,20 @@ public class BusinessInfo implements Serializable {
             JSONObject locationObject = jsonobject.getJSONObject("location");
             if (!locationObject.isNull("city"))  mCity = locationObject.getString("city");
             if (!locationObject.isNull("state")) mState = locationObject.getString("state");
+
+            if (jsonobject.has("coupon")) {
+                JSONArray couponList = jsonobject.getJSONArray("coupon");
+                for (int i = 0; i < couponList.length(); i++) {
+                    try {
+                        JSONObject couponObject = couponList.getJSONObject(i);
+                        CouponInfo info = new CouponInfo(couponObject);
+                        info.mBusinessInfo = this;
+                        mCoupons.add(info);
+                    } catch (JSONException e) {
+//                        DLog.e(MDApiManager.class, e.toString());
+                    }
+                }
+            }
         } catch (JSONException e) {
             DLog.e(this, e.toString());
         }

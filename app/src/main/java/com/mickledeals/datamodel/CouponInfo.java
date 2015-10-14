@@ -31,11 +31,12 @@ public class CouponInfo implements Serializable{
     public String mExpiredDate = "";
     public String mExpiredDays = "";
 
-    public boolean mSaved;
     public boolean mLimited;
     public boolean mActive;
 
     public boolean mPurchased;
+    public boolean mAvailable = true; //false will show coupon sold out
+    public boolean mSaved;
     public String mPurchaseId = "";
 
     public BusinessInfo mBusinessInfo;
@@ -55,10 +56,15 @@ public class CouponInfo implements Serializable{
             mPrice = (float) jsonobject.getDouble("price");
             mLimited = jsonobject.getBoolean("limited");
             mActive = jsonobject.getBoolean("active");
-            mSaved = jsonobject.getBoolean("favorite");
-            mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
+            if (jsonobject.has("company")) {
+                mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
+                mBusinessInfo.mCoupons.add(this);
+            }
             if (!jsonobject.isNull("expireDate")) mExpiredDate = jsonobject.getString("expireDate");
             if (!jsonobject.isNull("expireDays")) mExpiredDays = jsonobject.getString("expireDays");
+            //use specific
+            if (!jsonobject.isNull("favorite")) mSaved = jsonobject.getBoolean("favorite");
+            if (jsonobject.has("available")) mAvailable = jsonobject.getBoolean("available");
         } catch (JSONException e) {
             DLog.e(this, e.toString());
         }

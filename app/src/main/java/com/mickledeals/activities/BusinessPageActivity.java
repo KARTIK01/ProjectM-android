@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,9 @@ import com.mickledeals.R;
 import com.mickledeals.adapters.BusinessPhotoSliderAdapter;
 import com.mickledeals.datamodel.BusinessInfo;
 import com.mickledeals.datamodel.BusinessPhoto;
+import com.mickledeals.datamodel.CouponInfo;
+import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
@@ -183,44 +187,39 @@ public class BusinessPageActivity extends SwipeDismissActivity {
 
 
         mMoreCouponRow = (LinearLayout) findViewById(R.id.moreCouponRow);
-//        View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
-//        mMoreCouponRow.setVisibility(View.VISIBLE);
-//        mMoreCouponRow.addView(otherCoupon);
-//        otherCoupon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
-//                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
-//                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
-//                i.putExtra("listIndex", 0);
-//                i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
-//                startActivity(i);
-//            }
-//        });
-//
-//        CouponInfo otherCouponData = DataListModel.getInstance().getDataList().get(2);
-//        ((ImageView) otherCoupon.findViewById(R.id.card_image)).setImageResource(otherCouponData.mSmallImageResId);
-//        ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(otherCouponData.getDescription());
-//        ((TextView) otherCoupon.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData.mPrice));
-//
-//        View otherCoupon2 = getLayoutInflater().inflate(R.layout.card_layout_others, null);
-//        mMoreCouponRow.setVisibility(View.VISIBLE);
-//        mMoreCouponRow.addView(otherCoupon2);
-//        otherCoupon2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i =new Intent(BusinessPageActivity.this, DetailsActivity.class);
-//                DataListModel.getInstance().getMoreCouponsList().clear(); //need to revisit this crappy logic, no need list
-//                DataListModel.getInstance().getMoreCouponsList().add(DataListModel.getInstance().getDataList().get(mHolder.mId == 2 ? 3 : 2));
-//                i.putExtra("listIndex", 0);
-//                i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
-//                startActivity(i);
-//            }
-//        });
-//        CouponInfo otherCouponData2 = DataListModel.getInstance().getDataList().get(3);
-//        ((ImageView) otherCoupon2.findViewById(R.id.card_image)).setImageResource(otherCouponData2.mSmallImageResId);
-//        ((TextView) otherCoupon2.findViewById(R.id.card_description)).setText(otherCouponData2.getDescription());
-//        ((TextView) otherCoupon2.findViewById(R.id.card_price)).setText("$" + (int) (otherCouponData2.mPrice));
+
+
+        if (mBusinessInfo.mCoupons.size() > 0) {
+            mMoreCouponRow.setVisibility(View.VISIBLE);
+            for (final CouponInfo info : mBusinessInfo.mCoupons) {
+
+                View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
+                //load image
+                ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
+                TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
+                cardPrice.setText(info.getDisplayedPrice());
+
+                int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
+                int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);
+                if (!info.getDisplayedPrice().contains("$")) { //FREE and cents should be smaller
+                    cardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp20);
+                } else {
+                    cardPrice.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp19);
+                }
+                otherCoupon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(BusinessPageActivity.this, DetailsActivity.class);
+                        DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
+                        DataListModel.getInstance().getMoreCouponsList().add(info);
+                        i.putExtra("listIndex", 0);
+                        i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+                        startActivity(i);
+                    }
+                });
+                mMoreCouponRow.addView(otherCoupon);
+            }
+        }
 
     }
 

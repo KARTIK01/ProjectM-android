@@ -58,6 +58,7 @@
 
     <!-- Save -->
     <string name="empty_save_msg">請在任何優惠券按下星號以顯示在這收藏夾中</string>
+    <string name="remove_save_msg">你確定要從收藏夾移除此優惠券?</string>
 
     <!-- Featured -->
     <string name="new_added_coupons">最新優惠</string>
@@ -192,7 +193,7 @@
 
     <!-- Error Response -->
     <string name="response_error_title">錯誤</string>
-    <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
+    <string name="response_error_message_unknown">從伺服器擷取資訊時發生錯誤。請稍後再試。</string>
     <string name="user_already_registered">此電郵地址已被註冊, 請選擇登入</string>
     <string name="user_invalid_login">電郵地址或密碼不正確。若你未進行註冊, 請按註冊。</string>
 

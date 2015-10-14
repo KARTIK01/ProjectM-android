@@ -27,6 +27,7 @@ public class FeaturedAdapter extends CardAdapter {
     private static final int TYPE_TOP_SECTION = 0;
     private static final int TYPE_BEST_COUPONS = 1;
     private FeatureSliderAdapter mFeatureSliderAdapter;
+    private RecyclerView mAddedCouponRecyclerView;
     private ViewGroup mTopSectionLayout;
 
     public static class HeaderViewHolder extends CardAdapter.MainViewHolder {
@@ -64,7 +65,7 @@ public class FeaturedAdapter extends CardAdapter {
 
             HeaderViewHolder hvh = new HeaderViewHolder(v);
 
-            RecyclerView mAddedCouponRecyclerView = (RecyclerView) v.findViewById(R.id.addedCouponRecyclerView);
+            mAddedCouponRecyclerView = (RecyclerView) v.findViewById(R.id.addedCouponRecyclerView);
             mAddedCouponRecyclerView.setLayoutManager(new MyLinearLayoutManager(mFragmentActivity, LinearLayoutManager.HORIZONTAL, false));
             mAddedCouponRecyclerView.setAdapter(new CardAdapter(mFragment, DataListModel.getInstance().getNewAddedCouponList(), Constants.TYPE_NEW_ADDED_LIST, R.layout.card_layout_new));
             mAddedCouponRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -122,6 +123,13 @@ public class FeaturedAdapter extends CardAdapter {
     protected int convertListPosToDataPos(int position) {
 
         return position - 1;
+    }
+
+    public void notifyNewAddedCouponDataSetChanged() {
+        mAddedCouponRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+    public void notifySlideFeatureDataSetChanged() {
+        mFeatureSliderAdapter.notifyDataSetChanged();
     }
 
 }

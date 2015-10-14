@@ -3,30 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listResultRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listResultRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbars="vertical" />
-
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <RelativeLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/defaultLightGrayBg"
+        >
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+        </RelativeLayout>
 
 
     <ViewStub
         android:id="@+id/noNetworkStub"
-        android:layout="@layout/no_network_layout"
-        android:inflatedId="@+id/noNetworkLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:inflatedId="@+id/noNetworkLayout"
+        android:layout="@layout/no_network_layout" />
 
     <include
         android:id="@+id/toolbarShadow"

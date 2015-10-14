@@ -10,6 +10,7 @@ import com.mickledeals.adapters.FeaturedAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 
 import java.util.List;
 
@@ -51,7 +52,43 @@ public class FeaturedFragment extends ListBaseFragment {
     @Override
     public void sendRequest(boolean loadMore) {
 
-//        MDApiManager.fetchFeatureList(this);
+        MDApiManager.fetchTopFeatureList(new MDApiManager.MDResponseListener<List<CouponInfo>>() {
+            @Override
+            public void onMDSuccessResponse(List<CouponInfo> object) {
+                List<CouponInfo> list = DataListModel.getInstance().getFeatureSliderCouponList();
+                list.clear();
+                list.addAll(object);
+                ((FeaturedAdapter)mAdapter).notifySlideFeatureDataSetChanged();
+                mAdapter.setPendingAnimated();
+            }
+
+            @Override
+            public void onMDNetworkErrorResponse(String errorMessage) {
+            }
+
+            @Override
+            public void onMDErrorResponse(String errorMessage) {
+            }
+        });
+        MDApiManager.fetchNewAddedCouponList(5, new MDApiManager.MDResponseListener<List<CouponInfo>>() {
+            @Override
+            public void onMDSuccessResponse(List<CouponInfo> object) {
+                List<CouponInfo> list = DataListModel.getInstance().getNewAddedCouponList();
+                list.clear();
+                list.addAll(object);
+                ((FeaturedAdapter)mAdapter).notifyNewAddedCouponDataSetChanged();
+                mAdapter.setPendingAnimated();
+            }
+
+            @Override
+            public void onMDNetworkErrorResponse(String errorMessage) {
+            }
+
+            @Override
+            public void onMDErrorResponse(String errorMessage) {
+            }
+        });
+        MDApiManager.fetchFeatureList(this);
     }
 
     public void setRecyclerView() {

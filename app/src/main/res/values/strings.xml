@@ -67,6 +67,7 @@
 
     <!-- Save -->
     <string name="empty_save_msg">You will see your saved coupons here by tapping on the star icon on the coupon</string>
+    <string name="remove_save_msg">Are you sure you want to remove this coupon from Saved Coupons?</string>
 
     <!-- Featured -->
     <string name="new_added_coupons">New Added Coupons</string>

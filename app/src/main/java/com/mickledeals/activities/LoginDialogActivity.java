@@ -78,7 +78,8 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
                                     String gender = me.optString("gender");
                                     DLog.d(LoginDialogActivity.this, "email = " + email + " fbid = " + fbId + "name = "
                                             + firstName + "lastName = " + lastName + "birthday = " + birthday + "gender = " + gender);
-
+                                    if (gender.equals("male") || gender.equals("female")) gender = gender.toUpperCase();
+                                    else gender = null;
                                     MDApiManager.loginUserWithFb(fbId, email, firstName, lastName, gender, birthday, mMDReponseListener);
 
                                 }
@@ -213,7 +214,7 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
         @Override
         public void onMDErrorResponse(String errorMessage) {
             if (errorMessage != null) {
-                if (errorMessage.equals("INVLIDA_LOGIN")) {
+                if (errorMessage.equals("INVALID_LOGIN")) {
                     onMDErrorResponse(R.string.user_invalid_login);
                     return;
                 }

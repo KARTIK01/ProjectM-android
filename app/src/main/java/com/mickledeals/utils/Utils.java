@@ -321,17 +321,17 @@ public class Utils {
     }
 
     public static void showAlertDialog(Context context, int titleRes, int messageRes) {
-        AlertDialog dialog = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
-                .setTitle(titleRes)
-                .setMessage(messageRes)
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                })
-                .create();
-        dialog.show();
+                });
+
+        if (titleRes != 0) builder.setTitle(titleRes);
+        if (messageRes != 0) builder.setMessage(messageRes);
+        builder.create().show();
     }
 
     public static void showNetworkErrorDialog(Context context) {

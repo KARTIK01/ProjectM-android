@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.Button;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
@@ -27,6 +28,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     protected View mNoNetworkLayout;
     protected ViewStub mNoNetworkStub;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
+    protected View mLoadingLayout;
     protected RecyclerView mListResultRecyclerView;
     protected CardAdapter mAdapter;
 
@@ -37,6 +39,8 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         super.onCreate(savedInstanceState);
 
         mDataList = getDataList();
+        mDataList.clear();
+        //clea data list so that user will not see old data when reload activity / fragment
     }
 
     @Override
@@ -81,6 +85,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
 
 
         mNoResultLayout = view.findViewById(R.id.noResultLayout);
+        mLoadingLayout = view.findViewById(R.id.loadingLayout);
         mNoNetworkStub = (ViewStub) view.findViewById(R.id.noNetworkStub);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
@@ -107,53 +112,10 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         DLog.d(this, "prepareSendRequest");
 
         if (mNoNetworkLayout != null) mNoNetworkLayout.setVisibility(View.GONE);
+        if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.VISIBLE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
 
         sendRequest(false);
-
-//        MDApiManager.sendJSONArrayRequest(request, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//
-//
-//                Log.d("ZZZ", "reponse= " + response);
-//
-//                onSuccessResponse();
-//                mSwipeRefreshLayout.setRefreshing(false);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//                //UNCOMMENT IT
-//
-//                DLog.e(this, "message = " + error.getMessage());
-//
-//
-////                if (mNoNetworkLayout == null) mNoNetworkLayout = mNoNetworkStub.inflate();
-////                mNoNetworkLayout.setVisibility(View.VISIBLE);
-////
-////                Button retryButton = (Button) mNoNetworkLayout.findViewById(R.id.retryButton);
-////                retryButton.setOnClickListener(new View.OnClickListener() {
-////                    @Override
-////                    public void onClick(View v) {
-////                        prepareSendRequest();
-////                    }
-////                });
-////                mSwipeRefreshLayout.setRefreshing(false);
-//
-//
-//                //remove this please
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        onSuccessResponse();
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                    }
-//                }, 1000);
-//            }
-//        });
     }
 
     @Override
@@ -161,28 +123,40 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         mDataList.clear();
         mDataList.addAll(resultList);
         onSuccessResponse();
-        mSwipeRefreshLayout.setRefreshing(false);
+        if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
+        if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onMDNetworkErrorResponse(String errorMessage) {
-        mSwipeRefreshLayout.setRefreshing(false);
+        if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
+        if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
+        showErrorLayout();
     }
 
     @Override
     public void onMDErrorResponse(String errorMessage) {
-        mSwipeRefreshLayout.setRefreshing(false);
+        if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
+        if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
+        showErrorLayout();
     }
 
     public void onSuccessResponse() {
         mListResultRecyclerView.getAdapter().notifyDataSetChanged();
-        ((CardAdapter) mListResultRecyclerView.getAdapter()).setPendingAnimated();
+        mAdapter.setPendingAnimated();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
+    private void showErrorLayout() {
+        if (mNoNetworkLayout == null) mNoNetworkLayout = mNoNetworkStub.inflate();
+        mNoNetworkLayout.setVisibility(View.VISIBLE);
+
+        Button retryButton = (Button) mNoNetworkLayout.findViewById(R.id.retryButton);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prepareSendRequest();
+            }
+        });
     }
 
     @Override
