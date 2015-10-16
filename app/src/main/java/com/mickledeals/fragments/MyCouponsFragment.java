@@ -31,7 +31,7 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     private TextView mNoCouponText;
 
-    private List<CouponInfo> mBoughtList;
+//    private List<Integer> mBoughtList;
 
     private int mCurrentIndex = 0;
     private int mAvailableListIndex = -1;
@@ -41,7 +41,7 @@ public class MyCouponsFragment extends ListBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBoughtList = DataListModel.getInstance().getBoughtList();
+//        mBoughtList = DataListModel.getInstance().getBoughtList();
         //temporary, get it from server
         getMyCouponLists();
     }
@@ -52,7 +52,7 @@ public class MyCouponsFragment extends ListBaseFragment {
         mNoCouponText = (TextView) view.findViewById(R.id.noCouponsText);
     }
 
-    public List<CouponInfo> getDataList() {
+    public List<Integer> getDataList() {
         return DataListModel.getInstance().getBoughtList();
     }
 
@@ -62,7 +62,7 @@ public class MyCouponsFragment extends ListBaseFragment {
         mAvailableListIndex = -1;
         mExpiredListIndex = -1;
         mUsedListIndex = -1;
-        mBoughtList.clear();
+        mDataList.clear();
 //        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 //
 //            if (holder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
@@ -102,7 +102,8 @@ public class MyCouponsFragment extends ListBaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_REDEEM) {
                 //put available coupon to used coupon after redeem
-                for (CouponInfo holder : mBoughtList) {
+                for (Integer id : mDataList) {
+                    CouponInfo holder = DataListModel.getInstance().getCouponMap().get(id);
                     if (holder.mId == data.getIntExtra("id", 0)) {
 //                        holder.mRedeemTime = 0;
                         holder.mStatus = Constants.COUPON_STATUS_DEFAULT;
@@ -151,14 +152,14 @@ public class MyCouponsFragment extends ListBaseFragment {
     public void onSuccessResponse() {
         super.onSuccessResponse();
 
-        if (mBoughtList.size() == 0) {
+        if (mDataList.size() == 0) {
             mNoCouponText.setVisibility(View.VISIBLE);
         }
     }
 
     public void setRecyclerView() {
         mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new MyCouponsAdapter(this, mBoughtList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
+        mAdapter = new MyCouponsAdapter(this, mDataList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
         ((MyCouponsAdapter)mAdapter).setSectionListIndex(mAvailableListIndex, mExpiredListIndex, mUsedListIndex);
         mListResultRecyclerView.setAdapter(mAdapter);
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());

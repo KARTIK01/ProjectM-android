@@ -29,6 +29,7 @@ import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.CouponInfo;
+import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
@@ -236,8 +237,7 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
 
 
         for (int i = 0; i < mDataList.size(); i++) {
-
-            CouponInfo dataHolder = mDataList.get(i);
+            CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataList, i);
 
             LatLng latLng = new LatLng(dataHolder.mBusinessInfo.mLat, dataHolder.mBusinessInfo.mLng);
 
@@ -260,7 +260,9 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LAT_DEFAULT, LONG_DEFAULT), 12));
         } else if (mDataList.size() == 1) {
 
-            LatLng latLng = new LatLng(mDataList.get(0).mBusinessInfo.mLat, mDataList.get(0).mBusinessInfo.mLng);
+            CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataList, 0);
+
+            LatLng latLng = new LatLng(dataHolder.mBusinessInfo.mLat, dataHolder.mBusinessInfo.mLng);
             if (anim) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             } else {

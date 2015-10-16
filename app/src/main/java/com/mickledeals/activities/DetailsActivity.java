@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ScrollView;
 
 import com.mickledeals.R;
-import com.mickledeals.datamodel.CouponInfo;
+import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.fragments.DetailsFragment;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
@@ -26,7 +26,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
     private ViewPager mDetailsViewPager;
     private int mListType;
     private int mInitialIndex;
-    private List<CouponInfo> mList;
+    private List<Integer> mList;
     private View mShadow;
 
     @Override
@@ -53,7 +53,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
 
 //        mDetailsViewPager.setPageMarginDrawable(R.drawable.water_mark_bg);
 //        mDetailsViewPager.setPageMarginDrawable(R.color.transparentViewPagerDivider);
-        getSupportActionBar().setTitle(mList.get(mInitialIndex).mBusinessInfo.getStoreName());
+        getSupportActionBar().setTitle(DataListModel.getInstance().getCouponInfoFromList(mList, mInitialIndex).mBusinessInfo.getStoreName());
         setToolBarTransparency(0);
     }
 
@@ -78,7 +78,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mList.get(position).mBusinessInfo.getStoreName();
+            return DataListModel.getInstance().getCouponInfoFromList(mList, position).mBusinessInfo.getStoreName();
         }
 
         @Override
@@ -92,9 +92,9 @@ public class DetailsActivity extends SwipeDismissActivity  {
                 }
             });
             Bundle bundle = new Bundle();
-            bundle.putInt("storeId", mList.get(position).mId);
-            bundle.putInt("position", position);
-            bundle.putInt("listType", mListType);
+            bundle.putInt("couponId", mList.get(position));
+//            bundle.putInt("position", position);
+//            bundle.putInt("listType", mListType);
             int stringRes = Utils.getStringResFromType(mListType);
             if (stringRes != 0) bundle.putString("navMidText", getString(stringRes) + " " + (position + 1) + "/" + mList.size());
             if (position > 0) bundle.putString("navLeftText", position + " " + getString(R.string.nav_text_more));
@@ -120,7 +120,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
             }
             setToolBarTransparency(scrollPos);
 
-            getSupportActionBar().setTitle(mList.get(position).mBusinessInfo.getStoreName());
+            getSupportActionBar().setTitle(DataListModel.getInstance().getCouponInfoFromList(mList, position).mBusinessInfo.getStoreName());
             prevPosition = position;
         }
 

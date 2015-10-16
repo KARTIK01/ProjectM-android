@@ -85,6 +85,11 @@ public class DataListModel {
         return mSearchResultList;
     }
 
+    public CouponInfo getCouponInfoFromList(List<Integer> list, int position) {
+        int couponId = list.get(position);
+        return DataListModel.getInstance().getCouponMap().get(couponId);
+    }
+
 //    private void initFeatureSliderCoupon() {
 //        mFeatureSliderCouponList.add(mCouponMap.get(2));
 //        mFeatureSliderCouponList.add(mCouponMap.get(16));

@@ -211,7 +211,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
                     public void onClick(View v) {
                         Intent i = new Intent(BusinessPageActivity.this, DetailsActivity.class);
                         DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
-                        DataListModel.getInstance().getMoreCouponsList().add(info);
+                        DataListModel.getInstance().getMoreCouponsList().add(info.mId);
                         i.putExtra("listIndex", 0);
                         i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
                         startActivity(i);

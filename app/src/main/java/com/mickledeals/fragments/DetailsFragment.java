@@ -53,7 +53,7 @@ public class DetailsFragment extends BaseFragment {
 
     private CouponInfo mHolder;
 
-    private int mListType;
+//    private int mListType;
     private TextView mBusinessName;
     private TextView mDescription;
     private TextView mPrice;
@@ -86,9 +86,8 @@ public class DetailsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mListType = getArguments().getInt("listType");
-//        mHolder = DataListModel.getInstance().getDataList().get(getArguments().getInt("storeId"));
-        mHolder = Utils.getListFromType(mListType).get(getArguments().getInt("position"));
+        int id = getArguments().getInt("couponId");
+        mHolder = DataListModel.getInstance().getCouponMap().get(id);
     }
 
     @Override
@@ -338,7 +337,7 @@ public class DetailsFragment extends BaseFragment {
                     public void onClick(View v) {
                         Intent i = new Intent(mContext, DetailsActivity.class);
                         DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
-                        DataListModel.getInstance().getMoreCouponsList().add(info);
+                        DataListModel.getInstance().getMoreCouponsList().add(info.mId);
                         i.putExtra("listIndex", 0);
                         i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
                         startActivity(i);

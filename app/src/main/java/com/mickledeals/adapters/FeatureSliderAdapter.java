@@ -28,7 +28,7 @@ public class FeatureSliderAdapter extends PagerAdapter implements
         ViewPager.OnPageChangeListener {
 
     private static final long REFRESH_PERIOD = 5000;
-    private List<CouponInfo> mList;
+    private List<Integer> mList;
     private PagerIndicator mIndicator;
     private ViewPager mViewPager;
     private Handler mHandler;
@@ -62,16 +62,19 @@ public class FeatureSliderAdapter extends PagerAdapter implements
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         DLog.d(this, "onCreateView");
+
+        CouponInfo info = DataListModel.getInstance().getCouponInfoFromList(mList, position);
+
         ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
                 R.layout.fragment_feature_slide_page, null);
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
 //        imageView.setImageResource(mList.get(position).mImageResId);
         TextView description = (TextView) rootView.findViewById(R.id.slider_text);
-        description.setText(mList.get(position).mBusinessInfo.getStoreName() + " - " + mList.get(position).getDescription());
+        description.setText(info.mBusinessInfo.getStoreName() + " - " + info.getDescription());
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String transition = "cardImage" + mList.get(position).mId;
+                String transition = "cardImage" + mList.get(position);
                 Utils.transitDetailsActivity(mActivity, position, Constants.TYPE_FEATURE_SLIDER_LIST, null, transition);
             }
         });

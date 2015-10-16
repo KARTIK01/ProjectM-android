@@ -82,7 +82,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         }
     }
 
-    public CardAdapter(Fragment fragment, List<CouponInfo> myDataset, int listType, int layoutRes) {
+    public CardAdapter(Fragment fragment, List<Integer> myDataset, int listType, int layoutRes) {
         mFragment = fragment;
         mLayoutRes = layoutRes;
         mDataset = myDataset;
@@ -159,7 +159,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
         final int newPos  = convertListPosToDataPos(position);
 
-        final CouponInfo dataHolder = mDataset.get(newPos);
+        final CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataset, newPos);
 
         if (holder.mCardBaseLayout != null)
             holder.mCardBaseLayout.removeView(mDummpyImageView);
@@ -211,7 +211,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                                 .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        MDApiManager.addOrRemoveFavorite(dataHolder.mId, !dataHolder.mSaved);
+                                        dataHolder.mSaved = !dataHolder.mSaved;
+                                        MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
                                         mDataset.remove(newPos);
                                         notifyItemRemoved(newPos);
                                         dialog.dismiss();
@@ -247,11 +248,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             }
         }
         setAnimation(holder.mCardView, position);
-    }
-
-    public CouponInfo getCouponInfo(int position) {
-        int couponId = mDataset.get(position);
-        return DataListModel.getInstance().getCouponMap().get(couponId);
     }
 
     @Override

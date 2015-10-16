@@ -13,7 +13,6 @@ import android.widget.Button;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
-import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * Created by Nicky on 7/23/2015.
  */
-public abstract class ListBaseFragment extends BaseFragment implements MDApiManager.MDResponseListener<List<CouponInfo>>{
+public abstract class ListBaseFragment extends BaseFragment implements MDApiManager.MDResponseListener<List<Integer>>{
 
     protected View mNoResultLayout;
     protected View mNoNetworkLayout;
@@ -119,7 +118,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     }
 
     @Override
-    public void onMDSuccessResponse(List<CouponInfo> resultList) {
+    public void onMDSuccessResponse(List<Integer> resultList) {
         mDataList.clear();
         mDataList.addAll(resultList);
         onSuccessResponse();

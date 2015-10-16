@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
-import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 
@@ -53,8 +52,8 @@ public class SearchFragment extends ListMapBaseFragment {
         return mSearchStr.trim().toLowerCase();
     }
 
-    public List<CouponInfo> getDataList() {
-        List<CouponInfo> list = DataListModel.getInstance().getSearchResultList();
+    public List<Integer> getDataList() {
+        List<Integer> list = DataListModel.getInstance().getSearchResultList();
         return list;
     }
 

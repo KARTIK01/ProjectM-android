@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.FeaturedAdapter;
-import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDApiManager;
@@ -20,7 +19,7 @@ import java.util.List;
 public class FeaturedFragment extends ListBaseFragment {
 
 
-    public List<CouponInfo> getDataList() {
+    public List<Integer> getDataList() {
         return DataListModel.getInstance().getBestCouponList();
     }
 
@@ -52,10 +51,10 @@ public class FeaturedFragment extends ListBaseFragment {
     @Override
     public void sendRequest(boolean loadMore) {
 
-        MDApiManager.fetchTopFeatureList(new MDApiManager.MDResponseListener<List<CouponInfo>>() {
+        MDApiManager.fetchTopFeatureList(new MDApiManager.MDResponseListener<List<Integer>>() {
             @Override
-            public void onMDSuccessResponse(List<CouponInfo> object) {
-                List<CouponInfo> list = DataListModel.getInstance().getFeatureSliderCouponList();
+            public void onMDSuccessResponse(List<Integer> object) {
+                List<Integer> list = DataListModel.getInstance().getFeatureSliderCouponList();
                 list.clear();
                 list.addAll(object);
                 ((FeaturedAdapter)mAdapter).notifySlideFeatureDataSetChanged();
@@ -70,10 +69,10 @@ public class FeaturedFragment extends ListBaseFragment {
             public void onMDErrorResponse(String errorMessage) {
             }
         });
-        MDApiManager.fetchNewAddedCouponList(5, new MDApiManager.MDResponseListener<List<CouponInfo>>() {
+        MDApiManager.fetchNewAddedCouponList(5, new MDApiManager.MDResponseListener<List<Integer>>() {
             @Override
-            public void onMDSuccessResponse(List<CouponInfo> object) {
-                List<CouponInfo> list = DataListModel.getInstance().getNewAddedCouponList();
+            public void onMDSuccessResponse(List<Integer> object) {
+                List<Integer> list = DataListModel.getInstance().getNewAddedCouponList();
                 list.clear();
                 list.addAll(object);
                 ((FeaturedAdapter)mAdapter).notifyNewAddedCouponDataSetChanged();

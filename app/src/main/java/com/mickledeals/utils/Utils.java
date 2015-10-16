@@ -64,7 +64,7 @@ public class Utils {
         return MDApplication.sCurrentLocale.getLanguage().equals("zh");
     }
 
-    public static List<CouponInfo> getListFromType(int listType) {
+    public static List<Integer> getListFromType(int listType) {
         DataListModel dataModel = DataListModel.getInstance();
         switch (listType) {
             case Constants.TYPE_NEARBY_LIST:

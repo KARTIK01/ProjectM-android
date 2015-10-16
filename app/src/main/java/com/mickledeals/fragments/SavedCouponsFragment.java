@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
-import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDApiManager;
@@ -37,7 +36,7 @@ public class SavedCouponsFragment extends ListMapBaseFragment {
         return super.isSortByLocation();
     }
 
-    public List<CouponInfo> getDataList() {
+    public List<Integer> getDataList() {
         return DataListModel.getInstance().getSavedList();
     }
 
