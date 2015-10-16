@@ -28,7 +28,7 @@ public class NearbyFragment extends ListMapBaseFragment {
         mLocationManager.connect();
     }
 
-    public List<CouponInfo> getDataList() {
+    public List<Integer> getDataList() {
         return DataListModel.getInstance().getNearbyList();
     }
 

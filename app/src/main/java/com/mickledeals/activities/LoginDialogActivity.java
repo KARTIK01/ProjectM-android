@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,12 +18,12 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.mickledeals.R;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -80,7 +81,7 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
                                             + firstName + "lastName = " + lastName + "birthday = " + birthday + "gender = " + gender);
                                     if (gender.equals("male") || gender.equals("female")) gender = gender.toUpperCase();
                                     else gender = null;
-                                    MDApiManager.loginUserWithFb(fbId, email, firstName, lastName, gender, birthday, mMDReponseListener);
+                                    MDApiManager.loginUserWithFb(fbId, email, firstName, lastName, gender, birthday, mMDResponseListener);
 
                                 }
                             }
@@ -169,38 +170,30 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
         } else {
             mProgressDialog = ProgressDialog.show(this, null, getString(R.string.loading_login));
             if (signup) {
-                MDApiManager.registerUserWithEmail(emailStr, passwordStr, mMDReponseListener);
+                MDApiManager.registerUserWithEmail(emailStr, passwordStr, mMDResponseListener);
             } else {
-                MDApiManager.loginUserWithEmail(emailStr, passwordStr, mMDReponseListener);
+                MDApiManager.loginUserWithEmail(emailStr, passwordStr, mMDResponseListener);
             }
         }
     }
 
-    private MDReponseListenerImpl<JSONObject> mMDReponseListener = new MDReponseListenerImpl<JSONObject>() {
+    private MDReponseListenerImpl<JSONObject> mMDResponseListener = new MDReponseListenerImpl<JSONObject>() {
 
         @Override
         public void onMDSuccessResponse(JSONObject object) {
             super.onMDSuccessResponse(object);
 
-            int id = 0;
-            String email = null;
-            String name = null;
-            try {
-                id = object.getInt("id");
-                if (!object.isNull("email")) email = object.getString("email");
-                if (!object.isNull("firstName") && !object.isNull("lastName")) {
-                    name = object.getString("firstName") + " " + object.getString("lastName");
-                }
-                // get promotion object from json
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            MDLoginManager.setUserInfo(LoginDialogActivity.this, id, email, name);
+            int id = JSONHelper.getInteger(object, "id");
+            String email = JSONHelper.getString(object, "email");
+            String firstName = JSONHelper.getString(object, "firstName");
+            String lastName = JSONHelper.getString(object, "lastName");
+            String name = firstName + " " + lastName;
+            MDLoginManager.setUserInfo(LoginDialogActivity.this, id, TextUtils.isEmpty(email)? null : email, name);
             MDLoginManager.onLoginSuccess();
             finish();
 
             if (getIntent().getBooleanExtra("fromIntroScreen", false)) {
-
+                //do not restart the app if it is from intro screen
                 PreferenceHelper.savePreferencesBoolean(LoginDialogActivity.this, "firstLaunch", false);
                 Intent i = new Intent(LoginDialogActivity.this, HomeActivity.class);
                 i.putExtra("fromIntroScreen", true);

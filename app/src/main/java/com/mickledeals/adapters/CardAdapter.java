@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
+import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
@@ -35,7 +36,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     public final static int VIEW_ITEM = 11;
     public final static int VIEW_PROGRESS = 12;
 
-    protected List<CouponInfo> mDataset;
+    protected List<Integer> mDataset;
     protected int mLayoutRes;
     protected FragmentActivity mFragmentActivity;
     protected Fragment mFragment;
@@ -115,7 +116,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                     mDummpyImageView = new AspectRatioImageView(v.getContext());
                     mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
                     mDummpyImageView.setRatio(vh.mCardImage.getRatio());
-                    mDummpyImageView.setImageResource(mDataset.get(pos).mSmallImageResId);
+//                    mDummpyImageView.setImageResource(mDataset.get(pos).mSmallImageResId);
                     mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
                     vh.mCardBaseLayout.postDelayed(new Runnable() {
@@ -131,7 +132,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                             mClickable = true;
                         }
                     }, 2000);
-                    String transition = "cardImage" + mDataset.get(pos).mId;
+                    String transition = "cardImage" + mDataset.get(pos);
                     //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
                     Utils.transitDetailsActivity(mFragmentActivity, pos, mListType, v.findViewById(R.id.card_image), transition);
@@ -167,8 +168,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             holder.mCardDescription.setSelected(true);
         }
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
-        if (holder.mCardImage != null)
-            holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
+//        if (holder.mCardImage != null)
+//            holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
 
 
         int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);
@@ -246,6 +247,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             }
         }
         setAnimation(holder.mCardView, position);
+    }
+
+    public CouponInfo getCouponInfo(int position) {
+        int couponId = mDataset.get(position);
+        return DataListModel.getInstance().getCouponMap().get(couponId);
     }
 
     @Override

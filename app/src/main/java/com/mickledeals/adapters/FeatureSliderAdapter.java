@@ -65,7 +65,7 @@ public class FeatureSliderAdapter extends PagerAdapter implements
         ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
                 R.layout.fragment_feature_slide_page, null);
         final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
-        imageView.setImageResource(mList.get(position).mImageResId);
+//        imageView.setImageResource(mList.get(position).mImageResId);
         TextView description = (TextView) rootView.findViewById(R.id.slider_text);
         description.setText(mList.get(position).mBusinessInfo.getStoreName() + " - " + mList.get(position).getDescription());
         rootView.setOnClickListener(new View.OnClickListener() {

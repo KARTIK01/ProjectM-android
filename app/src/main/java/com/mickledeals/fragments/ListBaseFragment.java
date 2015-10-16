@@ -32,7 +32,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     protected RecyclerView mListResultRecyclerView;
     protected CardAdapter mAdapter;
 
-    protected List<CouponInfo> mDataList;
+    protected List<Integer> mDataList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -178,7 +178,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
 
     public abstract void setRecyclerView();
 
-    public abstract List<CouponInfo> getDataList();
+    public abstract List<Integer> getDataList();
 
     @Override
     public void onResume() {

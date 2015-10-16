@@ -3,10 +3,9 @@ package com.mickledeals.datamodel;
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.utils.Constants;
-import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -16,21 +15,17 @@ import java.io.Serializable;
  */
 public class CouponInfo implements Serializable{
 
-
-    public int mImageResId; //temp
-    public int mSmallImageResId; //temp
-
     public int mId;
     public String mCoverPhotoUrl = "";
     public String mThumbnailPhotoUrl = "";
     public String mDescription = "";
     public String mDescriptionCh = "";
-    public float mPrice;
     public String mFinePrint = "";
     public String mFinePrintCh = "";
     public String mExpiredDate = "";
     public String mExpiredDays = "";
 
+    public float mPrice;
     public boolean mLimited;
     public boolean mActive;
 
@@ -45,29 +40,27 @@ public class CouponInfo implements Serializable{
 
 
     public CouponInfo(JSONObject jsonobject) {
-        try {
-            mId = jsonobject.getInt("id");
-            if (!jsonobject.isNull("coverPhotoUrl")) mCoverPhotoUrl = jsonobject.getString("coverPhotoUrl");
-            if (!jsonobject.isNull("thumbnailPhotoUrl")) mThumbnailPhotoUrl = jsonobject.getString("thumbnailPhotoUrl");
-            if (!jsonobject.isNull("title")) mDescription = jsonobject.getString("title");
-            if (!jsonobject.isNull("chineseTitle")) mDescriptionCh = jsonobject.getString("chineseTitle");
-            if (!jsonobject.isNull("finePrint")) mFinePrint = jsonobject.getString("finePrint");
-            if (!jsonobject.isNull("chineseFinePrint")) mFinePrintCh = jsonobject.getString("chineseFinePrint");
-            mPrice = (float) jsonobject.getDouble("price");
-            mLimited = jsonobject.getBoolean("limited");
-            mActive = jsonobject.getBoolean("active");
-            if (jsonobject.has("company")) {
-                mBusinessInfo = new BusinessInfo(jsonobject.getJSONObject("company"));
-                mBusinessInfo.mCoupons.add(this);
-            }
-            if (!jsonobject.isNull("expireDate")) mExpiredDate = jsonobject.getString("expireDate");
-            if (!jsonobject.isNull("expireDays")) mExpiredDays = jsonobject.getString("expireDays");
-            //use specific
-            if (!jsonobject.isNull("favorite")) mSaved = jsonobject.getBoolean("favorite");
-            if (jsonobject.has("available")) mAvailable = jsonobject.getBoolean("available");
-        } catch (JSONException e) {
-            DLog.e(this, e.toString());
+        mId = JSONHelper.getInteger(jsonobject, "id");
+        mCoverPhotoUrl = JSONHelper.getString(jsonobject, "coverPhotoUrl");
+        mThumbnailPhotoUrl = JSONHelper.getString(jsonobject, "thumbnailPhotoUrl");
+        mDescription = JSONHelper.getString(jsonobject, "title");
+        mDescriptionCh = JSONHelper.getString(jsonobject, "chineseTitle");
+        mFinePrint = JSONHelper.getString(jsonobject, "finePrint");
+        mFinePrintCh = JSONHelper.getString(jsonobject, "chineseFinePrint");
+        mExpiredDate = JSONHelper.getString(jsonobject, "expireDate");
+        mExpiredDays = JSONHelper.getString(jsonobject, "expireDays");
+
+        mPrice = (float) JSONHelper.getDouble(jsonobject, "price");
+        mLimited = JSONHelper.getBoolean(jsonobject, "limited");
+        mActive = JSONHelper.getBoolean(jsonobject, "active");
+        JSONObject businessInfoObject = JSONHelper.getJSONObject(jsonobject, "company");
+        if (businessInfoObject != null) {
+            mBusinessInfo = new BusinessInfo(businessInfoObject);
+            mBusinessInfo.mCoupons.add(this);
         }
+        //user specific
+        mSaved = JSONHelper.getBoolean(jsonobject, "favorite");
+        mAvailable = JSONHelper.getBoolean(jsonobject, "available");
     }
 
     public String getDescription() {

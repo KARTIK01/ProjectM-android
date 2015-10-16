@@ -63,37 +63,37 @@ public class MyCouponsFragment extends ListBaseFragment {
         mExpiredListIndex = -1;
         mUsedListIndex = -1;
         mBoughtList.clear();
-        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
-
-            if (holder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
-                mBoughtList.add(holder);
-                if (mAvailableListIndex == -1) {
-                    mAvailableListIndex = mCurrentIndex;
-                    mCurrentIndex++;
-                }
-                mCurrentIndex++;
-            }
-        }
-        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
-
-            if (holder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
-                mBoughtList.add(holder);
-                if (mExpiredListIndex == -1) {
-                    mExpiredListIndex = mCurrentIndex;
-                    mCurrentIndex++;
-                }
-                mCurrentIndex++;
-            }
-        }
-        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
-
-            if (holder.mId == 9 || holder.mId == 16 || holder.mId == 14) {
-                mBoughtList.add(holder);
-                if (mUsedListIndex == -1) {
-                    mUsedListIndex = mCurrentIndex;
-                }
-            }
-        }
+//        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
+//
+//            if (holder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
+//                mBoughtList.add(holder);
+//                if (mAvailableListIndex == -1) {
+//                    mAvailableListIndex = mCurrentIndex;
+//                    mCurrentIndex++;
+//                }
+//                mCurrentIndex++;
+//            }
+//        }
+//        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
+//
+//            if (holder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
+//                mBoughtList.add(holder);
+//                if (mExpiredListIndex == -1) {
+//                    mExpiredListIndex = mCurrentIndex;
+//                    mCurrentIndex++;
+//                }
+//                mCurrentIndex++;
+//            }
+//        }
+//        for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
+//
+//            if (holder.mId == 9 || holder.mId == 16 || holder.mId == 14) {
+//                mBoughtList.add(holder);
+//                if (mUsedListIndex == -1) {
+//                    mUsedListIndex = mCurrentIndex;
+//                }
+//            }
+//        }
     }
 
     @Override

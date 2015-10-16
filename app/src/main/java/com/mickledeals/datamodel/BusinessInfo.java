@@ -2,7 +2,7 @@ package com.mickledeals.datamodel;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
-import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.Utils;
 
 import org.json.JSONArray;
@@ -45,43 +45,44 @@ public class BusinessInfo implements Serializable {
     public List<BusinessPhoto> mPhotoIds;
 
     public BusinessInfo(JSONObject jsonobject) {
-        try {
-            mId = jsonobject.getInt("id");
-            if (!jsonobject.isNull("coverPhotoUrl")) mCoverPhotoUrl = jsonobject.getString("coverPhotoUrl");
-            if (!jsonobject.isNull("iconUrl")) mLogoUrl = jsonobject.getString("iconUrl");
-            if (!jsonobject.isNull("name")) mName = jsonobject.getString("name");
-            if (!jsonobject.isNull("chineseName")) mNameCh = jsonobject.getString("chineseName");
-            if (!jsonobject.isNull("description")) mDescription = jsonobject.getString("description");
-            if (!jsonobject.isNull("chineseDescription")) mDescriptionCh = jsonobject.getString("chineseDescription");
-            if (!jsonobject.isNull("news")) mNews = jsonobject.getString("news");
-            if (!jsonobject.isNull("chineseNews")) mNewsCh = jsonobject.getString("chineseNews");
-            mLat = jsonobject.getDouble("latitude");
-            mLng = jsonobject.getDouble("longitude");
-            if (!jsonobject.isNull("address")) mAddress = jsonobject.getString("address");
-            if (!jsonobject.isNull("district")) mDistrict = jsonobject.getString("district");
-            if (!jsonobject.isNull("zipCode")) mZipCode = jsonobject.getString("zipCode");
-            if (!jsonobject.isNull("phone")) mPhone = jsonobject.getString("phone");
-            if (!jsonobject.isNull("link")) mWebSiteAddr = jsonobject.getString("link");
-            if (!jsonobject.isNull("hours")) mHours = jsonobject.getString("hours");
-            JSONObject locationObject = jsonobject.getJSONObject("location");
-            if (!locationObject.isNull("city"))  mCity = locationObject.getString("city");
-            if (!locationObject.isNull("state")) mState = locationObject.getString("state");
+        mId = JSONHelper.getInteger(jsonobject, "id");
+        mCoverPhotoUrl = JSONHelper.getString(jsonobject, "coverPhotoUrl");
+        mLogoUrl = JSONHelper.getString(jsonobject, "iconUrl");
+        mName = JSONHelper.getString(jsonobject, "name");
+        mNameCh = JSONHelper.getString(jsonobject, "chineseName");
+        mDescription = JSONHelper.getString(jsonobject, "description");
+        mDescriptionCh = JSONHelper.getString(jsonobject, "chineseDescription");
+        mNews = JSONHelper.getString(jsonobject, "news");
+        mNewsCh = JSONHelper.getString(jsonobject, "chineseNews");
+        mLat = JSONHelper.getDouble(jsonobject, "latitude");
+        mLng = JSONHelper.getDouble(jsonobject, "longitude");
 
-            if (jsonobject.has("coupon")) {
-                JSONArray couponList = jsonobject.getJSONArray("coupon");
-                for (int i = 0; i < couponList.length(); i++) {
-                    try {
-                        JSONObject couponObject = couponList.getJSONObject(i);
-                        CouponInfo info = new CouponInfo(couponObject);
-                        info.mBusinessInfo = this;
-                        mCoupons.add(info);
-                    } catch (JSONException e) {
+        mAddress = JSONHelper.getString(jsonobject, "address");
+        mDistrict = JSONHelper.getString(jsonobject, "district");
+        mZipCode = JSONHelper.getString(jsonobject, "zipCode");
+        mPhone = JSONHelper.getString(jsonobject, "phone");
+        mWebSiteAddr = JSONHelper.getString(jsonobject, "link");
+        mHours = JSONHelper.getString(jsonobject, "hours");
+
+
+        JSONObject locationObject = JSONHelper.getJSONObject(jsonobject, "location");
+        if (locationObject != null) {
+            mCity = JSONHelper.getString(locationObject, "city");
+            mState = JSONHelper.getString(locationObject, "state");
+        }
+
+        JSONArray couponList = JSONHelper.getJSONArray(jsonobject, "coupon");
+        if (couponList != null) {
+            for (int i = 0; i < couponList.length(); i++) {
+                try {
+                    JSONObject couponObject = couponList.getJSONObject(i);
+                    CouponInfo info = new CouponInfo(couponObject);
+                    info.mBusinessInfo = this;
+                    mCoupons.add(info);
+                } catch (JSONException e) {
 //                        DLog.e(MDApiManager.class, e.toString());
-                    }
                 }
             }
-        } catch (JSONException e) {
-            DLog.e(this, e.toString());
         }
     }
 

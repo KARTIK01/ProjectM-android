@@ -12,19 +12,19 @@ public class DataListModel {
 
     private static DataListModel sInstance;
 
-    private Map<Integer, CouponInfo> mDataList = new HashMap<Integer, CouponInfo>();
-    private List<CouponInfo> mFeatureSliderCouponList = new ArrayList<CouponInfo>();
-    private List<CouponInfo> mNewAddedCouponList = new ArrayList<CouponInfo>();
-    private List<CouponInfo> mPopularList = new ArrayList<CouponInfo>();
-    private List<CouponInfo> mBestCouponList = new ArrayList<CouponInfo>();
+    private Map<Integer, CouponInfo> mCouponMap = new HashMap<Integer, CouponInfo>();
+    private List<Integer> mFeatureSliderCouponList = new ArrayList<Integer>();
+    private List<Integer> mNewAddedCouponList = new ArrayList<Integer>();
+    private List<Integer> mPopularList = new ArrayList<Integer>();
+    private List<Integer> mBestCouponList = new ArrayList<Integer>();
 
 
-    private List<CouponInfo> mNearbyList = new ArrayList<CouponInfo>();
-    private List<CouponInfo> mSavedList = new ArrayList<CouponInfo>();
-    private List<CouponInfo> mBoughtList = new ArrayList<CouponInfo>();
+    private List<Integer> mNearbyList = new ArrayList<Integer>();
+    private List<Integer> mSavedList = new ArrayList<Integer>();
+    private List<Integer> mBoughtList = new ArrayList<Integer>();
 
-    private List<CouponInfo> mMoreCouponsList = new ArrayList<CouponInfo>();
-    private List<CouponInfo> mSearchResultList = new ArrayList<CouponInfo>();
+    private List<Integer> mMoreCouponsList = new ArrayList<Integer>();
+    private List<Integer> mSearchResultList = new ArrayList<Integer>();
 
     public static DataListModel getInstance() {
         if (sInstance == null) {
@@ -45,83 +45,83 @@ public class DataListModel {
 //        initBestCoupon();
     }
 
-    public Map<Integer, CouponInfo> getDataList() {
-        return mDataList;
+    public Map<Integer, CouponInfo> getCouponMap() {
+        return mCouponMap;
     }
 
-    public List<CouponInfo> getFeatureSliderCouponList() {
+    public List<Integer> getFeatureSliderCouponList() {
         return mFeatureSliderCouponList;
     }
 
-    public List<CouponInfo> getNewAddedCouponList() {
+    public List<Integer> getNewAddedCouponList() {
         return mNewAddedCouponList;
     }
 
-    public List<CouponInfo> getPopularCouponList() {
+    public List<Integer> getPopularCouponList() {
         return mPopularList;
     }
 
-    public List<CouponInfo> getBestCouponList() {
+    public List<Integer> getBestCouponList() {
         return mBestCouponList;
     }
 
-    public List<CouponInfo> getNearbyList() {
+    public List<Integer> getNearbyList() {
         return mNearbyList;
     }
 
-    public List<CouponInfo> getSavedList() {
+    public List<Integer> getSavedList() {
         return mSavedList;
     }
 
-    public List<CouponInfo> getBoughtList() {
+    public List<Integer> getBoughtList() {
         return mBoughtList;
     }
 
-    public List<CouponInfo> getMoreCouponsList() {
+    public List<Integer> getMoreCouponsList() {
         return mMoreCouponsList;
     }
 
-    public List<CouponInfo> getSearchResultList() {
+    public List<Integer> getSearchResultList() {
         return mSearchResultList;
     }
 
-    private void initFeatureSliderCoupon() {
-        mFeatureSliderCouponList.add(mDataList.get(2));
-        mFeatureSliderCouponList.add(mDataList.get(16));
-        mFeatureSliderCouponList.add(mDataList.get(1));
-        mFeatureSliderCouponList.add(mDataList.get(7));
-        mFeatureSliderCouponList.add(mDataList.get(6));
-        mFeatureSliderCouponList.add(mDataList.get(17));
-    }
-
-    private void initNewAddedCoupon() {
-        mNewAddedCouponList.add(mDataList.get(9));
-        mNewAddedCouponList.add(mDataList.get(11));
-        mNewAddedCouponList.add(mDataList.get(20));
-        mNewAddedCouponList.add(mDataList.get(10));
-        mNewAddedCouponList.add(mDataList.get(21));
-    }
-
-    private void initPopularCoupon() {
-        mPopularList.add(mDataList.get(13));
-        mPopularList.add(mDataList.get(5));
-        mPopularList.add(mDataList.get(8));
-        mPopularList.add(mDataList.get(10));
-        mPopularList.add(mDataList.get(4));
-    }
-
-    private void initBestCoupon() {
-        mBestCouponList.add(mDataList.get(12));
-        mBestCouponList.add(mDataList.get(14));
-        mBestCouponList.add(mDataList.get(15));
-        mBestCouponList.add(mDataList.get(18));
-        mBestCouponList.add(mDataList.get(9));
-        mBestCouponList.add(mDataList.get(11));
-        mBestCouponList.add(mDataList.get(10));
-        mBestCouponList.add(mDataList.get(8));
-        mBestCouponList.add(mDataList.get(5));
-        mBestCouponList.add(mDataList.get(13));
-    }
+//    private void initFeatureSliderCoupon() {
+//        mFeatureSliderCouponList.add(mCouponMap.get(2));
+//        mFeatureSliderCouponList.add(mCouponMap.get(16));
+//        mFeatureSliderCouponList.add(mCouponMap.get(1));
+//        mFeatureSliderCouponList.add(mCouponMap.get(7));
+//        mFeatureSliderCouponList.add(mCouponMap.get(6));
+//        mFeatureSliderCouponList.add(mCouponMap.get(17));
+//    }
+//
+//    private void initNewAddedCoupon() {
+//        mNewAddedCouponList.add(mCouponMap.get(9));
+//        mNewAddedCouponList.add(mCouponMap.get(11));
+//        mNewAddedCouponList.add(mCouponMap.get(20));
+//        mNewAddedCouponList.add(mCouponMap.get(10));
+//        mNewAddedCouponList.add(mCouponMap.get(21));
+//    }
+//
+//    private void initPopularCoupon() {
+//        mPopularList.add(mCouponMap.get(13));
+//        mPopularList.add(mCouponMap.get(5));
+//        mPopularList.add(mCouponMap.get(8));
+//        mPopularList.add(mCouponMap.get(10));
+//        mPopularList.add(mCouponMap.get(4));
+//    }
+//
+//    private void initBestCoupon() {
+//        mBestCouponList.add(mCouponMap.get(12));
+//        mBestCouponList.add(mCouponMap.get(14));
+//        mBestCouponList.add(mCouponMap.get(15));
+//        mBestCouponList.add(mCouponMap.get(18));
+//        mBestCouponList.add(mCouponMap.get(9));
+//        mBestCouponList.add(mCouponMap.get(11));
+//        mBestCouponList.add(mCouponMap.get(10));
+//        mBestCouponList.add(mCouponMap.get(8));
+//        mBestCouponList.add(mCouponMap.get(5));
+//        mBestCouponList.add(mCouponMap.get(13));
+//    }
 
 
 //    private void initTestData() {
@@ -141,7 +141,7 @@ public class DataListModel {
 //        holder.mDescriptionCh = "消費滿$30即獲免費草莓布丁1分";
 //        holder.mStoreNameCh ="藍天甜品屋";
 //
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 2;
@@ -158,7 +158,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        //this steakhouse should not have a chinese name, no need mStoreNameCh
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 3;
@@ -174,7 +174,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "免費馬鈴薯湯1客";
 //        holder.mDescriptionCh = "點菲力牛扒1份即送馬鈴薯湯1客";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //
 //
@@ -193,7 +193,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        holder.mStoreNameCh ="網天卡拉OK";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 4;
@@ -210,7 +210,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "免費1局保齡球遊戲";
 //        holder.mDescriptionCh = "買3局遊戲或以上即送1局";
 //        holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 21;
@@ -227,7 +227,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "免費奶茶1杯";
 //        holder.mDescriptionCh = "購物滿$10或以上即獲免費奶茶1杯";
 //        holder.mStoreNameCh ="茶壺天堂";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 5;
@@ -245,7 +245,7 @@ public class DataListModel {
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        holder.mStoreNameCh ="餛飩之城";
 //        holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder.mPrice = 1;
 //        holder = new CouponInfo();
@@ -262,7 +262,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "8折優惠";
 //        holder.mDescriptionCh = "結帳時享有8折優惠";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 7;
@@ -279,7 +279,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        holder.mStoreNameCh ="綠日水療";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 9;
@@ -296,7 +296,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "95折優惠";
 //        holder.mDescriptionCh = "結帳時享有95折優惠";
 //        holder.mStoreNameCh ="火鍋宮殿";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 10;
@@ -312,7 +312,7 @@ public class DataListModel {
 //        holder.mCategoryId = 4;
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 11;
@@ -328,7 +328,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "免費牛小排1份";
 //        holder.mDescriptionCh = "點任吃套餐即送牛小排一份";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 12;
@@ -344,7 +344,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "85折優惠";
 //        holder.mDescriptionCh = "消費滿$80以上享有85折優惠";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 13;
@@ -361,7 +361,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "免費餐湯一客";
 //        holder.mDescriptionCh = "消費滿$30以上即有免費番茄餐湯一客";
 //        holder.mStatus = Constants.COUPON_STATUS_BOUGHT;
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 14;
@@ -377,7 +377,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 15;
@@ -395,7 +395,7 @@ public class DataListModel {
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        holder.mStoreNameCh ="超速卡丁車場";
 //        holder.mStatus = Constants.COUPON_STATUS_EXPIRED;
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //
 //        holder = new CouponInfo();
@@ -412,7 +412,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "每隻生蠔$1";
 //        holder.mDescriptionCh = "8pm後每隻生蠔降至$1";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 17;
@@ -428,7 +428,7 @@ public class DataListModel {
 //        holder.mCategoryId = 1;
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 18;
@@ -445,7 +445,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        holder.mStoreNameCh ="珊珊髮廊";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 19;
@@ -462,7 +462,7 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "9折優惠";
 //        holder.mDescriptionCh = "結帳時享有9折優惠";
 //        holder.mStatus = Constants.COUPON_STATUS_EXPIRED;
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //
 //        holder = new CouponInfo();
 //        holder.mId = 20;
@@ -479,6 +479,6 @@ public class DataListModel {
 //        holder.mShortDescriptionCh = "免費門票一張";
 //        holder.mDescriptionCh = "購買門票3張即多送1張";
 //        holder.mStoreNameCh ="雕刻藝術博物館";
-//        mDataList.put(holder.mId, holder);
+//        mCouponMap.put(holder.mId, holder);
 //    }
 }

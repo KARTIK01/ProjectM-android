@@ -183,7 +183,7 @@ public class DetailsFragment extends BaseFragment {
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
         params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
         mImageView.setLayoutParams(params);
-        mImageView.setImageResource(mHolder.mImageResId);
+//        mImageView.setImageResource(mHolder.mImageResId);
         if (Build.VERSION.SDK_INT >= 21) {
             mImageView.setTransitionName("cardImage" + mHolder.mId);
             getActivity().startPostponedEnterTransition();
