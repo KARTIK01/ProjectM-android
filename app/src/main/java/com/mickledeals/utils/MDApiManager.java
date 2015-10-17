@@ -344,4 +344,26 @@ public class MDApiManager {
         });
     }
 
+    public static void forgotPassword(String email, final MDResponseListener<Boolean> listener) {
+        String url = "http://www.mickledeals.com/api/userses/forgotPassword";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("email", email);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                listener.onMDSuccessResponse(null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onMDNetworkErrorResponse(error.getMessage());
+                DLog.e(MDApiManager.class, error.getMessage());
+            }
+        });
+    }
+
 }

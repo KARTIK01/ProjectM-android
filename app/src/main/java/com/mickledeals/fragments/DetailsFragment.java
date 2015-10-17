@@ -340,6 +340,10 @@ public class DetailsFragment extends BaseFragment {
                         DataListModel.getInstance().getMoreCouponsList().add(info.mId);
                         i.putExtra("listIndex", 0);
                         i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+                        i.putExtra("fromOtherCoupon", true);
+                        if (getArguments().getBoolean("fromOtherCoupon")) {
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        }
                         startActivity(i);
                     }
                 });

@@ -187,8 +187,9 @@ public class LoginDialogActivity extends DialogSwipeDismissActivity {
             String email = JSONHelper.getString(object, "email");
             String firstName = JSONHelper.getString(object, "firstName");
             String lastName = JSONHelper.getString(object, "lastName");
+            String facebookId = JSONHelper.getString(object, "facebookId");
             String name = firstName + " " + lastName;
-            MDLoginManager.setUserInfo(LoginDialogActivity.this, id, TextUtils.isEmpty(email)? null : email, name);
+            MDLoginManager.setUserInfo(LoginDialogActivity.this, id, TextUtils.isEmpty(email)? null : email, name, facebookId);
             MDLoginManager.onLoginSuccess();
             finish();
 

@@ -44,7 +44,7 @@ public class SettingsActivity extends SwipeDismissActivity {
         if (MDLoginManager.isLogin()) {
             mLogin.setVisibility(View.GONE);
             mLogout.setVisibility(View.VISIBLE);
-            mChangePwd.setVisibility(View.VISIBLE);
+            mChangePwd.setVisibility(MDLoginManager.isFbLogin() ? View.GONE : View.VISIBLE);
         } else {
             mLogin.setVisibility(View.VISIBLE);
             mLogout.setVisibility(View.GONE);

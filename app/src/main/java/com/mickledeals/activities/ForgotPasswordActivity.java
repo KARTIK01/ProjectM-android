@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mickledeals.R;
+import com.mickledeals.utils.MDApiManager;
 
 /**
  * Created by Nicky on 5/17/2015.
@@ -45,7 +46,12 @@ public class ForgotPasswordActivity extends DialogSwipeDismissActivity {
             Toast.makeText(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             return;
         } else {
-//            AsyncTaskHelper.executeWithResultBoolean(new SubmitFeedBackTask(dialog, context));
+            MDApiManager.forgotPassword(emailStr, new MDReponseListenerImpl<Boolean>() {
+                @Override
+                public void onMDSuccessResponse(Boolean object) {
+                    super.onMDSuccessResponse(object);
+                }
+            });
         }
     }
 

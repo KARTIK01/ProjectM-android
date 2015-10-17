@@ -21,7 +21,6 @@
     <string-array name="sort_options">
         <item>按距離排序</item>
         <item>按日期排序</item>
-        <item>隨機排序</item>
     </string-array>
 
     <string-array name="hot_list">

@@ -23,11 +23,11 @@ public class MDLoginManager {
     public static String mEmailAddr;
     public static String mUserName;
     public static int mUserId;
+    public static String mFacebookId;
 
     private static Set<LoginCallback> mCallbackSet = new HashSet<LoginCallback>();
     private static LoginCallback mPendingCallback;
     private AccessToken mAccessToken;
-    private static boolean mIsFbLogin = true;
     private Activity mActivity;
     private static MDLoginManager sManager;
 
@@ -47,28 +47,33 @@ public class MDLoginManager {
         return mUserId != 0;
     }
 
+    public static boolean isFbLogin() {
+        return AccessToken.getCurrentAccessToken() != null;
+    }
+
     public static void initFromPreference(Context context) {
         mUserId = PreferenceHelper.getPreferenceValueInt(context, "user_id", 0);
         mEmailAddr = PreferenceHelper.getPreferenceValueStr(context, "user_email", null);
         mUserName = PreferenceHelper.getPreferenceValueStr(context, "user_name", null);
+        mFacebookId = PreferenceHelper.getPreferenceValueStr(context, "user_facebook_id", null);
     }
 
-    public static void setUserInfo(Context context, int userId, String email, String userName) {
+    public static void setUserInfo(Context context, int userId, String email, String userName, String userFacebookId) {
         mUserId = userId;
         mEmailAddr = email;
         mUserName = userName;
+        mFacebookId = userFacebookId;
         PreferenceHelper.savePreferencesInt(context, "user_id", userId);
         PreferenceHelper.savePreferencesStr(context, "user_email", email);
         PreferenceHelper.savePreferencesStr(context, "user_name", userName);
+        PreferenceHelper.savePreferencesStr(context, "user_facebook_id", userFacebookId);
     }
 
     public static void logout(Context context) {
-        //check id with f prefix
-        if (mIsFbLogin) {
-            LoginManager.getInstance().logOut();
-        }
-        setUserInfo(context, 0, null, null);
+        LoginManager.getInstance().logOut();
+        setUserInfo(context, 0, null, null, null);
     }
+
 
     //this should call after user email and name received
     public static void onLoginSuccess() {

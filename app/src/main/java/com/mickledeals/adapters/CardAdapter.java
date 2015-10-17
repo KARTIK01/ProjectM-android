@@ -165,7 +165,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             holder.mCardBaseLayout.removeView(mDummpyImageView);
         if (holder.mCardDescription != null) {
             holder.mCardDescription.setText(dataHolder.getDescription());
-            holder.mCardDescription.setSelected(true);
         }
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
 //        if (holder.mCardImage != null)
