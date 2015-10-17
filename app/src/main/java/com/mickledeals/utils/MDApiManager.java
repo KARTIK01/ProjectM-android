@@ -339,7 +339,7 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage());
+//                DLog.e(MDApiManager.class, error.getMessage());
             }
         });
     }
@@ -360,8 +360,42 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                listener.onMDNetworkErrorResponse(error.getMessage());
-                DLog.e(MDApiManager.class, error.getMessage());
+                listener.onMDSuccessResponse(null);
+                //always return error because no response received but try to convert to JSON
+//                        listener.onMDNetworkErrorResponse(error.getMessage());
+//                DLog.e(MDApiManager.class, error.getMessage());
+            }
+        });
+    }
+
+    public static void changePassword(String email, String oldPassword, String newPassword, final MDResponseListener<Boolean> listener) {
+        String url = "http://www.mickledeals.com/api/userses/resetPassword";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("email", email);
+            body.put("oldPassword", oldPassword);
+            body.put("newPassword", newPassword);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (!TextUtils.isEmpty(errorMessage)) {
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    listener.onMDSuccessResponse(null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onMDSuccessResponse(null);
+                //always return error because no response received but try to convert to JSON
+//                        listener.onMDNetworkErrorResponse(error.getMessage());
+//                DLog.e(MDApiManager.class, error.getMessage());
             }
         });
     }

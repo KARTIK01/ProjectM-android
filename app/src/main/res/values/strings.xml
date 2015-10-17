@@ -221,10 +221,6 @@
     <!-- Error Response -->
     <string name="response_error_title">Error</string>
     <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
-    <string name="user_already_registered">This email is already registered. Please login with this email.</string>
-    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button.</string>
-
-
 
     <string name="network_error_title">Connection Problem</string>
     <string name="network_error_msg">We could not connect to server at the moment. Please check your connection and try again. </string>
@@ -250,11 +246,22 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="facebook_never_post_msg">We\'ll never post anything without your permission</string>
+    <string name="user_already_registered">This email is already registered. Please login with this email.</string>
+    <string name="user_invalid_login">Incorrect email address or password. If you have not signed up yet, tap Sign up button.</string>
     <string name="reset_password_msg">Please enter your email below. A temporary password will be sent to you.</string>
     <string name="reset_password">Reset Password</string>
+    <string name="reset_password_succeed">Your temporary password has been sent to your email. You can always change your password in Settings.</string>
     <string name="reset">Reset</string>
     <string name="invalid_email">Please enter a valid email address</string>
     <string name="invalid_password">Please enter password with more than 6 characters</string>
+
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="update">update</string>
+    <string name="new_password_not_match">Confirmed password does not match with new password</string>
+    <string name="update_password_succeed">Password has been update successfully</string>
+    <string name="update_password_wrong_password">Your password is incorrect. Please enter the correct password in order to update your password.</string>
 
     <!-- Special Characters-->
     <string name="cent_symbol">¢</string>

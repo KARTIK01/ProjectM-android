@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.mickledeals.R;
 import com.mickledeals.utils.DLog;
@@ -33,6 +34,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     protected Toolbar mToolBar;
     protected ProgressDialog mProgressDialog;
+    protected ProgressBar mProgressBar;
 
     private static boolean mHasCheckVersioned;
 
@@ -82,6 +84,13 @@ public abstract class BaseActivity extends ActionBarActivity {
                 }
             });
         }
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBarLoading);
+        if (mProgressBar != null) mProgressBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //block touch event to disable button click from behind
+            }
+        });
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -193,12 +202,14 @@ public abstract class BaseActivity extends ActionBarActivity {
         @Override
         public void onMDSuccessResponse(T object) {
             if (mProgressDialog != null) mProgressDialog.dismiss();
+            if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onMDNetworkErrorResponse(String errorMessage) {
             Utils.showNetworkErrorDialog(BaseActivity.this);
             if (mProgressDialog != null) mProgressDialog.dismiss();
+            if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -206,11 +217,13 @@ public abstract class BaseActivity extends ActionBarActivity {
             int errorMessageRes = R.string.response_error_message_unknown;
             Utils.showAlertDialog(BaseActivity.this, R.string.response_error_title, errorMessageRes);
             if (mProgressDialog != null) mProgressDialog.dismiss();
+            if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
         }
 
         public void onMDErrorResponse(int errorMessageRes) {
             Utils.showAlertDialog(BaseActivity.this, R.string.response_error_title, errorMessageRes);
             if (mProgressDialog != null) mProgressDialog.dismiss();
+            if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
         }
     }
 }

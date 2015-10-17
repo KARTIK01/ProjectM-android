@@ -1,6 +1,7 @@
 package com.mickledeals.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -111,7 +112,8 @@ public class SettingsActivity extends SwipeDismissActivity {
     }
 
     public void changePasswordClick(View v) {
-
+        Intent i = new Intent(this, ChangePasswordActivity.class);
+        startActivity(i);
     }
 
     public void clearSearchClick(View v) {

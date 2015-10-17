@@ -194,9 +194,6 @@
     <!-- Error Response -->
     <string name="response_error_title">錯誤</string>
     <string name="response_error_message_unknown">從伺服器擷取資訊時發生錯誤。請稍後再試。</string>
-    <string name="user_already_registered">此電郵地址已被註冊, 請選擇登入</string>
-    <string name="user_invalid_login">電郵地址或密碼不正確。若你未進行註冊, 請按註冊。</string>
-
 
     <string name="network_error_title">連線失敗</string>
     <string name="network_error_msg">連接不到伺服器, 請檢查網絡後再重試 </string>
@@ -218,13 +215,23 @@
     <string name="email">電郵</string>
     <string name="password">密碼</string>
     <string name="facebook_never_post_msg">未得到你同意前, 我們絕不發佈任何訊息</string>
+    <string name="user_already_registered">此電郵地址已被註冊, 請選擇登入</string>
+    <string name="user_invalid_login">電郵地址或密碼不正確。若你未進行註冊, 請按註冊。</string>
     <string name="reset_password_msg">請輸入你的電郵地址, 我們會發送一個臨時密碼到你的電郵。</string>
+    <string name="reset_password_succeed">臨時密碼已發送到你的電郵, 你隨時可以在設定更改你的密碼。</string>
     <string name="reset_password">重設密碼</string>
     <string name="reset">重設</string>
     <string name="logout">登出</string>
     <string name="invalid_email">請輸入有效電郵地址</string>
     <string name="invalid_password">請輸入超過6個字母的密碼</string>
 
+    <string name="old_password">舊密碼</string>
+    <string name="new_password">新密碼</string>
+    <string name="confirm_new_password">確認新密碼</string>
+    <string name="update">更新</string>
+    <string name="new_password_not_match">確認密碼與新密碼不符</string>
+    <string name="update_password_succeed">密碼已成功更新</string>
+    <string name="update_password_wrong_password">你的密碼不正確。請輸入正確密碼以更新密碼</string>
     <!-- Temp -->
     <string name="expire_date">到期於 08/27/15</string>
     <string name="used_date">兌換於 06/14/15</string>

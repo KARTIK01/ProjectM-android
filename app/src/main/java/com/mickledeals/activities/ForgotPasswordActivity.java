@@ -25,6 +25,9 @@ public class ForgotPasswordActivity extends DialogSwipeDismissActivity {
         mEmail = (EditText) findViewById(R.id.email);
         mEmail.setText(getIntent().getStringExtra("email"));
 
+        mProgressBar.getIndeterminateDrawable().setColorFilter(
+                getResources().getColor(R.color.white),
+                android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -46,10 +49,13 @@ public class ForgotPasswordActivity extends DialogSwipeDismissActivity {
             Toast.makeText(this, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
             return;
         } else {
+            mProgressBar.setVisibility(View.VISIBLE);
             MDApiManager.forgotPassword(emailStr, new MDReponseListenerImpl<Boolean>() {
                 @Override
                 public void onMDSuccessResponse(Boolean object) {
                     super.onMDSuccessResponse(object);
+                    Toast.makeText(ForgotPasswordActivity.this, R.string.reset_password_succeed, Toast.LENGTH_LONG).show();
+                    finish();
                 }
             });
         }
