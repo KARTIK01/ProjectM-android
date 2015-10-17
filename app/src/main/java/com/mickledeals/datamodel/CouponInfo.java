@@ -9,6 +9,7 @@ import com.mickledeals.utils.Utils;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 /**
  * Created by Nicky on 12/7/2014.
@@ -25,7 +26,7 @@ public class CouponInfo implements Serializable{
     public String mExpiredDate = "";
     public String mExpiredDays = "";
 
-    public float mPrice;
+    public double mPrice;
     public boolean mLimited;
     public boolean mActive;
 
@@ -50,7 +51,7 @@ public class CouponInfo implements Serializable{
         mExpiredDate = JSONHelper.getString(jsonobject, "expireDate");
         mExpiredDays = JSONHelper.getString(jsonobject, "expireDays");
 
-        mPrice = (float) JSONHelper.getDouble(jsonobject, "price");
+        mPrice = JSONHelper.getDouble(jsonobject, "price");
         mLimited = JSONHelper.getBoolean(jsonobject, "limited");
         mActive = JSONHelper.getBoolean(jsonobject, "active");
         JSONObject businessInfoObject = JSONHelper.getJSONObject(jsonobject, "company");
@@ -71,6 +72,7 @@ public class CouponInfo implements Serializable{
         return (Utils.isChineseLocale() && !(mFinePrintCh == null || mFinePrintCh.trim().isEmpty())) ? mFinePrintCh : mFinePrint;
     }
 
+    //this is for card adapter
     public String getDisplayedPrice() {
 //        MDApplication.sAppContext.getResources().getString(R.string.free)
 
@@ -101,7 +103,8 @@ public class CouponInfo implements Serializable{
         } else if (mPrice * 10 % 10 == 0) {
             str = "$" + (int) mPrice;
         } else {
-            str = "$" + mPrice;
+            DecimalFormat df = new DecimalFormat("#.00");
+            str = "$" + df.format(mPrice);
         }
 
         return str;

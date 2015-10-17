@@ -203,6 +203,7 @@ public class DetailsFragment extends BaseFragment {
                             startActivity(newIntent);
                         } else {
                             Intent i = new Intent(mContext, BuyDialogActivity.class);
+                            i.putExtra("couponId", mHolder.mId);
                             i.putExtra("price", mHolder.mPrice);
                             i.putExtra("store_name", mHolder.mBusinessInfo.getStoreName());
                             i.putExtra("coupon_description", mHolder.getDescription());

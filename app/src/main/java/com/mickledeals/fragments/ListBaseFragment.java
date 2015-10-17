@@ -184,4 +184,10 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         super.onResume();
         mAdapter.notifyDataSetChanged();
     }
+
+
+    //this is for swiping in home, after saving a coupon in browse, it should reflect when swipe to feature
+    public void updateDataSet() {
+        mAdapter.notifyDataSetChanged();
+    }
 }

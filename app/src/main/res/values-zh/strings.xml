@@ -90,7 +90,7 @@
     <string name="payment_method">付款方法</string>
     <string name="coupon_price">價格</string>
     <string name="total_price">總價格</string>
-    <string name="current_credit">現有Credit: $7</string>
+    <string name="current_credit">現有Credit: %s</string>
     <string name="mickle_credit_text">Mickle Credit</string>
     <string name="review_order">預覽你的訂購</string>
     <string name="confirm_purchase">確認購買</string>

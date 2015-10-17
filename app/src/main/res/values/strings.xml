@@ -105,7 +105,7 @@
     <string name="payment_method">Payment Method</string>
     <string name="coupon_price">Coupon Price</string>
     <string name="total_price">Total Price</string>
-    <string name="current_credit">Current Credit: $7</string>
+    <string name="current_credit">Current Credit: %s</string>
     <string name="mickle_credit_text">Mickle Credit</string>
     <string name="review_order">REVIEW ORDER</string>
     <string name="confirm_purchase">Confirm Purchase</string>

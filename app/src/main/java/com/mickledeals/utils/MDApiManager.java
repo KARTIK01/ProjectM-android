@@ -400,4 +400,32 @@ public class MDApiManager {
         });
     }
 
+    public static void reviewOrder(int couponId, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/reviewOrder";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("couponId", couponId);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (!TextUtils.isEmpty(errorMessage)) {
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    listener.onMDSuccessResponse(response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
+    }
+
 }
