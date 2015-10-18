@@ -11,10 +11,10 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     private int previousTotal = 0; // The total number of items in the dataset after the last load
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
-    private int visibleThreshold = 3; // The minimum amount of items to have below your current scroll position before loading more.
+    private int visibleThreshold = 2; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
-    private int currentPage = 1;
+//    private int currentPage = 1;
 
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -26,8 +26,8 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        visibleItemCount = recyclerView.getChildCount();
-        totalItemCount = mLinearLayoutManager.getItemCount();
+        visibleItemCount = recyclerView.getChildCount() ;
+        totalItemCount = mLinearLayoutManager.getItemCount() ;
         firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
 
         if (loading) {
@@ -36,14 +36,23 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 previousTotal = totalItemCount;
             }
         }
+
+//        Log.e("ZZZ", "loading = " + loading + "totalItemCount = " + totalItemCount + "visibleItemCount = " + visibleItemCount +
+//                "firstVisibleItem = " + firstVisibleItem + "visibleThreshold = " + visibleThreshold);
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+
+            if (totalItemCount % MDApiManager.PAGE_SIZE != 0) {
+                //just optimization: if there is remainder, that means it is the end already
+                return;
+            }
+
             // End has been reached
             // Do something
-            currentPage++;
-            onLoadMore(currentPage);
+//            currentPage++;
+            onLoadMore();
             loading = true;
         }
     }
 
-    public abstract void onLoadMore(int current_page);
+    public abstract void onLoadMore();
 }

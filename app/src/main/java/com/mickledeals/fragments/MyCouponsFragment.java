@@ -144,13 +144,18 @@ public class MyCouponsFragment extends ListBaseFragment {
     }
 
     @Override
-    public void sendRequest(boolean loadMore) {
+    public void sendRequest() {
         MDApiManager.fetchFeatureList(this);
     }
 
     @Override
-    public void onSuccessResponse() {
-        super.onSuccessResponse();
+    public boolean needLoadMore() {
+        return true;
+    }
+
+    @Override
+    public void onMDSuccessResponse(List<Integer> resultList) {
+        super.onMDSuccessResponse(resultList);
 
         if (mDataList.size() == 0) {
             mNoCouponText.setVisibility(View.VISIBLE);

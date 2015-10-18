@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.EndlessRecyclerOnScrollListener;
 import com.mickledeals.utils.MDApiManager;
 
 import java.util.List;
@@ -30,8 +32,9 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     protected View mLoadingLayout;
     protected RecyclerView mListResultRecyclerView;
     protected CardAdapter mAdapter;
-
     protected List<Integer> mDataList;
+
+    protected int mPageToLoad = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,28 +62,21 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
 
         mListResultRecyclerView = (RecyclerView) view.findViewById(R.id.listResultRecyclerView);
         setRecyclerView();
-//        mListResultRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mListResultRecyclerView.getLayoutManager()) {
-//            @Override
-//            public void onLoadMore(int currentPage) {
-//                DLog.d(SwipeRefreshBaseFragment.this, "onloadmore page = " + currentPage);
-//                mDataList.add(null);
-//                mAdapter.notifyItemInserted(mDataList.size());
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //remove progress bar
-//                        mDataList.remove(mDataList.size() - 1);
-//                        mAdapter.notifyItemRemoved(mDataList.size());
-//                        for (int i = 1; i < DataListModel.getInstance().getDataList().size(); i++) {
-//                            TestDataHolder holder = DataListModel.getInstance().getDataList().get(i);
-//                            mDataList.add(holder);
-//                            mListResultRecyclerView.getAdapter().notifyItemInserted(mDataList.size());
-//                        }
-//                    }
-//                }, 3000);
-//
-//            }
-//        });
+        if (needLoadMore()) {
+            mListResultRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener((LinearLayoutManager) mListResultRecyclerView.getLayoutManager()) {
+                @Override
+                public void onLoadMore() {
+
+                    mPageToLoad++;
+                    DLog.d(ListBaseFragment.this, "onloadmore page = " + mPageToLoad);
+                    sendRequest();
+                    //add progressbar after send request, otherwise data list size will be wrong
+                    mDataList.add(null);
+                    mAdapter.notifyItemInserted(mDataList.size());
+
+                }
+            });
+        }
 
 
         mNoResultLayout = view.findViewById(R.id.noResultLayout);
@@ -114,14 +110,26 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.VISIBLE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
 
-        sendRequest(false);
+        mPageToLoad = 1;
+        sendRequest();
     }
 
     @Override
     public void onMDSuccessResponse(List<Integer> resultList) {
-        mDataList.clear();
-        mDataList.addAll(resultList);
-        onSuccessResponse();
+        if (mPageToLoad > 1) {
+            //remove progress bar
+            mDataList.remove(mDataList.size() - 1);
+            mAdapter.notifyItemRemoved(mDataList.size());
+            mDataList.addAll(resultList);
+            mAdapter.notifyItemRangeInserted(mDataList.size() - resultList.size(), resultList.size());
+            mAdapter.setPendingAnimated();
+        } else {
+            mDataList.clear();
+            mDataList.addAll(resultList);
+            mAdapter.notifyDataSetChanged();
+            mAdapter.setPendingAnimated();
+        }
+
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
         if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
     }
@@ -138,11 +146,6 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
         if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
         showErrorLayout();
-    }
-
-    public void onSuccessResponse() {
-        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
-        mAdapter.setPendingAnimated();
     }
 
     private void showErrorLayout() {
@@ -171,7 +174,9 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public abstract void sendRequest(boolean loadMore);
+    public abstract void sendRequest();
+
+    public abstract boolean needLoadMore();
 
     public abstract int getFragmentLayoutRes();
 
@@ -188,6 +193,10 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
 
     //this is for swiping in home, after saving a coupon in browse, it should reflect when swipe to feature
     public void updateDataSet() {
-        mAdapter.notifyDataSetChanged();
+
+        //there is a bug when animating when notify dataset changed
+        if (!mAdapter.isAnimating()) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

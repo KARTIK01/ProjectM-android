@@ -42,6 +42,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     protected Fragment mFragment;
     protected int mListType;
     protected boolean mAnimate;
+    private Animation mAnimation;
 
     private boolean mClickable = true;//to prevent multilpe click
 
@@ -159,7 +160,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
         final int newPos  = convertListPosToDataPos(position);
 
+        if (mDataset.get(newPos) == null) return; //if id is null, it is progressbar layout
+
         final CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataset, newPos);
+
 
         if (holder.mCardBaseLayout != null)
             holder.mCardBaseLayout.removeView(mDummpyImageView);
@@ -273,21 +277,26 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             public void run() {
                 mAnimate = false;
             }
-        }, 200);
+        }, 100);
+    }
+
+    public boolean isAnimating() {
+        return mAnimation != null && mAnimation.hasStarted() && !mAnimation.hasEnded();
     }
 
     protected void setAnimation(View viewToAnimate, int pos)
     {
+        pos = pos % MDApiManager.PAGE_SIZE;
         if (mAnimate) {
-            Animation animation = AnimationUtils.loadAnimation(mFragmentActivity, R.anim.card_layout_enter_anim);
+            mAnimation = AnimationUtils.loadAnimation(mFragmentActivity, R.anim.card_layout_enter_anim);
             if (mListType == Constants.TYPE_NEARBY_LIST) {
-                animation.setStartOffset(pos / 2 * 2 * 70);
+                mAnimation.setStartOffset(pos / 2 * 2 * 70);
             } else if (mListType == Constants.TYPE_BEST_LIST) {
-                animation.setStartOffset((pos + 3)* 50 ); //add 3 for header offset
+                mAnimation.setStartOffset((pos + 3)* 50 ); //add 3 for header offset
             } else {
-                animation.setStartOffset(pos * 50);
+                mAnimation.setStartOffset(pos * 50);
             }
-            viewToAnimate.startAnimation(animation);
+            viewToAnimate.startAnimation(mAnimation);
         }
     }
 

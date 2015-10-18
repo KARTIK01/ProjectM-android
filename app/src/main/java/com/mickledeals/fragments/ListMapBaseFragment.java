@@ -36,6 +36,7 @@ import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.Utils;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Nicky on 11/28/2014.
@@ -291,7 +292,7 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
     }
 
     @Override
-    public void sendRequest(boolean loadMore) {
+    public void sendRequest() {
         int categoryId = 0;
         if (mCategorySpinner != null) {
             categoryId = getResources().getIntArray(R.array.category_id)[mCategorySpinner.getSelectedItemPosition()];
@@ -299,8 +300,7 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
         String city = mLocationSpinner.getSelectedItemPosition() == 0 ? null : (String) mLocationSpinner.getSelectedItem();
         Location location = mSortSpinner.getSelectedItemPosition() == 0 ? MDLocationManager.getInstance(mContext).getLastLocation() : null;
         String searchText = getSearchText();
-        int currentSize = loadMore ? mDataList.size() : 0;
-        MDApiManager.fetchSearchCouponList(categoryId, city, location, searchText, currentSize, this);
+        MDApiManager.fetchSearchCouponList(categoryId, city, location, searchText, mPageToLoad, this);
     }
 
     protected String getSearchText() {
@@ -369,33 +369,10 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
 
 
     @Override
-    public void onSuccessResponse() {
-        super.onSuccessResponse();
+    public void onMDSuccessResponse(List<Integer> resultList) {
+        super.onMDSuccessResponse(resultList);
 
         mNeedPopularMapOverlays = true;
-//        List<CouponInfo> temporaryDataList = getTemporaryDataList();
-
-//        //temporrary
-//        for (int i = 0; i < temporaryDataList.size(); i++) {
-//            boolean matchCategory = false;
-//            boolean matchLocation = false;
-//            CouponInfo holder = temporaryDataList.get(i);
-//            int categoryPos = 0;
-//            if (mCategorySpinner != null) categoryPos = mCategorySpinner.getSelectedItemPosition();
-//            if (categoryPos == 0 || holder.mCategoryId == categoryPos) {
-//                matchCategory = true;
-//            }
-//            int locationPos = mLocationSpinner.getSelectedItemPosition();
-//            String targetCityName = getActivity().getResources().getStringArray(R.array.city_name)[locationPos];
-//            String[] addrToken = holder.mAddress.split(",");
-//            String cityName = addrToken[addrToken.length - 1].trim();
-//            if (locationPos == 0 || cityName.equals(targetCityName)) {
-//                matchLocation = true;
-//            }
-//            if (matchCategory && matchLocation) {
-//                mDataList.add(holder);
-//            }
-//        }
         if (mDataList.size() == 0) {
             if (mMapContainer.getVisibility() == View.VISIBLE) {
                 Toast.makeText(mContext, getNoResultMessage(), Toast.LENGTH_LONG).show();

@@ -41,8 +41,13 @@ public class SavedCouponsFragment extends ListMapBaseFragment {
     }
 
     @Override
-    public void sendRequest(boolean loadMore) {
+    public void sendRequest() {
         MDApiManager.fetchSavedCoupons(this);
+    }
+
+    @Override
+    public boolean needLoadMore() {
+        return false;
     }
 
     public int getFragmentLayoutRes() {

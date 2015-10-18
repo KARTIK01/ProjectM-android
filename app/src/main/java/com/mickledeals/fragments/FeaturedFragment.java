@@ -49,8 +49,7 @@ public class FeaturedFragment extends ListBaseFragment {
     }
 
     @Override
-    public void sendRequest(boolean loadMore) {
-
+    public void sendRequest() {
         MDApiManager.fetchTopFeatureList(new MDApiManager.MDResponseListener<List<Integer>>() {
             @Override
             public void onMDSuccessResponse(List<Integer> object) {
@@ -88,6 +87,12 @@ public class FeaturedFragment extends ListBaseFragment {
             }
         });
         MDApiManager.fetchFeatureList(this);
+    }
+
+
+    @Override
+    public boolean needLoadMore() {
+        return false;
     }
 
     public void setRecyclerView() {

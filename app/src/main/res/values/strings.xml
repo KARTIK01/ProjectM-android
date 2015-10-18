@@ -63,6 +63,7 @@
     <string name="buy_again">Buy again</string>
     <string name="redeem">REDEEM</string>
     <string name="deal_ended">Deal Ended</string>
+    <string name="coupon_not_available">This coupon is not available anymore.</string>
     <string name="no_my_coupons_msg">You do not have any coupons yet</string>
 
     <!-- Save -->

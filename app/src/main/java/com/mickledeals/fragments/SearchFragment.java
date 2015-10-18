@@ -48,6 +48,11 @@ public class SearchFragment extends ListMapBaseFragment {
         super.prepareSendRequest();
     }
 
+    @Override
+    public boolean needLoadMore() {
+        return true;
+    }
+
     protected String getSearchText() {
         return mSearchStr.trim().toLowerCase();
     }

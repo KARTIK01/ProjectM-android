@@ -43,7 +43,7 @@ public class MDApiManager {
         void onMDErrorResponse(String errorMessage);
     }
 
-    private static final int PAGE_SIZE = 12;
+    public static final int PAGE_SIZE = 14;
     private static RequestQueue sQueue;
     private static ImageLoader mImageLoader;
     private static Context sContext = MDApplication.sAppContext;
@@ -131,7 +131,7 @@ public class MDApiManager {
     // ---- Search, Browse, Feature, Top Feature, Favorite API ----- //
 
 
-    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int currentSize, final MDResponseListener<List<Integer>> listener) {
+    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int page, final MDResponseListener<List<Integer>> listener) {
         String url = "http://www.mickledeals.com/api/coupons/search";
         JSONObject body = new JSONObject();
         try {
@@ -150,7 +150,6 @@ public class MDApiManager {
             if (searchText != null) {
                 body.put("searchText", searchText);
             }
-            int page = currentSize / PAGE_SIZE + 1;
             body.put("page", page);
             body.put("size", PAGE_SIZE);
         } catch (JSONException e) {
