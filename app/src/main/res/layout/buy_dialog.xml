@@ -318,7 +318,12 @@
                     card_view:cardElevation="2dp"
                     card_view:cardUseCompatPadding="true">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
                     <TextView
+                        android:id="@+id/buttonText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minWidth="90dp"
@@ -333,6 +338,21 @@
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBarLoading"
+                            style="?android:attr/progressBarStyle"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/buttonText"
+                            android:layout_alignTop="@id/buttonText"
+                            android:layout_alignLeft="@id/buttonText"
+                            android:layout_alignRight="@id/buttonText"
+                            android:padding="8dp"
+                            android:background="@color/colorButtonBg" />
+
+                    </RelativeLayout>
 
                 </android.support.v7.widget.CardView>
 

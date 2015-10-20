@@ -30,6 +30,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     private TextView mCurrentCredit;
     private TextView mTotalPrice;
     private ImageView mCreditCardIcon;
+    private View mPaymentRow;
     private View mTotalPriceProgress;
     private View mMickleCreditProgress;
     private TextView mNoChargeMsg;
@@ -51,12 +52,17 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
         mCreditCardIcon = (ImageView) findViewById(R.id.creditCardIcon);
         mTotalPriceProgress = findViewById(R.id.totalPriceProgress);
         mMickleCreditProgress = findViewById(R.id.mickleCreditProgress);
+        mPaymentRow = findViewById(R.id.paymentRow);
 
         mCreditCardIcon.setImageBitmap(CardType.VISA.imageBitmap(this));
 
         mStoreName.setText(getIntent().getStringExtra("store_name"));
         mCouponDescription.setText(getIntent().getStringExtra("coupon_description"));
         mCouponPrice.setText("$" + mDf.format(getIntent().getDoubleExtra("price", 0)));
+
+        mProgressBar.getIndeterminateDrawable().setColorFilter(
+                getResources().getColor(R.color.white),
+                android.graphics.PorterDuff.Mode.SRC_IN);
 
         MDApiManager.reviewOrder(getIntent().getIntExtra("couponId", 0), new MDReponseListenerImpl<JSONObject>() {
 
@@ -69,6 +75,11 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 double currentCredit = JSONHelper.getDouble(object, "currentCredit");
                 double totalPrice = JSONHelper.getDouble(object, "totalPrice");
                 double useCredit = JSONHelper.getDouble(object, "useCredit");
+                if (totalPrice > 0) {
+                    mPaymentRow.setVisibility(View.VISIBLE);
+                } else {
+                    mPaymentRow.setVisibility(View.GONE);
+                }
                 mMickleCredit.setText("- $" + mDf.format(useCredit));
                 mTotalPrice.setText("$" + mDf.format(totalPrice));
                 mCurrentCredit.setText(getString(R.string.current_credit, "$" + mDf.format(currentCredit)));
@@ -82,10 +93,44 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     }
 
     public void confirmClick(View v) {
-        Intent i = new Intent();
-        i.putExtra("remainingTime", "");
-        setResult(RESULT_OK, i);
-        finish();
+        mProgressBar.setVisibility(View.VISIBLE);
+        int paymentId = 0;
+        MDApiManager.purchaseCoupon(getIntent().getIntExtra("couponId", 0), paymentId, new MDReponseListenerImpl<JSONObject>() {
+
+            @Override
+            public void onMDSuccessResponse(JSONObject object) {
+                super.onMDSuccessResponse(object);
+
+                Intent i = new Intent();
+                i.putExtra("pay", mPaymentRow.isShown());
+//                i.putExtra("remainingTime", "");
+                setResult(RESULT_OK, i);
+                finish();
+            }
+
+            @Override
+            public void onMDErrorResponse(String errorMessage) {
+
+
+                //temp
+                Intent i = new Intent();
+                i.putExtra("pay", true);
+//                i.putExtra("remainingTime", "");
+                setResult(RESULT_OK, i);
+                finish();
+
+//                if (errorMessage != null) {
+//                    if (errorMessage.equals("COUPON_NOT_AVAILABLE_FOR_USER")) {
+//                        onMDErrorResponse(R.string.purhcase_error_not_available);
+//                        return;
+//                    }
+//                }
+//                super.onMDErrorResponse(errorMessage);
+            }
+        });
+
+
+
     }
 
     public void termsClick(View v) {

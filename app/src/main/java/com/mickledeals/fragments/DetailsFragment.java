@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -405,7 +406,10 @@ public class DetailsFragment extends BaseFragment {
                 showBoughtStatus();
 
                 Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
-                newIntent.putExtra("pay", mHolder.mPrice != 0);
+                newIntent.putExtra("price", mHolder.mPrice);
+                newIntent.putExtra("store_name", mHolder.mBusinessInfo.mName);
+                newIntent.putExtra("coupon_description", mHolder.mDescription);
+                newIntent.putExtra("pay", data.getBooleanExtra("pay", false));
                 startActivity(newIntent);
             } else if (requestCode == REQUEST_CODE_REDEEM) {
                 showAvailableStatus();

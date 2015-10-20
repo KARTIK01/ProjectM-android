@@ -88,8 +88,9 @@
     <string name="unlock_coupon">Get this Coupon for %s</string>
     <string name="redeem_coupon">Redeem this Offer</string>
     <string name="redeem_in">"Redeem in "</string>
+    <string name="share_fb_message">I just got this great coupon from MickleDeals!</string>
     <string name="share_subject">A great coupon from MickleDeals!</string>
-    <string name="share_msg">Let\'s check out the deal in the MickleDeals App now!</string>
+    <string name="share_msg">Let\'s check out the deal from MickleDeals App in Google Play Store now! iOS version will be coming soon</string>
     <string name="share_business_page_msg">Let\'s check out %s\'s profile and see what it offers in the MickleDeals App now!</string>
     <string name="share_google_play">"Google Play Store: "</string>
     <string name="share_itunes">"iTunes App Store: "</string>
@@ -121,7 +122,8 @@
     <string name="share_to_fb">Share to Facebook</string>
     <string name="share_to_fb_purchase">To appreciate your purchase, you will receive $1 Mickle Credit when you share this to your friends!</string>
     <string name="share_to_fb_free">Share this to your friends!</string>
-
+    <string name="share_to_fb_free_succeed">Successfully shared to Facebook!</string>
+    <string name="share_to_fb_purchase_succeed">Successfully shared to Facebook, you just earned $1 Mickle Credit!</string>
 
     <!-- Redeem Dialog -->
 
@@ -223,6 +225,7 @@
     <string name="response_error_title">Error</string>
     <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
 
+    <string name="purhcase_error_not_available">Sorry, this coupon is no longer available.</string>
     <string name="network_error_title">Connection Problem</string>
     <string name="network_error_msg">We could not connect to server at the moment. Please check your connection and try again. </string>
     <string name="network_error_retry">Retry</string>

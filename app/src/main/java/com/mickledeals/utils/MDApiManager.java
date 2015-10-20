@@ -421,10 +421,66 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                DLog.e(MDApiManager.class, error.getMessage());
                 listener.onMDNetworkErrorResponse(error.getMessage());
             }
         });
     }
+
+
+
+    public static void purchaseCoupon(int couponId, int paymentId, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/purchaseCoupon";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("couponId", couponId);
+            if (paymentId != 0) body.put("paymentId", couponId);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (!TextUtils.isEmpty(errorMessage)) {
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    listener.onMDSuccessResponse(response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                DLog.e(MDApiManager.class, error.getMessage());
+//                listener.onMDNetworkErrorResponse(error.getMessage());
+                //temp
+                listener.onMDSuccessResponse(null);
+            }
+        });
+    }
+
+    //no response
+    public static void redeemPromotion(String code) {
+        String url = "http://www.mickledeals.com/api/userses/redeemPromotion";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("code", code);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                DLog.e(MDApiManager.class, error.getMessage());
+            }
+        });
+    }
+
 
 }

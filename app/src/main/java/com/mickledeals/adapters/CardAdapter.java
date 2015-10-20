@@ -20,6 +20,7 @@ import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
@@ -170,6 +171,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         if (holder.mCardDescription != null) {
             holder.mCardDescription.setText(dataHolder.getDescription());
         }
+        DLog.d(this, "coupon id = " + dataHolder.mId + " coupon description = " + dataHolder.mDescription);
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
 //        if (holder.mCardImage != null)
 //            holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
