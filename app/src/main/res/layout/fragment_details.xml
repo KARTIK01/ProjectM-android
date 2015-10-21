@@ -175,9 +175,19 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:textColor="@color/lightBlackTextColor"
+                    android:textColor="@color/lightGrayTextColor"
                     android:textSize="14sp"
-                    android:textStyle="italic"
+                    android:visibility="gone"
+                    android:layout_marginTop="12dp" />
+
+                <TextView
+                    android:id="@+id/purhcaseId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/lightGrayTextColor"
+                    android:textSize="14sp"
                     android:visibility="gone"
                     android:layout_marginTop="12dp" />
 
@@ -403,7 +413,7 @@
                 android:id="@+id/dealEndedText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/deal_ended"
+                android:text="@string/coupon_not_available"
                 android:visibility="gone"
                 android:gravity="center"
                 android:textSize="22sp"

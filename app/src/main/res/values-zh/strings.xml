@@ -72,12 +72,15 @@
     <string name="share">分享</string>
     <string name="business_info">商戶資料</string>
     <string name="more_coupon">更多此商戶的優惠</string>
+    <string name="fine_print">條款</string>
     <string name="expired_in_days">換領後%s日到期</string>
     <string name="expired_date">於 %s 過期</string>
-    <string name="fine_print">條款</string>
     <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠</string>
     <string name="redeem_in">"兌換時間剩 "</string>
+    <string name="purchase_date">你於%s領取此優惠券</string>
+    <string name="purchase_id_message">Coupon ID: </string>
+    <string name="coupon_not_available">此優惠券已不能換領</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
     <string name="nav_text_more">張</string>
@@ -99,7 +102,7 @@
     <string name="and">及</string>
 
     <!-- Success Purchase Dialog -->
-    <string name="success_purchase_title">你已獲得此優惠券!</string>
+    <string name="success_purchase_title">你已擁有此優惠券!</string>
     <string name="success_purchase_msg">要兌換優惠時,按下\"兌換此優惠券\"向商戶展示認證畫面</string>
     <string name="share_to_fb">分享到Facebook</string>
     <string name="share_to_fb_purchase">為答謝你的購買,分享到Facebook後你將會獲得 $1 Mickle Credit</string>

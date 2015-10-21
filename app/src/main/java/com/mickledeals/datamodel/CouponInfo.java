@@ -30,10 +30,12 @@ public class CouponInfo implements Serializable{
     public boolean mLimited;
     public boolean mActive;
 
-    public boolean mPurchased;
+    public boolean mRedeemable;
     public boolean mAvailable = true; //false will show coupon sold out
     public boolean mSaved;
     public String mPurchaseId = "";
+    public long mLastRedemptionDate;
+    public long mPurchaseDate;
 
     public BusinessInfo mBusinessInfo;
 
@@ -61,7 +63,15 @@ public class CouponInfo implements Serializable{
         }
         //user specific
         mSaved = JSONHelper.getBoolean(jsonobject, "favorite");
+        setPurhcaseInfo(jsonobject);
+    }
+
+    public void setPurhcaseInfo(JSONObject jsonobject) {
         mAvailable = JSONHelper.getBoolean(jsonobject, "available");
+        mRedeemable = JSONHelper.getBoolean(jsonobject, "redeemable");
+        mPurchaseId = JSONHelper.getString(jsonobject, "purchaseId");
+        mLastRedemptionDate = JSONHelper.getLong(jsonobject, "lastRedemptionDate");
+        mPurchaseDate = JSONHelper.getLong(jsonobject, "purchaseDate");
     }
 
     public String getDescription() {

@@ -54,6 +54,20 @@ public class JSONHelper {
         return 0;
     }
 
+    public static long getLong(JSONObject object, String key) {
+
+        if (!object.has(key)) {
+            DLog.e(JSONHelper.class, "no such key exists, key = " + key);
+            return 0;
+        }
+        try {
+            return object.getLong(key);
+        } catch (JSONException e) {
+            DLog.e(JSONHelper.class, "key = " + key + " " + e.getMessage());
+        }
+        return 0;
+    }
+
     public static double getDouble(JSONObject object, String key) {
 
         if (!object.has(key)) {

@@ -223,7 +223,7 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
                     }
                 });
                 MapsInitializer.initialize(mContext.getApplicationContext());
-                mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.md_pin);
+                mPinBitmap = BitmapDescriptorFactory.fromResource(R.drawable.ic_pin);
                 populateMapOverlays(false);
             }
         });

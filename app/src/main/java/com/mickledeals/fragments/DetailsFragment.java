@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -68,7 +67,8 @@ public class DetailsFragment extends BaseFragment {
     private TextView mExpiredDate;
     private TextView mFinePrint;
     private TextView mBoughtDate;
-    private TextView mDealEndedText;
+    private TextView mPurchaseId;
+    private TextView mNotAvailableText;
     private TextView mSaveBtnText;
     private TextView mBusinessInfoBtnText;
     private TextView mAddressBtn;
@@ -111,6 +111,7 @@ public class DetailsFragment extends BaseFragment {
         mDescription = (TextView) view.findViewById(R.id.couponDescription);
         mPrice = (TextView) view.findViewById(R.id.couponPrice);
         mBoughtDate = (TextView) view.findViewById(R.id.boughtDate);
+        mPurchaseId = (TextView) view.findViewById(R.id.purhcaseId);
         mBuyBtn = view.findViewById(R.id.buyBtn);
         mBuyBtnText = (TextView) view.findViewById(R.id.buyBtnText);
         mRedeemBtnText = (TextView) view.findViewById(R.id.redeemBtnText);
@@ -129,7 +130,7 @@ public class DetailsFragment extends BaseFragment {
         mNavMidText = (TextView) view.findViewById(R.id.navMidText);
         mNavRightText = (TextView) view.findViewById(R.id.navRightText);
         mMoreCouponRow = (LinearLayout) view.findViewById(R.id.moreCouponRow);
-        mDealEndedText = (TextView) view.findViewById(R.id.dealEndedText);
+        mNotAvailableText = (TextView) view.findViewById(R.id.dealEndedText);
 
         mDetailsScrollView = (NotifyingScrollView) view.findViewById(R.id.detailsScrollView);
         mDetailsScrollView.setOnScrollChangedListener(new NotifyingScrollView.OnScrollChangedListener() {
@@ -199,15 +200,12 @@ public class DetailsFragment extends BaseFragment {
                     public void onLoginSuccess() {
 
                         if (mHolder.mPrice == 0) {
-                            showBoughtStatus();
+                            showRedeemableStatus();
                             Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
                             startActivity(newIntent);
                         } else {
                             Intent i = new Intent(mContext, BuyDialogActivity.class);
-                            i.putExtra("couponId", mHolder.mId);
-                            i.putExtra("price", mHolder.mPrice);
-                            i.putExtra("store_name", mHolder.mBusinessInfo.getStoreName());
-                            i.putExtra("coupon_description", mHolder.getDescription());
+                            i.putExtra("couponInfo", mHolder);
                             startActivityForResult(i, REQUEST_CODE_BUY);
 
                         }
@@ -266,17 +264,7 @@ public class DetailsFragment extends BaseFragment {
             mSaveBtn.setVisibility(View.GONE);
         }
 
-        String expiredStr = null;
-        if (!mHolder.mExpiredDate.isEmpty()) {
-            expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
-        } else if (!mHolder.mExpiredDays.isEmpty()) {
-            expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays); //need format
-        } else {
-            mExpiredDate.setVisibility(View.GONE);
-        }
-        if (expiredStr != null) {
-            mExpiredDate.setText(expiredStr);
-        }
+
         mFinePrint.setText(mHolder.getFinePrint());
 
         mAddressBtn.setOnClickListener(new View.OnClickListener() {
@@ -307,13 +295,7 @@ public class DetailsFragment extends BaseFragment {
                 }
         });
 
-
-        if (mHolder.mPurchased) {
-            showBoughtStatus();
-        } else if (!mHolder.mActive) {
-            showExpiredStatus();
-        }
-
+        updateViewForStatus();
 
         if (mHolder.mBusinessInfo.mCoupons.size() > 1) {
             view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
@@ -354,6 +336,17 @@ public class DetailsFragment extends BaseFragment {
         }
     }
 
+    private void updateViewForStatus() {
+        if (mHolder.mRedeemable) {
+            showRedeemableStatus();
+        } else if (mHolder.mAvailable) {
+            showAvailableStatus();
+        } else {
+            showNotAvailableStatus();
+        }
+        showExpiredDate();
+    }
+
     private void showAvailableStatus() {
 //        mHandler.removeCallbacks(mUpdatetimerThread);
         mRedeemBtnText.setText(R.string.redeem_coupon);
@@ -361,29 +354,43 @@ public class DetailsFragment extends BaseFragment {
         mBuyBtn.setVisibility(View.VISIBLE);
         mRedeemBtn.setVisibility(View.GONE);
         mBoughtDate.setVisibility(View.GONE);
+        mPurchaseId.setVisibility(View.GONE);
     }
 
-    private void showExpiredStatus() {
-        mDealEndedText.setVisibility(View.VISIBLE);
+    private void showNotAvailableStatus() {
+        mNotAvailableText.setVisibility(View.VISIBLE);
         mRedeemBtn.setVisibility(View.GONE);
         mBuyBtn.setVisibility(View.GONE);
         mPrice.setVisibility(View.GONE);
         mBoughtDate.setVisibility(View.GONE);
+        mPurchaseId.setVisibility(View.GONE);
     }
 
-    private void showBoughtStatus() {
+    private void showRedeemableStatus() {
         mPrice.setVisibility(View.GONE);
         mRedeemBtn.setVisibility(View.VISIBLE);
         mBuyBtn.setVisibility(View.GONE);
-        if (mHolder.mPrice == 0) {
-            mBoughtDate.setText(getString(R.string.obtain_date));
-        } else {
-            //bought price
-//            mBoughtDate.setText(getString(R.string.bought_date, "$" + (int) (mHolder.mPrice)));
-        }
+        mBoughtDate.setText(getString(R.string.purchase_date, mHolder.mPurchaseDate));
         mBoughtDate.setVisibility(View.VISIBLE);
+        mPurchaseId.setText(getString(R.string.purchase_id_message, mHolder.mPurchaseId));
+        mPurchaseId.setVisibility(View.VISIBLE);
+    }
 
-
+    private void showExpiredDate() {
+        mExpiredDate.setVisibility(View.VISIBLE);
+        String expiredStr = null;
+        if (!mHolder.mExpiredDate.isEmpty()) {
+            expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
+        } else if (mHolder.mLastRedemptionDate != 0) {
+            expiredStr = getString(R.string.expired_date, mHolder.mLastRedemptionDate); //need format
+        } else if (!mHolder.mExpiredDays.isEmpty()) {
+            expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays); //need format
+        } else {
+            mExpiredDate.setVisibility(View.GONE);
+        }
+        if (expiredStr != null) {
+            mExpiredDate.setText(expiredStr);
+        }
     }
 
     private void scheduleStartPostponedTransition(final View sharedElement) {
@@ -403,7 +410,7 @@ public class DetailsFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_BUY) {
-                showBoughtStatus();
+                showRedeemableStatus();
 
                 Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
                 newIntent.putExtra("price", mHolder.mPrice);

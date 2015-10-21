@@ -17,7 +17,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="100dp"
                 android:orientation="horizontal"
                 android:gravity="center">
 
@@ -34,7 +34,18 @@
                     android:layout_alignParentBottom="true"
                     android:layout_margin="6dp"
                     android:background="?android:attr/selectableItemBackground"
-                    android:padding="6dp">
+                    android:paddingLeft="4dp">
+
+                    <TextView
+                        android:id="@+id/userCredit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:padding="2dp"
+                        android:text="Mickle Credit: $10.00"
+                        android:layout_alignParentBottom="true" />
 
                     <TextView
                         android:id="@+id/userEmail"
@@ -43,7 +54,8 @@
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="14sp"
-                        android:layout_alignParentBottom="true" />
+                        android:padding="2dp"
+                        android:layout_above="@id/userCredit"/>
 
                     <TextView
                         android:id="@+id/userName"
@@ -52,6 +64,7 @@
                         android:layout_above="@id/userEmail"
                         android:singleLine="true"
                         android:textStyle="bold"
+                        android:padding="2dp"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -76,6 +89,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:singleLine="true"
+                        android:textStyle="bold"
                         android:textColor="@color/white"
                         android:text="@string/login_or_signup"
                         android:drawableRight="@drawable/ic_arrow_right"

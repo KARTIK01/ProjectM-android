@@ -1,5 +1,9 @@
 package com.mickledeals.datamodel;
 
+import com.mickledeals.utils.JSONHelper;
+
+import org.json.JSONObject;
+
 import io.card.payment.CardType;
 
 /**
@@ -7,8 +11,16 @@ import io.card.payment.CardType;
  */
 public class PaymentInfo {
 
+    public int mPaymentId;
     public CardType mCardType;
-    public boolean mIsPaypal;
+    public String mPaypalAccount;
     public String mLastFourDigits;
+
+    public PaymentInfo(JSONObject jsonObject) {
+        mPaymentId = JSONHelper.getInteger(jsonObject, "id");
+        mPaypalAccount = JSONHelper.getString(jsonObject, "payPalAccount");
+        mLastFourDigits = JSONHelper.getString(jsonObject, "creditCardNumber");
+        mCardType = CardType.fromString(JSONHelper.getString(jsonObject, "creditCardType"));
+    }
 
 }

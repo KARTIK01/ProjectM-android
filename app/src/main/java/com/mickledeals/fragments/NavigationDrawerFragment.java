@@ -115,9 +115,9 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
     @Override
     public void onLoginSuccess() {
 
-        if (MDLoginManager.mUserName == null) {
+        if (MDLoginManager.mUserName == null || MDLoginManager.mUserName.trim().length() == 0) {
             mUserEmail.setTypeface(null, Typeface.BOLD);
-            mUserName.setVisibility(View.GONE);
+            mUserName.setVisibility(View.INVISIBLE);
         } else {
             mUserEmail.setTypeface(null, Typeface.NORMAL);
         }

@@ -75,7 +75,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 .position(latLng)
                 .title(mBusinessInfo.getStoreName())
                 .snippet(mBusinessInfo.getFullAddress())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.md_pin)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin)));
     }
 
     @Override

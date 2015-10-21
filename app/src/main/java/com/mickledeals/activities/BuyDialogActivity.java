@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickledeals.R;
+import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 
@@ -36,6 +37,8 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     private TextView mNoChargeMsg;
     private DecimalFormat mDf = new DecimalFormat("0.00");
 
+    private CouponInfo mCouponInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +59,10 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
 
         mCreditCardIcon.setImageBitmap(CardType.VISA.imageBitmap(this));
 
-        mStoreName.setText(getIntent().getStringExtra("store_name"));
-        mCouponDescription.setText(getIntent().getStringExtra("coupon_description"));
-        mCouponPrice.setText("$" + mDf.format(getIntent().getDoubleExtra("price", 0)));
+        mCouponInfo = (CouponInfo) getIntent().getSerializableExtra("couponInfo");
+        mStoreName.setText(mCouponInfo.mBusinessInfo.getStoreName());
+        mCouponDescription.setText(mCouponInfo.getDescription());
+        mCouponPrice.setText("$" + mDf.format(mCouponInfo.mPrice));
 
         mProgressBar.getIndeterminateDrawable().setColorFilter(
                 getResources().getColor(R.color.white),
@@ -95,11 +99,13 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     public void confirmClick(View v) {
         mProgressBar.setVisibility(View.VISIBLE);
         int paymentId = 0;
-        MDApiManager.purchaseCoupon(getIntent().getIntExtra("couponId", 0), paymentId, new MDReponseListenerImpl<JSONObject>() {
+        MDApiManager.purchaseCoupon(mCouponInfo.mId, paymentId, new MDReponseListenerImpl<JSONObject>() {
 
             @Override
             public void onMDSuccessResponse(JSONObject object) {
                 super.onMDSuccessResponse(object);
+
+                mCouponInfo.setPurhcaseInfo(object);
 
                 Intent i = new Intent();
                 i.putExtra("pay", mPaymentRow.isShown());
@@ -112,20 +118,20 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
             public void onMDErrorResponse(String errorMessage) {
 
 
-                //temp
-                Intent i = new Intent();
-                i.putExtra("pay", true);
-//                i.putExtra("remainingTime", "");
-                setResult(RESULT_OK, i);
-                finish();
+//                //temp
+//                Intent i = new Intent();
+//                i.putExtra("pay", true);
+////                i.putExtra("remainingTime", "");
+//                setResult(RESULT_OK, i);
+//                finish();
 
-//                if (errorMessage != null) {
-//                    if (errorMessage.equals("COUPON_NOT_AVAILABLE_FOR_USER")) {
-//                        onMDErrorResponse(R.string.purhcase_error_not_available);
-//                        return;
-//                    }
-//                }
-//                super.onMDErrorResponse(errorMessage);
+                if (errorMessage != null) {
+                    if (errorMessage.equals("COUPON_NOT_AVAILABLE_FOR_USER")) {
+                        onMDErrorResponse(R.string.purhcase_error_not_available);
+                        return;
+                    }
+                }
+                super.onMDErrorResponse(errorMessage);
             }
         });
 

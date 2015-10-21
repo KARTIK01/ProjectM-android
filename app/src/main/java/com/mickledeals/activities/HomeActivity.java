@@ -166,9 +166,9 @@ public class HomeActivity extends BaseActivity
     @Override
     public void onDrawerOpen() {
         if (mToolBar != null) {
-            if (mCurrentPosition != 0) {
+//            if (mCurrentPosition != 0) {
                 mSlidingTab.setVisibility(View.GONE);
-            }
+//            }
             mToolBarExtraLayout.setVisibility(View.VISIBLE);
         }
     }

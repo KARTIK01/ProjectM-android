@@ -136,7 +136,6 @@ public class MDApiManager {
         JSONObject body = new JSONObject();
         try {
             body.put("active", true);
-            body.put("available", true);
             if (city != null) {
                 body.put("city", city);
             }
@@ -163,7 +162,6 @@ public class MDApiManager {
         JSONObject body = new JSONObject();
         try {
             body.put("active", true);
-            body.put("available", true);
             body.put("page", 1);
             body.put("size", pageSize);
         } catch (JSONException e) {
@@ -177,7 +175,6 @@ public class MDApiManager {
         JSONObject body = new JSONObject();
         try {
             body.put("active", true);
-            body.put("available", true);
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
@@ -189,7 +186,6 @@ public class MDApiManager {
         JSONObject body = new JSONObject();
         try {
             body.put("active", true);
-            body.put("available", true);
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
