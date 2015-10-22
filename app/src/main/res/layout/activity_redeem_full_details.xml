@@ -68,7 +68,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/fine_print"
+                    android:text="@string/fine_print_english"
                     android:textColor="@color/defaultTextColor"
                     android:layout_marginTop="16dp"
                     android:textStyle="bold"

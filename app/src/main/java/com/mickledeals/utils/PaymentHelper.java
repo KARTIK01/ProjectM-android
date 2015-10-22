@@ -1,6 +1,5 @@
 package com.mickledeals.utils;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.mickledeals.R;
@@ -33,7 +32,6 @@ public class PaymentHelper {
                 imageView.setImageResource(R.drawable.ic_empty_card);
                 break;
             default:
-                Log.e("ZZZ", "type" + type);
                 imageView.setImageBitmap(type.imageBitmap(imageView.getContext()));
         }
     }

@@ -9,7 +9,6 @@ import com.mickledeals.utils.Utils;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 
 /**
  * Created by Nicky on 12/7/2014.
@@ -23,7 +22,7 @@ public class CouponInfo implements Serializable{
     public String mDescriptionCh = "";
     public String mFinePrint = "";
     public String mFinePrintCh = "";
-    public String mExpiredDate = "";
+    public long mExpiredDate;
     public String mExpiredDays = "";
 
     public double mPrice;
@@ -50,7 +49,7 @@ public class CouponInfo implements Serializable{
         mDescriptionCh = JSONHelper.getString(jsonobject, "chineseTitle");
         mFinePrint = JSONHelper.getString(jsonobject, "finePrint");
         mFinePrintCh = JSONHelper.getString(jsonobject, "chineseFinePrint");
-        mExpiredDate = JSONHelper.getString(jsonobject, "expireDate");
+        mExpiredDate = JSONHelper.getLong(jsonobject, "expireDate");
         mExpiredDays = JSONHelper.getString(jsonobject, "expireDays");
 
         mPrice = JSONHelper.getDouble(jsonobject, "price");
@@ -113,8 +112,7 @@ public class CouponInfo implements Serializable{
         } else if (mPrice * 10 % 10 == 0) {
             str = "$" + (int) mPrice;
         } else {
-            DecimalFormat df = new DecimalFormat("#.00");
-            str = "$" + df.format(mPrice);
+            str = Utils.formatPrice(mPrice);
         }
 
         return str;

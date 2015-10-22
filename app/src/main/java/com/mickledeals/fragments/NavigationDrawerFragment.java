@@ -28,6 +28,7 @@ import com.mickledeals.R;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.WebPageActivity;
 import com.mickledeals.bean.NavMenuItem;
+import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
@@ -74,6 +75,7 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
     private View mLoginArea;
     private TextView mUserEmail;
     private TextView mUserName;
+    private TextView mUserCredit;
 
     private TextView mVersionNumber;
     private TextView mTerms;
@@ -84,6 +86,18 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
     public NavigationDrawerFragment() {
     }
 
+    private DataListModel.Creditbserver mCreditObserver = new DataListModel.Creditbserver() {
+        @Override
+        public void update(double credit) {
+            if (credit > 0) {
+                mUserCredit.setText(getString(R.string.mickle_credit, Utils.formatPrice(credit)));
+                mUserCredit.setVisibility(View.VISIBLE);
+            } else {
+                mUserCredit.setVisibility(View.GONE);
+            }
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +106,7 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
         TypedValue outValue = new TypedValue();
         mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         mSelectableBgResId = outValue.resourceId;
+        DataListModel.getInstance().registerCreditObserver(mCreditObserver);
 
         selectItem(0);
     }
@@ -120,9 +135,9 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
             mUserName.setVisibility(View.INVISIBLE);
         } else {
             mUserEmail.setTypeface(null, Typeface.NORMAL);
+            mUserName.setText(MDLoginManager.mUserName);
         }
         mUserEmail.setText(MDLoginManager.mEmailAddr);
-        mUserName.setText(MDLoginManager.mUserName);
         mUserInfo.setVisibility(View.VISIBLE);
         mLoginArea.setVisibility(View.GONE);
     }
@@ -134,6 +149,7 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
         mLoginArea = view.findViewById(R.id.loginArea);
         mUserInfo = view.findViewById(R.id.userInfo);
         mUserEmail = (TextView) view.findViewById(R.id.userEmail);
+        mUserCredit = (TextView) view.findViewById(R.id.userCredit);
         mUserName = (TextView) view.findViewById(R.id.userName);
         mVersionNumber = (TextView) view.findViewById(R.id.versionNumber);
         mTerms = (TextView) view.findViewById(R.id.terms);
@@ -452,6 +468,12 @@ public class NavigationDrawerFragment extends BaseFragment implements MDLoginMan
 
     private ActionBar getSupportActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        DataListModel.getInstance().unregisterCreditObserver(mCreditObserver);
     }
 
     /**

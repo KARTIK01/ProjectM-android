@@ -13,8 +13,9 @@ public class PaymentInfo {
 
     public int mPaymentId;
     public CardType mCardType;
-    public String mPaypalAccount;
-    public String mLastFourDigits;
+    public String mPaypalAccount = "";
+    public String mLastFourDigits = "";
+    public boolean mUsing;
 
     public PaymentInfo(JSONObject jsonObject) {
         mPaymentId = JSONHelper.getInteger(jsonObject, "id");

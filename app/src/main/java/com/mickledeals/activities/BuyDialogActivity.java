@@ -8,12 +8,12 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
+import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
+import com.mickledeals.utils.Utils;
 
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
 
 import io.card.payment.CardType;
 
@@ -35,7 +35,6 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     private View mTotalPriceProgress;
     private View mMickleCreditProgress;
     private TextView mNoChargeMsg;
-    private DecimalFormat mDf = new DecimalFormat("0.00");
 
     private CouponInfo mCouponInfo;
 
@@ -57,18 +56,21 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
         mMickleCreditProgress = findViewById(R.id.mickleCreditProgress);
         mPaymentRow = findViewById(R.id.paymentRow);
 
+        //just to optimize UI when loading
+        mPaymentRow.setVisibility(DataListModel.getInstance().getMickleCredits() == 0? View.VISIBLE : View.GONE);
+
         mCreditCardIcon.setImageBitmap(CardType.VISA.imageBitmap(this));
 
-        mCouponInfo = (CouponInfo) getIntent().getSerializableExtra("couponInfo");
+        mCouponInfo = DataListModel.getInstance().getCouponMap().get(getIntent().getIntExtra("couponId", 0));
         mStoreName.setText(mCouponInfo.mBusinessInfo.getStoreName());
         mCouponDescription.setText(mCouponInfo.getDescription());
-        mCouponPrice.setText("$" + mDf.format(mCouponInfo.mPrice));
+        mCouponPrice.setText(Utils.formatPrice(mCouponInfo.mPrice));
 
         mProgressBar.getIndeterminateDrawable().setColorFilter(
                 getResources().getColor(R.color.white),
                 android.graphics.PorterDuff.Mode.SRC_IN);
 
-        MDApiManager.reviewOrder(getIntent().getIntExtra("couponId", 0), new MDReponseListenerImpl<JSONObject>() {
+        MDApiManager.reviewOrder(mCouponInfo.mId, new MDReponseListenerImpl<JSONObject>() {
 
             @Override
             public void onMDSuccessResponse(JSONObject object) {
@@ -84,9 +86,9 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 } else {
                     mPaymentRow.setVisibility(View.GONE);
                 }
-                mMickleCredit.setText("- $" + mDf.format(useCredit));
-                mTotalPrice.setText("$" + mDf.format(totalPrice));
-                mCurrentCredit.setText(getString(R.string.current_credit, "$" + mDf.format(currentCredit)));
+                mMickleCredit.setText("- " + Utils.formatPrice(useCredit));
+                mTotalPrice.setText(Utils.formatPrice(totalPrice));
+                mCurrentCredit.setText(getString(R.string.current_credit, Utils.formatPrice(currentCredit)));
             }
         });
     }
@@ -106,6 +108,8 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 super.onMDSuccessResponse(object);
 
                 mCouponInfo.setPurhcaseInfo(object);
+
+                MDApiManager.getPayments(null); //to update micklecredits in slider drawer
 
                 Intent i = new Intent();
                 i.putExtra("pay", mPaymentRow.isShown());

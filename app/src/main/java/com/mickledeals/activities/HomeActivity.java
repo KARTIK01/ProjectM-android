@@ -20,6 +20,7 @@ import com.mickledeals.bean.NavMenuItem;
 import com.mickledeals.fragments.BaseFragment;
 import com.mickledeals.fragments.NavigationDrawerFragment;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.PreferenceHelper;
 
@@ -131,6 +132,8 @@ public class HomeActivity extends BaseActivity
             }
         });
 
+
+        MDApiManager.getPayments(null);
 
 //        String saveListStr = PreferenceHelper.getPreferenceValueStr(this, "saveList", "");
 //        if (!saveListStr.equals("")) {

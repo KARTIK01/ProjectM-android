@@ -72,14 +72,16 @@
     <string name="share">分享</string>
     <string name="business_info">商戶資料</string>
     <string name="more_coupon">更多此商戶的優惠</string>
+    <string name="limited_availability">限量存貨</string>
     <string name="fine_print">條款</string>
+    <string name="fine_print_footer">所有商品和服務之品質均由商戶向優惠券使用者全權負責。</string>
     <string name="expired_in_days">換領後%s日到期</string>
-    <string name="expired_date">於 %s 過期</string>
+    <string name="expired_date">過期日為 %s </string>
     <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠</string>
     <string name="redeem_in">"兌換時間剩 "</string>
     <string name="purchase_date">你於%s領取此優惠券</string>
-    <string name="purchase_id_message">Coupon ID: </string>
+    <string name="purchase_id_message">優惠券ID #%s</string>
     <string name="coupon_not_available">此優惠券已不能換領</string>
     <string name="share_to">分享到...</string>
     <string name="share_failed">分享失敗</string>
@@ -133,6 +135,7 @@
     <string name="open_hours">營業時間</string>
     <string name="get_directions">規劃路綫</string>
     <string name="website">網站</string>
+    <string name="business_page_footer">此頁的所有資料均由商戶提供。</string>
 
 
     <!-- Payment -->
@@ -140,9 +143,11 @@
     <string name="saved_methods">已儲存方式</string>
     <string name="add_paypal">新增 PayPal</string>
     <string name="add_card">新增信用卡 /\nDebit Card</string>
-    <string name="mickle_credit">Mickle Credit: $7</string>
-    <string name="your_mickle_credit">你現有的 Mickle Credit: $7</string>
+    <string name="mickle_credit_footer">Mickle Credit只可用作購買優惠券，並不能於商店内作現金使用。</string>
+    <string name="your_mickle_credit">你現有的 Mickle Credit: %s</string>
     <string name="save_payment_hint">新增付款方式以獲得 $5 Mickle Credit</string>
+    <string name="no_payment_msg">你還未有任何付款方式，請用以下方法新增</string>
+    <string name="add">新增</string>
     <string name="get_more_credit">如何獲得更多 Mickle Credit?</string>
     <string name="get_more_credit_dialog_title">如何獲得更多 Mickle Credit</string>
     <string name="secure_transmitted_msg">所有資料都安全經用PayPal連接傳輸</string>

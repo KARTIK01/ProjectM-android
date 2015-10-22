@@ -1,11 +1,11 @@
 package com.mickledeals.activities;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mickledeals.R;
+import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.datamodel.PaymentInfo;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.PaymentHelper;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -26,13 +29,10 @@ import com.paypal.android.sdk.payments.PayPalService;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import io.card.payment.CardType;
 
 /**
  * Created by Nicky on 11/28/2014.
@@ -51,8 +51,10 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
     private static final int REQUEST_CODE_PROFILE_SHARING = 1;
     private static final int REQUEST_CODE_ADD_CARD = 10;
 
+    private View mNoPaymentMessage;
+    private TextView mCredit;
     private LinearLayout mSavedMethodLayout;
-    private List<PaymentMethod> mPayments = new ArrayList<PaymentMethod>();
+    private List<PaymentInfo> mPayments = DataListModel.getInstance().getPaymentList();
     private int mUsingMethodId = 1;
     private int mSelectedPaymentRowIndex = -1;
 
@@ -77,16 +79,23 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
 //        Intent intent = new Intent(this, PayPalService.class);
 //        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
 //        startService(intent);
-
+        mNoPaymentMessage = findViewById(R.id.noPaymentMessage);
+        mCredit = (TextView) findViewById(R.id.mickleCredit);
         mSavedMethodLayout = (LinearLayout) findViewById(R.id.savedMethodLayout);
-        mPayments.add(new PaymentMethod(1, false, "Visa-1234"));
-        mPayments.add(new PaymentMethod(2, false, "MasterCard-1234"));
-        mPayments.add(new PaymentMethod(3, false, "AmEx-1234"));
-        mPayments.add(new PaymentMethod(4, false, "Discover-1234"));
-        mPayments.add(new PaymentMethod(5, false, "jackywong@gmail.com"));
 
-        addSavedMethodsToView();
-        selectPaymentMethod(0, false);
+        if (DataListModel.getInstance().mUpdatedPayment) {
+            addSavedMethodsToView();
+            mCredit.setText(getString(R.string.your_mickle_credit, DataListModel.getInstance().getMickleCredits()));
+        } else {
+            MDApiManager.getPayments(new MDReponseListenerImpl<Void>() {
+                @Override
+                public void onMDSuccessResponse(Void object) {
+                    super.onMDSuccessResponse(object);
+                    addSavedMethodsToView();
+                    mCredit.setText(getString(R.string.your_mickle_credit, DataListModel.getInstance().getMickleCredits()));
+                }
+            });
+        }
     }
 
     public void addPayPalClick(View v) {
@@ -120,22 +129,27 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
     private void addSavedMethodsToView() {
         mSavedMethodLayout.removeAllViews();
         for (int i = 0; i < mPayments.size(); i++) {
-            PaymentMethod paymentMethod = mPayments.get(i);
+            PaymentInfo paymentMethod = mPayments.get(i);
             mSavedMethodLayout.addView(inflateSaveMethodRow(paymentMethod));
+        }
+        if (mPayments.size() == 0) {
+            mNoPaymentMessage.setVisibility(View.VISIBLE);
+        } else {
+            mNoPaymentMessage.setVisibility(View.GONE);
         }
     }
 
-    private View inflateSaveMethodRow(PaymentMethod paymentMethod) {
+    private View inflateSaveMethodRow(PaymentInfo paymentMethod) {
         final ViewGroup paymentRow = (ViewGroup) getLayoutInflater().inflate(R.layout.saved_payment_methods_row, null);
         ImageView paymentImage = (ImageView) paymentRow.findViewById(R.id.payment_image);
-        String str = paymentMethod.displayString;
-        if (str.contains("@")) paymentImage.setImageResource(R.drawable.ic_paypal_card);
-        else {
-            String cardTypeStr = str.substring(0, str.indexOf('-'));
-            PaymentHelper.setCardIcon(paymentImage, CardType.fromString(cardTypeStr));
-        }
         TextView paymentText = (TextView) paymentRow.findViewById(R.id.payment_text);
-        paymentText.setText(str);
+        if (!paymentMethod.mPaypalAccount.equals("")) {
+            paymentImage.setImageResource(R.drawable.ic_paypal_card);
+            paymentText.setText(paymentMethod.mPaypalAccount);
+        } else {
+            PaymentHelper.setCardIcon(paymentImage, paymentMethod.mCardType);
+            paymentText.setText(paymentMethod.mCardType.name + "-" + paymentMethod.mLastFourDigits);
+        }
         paymentRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,12 +228,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             }
         } else if (requestCode == REQUEST_CODE_ADD_CARD) {
             if (resultCode == Activity.RESULT_OK) {
-                PaymentMethod method = new PaymentMethod(12, false, data.getStringExtra("cardDisplayString"));
-                mPayments.add(0, method);
-//                addSavedMethodsToView();
-                mSavedMethodLayout.addView(inflateSaveMethodRow(method), 0);
-                mSelectedPaymentRowIndex++; //add one so that it will find the correct row to remove check mark
-                selectPaymentMethod(0, false);
+                addSavedMethodsToView();
             }
         }
     }

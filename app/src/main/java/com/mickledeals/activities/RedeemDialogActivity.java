@@ -68,8 +68,7 @@ public class RedeemDialogActivity extends BaseActivity {
         mMarkAsUsed.setTypeface(tf);
 
         mCouponNumber = (TextView) findViewById(R.id.couponNumber);
-        //getIntent().getStringExtra("couponNo/purchaseno")
-        mCouponNumber.setText("Coupon #100007198");
+        mCouponNumber.setText(getString(R.string.purchase_id_message, getIntent().getStringExtra("purchaseId")));
 
 
         ScaleAnimation anim = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

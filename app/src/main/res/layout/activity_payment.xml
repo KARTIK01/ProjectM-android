@@ -77,15 +77,15 @@
                                 android:orientation="vertical" />
 
                             <TextView
+                                android:id="@+id/noPaymentMessage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
                                 android:padding="16dp"
-                                android:textColor="@color/defaultTextColor"
-                                android:textStyle="italic"
-                                android:visibility="visible"
-                                android:textSize="16sp"
-                                android:text="@string/save_payment_hint" />
+                                android:textColor="@color/lighterGrayTextColor"
+                                android:visibility="gone"
+                                android:textSize="17sp"
+                                android:text="@string/no_payment_msg" />
 
                             <View
                                 android:layout_width="match_parent"
@@ -185,8 +185,7 @@
                         android:padding="16dp"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/defaultTextColor"
-                        android:text="@string/your_mickle_credit" />
+                        android:textColor="@color/defaultTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -198,7 +197,18 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:onClick="getMoreCreditClick"
+                        android:visibility="gone"
                         android:text="@string/get_more_credit" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:textSize="13sp"
+                        android:text="@string/mickle_credit_footer" />
 
 
                 </LinearLayout>

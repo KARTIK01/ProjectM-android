@@ -36,10 +36,13 @@ import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.MDApiManager;
+import com.mickledeals.utils.MDConnectManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.NotifyingScrollView;
+
+import org.json.JSONObject;
 
 /**
  * Created by Nicky on 11/28/2014.
@@ -53,7 +56,7 @@ public class DetailsFragment extends BaseFragment {
 
     private CouponInfo mHolder;
 
-//    private int mListType;
+    //    private int mListType;
     private TextView mBusinessName;
     private TextView mDescription;
     private TextView mPrice;
@@ -65,6 +68,7 @@ public class DetailsFragment extends BaseFragment {
     private View mSaveBtn;
     private View mBusinessInfoBtn;
     private TextView mExpiredDate;
+    private TextView mLimited;
     private TextView mFinePrint;
     private TextView mBoughtDate;
     private TextView mPurchaseId;
@@ -110,6 +114,7 @@ public class DetailsFragment extends BaseFragment {
         mBusinessName = (TextView) view.findViewById(R.id.storeName);
         mDescription = (TextView) view.findViewById(R.id.couponDescription);
         mPrice = (TextView) view.findViewById(R.id.couponPrice);
+        mLimited = (TextView) view.findViewById(R.id.limited);
         mBoughtDate = (TextView) view.findViewById(R.id.boughtDate);
         mPurchaseId = (TextView) view.findViewById(R.id.purhcaseId);
         mBuyBtn = view.findViewById(R.id.buyBtn);
@@ -205,7 +210,7 @@ public class DetailsFragment extends BaseFragment {
                             startActivity(newIntent);
                         } else {
                             Intent i = new Intent(mContext, BuyDialogActivity.class);
-                            i.putExtra("couponInfo", mHolder);
+                            i.putExtra("couponId", mHolder.mId);
                             startActivityForResult(i, REQUEST_CODE_BUY);
 
                         }
@@ -265,7 +270,7 @@ public class DetailsFragment extends BaseFragment {
         }
 
 
-        mFinePrint.setText(mHolder.getFinePrint());
+        mFinePrint.setText(mHolder.getFinePrint() + "\n" + getString(R.string.fine_print_footer));
 
         mAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,12 +292,12 @@ public class DetailsFragment extends BaseFragment {
         });
 
         mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(mContext, BusinessPageActivity.class);
-                    i.putExtra("businessInfo", mHolder.mBusinessInfo);
-                    startActivity(i);
-                }
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, BusinessPageActivity.class);
+                i.putExtra("businessInfo", mHolder.mBusinessInfo);
+                startActivity(i);
+            }
         });
 
         updateViewForStatus();
@@ -339,7 +344,7 @@ public class DetailsFragment extends BaseFragment {
     private void updateViewForStatus() {
         if (mHolder.mRedeemable) {
             showRedeemableStatus();
-        } else if (mHolder.mAvailable) {
+        } else if (mHolder.mAvailable || !MDLoginManager.isLogin()) { //show available when user not log in, coz available is missing
             showAvailableStatus();
         } else {
             showNotAvailableStatus();
@@ -351,6 +356,7 @@ public class DetailsFragment extends BaseFragment {
 //        mHandler.removeCallbacks(mUpdatetimerThread);
         mRedeemBtnText.setText(R.string.redeem_coupon);
         mPrice.setVisibility(View.VISIBLE);
+        if (mHolder.mLimited) mLimited.setVisibility(View.VISIBLE);
         mBuyBtn.setVisibility(View.VISIBLE);
         mRedeemBtn.setVisibility(View.GONE);
         mBoughtDate.setVisibility(View.GONE);
@@ -362,6 +368,7 @@ public class DetailsFragment extends BaseFragment {
         mRedeemBtn.setVisibility(View.GONE);
         mBuyBtn.setVisibility(View.GONE);
         mPrice.setVisibility(View.GONE);
+        mLimited.setVisibility(View.GONE);
         mBoughtDate.setVisibility(View.GONE);
         mPurchaseId.setVisibility(View.GONE);
     }
@@ -370,21 +377,22 @@ public class DetailsFragment extends BaseFragment {
         mPrice.setVisibility(View.GONE);
         mRedeemBtn.setVisibility(View.VISIBLE);
         mBuyBtn.setVisibility(View.GONE);
-        mBoughtDate.setText(getString(R.string.purchase_date, mHolder.mPurchaseDate));
+        mBoughtDate.setText(getString(R.string.purchase_date, Utils.formatDate(mHolder.mPurchaseDate)));
         mBoughtDate.setVisibility(View.VISIBLE);
         mPurchaseId.setText(getString(R.string.purchase_id_message, mHolder.mPurchaseId));
         mPurchaseId.setVisibility(View.VISIBLE);
+        mLimited.setVisibility(View.GONE);
     }
 
     private void showExpiredDate() {
         mExpiredDate.setVisibility(View.VISIBLE);
         String expiredStr = null;
-        if (!mHolder.mExpiredDate.isEmpty()) {
-            expiredStr = getString(R.string.expired_date, mHolder.mExpiredDate); //need format
+        if (mHolder.mExpiredDate != 0) {
+            expiredStr = getString(R.string.expired_date, Utils.formatDate(mHolder.mExpiredDate)); //need format
         } else if (mHolder.mLastRedemptionDate != 0) {
-            expiredStr = getString(R.string.expired_date, mHolder.mLastRedemptionDate); //need format
+            expiredStr = getString(R.string.expired_date, Utils.formatDate(mHolder.mLastRedemptionDate)); //need format
         } else if (!mHolder.mExpiredDays.isEmpty()) {
-            expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays); //need format
+            expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays);
         } else {
             mExpiredDate.setVisibility(View.GONE);
         }
@@ -421,15 +429,37 @@ public class DetailsFragment extends BaseFragment {
             } else if (requestCode == REQUEST_CODE_REDEEM) {
                 showAvailableStatus();
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
+                if (!MDConnectManager.getInstance(mContext).isNetworkAvailable()) {
+                    Utils.showNetworkErrorDialog(mContext);
+                    return;
+                }
+                MDApiManager.redeemCoupon(mHolder.mPurchaseId, new MDApiManager.MDResponseListener<JSONObject>() {
+                    @Override
+                    public void onMDSuccessResponse(JSONObject object) {
+                        //check available status
+                        mHolder.mRedeemable =false;
+                    }
+
+                    @Override
+                    public void onMDNetworkErrorResponse(String errorMessage) {
+                    }
+
+                    @Override
+                    public void onMDErrorResponse(String errorMessage) {
+                    }
+                });
 
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
                 i.putExtra("storeName", mHolder.mBusinessInfo.mName);
                 i.putExtra("couponDesc", mHolder.mDescription);
+                i.putExtra("finePrint", mHolder.mFinePrint);
+                i.putExtra("purchaseId", mHolder.mPurchaseId);
 //                i.putExtra("redeemTime", mHolder.mRedeemTime);
                 startActivityForResult(i, REQUEST_CODE_REDEEM);
 
 //                mHandler.removeCallbacks(mUpdatetimerThread);
 //                mHandler.postDelayed(mUpdatetimerThread, 0);
+
             }
         }
     }

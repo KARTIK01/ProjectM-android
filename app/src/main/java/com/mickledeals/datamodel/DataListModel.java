@@ -9,6 +9,9 @@ import java.util.Map;
  * Created by Nicky on 12/7/2014.
  */
 public class DataListModel {
+    public interface Creditbserver {
+        void update(double credit);
+    }
 
     private static DataListModel sInstance;
 
@@ -25,6 +28,13 @@ public class DataListModel {
 
     private List<Integer> mMoreCouponsList = new ArrayList<Integer>();
     private List<Integer> mSearchResultList = new ArrayList<Integer>();
+
+    private List<PaymentInfo> mPaymentList = new ArrayList<PaymentInfo>();
+    private double mMickleCredit;
+    public boolean mUpdatedPayment;
+
+    private List<Creditbserver> mObservers = new ArrayList<Creditbserver>();
+
 
     public static DataListModel getInstance() {
         if (sInstance == null) {
@@ -88,6 +98,29 @@ public class DataListModel {
     public CouponInfo getCouponInfoFromList(List<Integer> list, int position) {
         int couponId = list.get(position);
         return DataListModel.getInstance().getCouponMap().get(couponId);
+    }
+
+    public List<PaymentInfo> getPaymentList() {
+        return mPaymentList;
+    }
+
+    public double getMickleCredits() {
+        return mMickleCredit;
+    }
+
+    public void setMickleCredit(double credit) {
+        mMickleCredit = credit;
+        for (Creditbserver observer : mObservers) {
+            observer.update(credit);
+        }
+    }
+
+    public void registerCreditObserver(Creditbserver observer) {
+        mObservers.add(observer);
+    }
+
+    public void unregisterCreditObserver(Creditbserver observer) {
+        mObservers.remove(observer);
     }
 
 //    private void initFeatureSliderCoupon() {

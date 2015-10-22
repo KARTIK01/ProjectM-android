@@ -21,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.datamodel.PaymentInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -437,7 +438,7 @@ public class MDApiManager {
         sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                DLog.e(MDApiManager.class, response.toString());
                 String errorMessage = JSONHelper.getString(response, "ERROR");
                 if (!TextUtils.isEmpty(errorMessage)) {
                     listener.onMDErrorResponse(errorMessage);
@@ -452,6 +453,37 @@ public class MDApiManager {
 //                listener.onMDNetworkErrorResponse(error.getMessage());
                 //temp
                 listener.onMDSuccessResponse(null);
+            }
+        });
+    }
+
+    public static void redeemCoupon(String purchaseId, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/redeemCoupon";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("purchaseId", purchaseId);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                DLog.e(MDApiManager.class, response.toString());
+//                String errorMessage = JSONHelper.getString(response, "ERROR");
+//                if (!TextUtils.isEmpty(errorMessage)) {
+//                    listener.onMDErrorResponse(errorMessage);
+//                } else {
+//                    listener.onMDSuccessResponse(response);
+//                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                DLog.e(MDApiManager.class, error.getMessage());
+////                listener.onMDNetworkErrorResponse(error.getMessage());
+//                //temp
+//                listener.onMDSuccessResponse(null);
             }
         });
     }
@@ -474,6 +506,41 @@ public class MDApiManager {
             @Override
             public void onErrorResponse(VolleyError error) {
 //                DLog.e(MDApiManager.class, error.getMessage());
+            }
+        });
+    }
+
+    //no response
+    public static void getPayments(final MDResponseListener<Void> listener) {
+        String url = "http://www.mickledeals.com/api/userses/getPayments";
+        JSONObject body = new JSONObject();
+        sendJSONArrayRequest(url, body, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
+                list.clear();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonobject = response.getJSONObject(i);
+                        PaymentInfo info = new PaymentInfo(jsonobject);
+                        list.add(info);
+                        //get credit
+                        double credit = 0;
+                        JSONObject userObject = JSONHelper.getJSONObject(jsonobject, "users");
+                        if (userObject != null) credit = JSONHelper.getDouble(userObject, "mickleCredit");
+                        DataListModel.getInstance().setMickleCredit(credit);
+                    } catch (JSONException e) {
+                        DLog.e(MDApiManager.class, e.toString());
+                    }
+                }
+                DataListModel.getInstance().mUpdatedPayment = true;
+                if (listener != null) listener.onMDSuccessResponse(null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                DLog.e(MDApiManager.class, error.getMessage());
+                if (listener != null) listener.onMDNetworkErrorResponse(error.getMessage());
             }
         });
     }

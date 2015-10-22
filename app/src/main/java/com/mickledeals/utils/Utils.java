@@ -33,7 +33,6 @@ import com.mickledeals.R;
 import com.mickledeals.activities.DetailsActivity;
 import com.mickledeals.activities.HomeActivity;
 import com.mickledeals.activities.MDApplication;
-import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 
 import java.io.File;
@@ -41,10 +40,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -354,6 +355,22 @@ public class Utils {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
+    }
+
+    public static String formatPrice(double price) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return "$" + df.format(price);
+    }
+
+    public static String formatDate(long timeStamp) {
+        SimpleDateFormat format = null;
+        if (isChineseLocale()) {
+            format = new SimpleDateFormat("yyyy/MM/dd");
+        } else {
+            format = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
+        }
+
+        return format.format(new Date(timeStamp));
     }
 
 

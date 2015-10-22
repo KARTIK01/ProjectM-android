@@ -23,8 +23,6 @@ public class RedeemDetailsDialogActivity extends DialogSwipeDismissActivity {
         discLong.setText(getIntent().getStringExtra("couponDesc"));
         final TextView finePrint = (TextView) findViewById(R.id.finePrint);
         finePrint.setText(getIntent().getStringExtra("finePrint"));
-        //temp
-        finePrint.setText(R.string.fine_print_description);
 
     }
 

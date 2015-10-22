@@ -97,11 +97,14 @@
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/limited"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="128+ Bought"
+                                android:layout_marginRight="16dp"
+                                android:text="@string/limited_availability"
                                 android:visibility="gone"
-                                android:textSize="15sp" />
+                                android:textColor="@color/themeTextColor"
+                                android:textSize="14sp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -175,7 +178,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:textColor="@color/lightGrayTextColor"
+                    android:textColor="@color/defaultTextColor"
+                    android:textStyle="italic"
                     android:textSize="14sp"
                     android:visibility="gone"
                     android:layout_marginTop="12dp" />
@@ -186,10 +190,11 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:textColor="@color/lightGrayTextColor"
+                    android:paddingBottom="4dp"
+                    android:textColor="@color/defaultTextColor"
                     android:textSize="14sp"
-                    android:visibility="gone"
-                    android:layout_marginTop="12dp" />
+                    android:textStyle="italic"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/moreCouponLabel"
@@ -224,16 +229,6 @@
                     android:orientation="vertical"
                     android:layout_marginTop="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:text="@string/fine_print"
-                        android:textColor="@color/defaultTextColor"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
 
                     <TextView
                         android:id="@+id/expiredDate"
@@ -241,10 +236,22 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
-                        android:paddingTop="8dp"
                         android:textColor="@color/defaultTextColor"
+                        style="@style/MediumBoldTextStyle"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="12dp"
+                        android:text="@string/fine_print"
+                        android:textColor="@color/defaultTextColor"
+                        style="@style/MediumBoldTextStyle"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="normal" />
+
 
                     <TextView
                         android:id="@+id/finePrint"
@@ -253,7 +260,7 @@
                         android:paddingBottom="8dp"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
-                        android:paddingTop="8dp"
+                        android:paddingTop="4dp"
                         android:fontFamily="sans-serif-light"
                         android:textColor="@color/defaultTextColor"
                         android:textSize="14sp" />
