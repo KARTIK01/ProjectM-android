@@ -24,10 +24,6 @@ public class ForgotPasswordActivity extends DialogSwipeDismissActivity {
 
         mEmail = (EditText) findViewById(R.id.email);
         mEmail.setText(getIntent().getStringExtra("email"));
-
-        mProgressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.white),
-                android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override

@@ -39,9 +39,6 @@ public class SuccessDialogActivity extends DialogSwipeDismissActivity {
         }
 
         mCallbackManager = CallbackManager.Factory.create();
-        mProgressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.white),
-                android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override

@@ -114,6 +114,8 @@
     <string name="current_credit">Current Credit: %s</string>
     <string name="mickle_credit_text">Mickle Credit</string>
     <string name="review_order">REVIEW ORDER</string>
+    <string name="add">Add</string>
+    <string name="no_payment_message">Please add a payment method in order to purchase.</string>
     <string name="confirm_purchase">Confirm Purchase</string>
     <string name="no_charge_msg">No Charge At All!</string>
     <string name="agreeTermsWhenPurchase">By confirming the purchase, I agree to MickleDeals\'</string>
@@ -171,7 +173,6 @@
     <string name="your_mickle_credit">Your Mickle Credit: %s</string>
     <string name="save_payment_hint">Add a payment method to receive $5 Mickle Credit</string>
     <string name="no_payment_msg">You do not have any payment method yet. Please start adding by one of the methods below.</string>
-    <string name="add">Add</string>
     <string name="get_more_credit">How to get more Mickle Credit?</string>
     <string name="get_more_credit_dialog_title">How to get more Mickle Credit</string>
     <string name="get_more_credit_dialog_msg">1. If you log in for 7 consecutive days, you will receive $2 Mickle Credit

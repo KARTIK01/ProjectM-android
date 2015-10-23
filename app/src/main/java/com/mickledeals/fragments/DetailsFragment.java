@@ -35,6 +35,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDConnectManager;
 import com.mickledeals.utils.MDLocationManager;
@@ -205,9 +206,35 @@ public class DetailsFragment extends BaseFragment {
                     public void onLoginSuccess() {
 
                         if (mHolder.mPrice == 0) {
-                            showRedeemableStatus();
-                            Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
-                            startActivity(newIntent);
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            MDApiManager.purchaseCoupon(mHolder.mId, 0, new MDReponseListenerImpl<JSONObject>() {
+
+                                @Override
+                                public void onMDSuccessResponse(JSONObject object) {
+                                    super.onMDSuccessResponse(object);
+
+                                    mHolder.setPurhcaseInfo(object);
+                                    updateViewForStatus();
+
+                                    Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
+                                    newIntent.putExtra("price", mHolder.mPrice);
+                                    newIntent.putExtra("store_name", mHolder.mBusinessInfo.mName);
+                                    newIntent.putExtra("coupon_description", mHolder.mDescription);
+                                    newIntent.putExtra("pay", false);
+                                    startActivity(newIntent);
+                                }
+
+                                @Override
+                                public void onMDErrorResponse(String errorMessage) {
+                                    if (errorMessage != null) {
+                                        if (errorMessage.equals("COUPON_NOT_AVAILABLE_FOR_USER")) {
+                                            onMDErrorResponse(R.string.purhcase_error_not_available);
+                                            return;
+                                        }
+                                    }
+                                    super.onMDErrorResponse(errorMessage);
+                                }
+                            });
                         } else {
                             Intent i = new Intent(mContext, BuyDialogActivity.class);
                             i.putExtra("couponId", mHolder.mId);
@@ -226,8 +253,6 @@ public class DetailsFragment extends BaseFragment {
             public void onClick(View v) {
 //                if (mHolder.mRedeemTime == 0) {
                 Intent i = new Intent(mContext, ConfirmRedeemDialogActivity.class);
-                i.putExtra("storeName", mHolder.mBusinessInfo.mName);
-                i.putExtra("couponDesc", mHolder.mDescription);
                 startActivityForResult(i, REQUEST_CODE_CONFIRM_REDEEM);
 //                } else {
 //                    Intent i = new Intent(mContext, RedeemDialogActivity.class);
@@ -418,7 +443,7 @@ public class DetailsFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_BUY) {
-                showRedeemableStatus();
+                updateViewForStatus();
 
                 Intent newIntent = new Intent(mContext, SuccessDialogActivity.class);
                 newIntent.putExtra("price", mHolder.mPrice);
@@ -427,7 +452,7 @@ public class DetailsFragment extends BaseFragment {
                 newIntent.putExtra("pay", data.getBooleanExtra("pay", false));
                 startActivity(newIntent);
             } else if (requestCode == REQUEST_CODE_REDEEM) {
-                showAvailableStatus();
+                updateViewForStatus();
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
                 if (!MDConnectManager.getInstance(mContext).isNetworkAvailable()) {
                     Utils.showNetworkErrorDialog(mContext);
@@ -436,8 +461,13 @@ public class DetailsFragment extends BaseFragment {
                 MDApiManager.redeemCoupon(mHolder.mPurchaseId, new MDApiManager.MDResponseListener<JSONObject>() {
                     @Override
                     public void onMDSuccessResponse(JSONObject object) {
-                        //check available status
-                        mHolder.mRedeemable =false;
+
+                        boolean available = JSONHelper.getBoolean(object, "available");
+                        mHolder.mAvailable = available;
+                        mHolder.mRedeemable = false;
+                        mHolder.mPurchaseId = "";
+                        mHolder.mLastRedemptionDate = 0;
+                        mHolder.mPurchaseDate = 0;
                     }
 
                     @Override
@@ -450,6 +480,7 @@ public class DetailsFragment extends BaseFragment {
                 });
 
                 Intent i = new Intent(mContext, RedeemDialogActivity.class);
+                i.putExtra("couponId", mHolder.mId);
                 i.putExtra("storeName", mHolder.mBusinessInfo.mName);
                 i.putExtra("couponDesc", mHolder.mDescription);
                 i.putExtra("finePrint", mHolder.mFinePrint);

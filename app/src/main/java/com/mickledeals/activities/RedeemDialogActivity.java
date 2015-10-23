@@ -121,8 +121,7 @@ public class RedeemDialogActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         Intent i = new Intent();
-                        i.putExtra("id", getIntent().getIntExtra("id", 0));
-                        //send request then finish activity
+                        i.putExtra("couponId", getIntent().getIntExtra("couponId", 0));
                         setResult(Activity.RESULT_OK, i);
                         finish();
                     }

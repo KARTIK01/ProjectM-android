@@ -13,13 +13,13 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mickledeals.R;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.datamodel.PaymentInfo;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.PaymentHelper;
+import com.mickledeals.utils.Utils;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
@@ -46,8 +46,8 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             .clientId(CONFIG_CLIENT_ID)
             // The following are only used in PayPalFuturePaymentActivity.
             .merchantName("MickleDeals")
-            .merchantPrivacyPolicyUri(Uri.parse("http://www.mickledeals.com/business"))
-                    .merchantUserAgreementUri(Uri.parse("http://www.mickledeals.com/business"));
+            .merchantPrivacyPolicyUri(Uri.parse("http://www.mickledeals.com/privacy"))
+                    .merchantUserAgreementUri(Uri.parse("http://www.mickledeals.com/terms"));
     private static final int REQUEST_CODE_PROFILE_SHARING = 1;
     private static final int REQUEST_CODE_ADD_CARD = 10;
 
@@ -58,22 +58,9 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
     private int mUsingMethodId = 1;
     private int mSelectedPaymentRowIndex = -1;
 
-    private class PaymentMethod {
-        public int methodId;
-        public boolean isUsing; //may not need to use, propose api: return a id to indicate is using
-        public String displayString;
-
-        PaymentMethod(int methodId, boolean isUsing, String displayString) {
-            this.methodId = methodId;
-            this.isUsing = isUsing;
-            this.displayString = displayString;
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
 //        Intent intent = new Intent(this, PayPalService.class);
@@ -85,14 +72,14 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
 
         if (DataListModel.getInstance().mUpdatedPayment) {
             addSavedMethodsToView();
-            mCredit.setText(getString(R.string.your_mickle_credit, DataListModel.getInstance().getMickleCredits()));
+            mCredit.setText(getString(R.string.your_mickle_credit, Utils.formatPrice(DataListModel.getInstance().getMickleCredits())));
         } else {
             MDApiManager.getPayments(new MDReponseListenerImpl<Void>() {
                 @Override
                 public void onMDSuccessResponse(Void object) {
                     super.onMDSuccessResponse(object);
                     addSavedMethodsToView();
-                    mCredit.setText(getString(R.string.your_mickle_credit, DataListModel.getInstance().getMickleCredits()));
+                    mCredit.setText(getString(R.string.your_mickle_credit, Utils.formatPrice(DataListModel.getInstance().getMickleCredits())));
                 }
             });
         }
@@ -210,10 +197,6 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
                         Log.i("PaymentActivity", authorization_code);
 
                         sendAuthorizationToServer(auth);
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Profile Sharing code received from PayPal", Toast.LENGTH_LONG)
-                                .show();
 
                     } catch (JSONException e) {
                         Log.e("PaymentActivity", "an extremely unlikely failure occurred: ", e);
@@ -234,7 +217,6 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
     }
 
     private void sendAuthorizationToServer(PayPalAuthorization authorization) {
-
         //send auto code and return email address
     }
 

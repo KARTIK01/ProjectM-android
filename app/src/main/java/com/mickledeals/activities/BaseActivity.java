@@ -85,12 +85,17 @@ public abstract class BaseActivity extends ActionBarActivity {
             });
         }
         mProgressBar = (ProgressBar) findViewById(R.id.progressBarLoading);
-        if (mProgressBar != null) mProgressBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //block touch event to disable button click from behind
-            }
-        });
+        if (mProgressBar != null) {
+            mProgressBar.getIndeterminateDrawable().setColorFilter(
+                    getResources().getColor(R.color.white),
+                    android.graphics.PorterDuff.Mode.SRC_IN);
+            mProgressBar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //block touch event to disable button click from behind
+                }
+            });
+        }
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

@@ -111,9 +111,7 @@ public class MyCouponsAdapter extends CardAdapter {
                 public void onClick(View v) {
 //                    if (dataHolder.mRedeemTime == 0) {
                         Intent i = new Intent(mFragmentActivity, ConfirmRedeemDialogActivity.class);
-                        i.putExtra("storeName", dataHolder.mBusinessInfo.mName);
-                        i.putExtra("couponDesc", dataHolder.mDescription);
-                        i.putExtra("id", dataHolder.mId);
+                        i.putExtra("couponId", dataHolder.mId);
                         mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_CONFIRM_REDEEM);
 //                    } else {
 //                        Intent i = new Intent(mFragmentActivity, RedeemDialogActivity.class);

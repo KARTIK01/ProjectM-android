@@ -11,7 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mickledeals.R;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.PaymentHelper;
+
+import org.json.JSONObject;
 
 import io.card.payment.CardIOActivity;
 import io.card.payment.CardType;
@@ -27,8 +30,8 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
     private TextView mCardNumber;
     private TextView mMM;
     private TextView mYY;
-    private TextView mCVV;
-    private TextView mZipCode;
+//    private TextView mCVV;
+//    private TextView mZipCode;
     private ImageView mCardImage;
     private CardType mCardType = CardType.INSUFFICIENT_DIGITS;
 
@@ -41,7 +44,7 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
         findViewById(R.id.dialogContainer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //to dismiss dialog when tap on empty space
+                //to prevent dismiss dialog when tap on empty space
 //                finish();
             }
         });
@@ -49,14 +52,14 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
         mCardNumber = (TextView) findViewById(R.id.cardNumber);
         mMM = (TextView) findViewById(R.id.mm);
         mYY = (TextView) findViewById(R.id.yy);
-        mCVV = (TextView) findViewById(R.id.cvv);
-        mZipCode = (TextView) findViewById(R.id.zipcode);
+//        mCVV = (TextView) findViewById(R.id.cvv);
+//        mZipCode = (TextView) findViewById(R.id.zipcode);
         mCardImage = (ImageView) findViewById(R.id.cardImage);
 
         mCardNumber.addTextChangedListener(new FourDigitCardFormatWatcher(mMM, -1));
         mMM.addTextChangedListener(new JumpToNextTextWatcher(mYY, 2));
-        mYY.addTextChangedListener(new JumpToNextTextWatcher(mCVV, 2));
-        mCVV.addTextChangedListener(new JumpToNextTextWatcher(mZipCode, 4));
+//        mYY.addTextChangedListener(new JumpToNextTextWatcher(mCVV, 2));
+//        mCVV.addTextChangedListener(new JumpToNextTextWatcher(mZipCode, 4));
 
     }
 
@@ -77,14 +80,16 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
     public void saveBtnClick(View v) {
         boolean success = invalidateInfo();
         if (success) {
-            //send request to server
-            Intent i = new Intent();
-            i.putExtra("cardType", mCardType);
-            String str = mCardNumber.getText().toString().replace(" ", "");
-            String lastFour = str.substring(str.length() - 4, str.length());
-            i.putExtra("cardDisplayString", mCardType.toString() + "-" + lastFour);
-            setResult(Activity.RESULT_OK, i);
-            finish();
+            mProgressBar.setVisibility(View.VISIBLE);
+            String cardNumber = mCardNumber.getText().toString().replace(" ", "");
+            MDApiManager.addPayments(cardNumber, mCardType.name.toLowerCase(), mMM.getText().toString(), "20" + mYY.getText().toString(), new MDReponseListenerImpl<JSONObject>() {
+                @Override
+                public void onMDSuccessResponse(JSONObject object) {
+                    super.onMDSuccessResponse(object);
+                    setResult(Activity.RESULT_OK);
+                    finish();
+                }
+            });
         }
     }
 
@@ -109,15 +114,15 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
             return false;
         }
 
-        if (mCVV.getText().length() < 3) {
-            Toast.makeText(this, R.string.invalid_card_cvv, Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if (mZipCode.getText().length() < 5) {
-            Toast.makeText(this, R.string.invalid_card_zip_code, Toast.LENGTH_LONG).show();
-            return false;
-        }
+//        if (mCVV.getText().length() < 3) {
+//            Toast.makeText(this, R.string.invalid_card_cvv, Toast.LENGTH_LONG).show();
+//            return false;
+//        }
+//
+//        if (mZipCode.getText().length() < 5) {
+//            Toast.makeText(this, R.string.invalid_card_zip_code, Toast.LENGTH_LONG).show();
+//            return false;
+//        }
 
         return true;
 
@@ -142,9 +147,9 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
                     mYY.setText(yy.substring(yy.length() - 2, yy.length()));
                 }
 
-                if (scanResult.postalCode != null) {
-                    mZipCode.setText(scanResult.postalCode);
-                }
+//                if (scanResult.postalCode != null) {
+//                    mZipCode.setText(scanResult.postalCode);
+//                }
             }
             else {
 //                resultDisplayStr = "Scan was canceled.";
@@ -219,9 +224,9 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
             }
             else if (mMaxLength == 4) {//indicate it is cvv tv
                 int maxLength = mCardType.cvvLength();
-                if (mCVV.getText().length() >= maxLength && maxLength >= 3) {
-                    mNextFocusTv.requestFocus();
-                }
+//                if (mCVV.getText().length() >= maxLength && maxLength >= 3) {
+//                    mNextFocusTv.requestFocus();
+//                }
             }
 
 

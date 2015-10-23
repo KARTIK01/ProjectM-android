@@ -94,8 +94,8 @@
                             android:onClick="paymentMethodClick"
                             android:paddingLeft="12dp"
                             android:paddingRight="12dp"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="6dp"
+                            android:paddingTop="12dp"
+                            android:paddingBottom="8dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -112,17 +112,38 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="-6dp"
                                 android:scaleX="0.6"
-                                android:scaleY="0.6" />
+                                android:scaleY="0.6"
+                                android:visibility="gone"/>
 
                             <TextView
                                 android:id="@+id/paymentMethod"
                                 android:layout_height="wrap_content"
                                 android:layout_width="wrap_content"
-                                android:text="1234"
                                 android:includeFontPadding="false"
                                 android:drawablePadding="8dp"
                                 android:drawableRight="@drawable/ic_right_arrow_small"
-                                android:textSize="@dimen/sp_15" />
+                                android:textSize="@dimen/sp_15"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/add"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="@string/add"
+                                android:includeFontPadding="false"
+                                android:drawablePadding="4dp"
+                                android:paddingRight="6dp"
+                                android:gravity="center"
+                                android:textColor="@color/themeTextColor"
+                                android:drawableLeft="@drawable/ic_add"
+                                android:textSize="@dimen/sp_18"
+                                android:visibility="gone" />
+
+                            <ProgressBar
+                                android:id="@+id/paymentProgress"
+                                style="?android:attr/progressBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
 
                         </LinearLayout>
 

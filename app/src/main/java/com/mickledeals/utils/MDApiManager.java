@@ -199,6 +199,23 @@ public class MDApiManager {
         fetchCouponInfoList(url, body, listener);
     }
 
+    public static void fetchMyCoupons(String sortMethod, boolean expired, boolean redeemed, int page, final MDResponseListener<List<Integer>> listener) {
+        String url = "http://www.mickledeals.com/api/purchases/search";
+        JSONObject body = new JSONObject();
+        try {
+            if (redeemed == false) body.put("expiredPurchase", expired);
+            body.put("redeemedPurchase", redeemed);
+            body.put("sortBy", sortMethod);
+            if (page > 0) {
+                body.put("page", page);
+                body.put("size", PAGE_SIZE);
+            }
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        fetchCouponInfoList(url, body, listener);
+    }
+
     private static void fetchCouponInfoList(String request, JSONObject body, final MDResponseListener<List<Integer>> listener) {
 
         sendJSONArrayRequest(request, body, new Response.Listener<JSONArray>() {
@@ -474,7 +491,7 @@ public class MDApiManager {
 //                if (!TextUtils.isEmpty(errorMessage)) {
 //                    listener.onMDErrorResponse(errorMessage);
 //                } else {
-//                    listener.onMDSuccessResponse(response);
+                    listener.onMDSuccessResponse(response);
 //                }
             }
         }, new Response.ErrorListener() {
@@ -527,7 +544,8 @@ public class MDApiManager {
                         //get credit
                         double credit = 0;
                         JSONObject userObject = JSONHelper.getJSONObject(jsonobject, "users");
-                        if (userObject != null) credit = JSONHelper.getDouble(userObject, "mickleCredit");
+                        if (userObject != null)
+                            credit = JSONHelper.getDouble(userObject, "mickleCredit");
                         DataListModel.getInstance().setMickleCredit(credit);
                     } catch (JSONException e) {
                         DLog.e(MDApiManager.class, e.toString());
@@ -541,6 +559,52 @@ public class MDApiManager {
             public void onErrorResponse(VolleyError error) {
                 DLog.e(MDApiManager.class, error.getMessage());
                 if (listener != null) listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
+    }
+
+
+    public static void addPayments(String cardNumber, String cardType, String expireMonth, String expireYear, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/addPayment";
+        JSONObject body = new JSONObject();
+        try {
+            JSONObject cardObject = new JSONObject();
+            cardObject.put("number", cardNumber);
+            cardObject.put("type", cardType);
+            cardObject.put("expireMonth", expireMonth);
+            cardObject.put("expireYear", expireYear);
+            cardObject.put("number", cardNumber);
+            body.put("creditCard", cardObject);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (!TextUtils.isEmpty(errorMessage)) {
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
+                    PaymentInfo info = new PaymentInfo(response);
+                    list.add(0, info);
+                    listener.onMDSuccessResponse(response);
+                }
+
+
+                listener.onMDSuccessResponse(null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                DLog.e(MDApiManager.class, error.getMessage());
+                if (error.getMessage().contains("JSONException")) {
+                    listener.onMDErrorResponse(error.getMessage());
+                } else {
+                    listener.onMDNetworkErrorResponse(error.getMessage());
+                }
             }
         });
     }

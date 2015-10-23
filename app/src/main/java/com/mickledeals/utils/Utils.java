@@ -350,6 +350,7 @@ public class Utils {
     }
 
     public static void restartApp(Context context) {
+        DataListModel.getInstance().clear();
         Intent i = new Intent(context, HomeActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -365,7 +366,7 @@ public class Utils {
     public static String formatDate(long timeStamp) {
         SimpleDateFormat format = null;
         if (isChineseLocale()) {
-            format = new SimpleDateFormat("yyyy/MM/dd");
+            format = new SimpleDateFormat("MM/dd/yyyy");
         } else {
             format = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
         }

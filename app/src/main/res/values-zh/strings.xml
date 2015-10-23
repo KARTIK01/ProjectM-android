@@ -80,7 +80,7 @@
     <string name="unlock_coupon">%s換領此優惠券</string>
     <string name="redeem_coupon">兌換此優惠</string>
     <string name="redeem_in">"兌換時間剩 "</string>
-    <string name="purchase_date">你於%s領取此優惠券</string>
+    <string name="purchase_date">你於 %s 領取此優惠券</string>
     <string name="purchase_id_message">優惠券ID #%s</string>
     <string name="coupon_not_available">此優惠券已不能換領</string>
     <string name="share_to">分享到...</string>
@@ -98,6 +98,8 @@
     <string name="current_credit">現有Credit: %s</string>
     <string name="mickle_credit_text">Mickle Credit</string>
     <string name="review_order">預覽你的訂購</string>
+    <string name="add">新增</string>
+    <string name="no_payment_message">請新增付款方式以進行購買</string>
     <string name="confirm_purchase">確認購買</string>
     <string name="no_charge_msg">不收取費用!</string>
     <string name="agreeTermsWhenPurchase">通過確認購買,本人同意 MickleDeals</string>
@@ -147,7 +149,6 @@
     <string name="your_mickle_credit">你現有的 Mickle Credit: %s</string>
     <string name="save_payment_hint">新增付款方式以獲得 $5 Mickle Credit</string>
     <string name="no_payment_msg">你還未有任何付款方式，請用以下方法新增</string>
-    <string name="add">新增</string>
     <string name="get_more_credit">如何獲得更多 Mickle Credit?</string>
     <string name="get_more_credit_dialog_title">如何獲得更多 Mickle Credit</string>
     <string name="secure_transmitted_msg">所有資料都安全經用PayPal連接傳輸</string>

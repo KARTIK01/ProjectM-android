@@ -28,10 +28,6 @@ public class ChangePasswordActivity extends DialogSwipeDismissActivity {
         mOldPassword = (EditText) findViewById(R.id.oldPassword);
         mNewPassword = (EditText) findViewById(R.id.newPassword);
         mConfirmNewPassword = (EditText) findViewById(R.id.confirmNewPassword);
-
-        mProgressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.white),
-                android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override

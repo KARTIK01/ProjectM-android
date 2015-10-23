@@ -26,11 +26,9 @@ public class ConfirmRedeemDialogActivity extends DialogSwipeDismissActivity {
 
     public void redeemNowClick(View v) {
 
-        Intent i = new Intent(ConfirmRedeemDialogActivity.this, RedeemDialogActivity.class);
-        i.putExtra("storeName", getIntent().getStringExtra("storeName"));
-        i.putExtra("couponDesc", getIntent().getStringExtra("couponDesc"));
-        i.putExtra("id", getIntent().getIntExtra("id", 0));
-
+        Intent i = new Intent();
+        i.putExtra("couponId", getIntent().getIntExtra("couponId", 0));
+        //send result back to coupon fragment
         setResult(Activity.RESULT_OK, i);
         finish();
     }

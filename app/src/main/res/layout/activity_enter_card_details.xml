@@ -71,7 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/credit_card_number"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="0dp"
                     android:maxLength="23"
                     android:inputType="phone" />
 
@@ -162,7 +162,13 @@
                     android:textAllCaps="true"
                     android:background="?android:attr/selectableItemBackground" />
 
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
                 <TextView
+                    android:id="@+id/saveText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
@@ -177,6 +183,22 @@
                     android:textSize="16sp"
                     android:textAllCaps="true"
                     android:background="@drawable/button_selector_bg" />
+
+
+                    <ProgressBar
+                        android:id="@+id/progressBarLoading"
+                        style="?android:attr/progressBarStyle"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/saveText"
+                        android:layout_alignTop="@id/saveText"
+                        android:layout_alignLeft="@id/saveText"
+                        android:layout_alignRight="@id/saveText"
+                        android:padding="8dp"
+                        android:background="@drawable/button_selector_bg" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 

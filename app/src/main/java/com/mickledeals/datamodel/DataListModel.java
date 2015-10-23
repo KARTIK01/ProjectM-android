@@ -47,6 +47,22 @@ public class DataListModel {
         init();
     }
 
+    public void clear() {
+        mCouponMap.clear();
+        mFeatureSliderCouponList.clear();
+        mNewAddedCouponList.clear();
+        mPopularList.clear();
+        mBestCouponList.clear();
+        mNearbyList.clear();
+        mSavedList.clear();
+        mBoughtList.clear();
+        mMoreCouponsList.clear();
+        mSearchResultList.clear();
+        mPaymentList.clear();
+        mMickleCredit = 0;
+        mUpdatedPayment = false;
+    }
+
     private void init() {
 //        initTestData();
 //        initFeatureSliderCoupon();

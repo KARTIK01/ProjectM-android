@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
@@ -14,8 +15,6 @@ import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.Utils;
 
 import org.json.JSONObject;
-
-import io.card.payment.CardType;
 
 /**
  * Created by Nicky on 5/17/2015.
@@ -31,9 +30,12 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     private TextView mCurrentCredit;
     private TextView mTotalPrice;
     private ImageView mCreditCardIcon;
+    private TextView mPaymentDisplay;
+    private TextView mAdd;
     private View mPaymentRow;
     private View mTotalPriceProgress;
     private View mMickleCreditProgress;
+    private View mPaymentProgress;
     private TextView mNoChargeMsg;
 
     private CouponInfo mCouponInfo;
@@ -52,23 +54,21 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
         mTotalPrice = (TextView) findViewById(R.id.totalPrice);
         mNoChargeMsg = (TextView) findViewById(R.id.noChargeMsg);
         mCreditCardIcon = (ImageView) findViewById(R.id.creditCardIcon);
+        mPaymentDisplay = (TextView) findViewById(R.id.paymentMethod);
+        mAdd = (TextView) findViewById(R.id.add);
         mTotalPriceProgress = findViewById(R.id.totalPriceProgress);
         mMickleCreditProgress = findViewById(R.id.mickleCreditProgress);
+        mPaymentProgress = findViewById(R.id.paymentProgress);
         mPaymentRow = findViewById(R.id.paymentRow);
 
         //just to optimize UI when loading
-        mPaymentRow.setVisibility(DataListModel.getInstance().getMickleCredits() == 0? View.VISIBLE : View.GONE);
+        mPaymentRow.setVisibility(DataListModel.getInstance().getMickleCredits() == 0 ? View.VISIBLE : View.GONE);
 
-        mCreditCardIcon.setImageBitmap(CardType.VISA.imageBitmap(this));
 
         mCouponInfo = DataListModel.getInstance().getCouponMap().get(getIntent().getIntExtra("couponId", 0));
         mStoreName.setText(mCouponInfo.mBusinessInfo.getStoreName());
         mCouponDescription.setText(mCouponInfo.getDescription());
         mCouponPrice.setText(Utils.formatPrice(mCouponInfo.mPrice));
-
-        mProgressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.white),
-                android.graphics.PorterDuff.Mode.SRC_IN);
 
         MDApiManager.reviewOrder(mCouponInfo.mId, new MDReponseListenerImpl<JSONObject>() {
 
@@ -77,6 +77,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 super.onMDSuccessResponse(object);
                 mTotalPriceProgress.setVisibility(View.GONE);
                 mMickleCreditProgress.setVisibility(View.GONE);
+                mPaymentProgress.setVisibility(View.GONE);
 
                 double currentCredit = JSONHelper.getDouble(object, "currentCredit");
                 double totalPrice = JSONHelper.getDouble(object, "totalPrice");
@@ -89,6 +90,18 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 mMickleCredit.setText("- " + Utils.formatPrice(useCredit));
                 mTotalPrice.setText(Utils.formatPrice(totalPrice));
                 mCurrentCredit.setText(getString(R.string.current_credit, Utils.formatPrice(currentCredit)));
+
+                boolean noPayment = true;
+                if (noPayment) {
+                    mAdd.setVisibility(View.VISIBLE);
+                } else {
+                    mCreditCardIcon.setVisibility(View.VISIBLE);
+                    mCreditCardIcon.setImageBitmap(null);
+                    mPaymentDisplay.setVisibility(View.VISIBLE);
+                    mPaymentDisplay.setText("");
+                }
+
+
             }
         });
     }
@@ -99,8 +112,13 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     }
 
     public void confirmClick(View v) {
-        mProgressBar.setVisibility(View.VISIBLE);
         int paymentId = 0;
+        if (mPaymentRow.isShown() && paymentId == 0) {
+            Toast.makeText(this, R.string.no_payment_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mProgressBar.setVisibility(View.VISIBLE);
         MDApiManager.purchaseCoupon(mCouponInfo.mId, paymentId, new MDReponseListenerImpl<JSONObject>() {
 
             @Override
@@ -158,5 +176,20 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     @Override
     protected int getLayoutResource() {
         return R.layout.buy_dialog;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PAYMENT_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                mAdd.setVisibility(View.GONE);
+                mCreditCardIcon.setVisibility(View.VISIBLE);
+                mCreditCardIcon.setImageBitmap(null);
+                mPaymentDisplay.setVisibility(View.VISIBLE);
+                mPaymentDisplay.setText("");
+            }
+        }
     }
 }
