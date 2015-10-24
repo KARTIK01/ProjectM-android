@@ -15,10 +15,11 @@ public class PaymentInfo {
     public CardType mCardType;
     public String mPaypalAccount = "";
     public String mLastFourDigits = "";
-    public boolean mUsing;
+    public boolean mPrimary;
 
     public PaymentInfo(JSONObject jsonObject) {
         mPaymentId = JSONHelper.getInteger(jsonObject, "id");
+        mPrimary = JSONHelper.getBoolean(jsonObject, "primaryPayment");
         mPaypalAccount = JSONHelper.getString(jsonObject, "payPalAccount");
         mLastFourDigits = JSONHelper.getString(jsonObject, "creditCardNumber");
         mCardType = CardType.fromString(JSONHelper.getString(jsonObject, "creditCardType"));

@@ -138,7 +138,7 @@ public class MyCouponsFragment extends ListBaseFragment {
             if (requestCode == REQUEST_CODE_REDEEM) {
                 //put available coupon to used coupon after redeem
                 int couponId = data.getIntExtra("couponId", 0);
-                mAvailableList.remove(couponId);
+                mAvailableList.remove((Integer)couponId);
                 mUsedList.add(0, couponId);
                 CouponInfo holder = DataListModel.getInstance().getCouponMap().get(couponId);
                 //add used time using current time

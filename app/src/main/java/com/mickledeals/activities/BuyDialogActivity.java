@@ -10,11 +10,18 @@ import android.widget.Toast;
 import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.datamodel.PaymentInfo;
+import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
+import com.mickledeals.utils.PaymentHelper;
 import com.mickledeals.utils.Utils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Nicky on 5/17/2015.
@@ -39,6 +46,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     private TextView mNoChargeMsg;
 
     private CouponInfo mCouponInfo;
+    private PaymentInfo mPaymentInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 mPaymentProgress.setVisibility(View.GONE);
 
                 double currentCredit = JSONHelper.getDouble(object, "currentCredit");
+                DataListModel.getInstance().setMickleCredit(currentCredit);
                 double totalPrice = JSONHelper.getDouble(object, "totalPrice");
                 double useCredit = JSONHelper.getDouble(object, "useCredit");
                 if (totalPrice > 0) {
@@ -91,19 +100,47 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 mTotalPrice.setText(Utils.formatPrice(totalPrice));
                 mCurrentCredit.setText(getString(R.string.current_credit, Utils.formatPrice(currentCredit)));
 
-                boolean noPayment = true;
-                if (noPayment) {
-                    mAdd.setVisibility(View.VISIBLE);
-                } else {
-                    mCreditCardIcon.setVisibility(View.VISIBLE);
-                    mCreditCardIcon.setImageBitmap(null);
-                    mPaymentDisplay.setVisibility(View.VISIBLE);
-                    mPaymentDisplay.setText("");
+                JSONArray paymentArray = JSONHelper.getJSONArray(object, "payment");
+                List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
+                list.clear();
+                for (int i = 0; i < paymentArray.length(); i++) {
+                    try {
+                        JSONObject jsonobject = paymentArray.getJSONObject(i);
+                        PaymentInfo info = new PaymentInfo(jsonobject);
+                        list.add(info);
+                    } catch (JSONException e) {
+                        DLog.e(MDApiManager.class, e.toString());
+                    }
                 }
-
-
+                DataListModel.getInstance().mUpdatedPayment = true;
+                updatePaymentInfo();
             }
         });
+    }
+
+    private void updatePaymentInfo() {
+
+        List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
+        boolean noPayment = list.size() == 0;
+        if (noPayment) {
+            mAdd.setVisibility(View.VISIBLE);
+        } else {
+            for (PaymentInfo info: list) {
+                if (info.mPrimary) {
+                    mPaymentInfo = info;
+                    break;
+                }
+            }
+            if (!mPaymentInfo.mPaypalAccount.equals("")) {
+                mCreditCardIcon.setImageResource(R.drawable.ic_paypal_card);
+//                mPaymentDisplay.setText(mPaymentInfo.mPaypalAccount);
+            } else {
+                PaymentHelper.setCardIcon(mCreditCardIcon, mPaymentInfo.mCardType);
+                mPaymentDisplay.setText(mPaymentInfo.mLastFourDigits);
+            }
+            mCreditCardIcon.setVisibility(View.VISIBLE);
+            mPaymentDisplay.setVisibility(View.VISIBLE);
+        }
     }
 
     public void paymentMethodClick(View v) {
@@ -112,14 +149,13 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     }
 
     public void confirmClick(View v) {
-        int paymentId = 0;
-        if (mPaymentRow.isShown() && paymentId == 0) {
+        if (mPaymentRow.isShown() && mPaymentInfo.mPaymentId == 0) {
             Toast.makeText(this, R.string.no_payment_message, Toast.LENGTH_SHORT).show();
             return;
         }
 
         mProgressBar.setVisibility(View.VISIBLE);
-        MDApiManager.purchaseCoupon(mCouponInfo.mId, paymentId, new MDReponseListenerImpl<JSONObject>() {
+        MDApiManager.purchaseCoupon(mCouponInfo.mId, mPaymentInfo.mPaymentId, new MDReponseListenerImpl<JSONObject>() {
 
             @Override
             public void onMDSuccessResponse(JSONObject object) {
@@ -138,14 +174,6 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
 
             @Override
             public void onMDErrorResponse(String errorMessage) {
-
-
-//                //temp
-//                Intent i = new Intent();
-//                i.putExtra("pay", true);
-////                i.putExtra("remainingTime", "");
-//                setResult(RESULT_OK, i);
-//                finish();
 
                 if (errorMessage != null) {
                     if (errorMessage.equals("COUPON_NOT_AVAILABLE_FOR_USER")) {
@@ -182,14 +210,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_PAYMENT_CODE) {
-            if (resultCode == RESULT_OK) {
-
-                mAdd.setVisibility(View.GONE);
-                mCreditCardIcon.setVisibility(View.VISIBLE);
-                mCreditCardIcon.setImageBitmap(null);
-                mPaymentDisplay.setVisibility(View.VISIBLE);
-                mPaymentDisplay.setText("");
-            }
+            updatePaymentInfo();
         }
     }
 }

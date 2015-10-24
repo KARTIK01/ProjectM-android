@@ -27,7 +27,7 @@ import com.paypal.android.sdk.payments.PayPalOAuthScopes;
 import com.paypal.android.sdk.payments.PayPalProfileSharingActivity;
 import com.paypal.android.sdk.payments.PayPalService;
 
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -44,19 +44,20 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
     private static PayPalConfiguration config = new PayPalConfiguration()
             .environment(CONFIG_ENVIRONMENT)
             .clientId(CONFIG_CLIENT_ID)
-            // The following are only used in PayPalFuturePaymentActivity.
+                    // The following are only used in PayPalFuturePaymentActivity.
             .merchantName("MickleDeals")
             .merchantPrivacyPolicyUri(Uri.parse("http://www.mickledeals.com/privacy"))
-                    .merchantUserAgreementUri(Uri.parse("http://www.mickledeals.com/terms"));
+            .merchantUserAgreementUri(Uri.parse("http://www.mickledeals.com/terms"));
     private static final int REQUEST_CODE_PROFILE_SHARING = 1;
+    private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_ADD_CARD = 10;
 
     private View mNoPaymentMessage;
     private TextView mCredit;
     private LinearLayout mSavedMethodLayout;
     private List<PaymentInfo> mPayments = DataListModel.getInstance().getPaymentList();
-    private int mUsingMethodId = 1;
-    private int mSelectedPaymentRowIndex = -1;
+    private int mSelectedPaymentPos = -1;
+    private PaymentInfo mSelectedPaymentInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
         mSavedMethodLayout.removeAllViews();
         for (int i = 0; i < mPayments.size(); i++) {
             PaymentInfo paymentMethod = mPayments.get(i);
-            mSavedMethodLayout.addView(inflateSaveMethodRow(paymentMethod));
+            mSavedMethodLayout.addView(inflateSaveMethodRow(i, paymentMethod));
         }
         if (mPayments.size() == 0) {
             mNoPaymentMessage.setVisibility(View.VISIBLE);
@@ -126,10 +127,11 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
         }
     }
 
-    private View inflateSaveMethodRow(PaymentInfo paymentMethod) {
+    private View inflateSaveMethodRow(final int pos, PaymentInfo paymentMethod) {
         final ViewGroup paymentRow = (ViewGroup) getLayoutInflater().inflate(R.layout.saved_payment_methods_row, null);
         ImageView paymentImage = (ImageView) paymentRow.findViewById(R.id.payment_image);
         TextView paymentText = (TextView) paymentRow.findViewById(R.id.payment_text);
+        View check = paymentRow.findViewById(R.id.payment_check);
         if (!paymentMethod.mPaypalAccount.equals("")) {
             paymentImage.setImageResource(R.drawable.ic_paypal_card);
             paymentText.setText(paymentMethod.mPaypalAccount);
@@ -137,35 +139,46 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             PaymentHelper.setCardIcon(paymentImage, paymentMethod.mCardType);
             paymentText.setText(paymentMethod.mCardType.name + "-" + paymentMethod.mLastFourDigits);
         }
+        if (paymentMethod.mPrimary) {
+            mSelectedPaymentPos = pos;
+            mSelectedPaymentInfo = paymentMethod;
+            check.setVisibility(View.VISIBLE);
+        } else {
+            check.setVisibility(View.GONE);
+        }
         paymentRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectPaymentMethod(mSavedMethodLayout.indexOfChild(v), true);
+                selectPaymentMethod(pos, true);
             }
         });
         return paymentRow;
     }
 
-    private void selectPaymentMethod(int index, boolean anim) {
-        if (mSelectedPaymentRowIndex == index) return;
+    private void selectPaymentMethod(int pos, boolean anim) {
+        if (mSelectedPaymentPos == pos) return;
 
         //get payment id and send to server
+        MDApiManager.setPrimaryPayment(mPayments.get(pos).mPaymentId);
 
-        if (mSelectedPaymentRowIndex != -1) {
-            View v = mSavedMethodLayout.getChildAt(mSelectedPaymentRowIndex);
+        if (mSelectedPaymentPos != -1) {
+            View v = mSavedMethodLayout.getChildAt(mSelectedPaymentPos);
             View check = v.findViewById(R.id.payment_check);
             check.setVisibility(View.GONE);
+            mSelectedPaymentInfo.mPrimary = false;
         }
 
-        View v = mSavedMethodLayout.getChildAt(index);
+        View v = mSavedMethodLayout.getChildAt(pos);
         View check = v.findViewById(R.id.payment_check);
         check.setVisibility(View.VISIBLE);
+        mSelectedPaymentInfo = mPayments.get(pos);
+        mSelectedPaymentInfo.mPrimary = true;
         if (anim) {
             ScaleAnimation animation = new ScaleAnimation(0, 1, 0, 1, check.getWidth() / 2, check.getHeight() / 2);
             animation.setDuration(200);
             check.startAnimation(animation);
         }
-        mSelectedPaymentRowIndex = index;
+        mSelectedPaymentPos = pos;
     }
 
     private PayPalOAuthScopes getOauthScopes() {
@@ -174,10 +187,9 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
          * attributes you select for this app in the PayPal developer portal and the scopes required here.
          */
         Set<String> scopes = new HashSet<String>(
-                Arrays.asList(PayPalOAuthScopes.PAYPAL_SCOPE_EMAIL) );
+                Arrays.asList(PayPalOAuthScopes.PAYPAL_SCOPE_EMAIL));
         return new PayPalOAuthScopes(scopes);
     }
-
 
 
     @Override
@@ -186,21 +198,12 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             if (resultCode == Activity.RESULT_OK) {
                 PayPalAuthorization auth =
                         data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
-                PayPalOAuthScopes scopes =
-                        data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_REQUESTED_SCOPES);
+//                PayPalOAuthScopes scopes =
+//                        data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_REQUESTED_SCOPES);
 
                 if (auth != null) {
-                    try {
-                        Log.i("PaymentActivity", auth.toJSONObject().toString(4));
-
-                        String authorization_code = auth.getAuthorizationCode();
-                        Log.i("PaymentActivity", authorization_code);
-
-                        sendAuthorizationToServer(auth);
-
-                    } catch (JSONException e) {
-                        Log.e("PaymentActivity", "an extremely unlikely failure occurred: ", e);
-                    }
+                    String authorization_code = auth.getAuthorizationCode();
+                    sendAuthorizationToServer(authorization_code);
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.i("PaymentActivity", "The user canceled.");
@@ -211,13 +214,22 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             }
         } else if (requestCode == REQUEST_CODE_ADD_CARD) {
             if (resultCode == Activity.RESULT_OK) {
+                mSelectedPaymentInfo.mPrimary = false;
                 addSavedMethodsToView();
             }
         }
     }
 
-    private void sendAuthorizationToServer(PayPalAuthorization authorization) {
-        //send auto code and return email address
+    private void sendAuthorizationToServer(String authorizationCode) {
+        MDApiManager.addPayPalPayments(PayPalConfiguration.getApplicationCorrelationId(this), authorizationCode, new MDReponseListenerImpl<JSONObject>() {
+
+            @Override
+            public void onMDSuccessResponse(JSONObject object) {
+                super.onMDSuccessResponse(object);
+                mSelectedPaymentInfo.mPrimary = false;
+                addSavedMethodsToView();
+            }
+        });
     }
 
     @Override

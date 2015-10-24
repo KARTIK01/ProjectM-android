@@ -13,6 +13,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.fragments.MyCouponsFragment;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.Utils;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class MyCouponsAdapter extends CardAdapter {
             super(v);
             mCardButton = (TextView) v.findViewById(R.id.card_button);
             mCardExpiredDate = (TextView) v.findViewById(R.id.card_expired_date);
-            mCardDealEnded = (TextView) v.findViewById(R.id.card_deal_ended);
+//            mCardDealEnded = (TextView) v.findViewById(R.id.card_deal_ended);
         }
     }
 
@@ -124,18 +125,19 @@ public class MyCouponsAdapter extends CardAdapter {
                 }
             });
 
-            if (dataHolder.mStatus == Constants.COUPON_STATUS_BOUGHT) {
-                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
+            if (dataHolder.mRedeemable) {
+                String expiredDate = vh.mCardExpiredDate.getResources().getString(R.string.expired_on, Utils.formatShortDate(dataHolder.mLastRedemptionDate));
+                vh.mCardExpiredDate.setText(expiredDate);
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
-                vh.mCardDealEnded.setVisibility(View.GONE);
+//                vh.mCardDealEnded.setVisibility(View.GONE);
                 vh.mCardButton.setVisibility(View.VISIBLE);
             } else if (dataHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
-                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
-                vh.mCardDealEnded.setVisibility(View.VISIBLE);
+//                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
+//                vh.mCardDealEnded.setVisibility(View.VISIBLE);
                 vh.mCardButton.setVisibility(View.GONE);
             } else {
-                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
-                vh.mCardDealEnded.setVisibility(View.GONE);
+//                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
+//                vh.mCardDealEnded.setVisibility(View.GONE);
                 vh.mCardButton.setVisibility(View.GONE);
             }
         }

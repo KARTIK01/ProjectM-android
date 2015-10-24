@@ -527,26 +527,22 @@ public class MDApiManager {
         });
     }
 
-    //no response
     public static void getPayments(final MDResponseListener<Void> listener) {
         String url = "http://www.mickledeals.com/api/userses/getPayments";
         JSONObject body = new JSONObject();
-        sendJSONArrayRequest(url, body, new Response.Listener<JSONArray>() {
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
+            public void onResponse(JSONObject response) {
+                double credit = JSONHelper.getDouble(response, "mickleCredit");
+                DataListModel.getInstance().setMickleCredit(credit);
+                JSONArray paymentArray = JSONHelper.getJSONArray(response, "payment");
                 List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
                 list.clear();
-                for (int i = 0; i < response.length(); i++) {
+                for (int i = 0; i < paymentArray.length(); i++) {
                     try {
-                        JSONObject jsonobject = response.getJSONObject(i);
+                        JSONObject jsonobject = paymentArray.getJSONObject(i);
                         PaymentInfo info = new PaymentInfo(jsonobject);
                         list.add(info);
-                        //get credit
-                        double credit = 0;
-                        JSONObject userObject = JSONHelper.getJSONObject(jsonobject, "users");
-                        if (userObject != null)
-                            credit = JSONHelper.getDouble(userObject, "mickleCredit");
-                        DataListModel.getInstance().setMickleCredit(credit);
                     } catch (JSONException e) {
                         DLog.e(MDApiManager.class, e.toString());
                     }
@@ -582,7 +578,6 @@ public class MDApiManager {
             @Override
             public void onResponse(JSONObject response) {
 
-
                 String errorMessage = JSONHelper.getString(response, "ERROR");
                 if (!TextUtils.isEmpty(errorMessage)) {
                     listener.onMDErrorResponse(errorMessage);
@@ -592,7 +587,6 @@ public class MDApiManager {
                     list.add(0, info);
                     listener.onMDSuccessResponse(response);
                 }
-
 
                 listener.onMDSuccessResponse(null);
             }
@@ -605,6 +599,68 @@ public class MDApiManager {
                 } else {
                     listener.onMDNetworkErrorResponse(error.getMessage());
                 }
+            }
+        });
+    }
+
+    public static void addPayPalPayments(String correlationId, String authorizationCode, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/userses/addPayment";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("payPalAccount", "mickledealsus-buyer@gmail.com");
+            body.put("correlationId", correlationId);
+            body.put("authorizationCode", authorizationCode);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                DLog.e(MDApiManager.class, "response = " + response.toString());
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (!TextUtils.isEmpty(errorMessage)) {
+                    DLog.e(MDApiManager.class, "error Message = " + errorMessage);
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
+                    PaymentInfo info = new PaymentInfo(response);
+                    list.add(0, info);
+                    listener.onMDSuccessResponse(response);
+                }
+
+                listener.onMDSuccessResponse(null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                DLog.e(MDApiManager.class, error.getMessage());
+                if (error.getMessage().contains("JSONException")) {
+                    listener.onMDErrorResponse(error.getMessage());
+                } else {
+                    listener.onMDNetworkErrorResponse(error.getMessage());
+                }
+            }
+        });
+    }
+
+    //no response
+    public static void setPrimaryPayment(int paymentId) {
+        String url = "http://www.mickledeals.com/api/userses/setPrimaryPayment";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("paymentId", paymentId);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                DLog.e(MDApiManager.class, error.getMessage());
             }
         });
     }

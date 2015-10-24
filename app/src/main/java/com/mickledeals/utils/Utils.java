@@ -374,5 +374,10 @@ public class Utils {
         return format.format(new Date(timeStamp));
     }
 
+    public static String formatShortDate(long timeStamp) {
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yy");
+        return format.format(new Date(timeStamp));
+    }
+
 
 }

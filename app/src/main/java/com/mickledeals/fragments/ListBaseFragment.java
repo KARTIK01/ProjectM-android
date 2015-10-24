@@ -75,6 +75,12 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
                     mAdapter.notifyItemInserted(mDataList.size());
 
                 }
+
+                @Override
+                public boolean ignoreRemainder() {
+                    //my coupon fragment cannot use the remainder logic
+                    return ListBaseFragment.this instanceof MyCouponsFragment ? true : false;
+                }
             });
         }
 

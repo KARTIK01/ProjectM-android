@@ -62,6 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="-4dp"
+                    android:layout_marginTop="6dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"
                     android:src="@drawable/ic_empty_card" />
@@ -153,6 +154,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/themeTextColor"
                     android:text="@string/cancel"
+                    android:fontFamily="sans-serif-medium"
                     android:layout_marginRight="6dp"
                     android:onClick="cancelBtnClick"
                     android:clickable="true"

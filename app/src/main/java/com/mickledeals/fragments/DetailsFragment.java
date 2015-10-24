@@ -414,7 +414,7 @@ public class DetailsFragment extends BaseFragment {
         String expiredStr = null;
         if (mHolder.mExpiredDate != 0) {
             expiredStr = getString(R.string.expired_date, Utils.formatDate(mHolder.mExpiredDate)); //need format
-        } else if (mHolder.mLastRedemptionDate != 0) {
+        } else if (mHolder.mLastRedemptionDate != 0 && mHolder.mRedeemable) {
             expiredStr = getString(R.string.expired_date, Utils.formatDate(mHolder.mLastRedemptionDate)); //need format
         } else if (!mHolder.mExpiredDays.isEmpty()) {
             expiredStr = getString(R.string.expired_in_days, mHolder.mExpiredDays);

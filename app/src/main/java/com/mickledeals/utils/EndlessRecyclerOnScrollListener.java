@@ -41,7 +41,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 //                "firstVisibleItem = " + firstVisibleItem + "visibleThreshold = " + visibleThreshold);
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 
-            if (totalItemCount % MDApiManager.PAGE_SIZE != 0) {
+            if (totalItemCount % MDApiManager.PAGE_SIZE != 0 && ignoreRemainder()) {
                 //just optimization: if there is remainder, that means it is the end already
                 return;
             }
@@ -55,4 +55,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     }
 
     public abstract void onLoadMore();
+
+    public abstract boolean ignoreRemainder();
 }

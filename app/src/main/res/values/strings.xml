@@ -59,7 +59,8 @@
     <string name="available">Available</string>
     <string name="expired">Expired</string>
     <string name="used">Used</string>
-    <string name="expired_on">Expired on %s</string>
+    <string name="expired_on">Expires %s</string>
+    <string name="used_on">Used on %s</string>
     <string name="buy_again">Buy again</string>
     <string name="redeem">REDEEM</string>
     <string name="deal_ended">Deal Ended</string>
@@ -282,8 +283,6 @@
     <string name="center_dot_symbol">" • "</string>
 
     <!-- Temp -->
-    <string name="expire_date">Expires 08/27/15</string>
-    <string name="used_date">Used on 06/14/15</string>
     <string name="bought_date">You bought this coupon on 05/30/15 for %s</string>
     <string name="obtain_date">You got this coupon on 05/30/15 for Free</string>
     <string name="fine_print_description">Promotional value expires 120 days after purchase. Amount paid never expires. Limit 1 per person, may buy 3 additional as gifts. Limit 2 per visit. Valid only for option purchased. Pre-order required at least 48 hours in advance; subject to availability. Valid for in-store purchases only. Valid toward any assorted flavors. Excludes gluten-free cupcakes. Must use promotional value in 1 visit. Merchant is solely responsible to purchasers for the care and quality of the advertised goods and services.</string>
