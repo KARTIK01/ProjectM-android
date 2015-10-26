@@ -212,7 +212,11 @@ public abstract class BaseActivity extends ActionBarActivity {
 
         @Override
         public void onMDNetworkErrorResponse(String errorMessage) {
-            Utils.showNetworkErrorDialog(BaseActivity.this);
+            if (errorMessage.equals("timeout")) {
+                Utils.showNetworkTimeOutDialog(BaseActivity.this);
+            } else {
+                Utils.showNetworkErrorDialog(BaseActivity.this);
+            }
             if (mProgressDialog != null) mProgressDialog.dismiss();
             if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
         }

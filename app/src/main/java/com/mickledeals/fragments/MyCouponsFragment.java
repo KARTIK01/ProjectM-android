@@ -38,6 +38,8 @@ public class MyCouponsFragment extends ListBaseFragment {
     private List<Integer> mExpiredList;
     private List<Integer> mUsedList;
 
+//    private List<Long> mR
+
     private TextView mNoCouponText;
 
     @Override

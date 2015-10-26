@@ -3,14 +3,13 @@ package com.mickledeals.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.mickledeals.R;
 
 /**
  * Created by Nicky on 12/11/2014.
  */
-public class AspectRatioImageView extends ImageView {
+public class AspectRatioImageView extends com.android.volley.toolbox.NetworkImageView {
 
     private float mRatio = 9f / 14;//0.6428
 

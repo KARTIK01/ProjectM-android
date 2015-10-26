@@ -206,7 +206,7 @@
     <!-- Error Response -->
     <string name="response_error_title">錯誤</string>
     <string name="response_error_message_unknown">從伺服器擷取資訊時發生錯誤。請稍後再試。</string>
-
+    <string name="response_error_timeout">你的連接太慢以致超時。請再試。</string>
     <string name="purhcase_error_not_available">抱歉, 此優惠券已不能換領</string>
     <string name="network_error_title">連線失敗</string>
     <string name="network_error_msg">連接不到伺服器, 請檢查網絡後再重試 </string>

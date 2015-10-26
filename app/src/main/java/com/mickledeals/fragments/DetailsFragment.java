@@ -16,9 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -27,7 +25,6 @@ import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.activities.DetailsActivity;
-import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.activities.SuccessDialogActivity;
@@ -41,6 +38,7 @@ import com.mickledeals.utils.MDConnectManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
+import com.mickledeals.views.AspectRatioImageView;
 import com.mickledeals.views.NotifyingScrollView;
 
 import org.json.JSONObject;
@@ -61,7 +59,7 @@ public class DetailsFragment extends BaseFragment {
     private TextView mBusinessName;
     private TextView mDescription;
     private TextView mPrice;
-    private ImageView mImageView;
+    private AspectRatioImageView mImageView;
     private View mBuyBtn;
     private TextView mBuyBtnText;
     private TextView mRedeemBtnText;
@@ -186,11 +184,16 @@ public class DetailsFragment extends BaseFragment {
         }
         ((TextView) view.findViewById(R.id.addressDist)).setText(addrShort);
 
-        mImageView = (ImageView) view.findViewById(R.id.imageView);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
-        params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
-        mImageView.setLayoutParams(params);
+        mImageView = (AspectRatioImageView) view.findViewById(R.id.imageView);
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
+//        params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
+//        mImageView.setLayoutParams(params);
+
+        mImageView.setImageUrl(mHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
 //        mImageView.setImageResource(mHolder.mImageResId);
+
+
+
         if (Build.VERSION.SDK_INT >= 21) {
             mImageView.setTransitionName("cardImage" + mHolder.mId);
             getActivity().startPostponedEnterTransition();
@@ -207,7 +210,7 @@ public class DetailsFragment extends BaseFragment {
 
                         if (mHolder.mPrice == 0) {
                             mProgressBar.setVisibility(View.VISIBLE);
-                            MDApiManager.purchaseCoupon(mHolder.mId, 0, new MDReponseListenerImpl<JSONObject>() {
+                            MDApiManager.purchaseCoupon(mHolder.mId, 0, null, new MDReponseListenerImpl<JSONObject>() {
 
                                 @Override
                                 public void onMDSuccessResponse(JSONObject object) {
@@ -316,18 +319,22 @@ public class DetailsFragment extends BaseFragment {
             }
         });
 
-        mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(mContext, BusinessPageActivity.class);
-                i.putExtra("businessInfo", mHolder.mBusinessInfo);
-                startActivity(i);
-            }
-        });
+        if (!getArguments().getBoolean("fromBusinessProfile")) {
+            mBusinessInfoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mContext, BusinessPageActivity.class);
+                    i.putExtra("businessInfo", mHolder.mBusinessInfo);
+                    startActivity(i);
+                }
+            });
+        } else {
+            mBusinessInfoBtn.setVisibility(View.INVISIBLE); //invisible instead of gone so that save button remain same size
+        }
 
         updateViewForStatus();
 
-        if (mHolder.mBusinessInfo.mCoupons.size() > 1) {
+        if (mHolder.mBusinessInfo.mCoupons.size() > 1 && !getArguments().getBoolean("fromOtherCoupon")) {
             view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
             mMoreCouponRow.setVisibility(View.VISIBLE);
             for (final CouponInfo info : mHolder.mBusinessInfo.mCoupons) {
@@ -338,6 +345,7 @@ public class DetailsFragment extends BaseFragment {
                 ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
                 TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
                 cardPrice.setText(info.getDisplayedPrice());
+                ((AspectRatioImageView) otherCoupon.findViewById(R.id.card_image)).setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
 
                 int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
                 int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);

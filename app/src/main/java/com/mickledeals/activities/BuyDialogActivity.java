@@ -16,6 +16,7 @@ import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.PaymentHelper;
 import com.mickledeals.utils.Utils;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,7 +120,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     }
 
     private void updatePaymentInfo() {
-
+        mPaymentInfo = null;
         List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
         boolean noPayment = list.size() == 0;
         if (noPayment) {
@@ -149,13 +150,17 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
     }
 
     public void confirmClick(View v) {
-        if (mPaymentRow.isShown() && mPaymentInfo.mPaymentId == 0) {
+        if (mPaymentRow.isShown() && mPaymentInfo == null) {
             Toast.makeText(this, R.string.no_payment_message, Toast.LENGTH_SHORT).show();
             return;
         }
 
         mProgressBar.setVisibility(View.VISIBLE);
-        MDApiManager.purchaseCoupon(mCouponInfo.mId, mPaymentInfo.mPaymentId, new MDReponseListenerImpl<JSONObject>() {
+        String clientMetadataId = null;
+        if (!mPaymentInfo.mPaypalAccount.isEmpty()) {
+            clientMetadataId = PayPalConfiguration.getClientMetadataId(this);
+        }
+        MDApiManager.purchaseCoupon(mCouponInfo.mId, mPaymentInfo == null ? 0 : mPaymentInfo.mPaymentId, clientMetadataId, new MDReponseListenerImpl<JSONObject>() {
 
             @Override
             public void onMDSuccessResponse(JSONObject object) {

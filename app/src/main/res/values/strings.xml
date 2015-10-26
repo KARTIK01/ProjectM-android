@@ -235,7 +235,7 @@
     <!-- Error Response -->
     <string name="response_error_title">Error</string>
     <string name="response_error_message_unknown">There is an unknown error when processing your request. Please try again later.</string>
-
+    <string name="response_error_timeout">Your connection is too slow that causes a timeout. Please try again.</string>
     <string name="purhcase_error_not_available">Sorry, this coupon is no longer available.</string>
     <string name="network_error_title">Connection Problem</string>
     <string name="network_error_msg">We could not connect to server at the moment. Please check your connection and try again. </string>

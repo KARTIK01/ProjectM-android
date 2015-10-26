@@ -71,7 +71,11 @@ public abstract class BaseFragment extends Fragment{
 
         @Override
         public void onMDNetworkErrorResponse(String errorMessage) {
-            Utils.showNetworkErrorDialog(mContext);
+            if (errorMessage.equals("timeout")) {
+                Utils.showNetworkTimeOutDialog(mContext);
+            } else {
+                Utils.showNetworkErrorDialog(mContext);
+            }
             if (mProgressDialog != null) mProgressDialog.dismiss();
             if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
         }

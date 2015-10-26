@@ -103,8 +103,8 @@ public class MyCouponsAdapter extends CardAdapter {
         } else {
             super.onBindViewHolder(holder, position);
 
-            position = convertListPosToDataPos(position);
-            final CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataset, position);
+            int newPos = convertListPosToDataPos(position);
+            final CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataset, newPos);
 
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
             vh.mCardButton.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +131,7 @@ public class MyCouponsAdapter extends CardAdapter {
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
 //                vh.mCardDealEnded.setVisibility(View.GONE);
                 vh.mCardButton.setVisibility(View.VISIBLE);
-            } else if (dataHolder.mStatus == Constants.COUPON_STATUS_EXPIRED) {
+            } else if (dataHolder.mStatus == Constants.MYCOUPON_USED) {
 //                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
 //                vh.mCardDealEnded.setVisibility(View.VISIBLE);
                 vh.mCardButton.setVisibility(View.GONE);
@@ -158,6 +158,11 @@ public class MyCouponsAdapter extends CardAdapter {
             return TYPE_HEADER;
 
         return super.getItemViewType(position);
+    }
+
+    private boolean isAvailable(int position) {
+//        if (position )
+        return false;
     }
 
     @Override

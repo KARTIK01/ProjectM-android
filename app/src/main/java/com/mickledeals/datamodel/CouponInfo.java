@@ -35,11 +35,10 @@ public class CouponInfo implements Serializable{
     public String mPurchaseId = "";
     public long mLastRedemptionDate;
     public long mPurchaseDate;
-    public long mRedemptionDate;
 
     public BusinessInfo mBusinessInfo;
 
-    public int mStatus = Constants.COUPON_STATUS_DEFAULT;
+    public int mStatus = Constants.MYCOUPON_AVAILABLE;
 
 
     public CouponInfo(JSONObject jsonobject) {
@@ -72,7 +71,6 @@ public class CouponInfo implements Serializable{
         mPurchaseId = JSONHelper.getString(jsonobject, "purchaseId");
         mLastRedemptionDate = JSONHelper.getLong(jsonobject, "lastRedemptionDate");
         mPurchaseDate = JSONHelper.getLong(jsonobject, "purchaseDate");
-        mRedemptionDate = JSONHelper.getLong(jsonobject, "redemptionDate");
     }
 
     public String getDescription() {

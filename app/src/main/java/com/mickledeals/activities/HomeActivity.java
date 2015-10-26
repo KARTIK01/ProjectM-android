@@ -132,8 +132,9 @@ public class HomeActivity extends BaseActivity
             }
         });
 
-
-        MDApiManager.getPayments(null);
+        if (MDLoginManager.isLogin()) {
+            MDApiManager.getPayments(null);
+        }
 
 //        String saveListStr = PreferenceHelper.getPreferenceValueStr(this, "saveList", "");
 //        if (!saveListStr.equals("")) {

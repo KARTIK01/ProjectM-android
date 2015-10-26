@@ -349,6 +349,20 @@ public class Utils {
         dialog.show();
     }
 
+    public static void showNetworkTimeOutDialog(Context context) {
+        AlertDialog dialog = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                .setTitle(R.string.network_error_title)
+                .setMessage(R.string.response_error_timeout)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
     public static void restartApp(Context context) {
         DataListModel.getInstance().clear();
         Intent i = new Intent(context, HomeActivity.class);

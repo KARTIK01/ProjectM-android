@@ -6,9 +6,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.mickledeals.R;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
@@ -67,8 +67,8 @@ public class FeatureSliderAdapter extends PagerAdapter implements
 
         ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
                 R.layout.fragment_feature_slide_page, null);
-        final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
-//        imageView.setImageResource(mList.get(position).mImageResId);
+        final NetworkImageView imageView = (NetworkImageView) rootView.findViewById(R.id.slider_image);
+//        imageView.setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
         TextView description = (TextView) rootView.findViewById(R.id.slider_text);
         description.setText(info.mBusinessInfo.getStoreName() + " - " + info.getDescription());
         rootView.setOnClickListener(new View.OnClickListener() {

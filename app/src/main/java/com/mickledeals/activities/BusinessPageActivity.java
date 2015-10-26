@@ -21,7 +21,9 @@ import com.mickledeals.datamodel.BusinessPhoto;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.Utils;
+import com.mickledeals.views.AspectRatioImageView;
 import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
 import com.mickledeals.views.RoundedImageView;
@@ -198,6 +200,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
                 ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
                 TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
                 cardPrice.setText(info.getDisplayedPrice());
+                ((AspectRatioImageView) otherCoupon.findViewById(R.id.card_image)).setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
 
                 int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
                 int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);
@@ -214,6 +217,8 @@ public class BusinessPageActivity extends SwipeDismissActivity {
                         DataListModel.getInstance().getMoreCouponsList().add(info.mId);
                         i.putExtra("listIndex", 0);
                         i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
+                        i.putExtra("fromOtherCoupon", true);
+                        i.putExtra("fromBusinessProfile", true);
                         startActivity(i);
                     }
                 });

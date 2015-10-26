@@ -3,7 +3,6 @@ package com.mickledeals.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
@@ -72,8 +71,6 @@ public class MDLoginManager {
 
     public static void logout(Context context) {
         LoginManager.getInstance().logOut();
-        if (AccessToken.getCurrentAccessToken() != null) Log.e("ZZZ", "not null");
-        else Log.e("ZZZ", "should be null now");
         setUserInfo(context, 0, null, null, null);
     }
 

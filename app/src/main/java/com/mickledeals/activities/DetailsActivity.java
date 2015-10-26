@@ -94,6 +94,7 @@ public class DetailsActivity extends SwipeDismissActivity  {
             Bundle bundle = new Bundle();
             bundle.putInt("couponId", mList.get(position));
             bundle.putBoolean("fromOtherCoupon", getIntent().getBooleanExtra("fromOtherCoupon", false));
+            bundle.putBoolean("fromBusinessProfile", getIntent().getBooleanExtra("fromBusinessProfile", false));
 //            bundle.putInt("position", position);
 //            bundle.putInt("listType", mListType);
             int stringRes = Utils.getStringResFromType(mListType);

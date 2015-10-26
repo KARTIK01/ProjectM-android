@@ -3,8 +3,9 @@ package com.mickledeals.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.text.TextUtils;
 import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.util.LruCache;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -46,11 +47,52 @@ public class MDApiManager {
 
     public static final int PAGE_SIZE = 14;
     private static RequestQueue sQueue;
-    private static ImageLoader mImageLoader;
+    public static ImageLoader sImageLoader;
     private static Context sContext = MDApplication.sAppContext;
 
     public static void initVolley() {
         sQueue = Volley.newRequestQueue(sContext);
+        sImageLoader = new ImageLoader(sQueue, new LruBitmapCache(
+                LruBitmapCache.getCacheSize(sContext)));
+    }
+
+    public static class LruBitmapCache extends LruCache<String, Bitmap>
+            implements ImageLoader.ImageCache {
+
+        public LruBitmapCache(int maxSize) {
+            super(maxSize);
+        }
+
+        public LruBitmapCache(Context ctx) {
+            this(getCacheSize(ctx));
+        }
+
+        @Override
+        protected int sizeOf(String key, Bitmap value) {
+            return value.getRowBytes() * value.getHeight();
+        }
+
+        @Override
+        public Bitmap getBitmap(String url) {
+            return get(url);
+        }
+
+        @Override
+        public void putBitmap(String url, Bitmap bitmap) {
+            put(url, bitmap);
+        }
+
+        // Returns a cache size equal to approximately three screens worth of images.
+        public static int getCacheSize(Context ctx) {
+            final DisplayMetrics displayMetrics = ctx.getResources().
+                    getDisplayMetrics();
+            final int screenWidth = displayMetrics.widthPixels;
+            final int screenHeight = displayMetrics.heightPixels;
+            // 4 bytes per pixel
+            final int screenBytes = screenWidth * screenHeight * 4;
+
+            return screenBytes * 3;
+        }
     }
 
     public static void sendStringRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
@@ -295,7 +337,7 @@ public class MDApiManager {
             public void onResponse(JSONObject response) {
 
                 String errorMessage = JSONHelper.getString(response, "ERROR");
-                if (!TextUtils.isEmpty(errorMessage)) {
+                if (response.has("ERROR")) {
                     listener.onMDErrorResponse(errorMessage);
                 } else {
                     int id = JSONHelper.getInteger(response, "id");
@@ -373,6 +415,7 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //check what error maybe....
                 listener.onMDSuccessResponse(null);
                 //always return error because no response received but try to convert to JSON
 //                        listener.onMDNetworkErrorResponse(error.getMessage());
@@ -381,6 +424,7 @@ public class MDApiManager {
         });
     }
 
+    //no response
     public static void changePassword(String email, String oldPassword, String newPassword, final MDResponseListener<Boolean> listener) {
         String url = "http://www.mickledeals.com/api/userses/resetPassword";
         JSONObject body = new JSONObject();
@@ -396,7 +440,7 @@ public class MDApiManager {
             public void onResponse(JSONObject response) {
 
                 String errorMessage = JSONHelper.getString(response, "ERROR");
-                if (!TextUtils.isEmpty(errorMessage)) {
+                if (response.has("ERROR")) {
                     listener.onMDErrorResponse(errorMessage);
                 } else {
                     listener.onMDSuccessResponse(null);
@@ -426,7 +470,7 @@ public class MDApiManager {
             public void onResponse(JSONObject response) {
 
                 String errorMessage = JSONHelper.getString(response, "ERROR");
-                if (!TextUtils.isEmpty(errorMessage)) {
+                if (response.has("ERROR")) {
                     listener.onMDErrorResponse(errorMessage);
                 } else {
                     listener.onMDSuccessResponse(response);
@@ -435,29 +479,29 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage());
-                listener.onMDNetworkErrorResponse(error.getMessage());
+                handleErrorResponse(error, listener);
             }
         });
     }
 
 
 
-    public static void purchaseCoupon(int couponId, int paymentId, final MDResponseListener<JSONObject> listener) {
+    public static void purchaseCoupon(int couponId, int paymentId, String clientMetadataId, final MDResponseListener<JSONObject> listener) {
         String url = "http://www.mickledeals.com/api/userses/purchaseCoupon";
         JSONObject body = new JSONObject();
         try {
             body.put("couponId", couponId);
-            if (paymentId != 0) body.put("paymentId", couponId);
+            if (paymentId != 0) body.put("paymentId", paymentId);
+            if (clientMetadataId != null) body.put("clientMetadataId", clientMetadataId);
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
         sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                DLog.e(MDApiManager.class, response.toString());
+                DLog.d(MDApiManager.class, response.toString() + "REALLY");
                 String errorMessage = JSONHelper.getString(response, "ERROR");
-                if (!TextUtils.isEmpty(errorMessage)) {
+                if (response.has("ERROR")) {
                     listener.onMDErrorResponse(errorMessage);
                 } else {
                     listener.onMDSuccessResponse(response);
@@ -466,12 +510,24 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage());
-//                listener.onMDNetworkErrorResponse(error.getMessage());
-                //temp
-                listener.onMDSuccessResponse(null);
+                handleErrorResponse(error, listener);
             }
         });
+    }
+
+    private static void handleErrorResponse(VolleyError error, final MDResponseListener<JSONObject> listener) {
+        if (listener == null) return;
+
+        if (error.getMessage() == null) {
+            listener.onMDNetworkErrorResponse("timeout");
+            return;
+        }
+        DLog.e(MDApiManager.class, error.getMessage());
+        if (error.getMessage().contains("JSONException")) {
+            listener.onMDErrorResponse(error.getMessage());
+        } else {
+            listener.onMDNetworkErrorResponse(error.getMessage());
+        }
     }
 
     public static void redeemCoupon(String purchaseId, final MDResponseListener<JSONObject> listener) {
@@ -486,7 +542,7 @@ public class MDApiManager {
             @Override
             public void onResponse(JSONObject response) {
 
-                DLog.e(MDApiManager.class, response.toString());
+                DLog.d(MDApiManager.class, response.toString());
 //                String errorMessage = JSONHelper.getString(response, "ERROR");
 //                if (!TextUtils.isEmpty(errorMessage)) {
 //                    listener.onMDErrorResponse(errorMessage);
@@ -579,7 +635,7 @@ public class MDApiManager {
             public void onResponse(JSONObject response) {
 
                 String errorMessage = JSONHelper.getString(response, "ERROR");
-                if (!TextUtils.isEmpty(errorMessage)) {
+                if (response.has("ERROR")) {
                     listener.onMDErrorResponse(errorMessage);
                 } else {
                     List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
@@ -607,7 +663,7 @@ public class MDApiManager {
         String url = "http://www.mickledeals.com/api/userses/addPayment";
         JSONObject body = new JSONObject();
         try {
-            body.put("payPalAccount", "mickledealsus-buyer@gmail.com");
+            body.put("payPalAccount", "");
             body.put("correlationId", correlationId);
             body.put("authorizationCode", authorizationCode);
         } catch (JSONException e) {
@@ -618,7 +674,7 @@ public class MDApiManager {
             public void onResponse(JSONObject response) {
                 DLog.e(MDApiManager.class, "response = " + response.toString());
                 String errorMessage = JSONHelper.getString(response, "ERROR");
-                if (!TextUtils.isEmpty(errorMessage)) {
+                if (response.has("ERROR")) {
                     DLog.e(MDApiManager.class, "error Message = " + errorMessage);
                     listener.onMDErrorResponse(errorMessage);
                 } else {
@@ -633,7 +689,7 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage());
+                DLog.e(MDApiManager.class, error.getMessage() + "");
                 if (error.getMessage().contains("JSONException")) {
                     listener.onMDErrorResponse(error.getMessage());
                 } else {

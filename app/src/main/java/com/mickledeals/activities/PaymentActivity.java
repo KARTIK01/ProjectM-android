@@ -165,7 +165,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             View v = mSavedMethodLayout.getChildAt(mSelectedPaymentPos);
             View check = v.findViewById(R.id.payment_check);
             check.setVisibility(View.GONE);
-            mSelectedPaymentInfo.mPrimary = false;
+            if (mSelectedPaymentInfo != null) mSelectedPaymentInfo.mPrimary = false;
         }
 
         View v = mSavedMethodLayout.getChildAt(pos);
@@ -214,7 +214,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             }
         } else if (requestCode == REQUEST_CODE_ADD_CARD) {
             if (resultCode == Activity.RESULT_OK) {
-                mSelectedPaymentInfo.mPrimary = false;
+                if (mSelectedPaymentInfo != null) mSelectedPaymentInfo.mPrimary = false;
                 addSavedMethodsToView();
             }
         }
@@ -226,7 +226,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
             @Override
             public void onMDSuccessResponse(JSONObject object) {
                 super.onMDSuccessResponse(object);
-                mSelectedPaymentInfo.mPrimary = false;
+                if (mSelectedPaymentInfo != null) mSelectedPaymentInfo.mPrimary = false;
                 addSavedMethodsToView();
             }
         });

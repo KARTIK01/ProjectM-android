@@ -112,6 +112,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     public void prepareSendRequest() {
         DLog.d(this, "prepareSendRequest");
 
+        if (mNoResultLayout != null) mNoResultLayout.setVisibility(View.GONE);
         if (mNoNetworkLayout != null) mNoNetworkLayout.setVisibility(View.GONE);
         if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.VISIBLE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
@@ -138,6 +139,9 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
 
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(false);
         if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
+        if (mDataList.size() == 0 && mNoResultLayout != null) {
+            mNoResultLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -193,7 +197,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -203,7 +207,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         //there is a bug when animating when notify dataset changed
         if (!mAdapter.isAnimating()) {
             DLog.d(this, "notifydatasetchanged");
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -173,8 +173,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         }
         DLog.d(this, "coupon id = " + dataHolder.mId + " coupon description = " + dataHolder.mDescription);
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
-//        if (holder.mCardImage != null)
-//            holder.mCardImage.setImageResource(dataHolder.mSmallImageResId);
+        if (holder.mCardImage != null) {
+            holder.mCardImage.setImageUrl(dataHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
+        }
 
 
         int sp17 = mFragmentActivity.getResources().getDimensionPixelSize(R.dimen.sp_17);

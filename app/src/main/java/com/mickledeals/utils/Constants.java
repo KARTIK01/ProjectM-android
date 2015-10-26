@@ -17,7 +17,7 @@ public interface Constants {
     public static final int LANG_CHT = 1;
     public static final int LANG_CHS = 2;
 
-    public static final int COUPON_STATUS_DEFAULT = 1;
-    public static final int COUPON_STATUS_BOUGHT = 2;
-    public static final int COUPON_STATUS_EXPIRED = 3;
+    public static final int MYCOUPON_AVAILABLE = 1;
+    public static final int MYCOUPON_EXPIRED = 2;
+    public static final int MYCOUPON_USED = 3;
 }
