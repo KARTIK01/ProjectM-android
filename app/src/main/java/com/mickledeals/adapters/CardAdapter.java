@@ -1,7 +1,8 @@
 package com.mickledeals.adapters;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -125,10 +126,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                     } else {
                         Log.e("ZZZ", "drawable not null");
                     }
-//                    mDummpyImageView.setImageDrawable(vh.mCardImage.getDrawable());
-                    mDummpyImageView.setImageResource(R.drawable.pic_1_s);
-                    mDummpyImageView.setBackgroundColor(Color.RED);
-                    mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    Bitmap bitmap = ((BitmapDrawable)vh.mCardImage.getDrawable()).getBitmap();
+                    mDummpyImageView.setImageBitmap(bitmap);
+//                    mDummpyImageView.setImageResource(R.drawable.pic_1_s);
+//                    mDummpyImageView.setBackgroundColor(Color.RED);
+//                    mDummpyImageView.setBackground(vh.mCardImage.getDrawable());
+//                    mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
                     vh.mCardBaseLayout.postDelayed(new Runnable() {
                         @Override

@@ -25,30 +25,7 @@
             android:layout_height="0dp"
             android:scaleType="centerCrop"/>
 
-        <TextView
-            android:id="@+id/card_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/card_image"
-            android:maxLines="1"
-            android:paddingRight="4dp"
-            android:paddingTop="2dp"
-            android:textColor="@color/themeTextColor"
-            android:textStyle="bold" />
 
-
-        <ImageView
-            android:id="@+id/card_save"
-            android:paddingRight="3dp"
-            android:paddingBottom="3dp"
-            android:paddingTop="8dp"
-            android:paddingLeft="8dp"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:background="?android:attr/selectableItemBackground"/>
 
 
         <TextView
@@ -56,21 +33,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/card_image"
-            android:layout_toLeftOf="@id/card_price"
             android:fontFamily="sans-serif-condensed"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="3"
             android:paddingLeft="4dp"
+            android:paddingRight="2dp"
             android:paddingTop="2dp"
             android:textColor="@color/defaultTextColor"
-            android:textSize="@dimen/sp_15" />
+            android:textSize="@dimen/sp_16" />
+
+
+        <TextView
+            android:id="@+id/card_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:maxLines="1"
+            android:layout_below="@id/card_description"
+            android:paddingRight="4dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/themeTextColor"
+            android:textStyle="bold" />
 
         <com.mickledeals.views.AutofitTextView
             android:id="@+id/card_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/card_description"
-            android:layout_toLeftOf="@id/card_save"
+            android:layout_toLeftOf="@id/card_price"
+            android:layout_alignBaseline="@id/card_price"
             android:ellipsize="marquee"
             android:paddingBottom="4dp"
             android:paddingLeft="4dp"
@@ -94,6 +85,20 @@
             android:paddingRight="2dp"
             android:paddingLeft="2dp"
             />
+
+
+
+        <ImageView
+            android:id="@+id/card_save"
+            android:paddingRight="3dp"
+            android:paddingBottom="3dp"
+            android:layout_above="@id/card_description"
+            android:paddingTop="8dp"
+            android:paddingLeft="8dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"/>
 
 
     </RelativeLayout>
