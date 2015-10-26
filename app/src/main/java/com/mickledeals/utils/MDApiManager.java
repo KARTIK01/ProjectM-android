@@ -91,7 +91,7 @@ public class MDApiManager {
             // 4 bytes per pixel
             final int screenBytes = screenWidth * screenHeight * 4;
 
-            return screenBytes * 3;
+            return screenBytes * 5;
         }
     }
 

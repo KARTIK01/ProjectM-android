@@ -4,6 +4,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.mickledeals.R;
 import com.mickledeals.adapters.FeaturedAdapter;
@@ -11,12 +12,15 @@ import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.MDApiManager;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Nicky on 11/28/2014.
  */
 public class FeaturedFragment extends ListBaseFragment {
+
+    private int mCompletedReponse = 0;
 
 
     public List<Integer> getDataList() {
@@ -50,14 +54,16 @@ public class FeaturedFragment extends ListBaseFragment {
 
     @Override
     public void sendRequest() {
+        mCompletedReponse = 0;
         MDApiManager.fetchTopFeatureList(new MDApiManager.MDResponseListener<List<Integer>>() {
             @Override
             public void onMDSuccessResponse(List<Integer> object) {
                 List<Integer> list = DataListModel.getInstance().getFeatureSliderCouponList();
                 list.clear();
                 list.addAll(object);
-                ((FeaturedAdapter)mAdapter).notifySlideFeatureDataSetChanged();
-                mAdapter.setPendingAnimated();
+                Collections.shuffle(list);
+                mCompletedReponse++;
+                notifyDataSetWhenCompleted();
             }
 
             @Override
@@ -74,8 +80,8 @@ public class FeaturedFragment extends ListBaseFragment {
                 List<Integer> list = DataListModel.getInstance().getNewAddedCouponList();
                 list.clear();
                 list.addAll(object);
-                ((FeaturedAdapter)mAdapter).notifyNewAddedCouponDataSetChanged();
-                mAdapter.setPendingAnimated();
+                mCompletedReponse++;
+                notifyDataSetWhenCompleted();
             }
 
             @Override
@@ -86,7 +92,37 @@ public class FeaturedFragment extends ListBaseFragment {
             public void onMDErrorResponse(String errorMessage) {
             }
         });
-        MDApiManager.fetchFeatureList(this);
+        MDApiManager.fetchFeatureList(new MDApiManager.MDResponseListener<List<Integer>>() {
+            @Override
+            public void onMDSuccessResponse(List<Integer> object) {
+                mDataList.clear();
+                mDataList.addAll(object);
+                Collections.shuffle(mDataList);
+                mCompletedReponse++;
+                notifyDataSetWhenCompleted();
+            }
+
+            @Override
+            public void onMDNetworkErrorResponse(String errorMessage) {
+                FeaturedFragment.super.onMDNetworkErrorResponse(errorMessage);
+            }
+
+            @Override
+            public void onMDErrorResponse(String errorMessage) {
+                FeaturedFragment.super.onMDErrorResponse(errorMessage);
+            }
+        });
+    }
+
+    private void notifyDataSetWhenCompleted() {
+        if (mCompletedReponse >= 3) {
+            ((FeaturedAdapter)mAdapter).notifySlideFeatureDataSetChanged();
+            ((FeaturedAdapter)mAdapter).notifyNewAddedCouponDataSetChanged();
+            mAdapter.notifyDataSetChanged();
+            mAdapter.setPendingAnimated();
+
+            if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.GONE);
+        }
     }
 
 

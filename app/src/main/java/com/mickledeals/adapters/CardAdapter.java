@@ -1,11 +1,13 @@
 package com.mickledeals.adapters;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,7 +120,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                     mDummpyImageView = new AspectRatioImageView(v.getContext());
                     mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
                     mDummpyImageView.setRatio(vh.mCardImage.getRatio());
-//                    mDummpyImageView.setImageResource(mDataset.get(pos).mSmallImageResId);
+                    if (vh.mCardImage.getDrawable() == null) {
+                        Log.e("ZZZ", "drawable null");
+                    } else {
+                        Log.e("ZZZ", "drawable not null");
+                    }
+//                    mDummpyImageView.setImageDrawable(vh.mCardImage.getDrawable());
+                    mDummpyImageView.setImageResource(R.drawable.pic_1_s);
+                    mDummpyImageView.setBackgroundColor(Color.RED);
                     mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
                     vh.mCardBaseLayout.postDelayed(new Runnable() {
@@ -151,6 +160,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(CardAdapter.MainViewHolder holder, int position) {
 
+//        Log.e("ZZZ", "card adapter onBindViewHolder" + position);
 //            if (position % 2 == 0) {
 //                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewholder.mCardView.getLayoutParams();
 //                params.rightMargin = viewholder.mCardView.getResources().getDimensionPixelSize(R.dimen.card_margin);
@@ -174,6 +184,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         DLog.d(this, "coupon id = " + dataHolder.mId + " coupon description = " + dataHolder.mDescription);
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
         if (holder.mCardImage != null) {
+            if (this instanceof FeaturedAdapter) Log.e("ZZZ", "loadimage" + dataHolder.mBusinessInfo.getStoreName());
             holder.mCardImage.setImageUrl(dataHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
         }
 

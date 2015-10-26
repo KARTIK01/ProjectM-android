@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.mickledeals.R;
 import com.mickledeals.bean.NavMenuItem;
+import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.fragments.BaseFragment;
 import com.mickledeals.fragments.NavigationDrawerFragment;
 import com.mickledeals.utils.DLog;
@@ -54,6 +55,9 @@ public class HomeActivity extends BaseActivity
             finish();
             return;
         }
+
+        //should clear all data list otherwise when user hit back and launch app again there will be issue
+        DataListModel.getInstance().clear();
 
         final View launchBg = findViewById(R.id.launchBg);
         if (getIntent().getBooleanExtra("fromIntroScreen", false)) {

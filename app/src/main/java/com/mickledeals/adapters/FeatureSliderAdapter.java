@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.PagerIndicator;
 
@@ -68,7 +70,8 @@ public class FeatureSliderAdapter extends PagerAdapter implements
         ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
                 R.layout.fragment_feature_slide_page, null);
         final NetworkImageView imageView = (NetworkImageView) rootView.findViewById(R.id.slider_image);
-//        imageView.setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
+        Log.e("ZZZ", "top feature image");
+        imageView.setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
         TextView description = (TextView) rootView.findViewById(R.id.slider_text);
         description.setText(info.mBusinessInfo.getStoreName() + " - " + info.getDescription());
         rootView.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +92,11 @@ public class FeatureSliderAdapter extends PagerAdapter implements
 
     @Override
     public int getCount() {
-        if (mIndicator != null) mIndicator.setSize(mList.size());
+        if (mIndicator != null) {
+            mIndicator.setSize(mList.size());
+            mIndicator.setVisibility(View.GONE);
+            mIndicator.setVisibility(View.VISIBLE);
+        }
         return mList.size();
     }
 
