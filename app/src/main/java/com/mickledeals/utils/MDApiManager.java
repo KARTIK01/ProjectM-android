@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.LruCache;
 import android.widget.ImageView;
 
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.mickledeals.activities.MDApplication;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.datamodel.MyCouponInfo;
 import com.mickledeals.datamodel.PaymentInfo;
 
 import org.json.JSONArray;
@@ -171,6 +173,21 @@ public class MDApiManager {
         return headerMap;
     }
 
+    private static void handleErrorResponse(VolleyError error, final MDResponseListener<JSONObject> listener) {
+        if (listener == null) return;
+
+        if (error.getMessage() == null) {
+            listener.onMDNetworkErrorResponse("timeout");
+            return;
+        }
+        DLog.e(MDApiManager.class, error.getMessage());
+        if (error.getMessage().contains("JSONException")) {
+            listener.onMDErrorResponse(error.getMessage());
+        } else {
+            listener.onMDNetworkErrorResponse(error.getMessage());
+        }
+    }
+
     // ---- Search, Browse, Feature, Top Feature, Favorite API ----- //
 
 
@@ -241,7 +258,7 @@ public class MDApiManager {
         fetchCouponInfoList(url, body, listener);
     }
 
-    public static void fetchMyCoupons(String sortMethod, boolean expired, boolean redeemed, int page, final MDResponseListener<List<Integer>> listener) {
+    public static void fetchMyCoupons(String sortMethod, boolean expired, boolean redeemed, int page, final MDResponseListener<List<MyCouponInfo>> listener) {
         String url = "http://www.mickledeals.com/api/purchases/search";
         JSONObject body = new JSONObject();
         try {
@@ -255,7 +272,36 @@ public class MDApiManager {
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
-        fetchCouponInfoList(url, body, listener);
+        sendJSONArrayRequest(url, body, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                DLog.d(MDApiManager.class, response.toString());
+                List<MyCouponInfo> list = new ArrayList<MyCouponInfo>();
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonobject = response.getJSONObject(i);
+                        CouponInfo info = new CouponInfo(jsonobject);
+                        DataListModel.getInstance().getCouponMap().put(info.mId, info);
+                        MyCouponInfo myCouponInfo = new MyCouponInfo();
+                        myCouponInfo.mId = info.mId;
+                        myCouponInfo.mRedemptionDate = JSONHelper.getLong(jsonobject, "redemptionDate");
+                        Log.e("ZZZ", "myCouponInfo.name = " + info.mDescription  + "myCouponInfo.mRedemptionDate = " + myCouponInfo.mRedemptionDate);
+                        list.add(myCouponInfo);
+                    } catch (JSONException e) {
+                        DLog.e(MDApiManager.class, e.toString());
+                    }
+                }
+
+                listener.onMDSuccessResponse(list);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.onMDNetworkErrorResponse(error.getMessage());
+            }
+        });
     }
 
     private static void fetchCouponInfoList(String request, JSONObject body, final MDResponseListener<List<Integer>> listener) {
@@ -349,7 +395,7 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                listener.onMDNetworkErrorResponse(error.getMessage());
+                handleErrorResponse(error, listener);
             }
         });
     }
@@ -499,7 +545,6 @@ public class MDApiManager {
         sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                DLog.d(MDApiManager.class, response.toString() + "REALLY");
                 String errorMessage = JSONHelper.getString(response, "ERROR");
                 if (response.has("ERROR")) {
                     listener.onMDErrorResponse(errorMessage);
@@ -515,20 +560,6 @@ public class MDApiManager {
         });
     }
 
-    private static void handleErrorResponse(VolleyError error, final MDResponseListener<JSONObject> listener) {
-        if (listener == null) return;
-
-        if (error.getMessage() == null) {
-            listener.onMDNetworkErrorResponse("timeout");
-            return;
-        }
-        DLog.e(MDApiManager.class, error.getMessage());
-        if (error.getMessage().contains("JSONException")) {
-            listener.onMDErrorResponse(error.getMessage());
-        } else {
-            listener.onMDNetworkErrorResponse(error.getMessage());
-        }
-    }
 
     public static void redeemCoupon(String purchaseId, final MDResponseListener<JSONObject> listener) {
         String url = "http://www.mickledeals.com/api/userses/redeemCoupon";
@@ -625,7 +656,6 @@ public class MDApiManager {
             cardObject.put("type", cardType);
             cardObject.put("expireMonth", expireMonth);
             cardObject.put("expireYear", expireYear);
-            cardObject.put("number", cardNumber);
             body.put("creditCard", cardObject);
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
@@ -640,21 +670,18 @@ public class MDApiManager {
                 } else {
                     List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
                     PaymentInfo info = new PaymentInfo(response);
-                    list.add(0, info);
-                    listener.onMDSuccessResponse(response);
+                    if (info.mPaymentId == 0) {
+                        listener.onMDErrorResponse(null);
+                    } else {
+                        list.add(0, info);
+                        listener.onMDSuccessResponse(response);
+                    }
                 }
-
-                listener.onMDSuccessResponse(null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage());
-                if (error.getMessage().contains("JSONException")) {
-                    listener.onMDErrorResponse(error.getMessage());
-                } else {
-                    listener.onMDNetworkErrorResponse(error.getMessage());
-                }
+                handleErrorResponse(error, listener);
             }
         });
     }
@@ -680,21 +707,18 @@ public class MDApiManager {
                 } else {
                     List<PaymentInfo> list = DataListModel.getInstance().getPaymentList();
                     PaymentInfo info = new PaymentInfo(response);
-                    list.add(0, info);
-                    listener.onMDSuccessResponse(response);
+                    if (info.mPaymentId == 0) {
+                        listener.onMDErrorResponse(null);
+                    } else {
+                        list.add(0, info);
+                        listener.onMDSuccessResponse(response);
+                    }
                 }
-
-                listener.onMDSuccessResponse(null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage() + "");
-                if (error.getMessage().contains("JSONException")) {
-                    listener.onMDErrorResponse(error.getMessage());
-                } else {
-                    listener.onMDNetworkErrorResponse(error.getMessage());
-                }
+                handleErrorResponse(error, listener);
             }
         });
     }

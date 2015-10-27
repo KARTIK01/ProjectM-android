@@ -11,6 +11,7 @@ import com.mickledeals.R;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.datamodel.MyCouponInfo;
 import com.mickledeals.fragments.MyCouponsFragment;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.Utils;
@@ -27,6 +28,8 @@ public class MyCouponsAdapter extends CardAdapter {
     private int mAvailableListIndex = -1;
     private int mExpiredListIndex = -1;
     private int mUsedListIndex = -1;
+
+    private List<MyCouponInfo> mMyCouponList;
 
     //extends because onCreateViewHolder returns MainViewHolder, performance impact is very little
     public static class HeaderViewHolder extends MainViewHolder {
@@ -53,8 +56,9 @@ public class MyCouponsAdapter extends CardAdapter {
         }
     }
 
-    public MyCouponsAdapter(Fragment fragment, List<Integer> myDataset, int listType, int layoutRes) {
+    public MyCouponsAdapter(Fragment fragment, List<Integer> myDataset, int listType, int layoutRes, List<MyCouponInfo> myCouponList) {
         super(fragment, myDataset, listType, layoutRes);
+        mMyCouponList = myCouponList;
     }
 
     public void setSectionListIndex(int availableListIndex, int expiredListIndex, int usedListIndex) {
@@ -105,6 +109,7 @@ public class MyCouponsAdapter extends CardAdapter {
 
             int newPos = convertListPosToDataPos(position);
             final CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataset, newPos);
+            final MyCouponInfo myCouponDataHolder = mMyCouponList.get(newPos);
 
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
             vh.mCardButton.setOnClickListener(new View.OnClickListener() {
@@ -125,18 +130,20 @@ public class MyCouponsAdapter extends CardAdapter {
                 }
             });
 
-            if (dataHolder.mRedeemable) {
+            if (myCouponDataHolder.mStatus == Constants.MYCOUPON_AVAILABLE) {
                 String expiredDate = vh.mCardExpiredDate.getResources().getString(R.string.expired_on, Utils.formatShortDate(dataHolder.mLastRedemptionDate));
                 vh.mCardExpiredDate.setText(expiredDate);
                 vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
 //                vh.mCardDealEnded.setVisibility(View.GONE);
                 vh.mCardButton.setVisibility(View.VISIBLE);
-            } else if (dataHolder.mStatus == Constants.MYCOUPON_USED) {
-//                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.expire_date));
+            } else if (myCouponDataHolder.mStatus == Constants.MYCOUPON_EXPIRED) {
+                String expiredDate = vh.mCardExpiredDate.getResources().getString(R.string.expired_on, Utils.formatShortDate(dataHolder.mLastRedemptionDate));
+                vh.mCardExpiredDate.setText(expiredDate);
 //                vh.mCardDealEnded.setVisibility(View.VISIBLE);
                 vh.mCardButton.setVisibility(View.GONE);
-            } else {
-//                vh.mCardExpiredDate.setText(vh.mCardExpiredDate.getResources().getString(R.string.used_date));
+            } else if (myCouponDataHolder.mStatus == Constants.MYCOUPON_USED) {
+                String usedDate = vh.mCardExpiredDate.getResources().getString(R.string.used_on, Utils.formatShortDate(myCouponDataHolder.mRedemptionDate));
+                vh.mCardExpiredDate.setText(usedDate);
 //                vh.mCardDealEnded.setVisibility(View.GONE);
                 vh.mCardButton.setVisibility(View.GONE);
             }
@@ -158,11 +165,6 @@ public class MyCouponsAdapter extends CardAdapter {
             return TYPE_HEADER;
 
         return super.getItemViewType(position);
-    }
-
-    private boolean isAvailable(int position) {
-//        if (position )
-        return false;
     }
 
     @Override

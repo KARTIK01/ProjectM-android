@@ -30,7 +30,7 @@
     <string name="menu_faq">FAQs</string>
     <string name="menu_promote">Promote Your Business</string>
     <string name="menu_feedback">Send Us Your Feedback</string>
-    <string name="menu_rate">Rate &amp; Comment on App Store</string>
+    <string name="menu_rate">Give Us Good Reviews/Ratings</string>
     <string name="menu_about">About Us</string>
     <string name="menu_terms">Terms of Use</string>
 
@@ -184,11 +184,13 @@
     <string name="enter_card_details">Scan or Enter Card Details</string>
     <string name="scan_your_card">Scan your Card</string>
     <string name="credit_card_number">Card Number</string>
+    <string name="card_expired_date">Expired Date</string>
     <string name="mm">MM</string>
     <string name="yy">YY</string>
     <string name="cvv">CVV</string>
     <string name="zip_code">ZIP CODE</string>
     <string name="enter_card_save">SAVE</string>
+    <string name="incorrect_card_info_message">There is an error when adding your card. Please make sure your card info is correct and try again.</string>
     <string name="invalid_card_number">Please enter a valid card number</string>
     <string name="invalid_card_mm">Please enter a valid expired card Month</string>
     <string name="invalid_card_yy">Please enter a valid expired card Year</string>
@@ -249,6 +251,7 @@
 
     <!-- Loading Dialog -->
     <string name="loading_login">Logging in...</string>
+    <string name="loading_adding_payment">Adding PayPal account...</string>
 
     <!-- Login -->
     <string name="or">or</string>

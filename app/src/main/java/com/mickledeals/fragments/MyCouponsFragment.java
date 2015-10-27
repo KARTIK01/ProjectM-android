@@ -14,6 +14,7 @@ import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.adapters.MyCouponsAdapter;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.datamodel.MyCouponInfo;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
@@ -22,6 +23,7 @@ import com.mickledeals.utils.Utils;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,13 +36,16 @@ public class MyCouponsFragment extends ListBaseFragment {
     public static final int REQUEST_CODE_CONFIRM_REDEEM = 1;
     public static final int REQUEST_CODE_REDEEM = 2;
 
-    private List<Integer> mAvailableList;
-    private List<Integer> mExpiredList;
-    private List<Integer> mUsedList;
+    private List<MyCouponInfo> mAvailableList;
+    private List<MyCouponInfo> mExpiredList;
+    private List<MyCouponInfo> mUsedList;
 
-//    private List<Long> mR
+    private List<MyCouponInfo> mMyCouponList = new ArrayList<MyCouponInfo>();
 
     private TextView mNoCouponText;
+
+    private boolean mSendingRequest;
+    private boolean mHasPaused;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -54,13 +59,17 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     @Override
     public void sendRequest() {
+        mSendingRequest = true;
         mAvailableList = null;
         mExpiredList = null;
         mUsedList = null;
-        MDApiManager.fetchMyCoupons("purchaseDate", false, false, 0, new MDApiManager.MDResponseListener<List<Integer>>() {
+        MDApiManager.fetchMyCoupons("purchaseDate", false, false, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
             @Override
-            public void onMDSuccessResponse(List<Integer> object) {
+            public void onMDSuccessResponse(List<MyCouponInfo> object) {
                 mAvailableList = object;
+                for (MyCouponInfo info: object) {
+                    info.mStatus = Constants.MYCOUPON_AVAILABLE;
+                }
                 checkIfCompleteResponse();
             }
             @Override
@@ -73,10 +82,13 @@ public class MyCouponsFragment extends ListBaseFragment {
             }
         });
 
-        MDApiManager.fetchMyCoupons("expireDate", true, false, 0, new MDApiManager.MDResponseListener<List<Integer>>() {
+        MDApiManager.fetchMyCoupons("expireDate", true, false, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
             @Override
-            public void onMDSuccessResponse(List<Integer> object) {
+            public void onMDSuccessResponse(List<MyCouponInfo> object) {
                 mExpiredList = object;
+                for (MyCouponInfo info: object) {
+                    info.mStatus = Constants.MYCOUPON_EXPIRED;
+                }
                 checkIfCompleteResponse();
             }
             @Override
@@ -89,10 +101,13 @@ public class MyCouponsFragment extends ListBaseFragment {
             }
         });
 
-        MDApiManager.fetchMyCoupons("redemptionDate", false, true, 0, new MDApiManager.MDResponseListener<List<Integer>>() {
+        MDApiManager.fetchMyCoupons("redemptionDate", false, true, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
             @Override
-            public void onMDSuccessResponse(List<Integer> object) {
+            public void onMDSuccessResponse(List<MyCouponInfo> object) {
                 mUsedList = object;
+                for (MyCouponInfo info: object) {
+                    info.mStatus = Constants.MYCOUPON_USED;
+                }
                 checkIfCompleteResponse();
             }
             @Override
@@ -108,10 +123,15 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     private void checkIfCompleteResponse() {
         if (mAvailableList != null && mExpiredList != null && mUsedList != null) {
+            mSendingRequest = false;
             mDataList.clear();
-            mDataList.addAll(mAvailableList);
-            mDataList.addAll(mExpiredList);
-            mDataList.addAll(mUsedList);
+            mMyCouponList.clear();
+            mMyCouponList.addAll(mAvailableList);
+            mMyCouponList.addAll(mExpiredList);
+            mMyCouponList.addAll(mUsedList);
+            for (MyCouponInfo info: mMyCouponList) {
+                mDataList.add(info.mId);
+            }
             if (mDataList.size() == 0) {
                 mNoCouponText.setVisibility(View.VISIBLE);
             }
@@ -138,14 +158,16 @@ public class MyCouponsFragment extends ListBaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_REDEEM) {
-                //put available coupon to used coupon after redeem
-                int couponId = data.getIntExtra("couponId", 0);
-                mAvailableList.remove((Integer)couponId);
-                mUsedList.add(0, couponId);
-                CouponInfo holder = DataListModel.getInstance().getCouponMap().get(couponId);
-                //add used time using current time
-                setSectionListIndex();
-                mAdapter.notifyDataSetChanged();
+//                //put available coupon to used coupon after redeem
+//                int couponId = data.getIntExtra("couponId", 0);
+//                mAvailableList.remove((Integer)couponId);
+//                mUsedList.add(0, couponId);
+//                CouponInfo holder = DataListModel.getInstance().getCouponMap().get(couponId);
+//                //add used time using current time
+//                setSectionListIndex();
+//                mAdapter.notifyDataSetChanged();
+                //too much to do above, just simply send new request
+                prepareSendRequest();
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
                 if (!MDConnectManager.getInstance(mContext).isNetworkAvailable()) {
                     Utils.showNetworkErrorDialog(mContext);
@@ -197,6 +219,7 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     @Override
     public void prepareSendRequest() {
+        if (mSendingRequest) return;
         super.prepareSendRequest();
         mNoCouponText.setVisibility(View.GONE);
     }
@@ -213,8 +236,22 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     public void setRecyclerView() {
         mListResultRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        mAdapter = new MyCouponsAdapter(this, mDataList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons);
+        mAdapter = new MyCouponsAdapter(this, mDataList, Constants.TYPE_BOUGHT_LIST, R.layout.card_layout_my_coupons, mMyCouponList);
         mListResultRecyclerView.setAdapter(mAdapter);
         mListResultRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //only send request when onRestart
+        if (mHasPaused) prepareSendRequest();
+        mHasPaused = false;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHasPaused = true;
     }
 }

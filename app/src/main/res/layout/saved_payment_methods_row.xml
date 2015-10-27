@@ -25,7 +25,8 @@
         android:textColor="@color/defaultTextColor"
         android:paddingLeft="6sp"
         android:paddingRight="4sp"
-        android:lines="1"
+        android:singleLine="true"
+        android:ellipsize="marquee"
         android:layout_height="wrap_content" />
 
     <ImageView

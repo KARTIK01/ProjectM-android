@@ -29,6 +29,8 @@ public class DataListModel {
     private List<Integer> mBoughtList = new ArrayList<Integer>();
 
     private List<Integer> mMoreCouponsList = new ArrayList<Integer>();
+    private List<MyCouponInfo> mMyCouponList = new ArrayList<MyCouponInfo>();
+
     private List<Integer> mSearchResultList = new ArrayList<Integer>();
 
     private List<PaymentInfo> mPaymentList = new ArrayList<PaymentInfo>();
@@ -113,6 +115,10 @@ public class DataListModel {
 
     public List<Integer> getSearchResultList() {
         return mSearchResultList;
+    }
+
+    public List<MyCouponInfo> getMyCouponList() {
+        return mMyCouponList;
     }
 
     public CouponInfo getCouponInfoFromList(List<Integer> list, int position) {

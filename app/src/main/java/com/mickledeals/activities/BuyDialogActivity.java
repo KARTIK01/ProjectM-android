@@ -157,7 +157,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
 
         mProgressBar.setVisibility(View.VISIBLE);
         String clientMetadataId = null;
-        if (!mPaymentInfo.mPaypalAccount.isEmpty()) {
+        if (mPaymentInfo != null && !mPaymentInfo.mPaypalAccount.isEmpty()) {
             clientMetadataId = PayPalConfiguration.getClientMetadataId(this);
         }
         MDApiManager.purchaseCoupon(mCouponInfo.mId, mPaymentInfo == null ? 0 : mPaymentInfo.mPaymentId, clientMetadataId, new MDReponseListenerImpl<JSONObject>() {

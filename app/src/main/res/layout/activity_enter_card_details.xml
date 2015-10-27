@@ -84,6 +84,17 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_expired_date"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="sans-serif-light"
+                    />
+
                 <EditText
                     android:id="@+id/mm"
                     android:layout_width="wrap_content"
@@ -113,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:maxLength="4"
+                    android:visibility="gone"
                     android:inputType="number"
                     android:hint="@string/cvv" />
 
@@ -125,6 +137,7 @@
                     android:id="@+id/zipcode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:maxLength="5"
                     android:inputType="number"
                     android:hint="@string/zip_code" />

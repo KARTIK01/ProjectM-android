@@ -89,6 +89,11 @@ public class EnterCardDetailsActivity extends DialogSwipeDismissActivity {
                     setResult(Activity.RESULT_OK);
                     finish();
                 }
+
+                @Override
+                public void onMDErrorResponse(String errorMessage) {
+                    super.onMDErrorResponse(R.string.incorrect_card_info_message);
+                }
             });
         }
     }

@@ -1,6 +1,7 @@
 package com.mickledeals.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -64,9 +65,9 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.getBoolean("isKilled")) return;
 
-//        Intent intent = new Intent(this, PayPalService.class);
-//        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
-//        startService(intent);
+        Intent intent = new Intent(this, PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        startService(intent);
         mNoPaymentMessage = findViewById(R.id.noPaymentMessage);
         mCredit = (TextView) findViewById(R.id.mickleCredit);
         mSavedMethodLayout = (LinearLayout) findViewById(R.id.savedMethodLayout);
@@ -221,6 +222,8 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
     }
 
     private void sendAuthorizationToServer(String authorizationCode) {
+
+        mProgressDialog = ProgressDialog.show(PaymentActivity.this, null, getString(R.string.loading_adding_payment));
         MDApiManager.addPayPalPayments(PayPalConfiguration.getApplicationCorrelationId(this), authorizationCode, new MDReponseListenerImpl<JSONObject>() {
 
             @Override
@@ -234,7 +237,7 @@ public class PaymentActivity extends DialogSwipeDismissActivity {
 
     @Override
     public void onDestroy() {
-//        stopService(new Intent(this, PayPalService.class));
+        stopService(new Intent(this, PayPalService.class));
         super.onDestroy();
     }
 

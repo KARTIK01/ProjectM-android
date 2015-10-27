@@ -14,7 +14,7 @@
     <string name="menu_faq">常見問題</string>
     <string name="menu_promote">推廣你的業務</string>
     <string name="menu_feedback">意見提交</string>
-    <string name="menu_rate">在App Store點評</string>
+    <string name="menu_rate">給我們好評</string>
     <string name="menu_about">關於我們</string>
     <string name="menu_terms">適用條款</string>
 
@@ -160,6 +160,8 @@
     <string name="scan_your_card">掃描信用卡</string>
     <string name="credit_card_number">信用卡號碼</string>
     <string name="enter_card_save">儲存</string>
+    <string name="incorrect_card_info_message">新增信用卡發生錯誤。請確認你的卡資料正確後再試。</string>
+    <string name="card_expired_date">到期日</string>
     <string name="invalid_card_number">請輸入有效信用卡號碼</string>
     <string name="invalid_card_mm">請輸入正確到期月份</string>
     <string name="invalid_card_yy">請輸入正確到期年份</string>
@@ -217,6 +219,10 @@
     <string name="location_error_choice2">開啟設定</string>
     <string name="location_error_choice3">按日期排序</string>
     <string name="location_error_choice4">隨機排序</string>
+
+    <!-- Loading Dialog -->
+    <string name="loading_login">登入中...</string>
+    <string name="loading_adding_payment">新增PayPal帳戶中...</string>
 
     <!-- Login -->
     <string name="or">或</string>
