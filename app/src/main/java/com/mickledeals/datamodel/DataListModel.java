@@ -1,5 +1,7 @@
 package com.mickledeals.datamodel;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,8 @@ public class DataListModel {
     private List<PaymentInfo> mPaymentList = new ArrayList<PaymentInfo>();
     private double mMickleCredit;
     public boolean mUpdatedPayment;
+
+    public static Drawable sTransitDrawable;
 
     private List<Creditbserver> mObservers = new ArrayList<Creditbserver>();
 

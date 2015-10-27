@@ -19,7 +19,7 @@
         android:minHeight="160dp"
         android:orientation="vertical">
 
-        <com.mickledeals.views.AspectRatioImageView
+        <com.mickledeals.views.AspectRatioNetworkImageView
             android:id="@+id/card_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"

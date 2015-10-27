@@ -1,14 +1,12 @@
 package com.mickledeals.adapters;
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +27,7 @@ import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
 import com.mickledeals.views.AspectRatioImageView;
+import com.mickledeals.views.AspectRatioNetworkImageView;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         public View mCardView;
         public TextView mCardTitle;
         public TextView mCardDescription;
-        public AspectRatioImageView mCardImage;
+        public AspectRatioNetworkImageView mCardImage;
         public TextView mCardPrice;
         public ImageView mCardSave;
         public TextView mCardDist;
@@ -77,7 +76,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             super(v);
             mCardView = v.findViewById(R.id.card_view);
             mCardBaseLayout = (RelativeLayout) v.findViewById(R.id.card_base_layout);
-            mCardImage = (AspectRatioImageView) v.findViewById(R.id.card_image);
+            mCardImage = (AspectRatioNetworkImageView) v.findViewById(R.id.card_image);
             mCardDescription = (TextView) v.findViewById(R.id.card_description);
             mCardTitle = (TextView) v.findViewById(R.id.card_title);
             mCardPrice = (TextView) v.findViewById(R.id.card_price);
@@ -115,40 +114,36 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!mClickable) return;
-                    mClickable = false;
                     int pos = convertListPosToDataPos(vh.getAdapterPosition());
-                    mDummpyImageView = new AspectRatioImageView(v.getContext());
-                    mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
-                    mDummpyImageView.setRatio(vh.mCardImage.getRatio());
-                    if (vh.mCardImage.getDrawable() == null) {
-                        Log.e("ZZZ", "drawable null");
-                    } else {
-                        Log.e("ZZZ", "drawable not null");
-                    }
-                    Bitmap bitmap = ((BitmapDrawable)vh.mCardImage.getDrawable()).getBitmap();
-                    mDummpyImageView.setImageBitmap(bitmap);
-//                    mDummpyImageView.setImageResource(R.drawable.pic_1_s);
-//                    mDummpyImageView.setBackgroundColor(Color.RED);
-//                    mDummpyImageView.setBackground(vh.mCardImage.getDrawable());
-//                    mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
-                    vh.mCardBaseLayout.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            vh.mCardBaseLayout.removeView(mDummpyImageView);
-                            vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
-                        }
-                    }, 1500);
-                    v.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mClickable = true;
-                        }
-                    }, 2000);
-                    String transition = "cardImage" + mDataset.get(pos);
-                    //doesnt seem to need below line
+                    String transition = null;
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        //for optimizing share element transition
+                        if (!mClickable) return;
+                        mClickable = false;
+                        mDummpyImageView = new AspectRatioImageView(v.getContext());
+                        mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
+                        mDummpyImageView.setRatio(vh.mCardImage.getRatio());
+                        mDummpyImageView.setImageDrawable(vh.mCardImage.getDrawable());
+                        DataListModel.sTransitDrawable = vh.mCardImage.getDrawable();
+                        mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
+                        vh.mCardBaseLayout.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                vh.mCardBaseLayout.removeView(mDummpyImageView);
+                                vh.mCardBaseLayout.addView(mDummpyImageView, indexToAdd);
+                            }
+                        }, 1500);
+                        v.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mClickable = true;
+                            }
+                        }, 2000);
+                        transition = "cardImage" + mDataset.get(pos);
+                        //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
+                    }
                     Utils.transitDetailsActivity(mFragmentActivity, pos, mListType, v.findViewById(R.id.card_image), transition);
                 }
             });
@@ -187,7 +182,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         DLog.d(this, "coupon id = " + dataHolder.mId + " coupon description = " + dataHolder.mDescription);
         if (holder.mCardTitle != null) holder.mCardTitle.setText(dataHolder.mBusinessInfo.getStoreName());
         if (holder.mCardImage != null) {
-            if (this instanceof FeaturedAdapter) Log.e("ZZZ", "loadimage" + dataHolder.mBusinessInfo.getStoreName());
             holder.mCardImage.setImageUrl(dataHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
         }
 

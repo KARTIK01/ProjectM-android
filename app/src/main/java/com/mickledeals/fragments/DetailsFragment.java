@@ -17,14 +17,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPageActivity;
 import com.mickledeals.activities.BuyDialogActivity;
 import com.mickledeals.activities.ConfirmRedeemDialogActivity;
 import com.mickledeals.activities.DetailsActivity;
+import com.mickledeals.activities.MDApplication;
 import com.mickledeals.activities.MapActivity;
 import com.mickledeals.activities.RedeemDialogActivity;
 import com.mickledeals.activities.SuccessDialogActivity;
@@ -38,7 +41,7 @@ import com.mickledeals.utils.MDConnectManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
 import com.mickledeals.utils.Utils;
-import com.mickledeals.views.AspectRatioImageView;
+import com.mickledeals.views.AspectRatioNetworkImageView;
 import com.mickledeals.views.NotifyingScrollView;
 
 import org.json.JSONObject;
@@ -59,7 +62,7 @@ public class DetailsFragment extends BaseFragment {
     private TextView mBusinessName;
     private TextView mDescription;
     private TextView mPrice;
-    private AspectRatioImageView mImageView;
+    private NetworkImageView mImageView;
     private View mBuyBtn;
     private TextView mBuyBtnText;
     private TextView mRedeemBtnText;
@@ -184,21 +187,21 @@ public class DetailsFragment extends BaseFragment {
         }
         ((TextView) view.findViewById(R.id.addressDist)).setText(addrShort);
 
-        mImageView = (AspectRatioImageView) view.findViewById(R.id.imageView);
-//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
-//        params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
-//        mImageView.setLayoutParams(params);
-
+        mImageView = (NetworkImageView) view.findViewById(R.id.imageView);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
+        params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
+        mImageView.setLayoutParams(params);
+        mImageView.setNoAnimation();
         mImageView.setImageUrl(mHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
-//        mImageView.setImageResource(mHolder.mImageResId);
 
 
 
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21 && getArguments().getBoolean("initialFragment")) {
+            mImageView.setTransitionImage(DataListModel.sTransitDrawable);
             mImageView.setTransitionName("cardImage" + mHolder.mId);
             getActivity().startPostponedEnterTransition();
             //seems like no need to use below line???
-            //scheduleStartPostponedTransition(storePhoto);
+//            scheduleStartPostponedTransition(mImageView);
         }
 
         mBuyBtn.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +348,7 @@ public class DetailsFragment extends BaseFragment {
                 ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
                 TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
                 cardPrice.setText(info.getDisplayedPrice());
-                ((AspectRatioImageView) otherCoupon.findViewById(R.id.card_image)).setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
+                ((AspectRatioNetworkImageView) otherCoupon.findViewById(R.id.card_image)).setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
 
                 int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
                 int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);

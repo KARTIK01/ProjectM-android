@@ -19,7 +19,7 @@
         android:gravity="center_vertical"
         android:paddingRight="10dp">
 
-        <com.mickledeals.views.AspectRatioImageView
+        <com.mickledeals.views.AspectRatioNetworkImageView
             android:id="@+id/card_image"
             android:layout_width="@dimen/thumbnail_small_image_width"
             android:layout_height="0dp"

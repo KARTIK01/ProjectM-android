@@ -78,7 +78,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <declare-styleable name="AspectRatioImageView">
+    <declare-styleable name="AspectRatioNetworkImageView">
         <attr name="ratio" format="float" />
     </declare-styleable>
 

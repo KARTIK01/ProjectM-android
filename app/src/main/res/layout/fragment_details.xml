@@ -15,12 +15,10 @@
             android:layout_height="wrap_content"
             android:background="@color/lighterGrayBg"> <!-- need to set bg here for screenshot -->
 
-            <com.mickledeals.views.AspectRatioImageView
+            <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                card_view:ratio="0.5625"
+                android:layout_height="0dp"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
