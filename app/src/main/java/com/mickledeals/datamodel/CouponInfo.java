@@ -58,7 +58,7 @@ public class CouponInfo implements Serializable{
         JSONObject businessInfoObject = JSONHelper.getJSONObject(jsonobject, "company");
         if (businessInfoObject != null) {
             mBusinessInfo = new BusinessInfo(businessInfoObject);
-            mBusinessInfo.mCoupons.add(this);
+            mBusinessInfo.mCouponsId.add(mId);
         }
         //user specific
         mSaved = JSONHelper.getBoolean(jsonobject, "favorite");

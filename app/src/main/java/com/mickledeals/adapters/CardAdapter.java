@@ -2,6 +2,7 @@ package com.mickledeals.adapters;
 
 import android.content.DialogInterface;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.EventBus;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLocationManager;
 import com.mickledeals.utils.MDLoginManager;
@@ -244,6 +246,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                         dataHolder.mSaved = !dataHolder.mSaved;
                         ((ImageView) v).setImageResource(dataHolder.mSaved ? R.drawable.ic_star_on : R.drawable.ic_star_off);
                         MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("couponId", dataHolder.mId);
+                        EventBus.getInstance().sendEvent(dataHolder.mSaved ? EventBus.EVENT_ADD_SAVE : EventBus.EVENT_REMOVE_SAVE, bundle);
                     }
                     }
                 });
@@ -291,9 +297,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
         }, 100);
     }
 
-    public boolean isAnimating() {
-        return mAnimation != null && mAnimation.hasStarted() && !mAnimation.hasEnded();
-    }
+//    public boolean isAnimating() {
+//        return mAnimation != null && mAnimation.hasStarted() && !mAnimation.hasEnded();
+//    }
 
     protected void setAnimation(View viewToAnimate, int pos)
     {
@@ -314,4 +320,5 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     public int getListType() {
         return mListType;
     }
+
 }

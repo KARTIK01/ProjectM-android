@@ -12,6 +12,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.datamodel.PaymentInfo;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.EventBus;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.PaymentHelper;
@@ -169,6 +170,11 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
                 mCouponInfo.setPurhcaseInfo(object);
 
                 MDApiManager.getPayments(null); //to update micklecredits in slider drawer
+
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("couponId", mCouponInfo.mId);
+                EventBus.getInstance().sendEvent(EventBus.EVENT_PURCHASE, bundle);
 
                 Intent i = new Intent();
                 i.putExtra("pay", mPaymentRow.isShown());

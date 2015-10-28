@@ -40,7 +40,7 @@ public class BusinessInfo implements Serializable {
     public String mWebSiteAddr = "";
     public String mHours = "";
 
-    public List<CouponInfo> mCoupons = new ArrayList<CouponInfo>();
+    public List<Integer> mCouponsId = new ArrayList<Integer>();
 
     public List<BusinessPhoto> mPhotoIds;
 
@@ -78,7 +78,8 @@ public class BusinessInfo implements Serializable {
                     JSONObject couponObject = couponList.getJSONObject(i);
                     CouponInfo info = new CouponInfo(couponObject);
                     info.mBusinessInfo = this;
-                    mCoupons.add(info);
+                    DataListModel.getInstance().getCouponMap().put(info.mId, info);
+                    mCouponsId.add(info.mId);
                 } catch (JSONException e) {
 //                        DLog.e(MDApiManager.class, e.toString());
                 }

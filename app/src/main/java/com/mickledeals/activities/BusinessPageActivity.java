@@ -191,9 +191,11 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         mMoreCouponRow = (LinearLayout) findViewById(R.id.moreCouponRow);
 
 
-        if (mBusinessInfo.mCoupons.size() > 0) {
+        if (mBusinessInfo.mCouponsId.size() > 0) {
             mMoreCouponRow.setVisibility(View.VISIBLE);
-            for (final CouponInfo info : mBusinessInfo.mCoupons) {
+            for (final Integer couponId : mBusinessInfo.mCouponsId) {
+
+                CouponInfo info = DataListModel.getInstance().getCouponMap().get(couponId);
 
                 View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
                 //load image
@@ -214,7 +216,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
                     public void onClick(View v) {
                         Intent i = new Intent(BusinessPageActivity.this, DetailsActivity.class);
                         DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
-                        DataListModel.getInstance().getMoreCouponsList().add(info.mId);
+                        DataListModel.getInstance().getMoreCouponsList().add(couponId);
                         i.putExtra("listIndex", 0);
                         i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
                         i.putExtra("fromOtherCoupon", true);

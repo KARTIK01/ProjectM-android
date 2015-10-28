@@ -77,7 +77,7 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     if (mFragments[1] != null) ((FeaturedFragment)mFragments[1]).startAutoSliding();
                 }
-                mFragments[position].updateDataSet();
+//                mFragments[position].updateDataSet();
             }
 
             @Override

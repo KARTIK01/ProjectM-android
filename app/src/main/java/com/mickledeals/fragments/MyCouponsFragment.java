@@ -16,6 +16,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.datamodel.MyCouponInfo;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.EventBus;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDConnectManager;
@@ -43,9 +44,7 @@ public class MyCouponsFragment extends ListBaseFragment {
     private List<MyCouponInfo> mMyCouponList = new ArrayList<MyCouponInfo>();
 
     private TextView mNoCouponText;
-
-    private boolean mSendingRequest;
-    private boolean mHasPaused;
+    private boolean mPendingUpdate;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     @Override
     public void sendRequest() {
-        mSendingRequest = true;
         mAvailableList = null;
         mExpiredList = null;
         mUsedList = null;
@@ -67,15 +65,17 @@ public class MyCouponsFragment extends ListBaseFragment {
             @Override
             public void onMDSuccessResponse(List<MyCouponInfo> object) {
                 mAvailableList = object;
-                for (MyCouponInfo info: object) {
+                for (MyCouponInfo info : object) {
                     info.mStatus = Constants.MYCOUPON_AVAILABLE;
                 }
                 checkIfCompleteResponse();
             }
+
             @Override
             public void onMDNetworkErrorResponse(String errorMessage) {
                 MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
             }
+
             @Override
             public void onMDErrorResponse(String errorMessage) {
                 MyCouponsFragment.super.onMDErrorResponse(errorMessage);
@@ -86,15 +86,17 @@ public class MyCouponsFragment extends ListBaseFragment {
             @Override
             public void onMDSuccessResponse(List<MyCouponInfo> object) {
                 mExpiredList = object;
-                for (MyCouponInfo info: object) {
+                for (MyCouponInfo info : object) {
                     info.mStatus = Constants.MYCOUPON_EXPIRED;
                 }
                 checkIfCompleteResponse();
             }
+
             @Override
             public void onMDNetworkErrorResponse(String errorMessage) {
                 MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
             }
+
             @Override
             public void onMDErrorResponse(String errorMessage) {
                 MyCouponsFragment.super.onMDErrorResponse(errorMessage);
@@ -105,15 +107,17 @@ public class MyCouponsFragment extends ListBaseFragment {
             @Override
             public void onMDSuccessResponse(List<MyCouponInfo> object) {
                 mUsedList = object;
-                for (MyCouponInfo info: object) {
+                for (MyCouponInfo info : object) {
                     info.mStatus = Constants.MYCOUPON_USED;
                 }
                 checkIfCompleteResponse();
             }
+
             @Override
             public void onMDNetworkErrorResponse(String errorMessage) {
                 MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
             }
+
             @Override
             public void onMDErrorResponse(String errorMessage) {
                 MyCouponsFragment.super.onMDErrorResponse(errorMessage);
@@ -123,13 +127,12 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     private void checkIfCompleteResponse() {
         if (mAvailableList != null && mExpiredList != null && mUsedList != null) {
-            mSendingRequest = false;
             mDataList.clear();
             mMyCouponList.clear();
             mMyCouponList.addAll(mAvailableList);
             mMyCouponList.addAll(mExpiredList);
             mMyCouponList.addAll(mUsedList);
-            for (MyCouponInfo info: mMyCouponList) {
+            for (MyCouponInfo info : mMyCouponList) {
                 mDataList.add(info.mId);
             }
             if (mDataList.size() == 0) {
@@ -150,7 +153,7 @@ public class MyCouponsFragment extends ListBaseFragment {
         int expiredListIndex = mExpiredList.size() == 0 ? -1 : currentIndex;
         if (mExpiredList.size() != 0) currentIndex += mExpiredList.size() + 1;
         int usedListIndex = mUsedList.size() == 0 ? -1 : currentIndex;
-        ((MyCouponsAdapter)mAdapter).setSectionListIndex(availableListIndex, expiredListIndex, usedListIndex);
+        ((MyCouponsAdapter) mAdapter).setSectionListIndex(availableListIndex, expiredListIndex, usedListIndex);
     }
 
     @Override
@@ -167,7 +170,7 @@ public class MyCouponsFragment extends ListBaseFragment {
 //                setSectionListIndex();
 //                mAdapter.notifyDataSetChanged();
                 //too much to do above, just simply send new request
-                prepareSendRequest();
+//                prepareSendRequest();
             } else if (requestCode == REQUEST_CODE_CONFIRM_REDEEM) {
                 if (!MDConnectManager.getInstance(mContext).isNetworkAvailable()) {
                     Utils.showNetworkErrorDialog(mContext);
@@ -186,6 +189,10 @@ public class MyCouponsFragment extends ListBaseFragment {
                         holder.mPurchaseId = "";
                         holder.mLastRedemptionDate = 0;
                         holder.mPurchaseDate = 0;
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("couponId", holder.mId);
+                        EventBus.getInstance().sendEvent(EventBus.EVENT_REDEEM, bundle);
                     }
 
                     @Override
@@ -219,7 +226,6 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     @Override
     public void prepareSendRequest() {
-        if (mSendingRequest) return;
         super.prepareSendRequest();
         mNoCouponText.setVisibility(View.GONE);
     }
@@ -242,16 +248,41 @@ public class MyCouponsFragment extends ListBaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        //only send request when onRestart
-        if (mHasPaused) prepareSendRequest();
-        mHasPaused = false;
+    public void onEventUpdate(int event, Bundle data) {
+        if (event == EventBus.EVENT_REDEEM) {
+            int couponId = data.getInt("couponId");
+            for (MyCouponInfo info : mAvailableList) {
+                if (info.mId == couponId) {
+                    mAvailableList.remove(info);
+                    info.mRedemptionDate = System.currentTimeMillis();
+                    info.mStatus = Constants.MYCOUPON_USED;
+                    mUsedList.add(0, info);
+                    break;
+                }
+            }
+            mPendingUpdate = true;
+        } else if (event == EventBus.EVENT_PURCHASE) {
+            int couponId = data.getInt("couponId");
+            MyCouponInfo info = new MyCouponInfo();
+            info.mStatus = Constants.MYCOUPON_AVAILABLE;
+            info.mId = couponId;
+            mAvailableList.add(0, info);
+            mPendingUpdate = true;
+        }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mHasPaused = true;
+        @Override
+    public void onResume() {
+        super.onResume();
+        if (mPendingUpdate) {
+            checkIfCompleteResponse();
+            mPendingUpdate = false;
+        }
     }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        mHasPaused = true;
+//    }
 }

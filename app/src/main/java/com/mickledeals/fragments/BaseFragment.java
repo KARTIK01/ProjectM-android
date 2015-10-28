@@ -10,13 +10,14 @@ import android.widget.ProgressBar;
 
 import com.mickledeals.R;
 import com.mickledeals.activities.BaseActivity;
+import com.mickledeals.utils.EventBus;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.Utils;
 
 /**
  * Created by Nicky on 11/28/2014.
  */
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment implements EventBus.EventListener{
 
     protected Context mContext;
     protected ProgressDialog mProgressDialog;
@@ -26,6 +27,7 @@ public abstract class BaseFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        EventBus.getInstance().registerListener(this);
     }
 
 
@@ -60,6 +62,17 @@ public abstract class BaseFragment extends Fragment{
 
     public void onFragmentResume() {
 
+    }
+
+    @Override
+    public void onEventUpdate(int event, Bundle data) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregisterListener(this);
     }
 
     protected class MDReponseListenerImpl<T> implements MDApiManager.MDResponseListener<T> {

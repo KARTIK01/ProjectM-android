@@ -35,6 +35,7 @@ import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.EventBus;
 import com.mickledeals.utils.JSONHelper;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDConnectManager;
@@ -285,6 +286,11 @@ public class DetailsFragment extends BaseFragment {
                         MDApiManager.addOrRemoveFavorite(mHolder.mId, mHolder.mSaved);
                     }
                 });
+
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("couponId", mHolder.mId);
+                EventBus.getInstance().sendEvent(mHolder.mSaved ? EventBus.EVENT_ADD_SAVE : EventBus.EVENT_REMOVE_SAVE, bundle);
 //                StringBuilder sb = new StringBuilder();
 //                for (CouponInfo holder : DataListModel.getInstance().getDataList().values()) {
 //                    if (holder.mSaved) {
@@ -337,12 +343,13 @@ public class DetailsFragment extends BaseFragment {
 
         updateViewForStatus();
 
-        if (mHolder.mBusinessInfo.mCoupons.size() > 1 && !getArguments().getBoolean("fromOtherCoupon")) {
+        if (mHolder.mBusinessInfo.mCouponsId.size() > 1 && !getArguments().getBoolean("fromOtherCoupon")) {
             view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
             mMoreCouponRow.setVisibility(View.VISIBLE);
-            for (final CouponInfo info : mHolder.mBusinessInfo.mCoupons) {
-                if (info == mHolder) continue;
+            for (final Integer couponId : mHolder.mBusinessInfo.mCouponsId) {
+                if (couponId == mHolder.mId) continue;
 
+                CouponInfo info = DataListModel.getInstance().getCouponMap().get(couponId);
                 View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
                 //load image
                 ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
@@ -362,7 +369,7 @@ public class DetailsFragment extends BaseFragment {
                     public void onClick(View v) {
                         Intent i = new Intent(mContext, DetailsActivity.class);
                         DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
-                        DataListModel.getInstance().getMoreCouponsList().add(info.mId);
+                        DataListModel.getInstance().getMoreCouponsList().add(couponId);
                         i.putExtra("listIndex", 0);
                         i.putExtra("listType", Constants.TYPE_MORE_COUPONS_LIST);
                         i.putExtra("fromOtherCoupon", true);
@@ -479,6 +486,10 @@ public class DetailsFragment extends BaseFragment {
                         mHolder.mPurchaseId = "";
                         mHolder.mLastRedemptionDate = 0;
                         mHolder.mPurchaseDate = 0;
+
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("couponId", mHolder.mId);
+                        EventBus.getInstance().sendEvent(EventBus.EVENT_REDEEM, bundle);
                     }
 
                     @Override

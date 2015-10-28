@@ -16,6 +16,7 @@ import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.utils.DLog;
 import com.mickledeals.utils.EndlessRecyclerOnScrollListener;
+import com.mickledeals.utils.EventBus;
 import com.mickledeals.utils.MDApiManager;
 
 import java.util.List;
@@ -195,19 +196,30 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     public abstract List<Integer> getDataList();
 
     @Override
-    public void onResume() {
-        super.onResume();
-//        mAdapter.notifyDataSetChanged();
-    }
-
-
-    //this is for swiping in home, after saving a coupon in browse, it should reflect when swipe to feature
-    public void updateDataSet() {
-        DLog.d(this, "updateDataSet");
-        //there is a bug when animating when notify dataset changed
-        if (!mAdapter.isAnimating()) {
-            DLog.d(this, "notifydatasetchanged");
-//            mAdapter.notifyDataSetChanged();
+    public void onEventUpdate(int event, Bundle data) {
+        super.onEventUpdate(event, data);
+        if (event == EventBus.EVENT_ADD_SAVE || event == EventBus.EVENT_REMOVE_SAVE) {
+            int couponId = data.getInt("couponId");
+            int index = mDataList.indexOf(couponId);
+            if (this instanceof FeaturedFragment) index++; //there is top feature as index 0
+            mAdapter.notifyItemChanged(index);
         }
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+////        mAdapter.notifyDataSetChanged();
+//    }
+//
+//
+//    //this is for swiping in home, after saving a coupon in browse, it should reflect when swipe to feature
+//    public void updateDataSet() {
+//        DLog.d(this, "updateDataSet");
+//        //there is a bug when animating when notify dataset changed
+//        if (!mAdapter.isAnimating()) {
+//            DLog.d(this, "notifydatasetchanged");
+////            mAdapter.notifyDataSetChanged();
+//        }
+//    }
 }
