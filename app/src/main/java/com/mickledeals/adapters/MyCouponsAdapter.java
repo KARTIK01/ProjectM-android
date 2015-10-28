@@ -2,6 +2,7 @@ package com.mickledeals.adapters;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,14 +108,21 @@ public class MyCouponsAdapter extends CardAdapter {
         } else {
             super.onBindViewHolder(holder, position);
 
+            if (holder == null) return; //if holder is null, it is progressbar layout
+
             int newPos = convertListPosToDataPos(position);
+
+            Log.e("XXX", "position3 " + position);
+            if (mDataset.get(newPos) == null) return; //if id is null, it is progressbar layout
+            Log.e("XXX", "position4 " + position + "data = " + mDataset.get(newPos) + "new pos = " + newPos);
             final CouponInfo dataHolder = DataListModel.getInstance().getCouponInfoFromList(mDataset, newPos);
             final MyCouponInfo myCouponDataHolder = mMyCouponList.get(newPos);
 
             MyCouponViewHolder vh = (MyCouponViewHolder) holder;
-            vh.mCardButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (vh.mCardButton != null) {
+                vh.mCardButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 //                    if (dataHolder.mRedeemTime == 0) {
                         Intent i = new Intent(mFragmentActivity, ConfirmRedeemDialogActivity.class);
                         i.putExtra("couponId", dataHolder.mId);
@@ -127,25 +135,26 @@ public class MyCouponsAdapter extends CardAdapter {
 //                        i.putExtra("id", dataHolder.mId);
 //                        mFragment.startActivityForResult(i, MyCouponsFragment.REQUEST_CODE_REDEEM);
 //                    }
-                }
-            });
+                    }
+                });
+            }
 
             if (myCouponDataHolder.mStatus == Constants.MYCOUPON_AVAILABLE) {
                 String expiredDate = vh.mCardExpiredDate.getResources().getString(R.string.expired_on, Utils.formatShortDate(dataHolder.mLastRedemptionDate));
                 vh.mCardExpiredDate.setText(expiredDate);
-                vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
+                if (vh.mCardButton != null) vh.mCardButton.setText(vh.mCardButton.getResources().getString(R.string.redeem));
 //                vh.mCardDealEnded.setVisibility(View.GONE);
                 vh.mCardButton.setVisibility(View.VISIBLE);
             } else if (myCouponDataHolder.mStatus == Constants.MYCOUPON_EXPIRED) {
                 String expiredDate = vh.mCardExpiredDate.getResources().getString(R.string.expired_on, Utils.formatShortDate(dataHolder.mLastRedemptionDate));
                 vh.mCardExpiredDate.setText(expiredDate);
 //                vh.mCardDealEnded.setVisibility(View.VISIBLE);
-                vh.mCardButton.setVisibility(View.GONE);
+                if (vh.mCardButton != null) vh.mCardButton.setVisibility(View.GONE);
             } else if (myCouponDataHolder.mStatus == Constants.MYCOUPON_USED) {
                 String usedDate = vh.mCardExpiredDate.getResources().getString(R.string.used_on, Utils.formatShortDate(myCouponDataHolder.mRedemptionDate));
                 vh.mCardExpiredDate.setText(usedDate);
 //                vh.mCardDealEnded.setVisibility(View.GONE);
-                vh.mCardButton.setVisibility(View.GONE);
+                if (vh.mCardButton != null) vh.mCardButton.setVisibility(View.GONE);
             }
         }
     }

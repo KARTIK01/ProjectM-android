@@ -58,59 +58,75 @@ public class MyCouponsFragment extends ListBaseFragment {
 
     @Override
     public void sendRequest() {
-        mAvailableList = null;
-        mExpiredList = null;
-        mUsedList = null;
-        MDApiManager.fetchMyCoupons("purchaseDate", false, false, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
-            @Override
-            public void onMDSuccessResponse(List<MyCouponInfo> object) {
-                mAvailableList = object;
-                for (MyCouponInfo info : object) {
-                    info.mStatus = Constants.MYCOUPON_AVAILABLE;
+        //load all list except when page to load > 1
+        if (mPageToLoad <= 1) {
+            mAvailableList = null;
+            mExpiredList = null;
+            mUsedList = null;
+            MDApiManager.fetchMyCoupons("purchaseDate", false, false, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
+                @Override
+                public void onMDSuccessResponse(List<MyCouponInfo> object) {
+                    mAvailableList = object;
+                    for (MyCouponInfo info : object) {
+                        info.mStatus = Constants.MYCOUPON_AVAILABLE;
+                    }
+                    checkIfCompleteResponse();
                 }
-                checkIfCompleteResponse();
-            }
 
-            @Override
-            public void onMDNetworkErrorResponse(String errorMessage) {
-                MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
-            }
-
-            @Override
-            public void onMDErrorResponse(String errorMessage) {
-                MyCouponsFragment.super.onMDErrorResponse(errorMessage);
-            }
-        });
-
-        MDApiManager.fetchMyCoupons("expireDate", true, false, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
-            @Override
-            public void onMDSuccessResponse(List<MyCouponInfo> object) {
-                mExpiredList = object;
-                for (MyCouponInfo info : object) {
-                    info.mStatus = Constants.MYCOUPON_EXPIRED;
+                @Override
+                public void onMDNetworkErrorResponse(String errorMessage) {
+                    MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
                 }
-                checkIfCompleteResponse();
-            }
 
-            @Override
-            public void onMDNetworkErrorResponse(String errorMessage) {
-                MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
-            }
+                @Override
+                public void onMDErrorResponse(String errorMessage) {
+                    MyCouponsFragment.super.onMDErrorResponse(errorMessage);
+                }
+            });
 
-            @Override
-            public void onMDErrorResponse(String errorMessage) {
-                MyCouponsFragment.super.onMDErrorResponse(errorMessage);
-            }
-        });
+            MDApiManager.fetchMyCoupons("expireDate", true, false, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
+                @Override
+                public void onMDSuccessResponse(List<MyCouponInfo> object) {
+                    mExpiredList = object;
+                    for (MyCouponInfo info : object) {
+                        info.mStatus = Constants.MYCOUPON_EXPIRED;
+                    }
+                    checkIfCompleteResponse();
+                }
 
-        MDApiManager.fetchMyCoupons("redemptionDate", false, true, 0, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
+                @Override
+                public void onMDNetworkErrorResponse(String errorMessage) {
+                    MyCouponsFragment.super.onMDNetworkErrorResponse(errorMessage);
+                }
+
+                @Override
+                public void onMDErrorResponse(String errorMessage) {
+                    MyCouponsFragment.super.onMDErrorResponse(errorMessage);
+                }
+            });
+        }
+
+        MDApiManager.fetchMyCoupons("redemptionDate", false, true, mPageToLoad, new MDApiManager.MDResponseListener<List<MyCouponInfo>>() {
             @Override
             public void onMDSuccessResponse(List<MyCouponInfo> object) {
-                mUsedList = object;
                 for (MyCouponInfo info : object) {
                     info.mStatus = Constants.MYCOUPON_USED;
                 }
-                checkIfCompleteResponse();
+                if (mPageToLoad > 1) {
+                    //remove progress bar
+                    mDataList.remove(mDataList.size() - 1);
+                    mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                    mUsedList.addAll(object);
+                    mMyCouponList.addAll(object);
+                    for (MyCouponInfo info : object) {
+                        mDataList.add(info.mId);
+                    }
+                    mAdapter.notifyItemRangeInserted(mAdapter.getItemCount() - object.size(), object.size());
+                    mAdapter.setPendingAnimated();
+                } else {
+                    mUsedList = object;
+                    checkIfCompleteResponse();
+                }
             }
 
             @Override
@@ -271,7 +287,7 @@ public class MyCouponsFragment extends ListBaseFragment {
         }
     }
 
-        @Override
+    @Override
     public void onResume() {
         super.onResume();
         if (mPendingUpdate) {

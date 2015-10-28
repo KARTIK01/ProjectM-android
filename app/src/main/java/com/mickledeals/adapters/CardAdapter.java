@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,7 +161,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(CardAdapter.MainViewHolder holder, int position) {
 
-//        Log.e("ZZZ", "card adapter onBindViewHolder" + position);
+        Log.e("ZZZ", "card adapter onBindViewHolder" + position);
 //            if (position % 2 == 0) {
 //                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewholder.mCardView.getLayoutParams();
 //                params.rightMargin = viewholder.mCardView.getResources().getDimensionPixelSize(R.dimen.card_margin);
@@ -272,8 +273,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (position >= mDataset.size()) return VIEW_ITEM; //prevent index oob
-        return mDataset.get(position)!=null? VIEW_ITEM: VIEW_PROGRESS;
+        int newPos  = convertListPosToDataPos(position);
+        return mDataset.get(newPos) != null ? VIEW_ITEM : VIEW_PROGRESS;
     }
 
     @Override

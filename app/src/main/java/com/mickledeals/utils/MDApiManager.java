@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.LruCache;
 import android.widget.ImageView;
 
@@ -47,7 +46,7 @@ public class MDApiManager {
         void onMDErrorResponse(String errorMessage);
     }
 
-    public static final int PAGE_SIZE = 14;
+    public static final int PAGE_SIZE = 10;
     private static RequestQueue sQueue;
     public static ImageLoader sImageLoader;
     private static Context sContext = MDApplication.sAppContext;
@@ -93,7 +92,7 @@ public class MDApiManager {
             // 4 bytes per pixel
             final int screenBytes = screenWidth * screenHeight * 4;
 
-            return screenBytes * 5;
+            return screenBytes * 15;
         }
     }
 
@@ -286,7 +285,6 @@ public class MDApiManager {
                         MyCouponInfo myCouponInfo = new MyCouponInfo();
                         myCouponInfo.mId = info.mId;
                         myCouponInfo.mRedemptionDate = JSONHelper.getLong(jsonobject, "redemptionDate");
-                        Log.e("ZZZ", "myCouponInfo.name = " + info.mDescription  + "myCouponInfo.mRedemptionDate = " + myCouponInfo.mRedemptionDate);
                         list.add(myCouponInfo);
                     } catch (JSONException e) {
                         DLog.e(MDApiManager.class, e.toString());

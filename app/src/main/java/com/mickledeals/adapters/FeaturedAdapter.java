@@ -5,7 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,6 @@ public class FeaturedAdapter extends CardAdapter {
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        Log.e("ZZZ", "feature adapter onBindViewHolder" + position);
         if (isPositionHeader(position)) {
             for (int i = 0; i < mTopSectionLayout.getChildCount(); i++) {
                 setAnimation(mTopSectionLayout.getChildAt(i), i - 3);
@@ -100,7 +98,7 @@ public class FeaturedAdapter extends CardAdapter {
         if (isPositionHeader(position))
             return TYPE_TOP_SECTION;
 
-        return super.getItemViewType(position - 1);
+        return super.getItemViewType(position);
     }
 
 
@@ -127,13 +125,11 @@ public class FeaturedAdapter extends CardAdapter {
     }
 
     public void notifyNewAddedCouponDataSetChanged() {
-        Log.e("ZZZ", "notify added coupon changed");
         mAddedCouponRecyclerView.getAdapter().notifyDataSetChanged();
         notifyDataSetChanged();
 
     }
     public void notifySlideFeatureDataSetChanged() {
-        Log.e("ZZZ", "notify top feature coupon changed");
         mFeatureSliderAdapter.notifyDataSetChanged();
     }
 

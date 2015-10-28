@@ -126,6 +126,8 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
         boolean noPayment = list.size() == 0;
         if (noPayment) {
             mAdd.setVisibility(View.VISIBLE);
+            mPaymentDisplay.setVisibility(View.GONE);
+            mCreditCardIcon.setVisibility(View.GONE);
         } else {
             for (PaymentInfo info: list) {
                 if (info.mPrimary) {
@@ -135,13 +137,13 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
             }
             if (!mPaymentInfo.mPaypalAccount.equals("")) {
                 mCreditCardIcon.setImageResource(R.drawable.ic_paypal_card);
+                mPaymentDisplay.setVisibility(View.GONE);
 //                mPaymentDisplay.setText(mPaymentInfo.mPaypalAccount);
             } else {
                 PaymentHelper.setCardIcon(mCreditCardIcon, mPaymentInfo.mCardType);
-                mPaymentDisplay.setText(mPaymentInfo.mLastFourDigits);
+                mPaymentDisplay.setVisibility(View.VISIBLE);
             }
             mCreditCardIcon.setVisibility(View.VISIBLE);
-            mPaymentDisplay.setVisibility(View.VISIBLE);
         }
     }
 

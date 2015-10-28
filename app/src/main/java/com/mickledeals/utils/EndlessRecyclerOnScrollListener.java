@@ -13,7 +13,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     private boolean loading = true; // True if we are still waiting for the last set of data to load.
     private int visibleThreshold = 2; // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
-
 //    private int currentPage = 1;
 
     private LinearLayoutManager mLinearLayoutManager;
@@ -26,22 +25,24 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
+
         visibleItemCount = recyclerView.getChildCount() ;
         totalItemCount = mLinearLayoutManager.getItemCount() ;
         firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
 
+
         if (loading) {
-            if (totalItemCount > previousTotal+1) {
+            if (totalItemCount > previousTotal + 1 ) {
                 loading = false;
                 previousTotal = totalItemCount;
             }
         }
-
-//        Log.e("ZZZ", "loading = " + loading + "totalItemCount = " + totalItemCount + "visibleItemCount = " + visibleItemCount +
+//
+//        Log.e("XXX", "loading = " + loading + "totalItemCount = " + totalItemCount + "visibleItemCount = " + visibleItemCount +
 //                "firstVisibleItem = " + firstVisibleItem + "visibleThreshold = " + visibleThreshold);
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 
-            if (totalItemCount % MDApiManager.PAGE_SIZE != 0 && ignoreRemainder()) {
+            if (totalItemCount % MDApiManager.PAGE_SIZE != 0 && !ignoreRemainder()) {
                 //just optimization: if there is remainder, that means it is the end already
                 return;
             }
@@ -49,9 +50,15 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             // End has been reached
             // Do something
 //            currentPage++;
+
             onLoadMore();
             loading = true;
         }
+    }
+
+    //we need to reset previous total when refresh the whole list, otherwise loading flag never get set to false
+    public void resetPreviousTotal() {
+        previousTotal = 0;
     }
 
     public abstract void onLoadMore();

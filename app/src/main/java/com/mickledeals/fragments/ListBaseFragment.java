@@ -34,6 +34,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     protected RecyclerView mListResultRecyclerView;
     protected CardAdapter mAdapter;
     protected List<Integer> mDataList;
+    private EndlessRecyclerOnScrollListener mEndlessScrollListener;
 
     protected int mPageToLoad = 1;
 
@@ -64,17 +65,15 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         mListResultRecyclerView = (RecyclerView) view.findViewById(R.id.listResultRecyclerView);
         setRecyclerView();
         if (needLoadMore()) {
-            mListResultRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener((LinearLayoutManager) mListResultRecyclerView.getLayoutManager()) {
+            mEndlessScrollListener =  new EndlessRecyclerOnScrollListener((LinearLayoutManager) mListResultRecyclerView.getLayoutManager()) {
                 @Override
                 public void onLoadMore() {
-
                     mPageToLoad++;
                     DLog.d(ListBaseFragment.this, "onloadmore page = " + mPageToLoad);
                     sendRequest();
                     //add progressbar after send request, otherwise data list size will be wrong
                     mDataList.add(null);
                     mAdapter.notifyItemInserted(mDataList.size());
-
                 }
 
                 @Override
@@ -82,7 +81,9 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
                     //my coupon fragment cannot use the remainder logic
                     return ListBaseFragment.this instanceof MyCouponsFragment ? true : false;
                 }
-            });
+            };
+
+            mListResultRecyclerView.addOnScrollListener(mEndlessScrollListener);
         }
 
 
@@ -110,6 +111,8 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         });
     }
 
+
+
     public void prepareSendRequest() {
         DLog.d(this, "prepareSendRequest");
 
@@ -118,6 +121,7 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         if (mLoadingLayout != null) mLoadingLayout.setVisibility(View.VISIBLE);
         if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.setRefreshing(true);
 
+        if (mEndlessScrollListener != null) mEndlessScrollListener.resetPreviousTotal();
         mPageToLoad = 1;
         sendRequest();
     }
@@ -127,9 +131,9 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
         if (mPageToLoad > 1) {
             //remove progress bar
             mDataList.remove(mDataList.size() - 1);
-            mAdapter.notifyItemRemoved(mDataList.size());
+            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
             mDataList.addAll(resultList);
-            mAdapter.notifyItemRangeInserted(mDataList.size() - resultList.size(), resultList.size());
+            mAdapter.notifyItemRangeInserted(mAdapter.getItemCount() - resultList.size(), resultList.size());
             mAdapter.setPendingAnimated();
         } else {
             mDataList.clear();
