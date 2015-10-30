@@ -1,6 +1,6 @@
 package com.mickledeals.datamodel;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class DataListModel {
     private double mMickleCredit;
     public boolean mUpdatedPayment;
 
-    public static Drawable sTransitDrawable;
+    public static Bitmap sTransitBitmap;
 
     private List<Creditbserver> mObservers = new ArrayList<Creditbserver>();
 

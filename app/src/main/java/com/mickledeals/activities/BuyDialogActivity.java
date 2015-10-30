@@ -141,6 +141,7 @@ public class BuyDialogActivity extends DialogSwipeDismissActivity {
 //                mPaymentDisplay.setText(mPaymentInfo.mPaypalAccount);
             } else {
                 PaymentHelper.setCardIcon(mCreditCardIcon, mPaymentInfo.mCardType);
+                mPaymentDisplay.setText(mPaymentInfo.mLastFourDigits);
                 mPaymentDisplay.setVisibility(View.VISIBLE);
             }
             mCreditCardIcon.setVisibility(View.VISIBLE);

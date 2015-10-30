@@ -1,10 +1,10 @@
 package com.mickledeals.adapters;
 
 import android.app.Activity;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -70,7 +70,7 @@ public class FeatureSliderAdapter extends PagerAdapter implements
         ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
                 R.layout.fragment_feature_slide_page, null);
         final NetworkImageView imageView = (NetworkImageView) rootView.findViewById(R.id.slider_image);
-        Log.e("ZZZ", "top feature image");
+        imageView.setNoAnimation();
         imageView.setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
         TextView description = (TextView) rootView.findViewById(R.id.slider_text);
         description.setText(info.mBusinessInfo.getStoreName() + " - " + info.getDescription());
@@ -78,6 +78,7 @@ public class FeatureSliderAdapter extends PagerAdapter implements
             @Override
             public void onClick(View v) {
                 String transition = "cardImage" + mList.get(position);
+                DataListModel.sTransitBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                 Utils.transitDetailsActivity(mActivity, position, Constants.TYPE_FEATURE_SLIDER_LIST, null, transition);
             }
         });

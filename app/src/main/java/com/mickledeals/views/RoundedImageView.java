@@ -11,13 +11,13 @@ import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.ImageView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.mickledeals.R;
 import com.mickledeals.utils.Utils;
 
 @SuppressWarnings("UnusedDeclaration")
-public class RoundedImageView extends ImageView {
+public class RoundedImageView extends NetworkImageView {
 
     // Constants for tile mode attributes
     private static final int TILE_MODE_UNDEFINED = -2;

@@ -300,7 +300,8 @@ public abstract class ListMapBaseFragment extends ListBaseFragment implements Ad
         String city = mLocationSpinner.getSelectedItemPosition() == 0 ? null : (String) mLocationSpinner.getSelectedItem();
         Location location = mSortSpinner.getSelectedItemPosition() == 0 ? MDLocationManager.getInstance(mContext).getLastLocation() : null;
         String searchText = getSearchText();
-        MDApiManager.fetchSearchCouponList(categoryId, city, location, searchText, mPageToLoad, this);
+        String sortBy = mSortSpinner.getSelectedItemPosition() == 0 ? null : "Date";
+        MDApiManager.fetchSearchCouponList(categoryId, city, location, searchText, sortBy, mPageToLoad, this);
     }
 
     protected String getSearchText() {

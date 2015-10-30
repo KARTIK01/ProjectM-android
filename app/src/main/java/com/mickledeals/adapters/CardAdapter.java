@@ -1,6 +1,7 @@
 package com.mickledeals.adapters;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,7 +127,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                         mDummpyImageView.setLayoutParams(vh.mCardImage.getLayoutParams());
                         mDummpyImageView.setRatio(vh.mCardImage.getRatio());
                         mDummpyImageView.setImageDrawable(vh.mCardImage.getDrawable());
-                        DataListModel.sTransitDrawable = vh.mCardImage.getDrawable();
+
+                        DataListModel.sTransitBitmap = ((BitmapDrawable) vh.mCardImage.getDrawable()).getBitmap();
                         mDummpyImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         final int indexToAdd = vh.mCardBaseLayout.indexOfChild(vh.mCardImage);
                         vh.mCardBaseLayout.postDelayed(new Runnable() {
@@ -147,6 +148,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                         //doesnt seem to need below line
 //                if (Build.VERSION.SDK_INT >= 21) v.findViewById(R.id.card_image).setTransitionName(transition);
                     }
+
                     Utils.transitDetailsActivity(mFragmentActivity, pos, mListType, v.findViewById(R.id.card_image), transition);
                 }
             });
@@ -160,8 +162,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 
     @Override
     public void onBindViewHolder(CardAdapter.MainViewHolder holder, int position) {
-
-        Log.e("ZZZ", "card adapter onBindViewHolder" + position);
 //            if (position % 2 == 0) {
 //                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) viewholder.mCardView.getLayoutParams();
 //                params.rightMargin = viewholder.mCardView.getResources().getDimensionPixelSize(R.dimen.card_margin);

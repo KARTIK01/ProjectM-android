@@ -35,8 +35,9 @@ public class SearchFragment extends ListMapBaseFragment {
     }
 
     public void clearDataListWhenLoading() {
-        mDataList.clear();
-        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
+        mListResultRecyclerView.setVisibility(View.GONE);
+//        mDataList.clear();
+//        mListResultRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -46,6 +47,12 @@ public class SearchFragment extends ListMapBaseFragment {
         else mNoResultMsg.setText(getString(R.string.no_results_found_in_search_in_location, mSearchStr, mLocationSpinner.getSelectedItem().toString()));
 
         super.prepareSendRequest();
+    }
+
+    @Override
+    public void onMDSuccessResponse(List<Integer> resultList) {
+        super.onMDSuccessResponse(resultList);
+        mListResultRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override

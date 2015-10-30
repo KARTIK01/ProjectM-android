@@ -2,6 +2,7 @@ package com.mickledeals.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -14,10 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.mickledeals.R;
 import com.mickledeals.adapters.BusinessPhotoSliderAdapter;
 import com.mickledeals.datamodel.BusinessInfo;
-import com.mickledeals.datamodel.BusinessPhoto;
 import com.mickledeals.datamodel.CouponInfo;
 import com.mickledeals.datamodel.DataListModel;
 import com.mickledeals.utils.Constants;
@@ -28,13 +29,12 @@ import com.mickledeals.views.NotifyingScrollView;
 import com.mickledeals.views.PagerIndicator;
 import com.mickledeals.views.RoundedImageView;
 
-import java.util.ArrayList;
-
 /**
  * Created by Nicky on 2/21/2015.
  */
 public class BusinessPageActivity extends SwipeDismissActivity {
 
+    private NetworkImageView mCoverImageView;
     private RoundedImageView mRoundedImageView;
     private ViewPager mPhotoViewPager;
     private View mShadow;
@@ -73,46 +73,40 @@ public class BusinessPageActivity extends SwipeDismissActivity {
             }
         });
         mRoundedImageView = (RoundedImageView) findViewById(R.id.roundImageView);
+        mCoverImageView = (NetworkImageView) findViewById(R.id.imageView);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mCoverImageView.getLayoutParams();
+        params.height = MDApplication.sDeviceWidth * 9 / 16;// NEED THIS
+        mCoverImageView.setLayoutParams(params);
+//        mCoverImageView.setNoAnimation();
+        mCoverImageView.setImageUrl(mBusinessInfo.mCoverPhotoUrl, MDApiManager.sImageLoader);
         mShadow = findViewById(R.id.toolbarShadow);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRoundedImageView.getLayoutParams();
-        params.topMargin = MDApplication.sDeviceWidth * 336 / 540 - Utils.getPixelsFromDip(50f, getResources());
+        params = (RelativeLayout.LayoutParams) mRoundedImageView.getLayoutParams();
+        params.topMargin = MDApplication.sDeviceWidth * 9 / 16 - Utils.getPixelsFromDip(50f, getResources());
         mRoundedImageView.setLayoutParams(params);
+        mRoundedImageView.setImageUrl(mBusinessInfo.mLogoUrl, MDApiManager.sImageLoader);
 
         mPhotoViewPager = (ViewPager) findViewById(R.id.photoViewPager);
-
-        //create adapter after fetching data
-        ArrayList photoList = new ArrayList<BusinessPhoto>();
-        BusinessPhoto photo = new BusinessPhoto();
-        photo.mResId = R.drawable.pic_business_1;
-        photo.mPhotoDescription = getString(R.string.business_photo1);
-        photoList.add(photo);
-        photo = new BusinessPhoto();
-        photo.mResId = R.drawable.pic_business_2;
-        photo.mPhotoDescription = getString(R.string.business_photo2);
-        photoList.add(photo);
-        photo = new BusinessPhoto();
-        photo.mResId = R.drawable.pic_business_3;
-        photo.mPhotoDescription = getString(R.string.business_photo3);
-        photoList.add(photo);
-        photo = new BusinessPhoto();
-        photo.mResId = R.drawable.pic_business_4;
-        photo.mPhotoDescription = getString(R.string.business_photo4);
-        photoList.add(photo);
-
-        BusinessPhotoSliderAdapter adapter = new BusinessPhotoSliderAdapter(this,
-                (PagerIndicator) findViewById(R.id.pagerIndicator), photoList);
-
-        //temp above
-
-        mPhotoViewPager.setAdapter(adapter);
-        mPhotoViewPager.addOnPageChangeListener(adapter);
-        mPhotoViewPager.setPageMargin(Utils.getPixelsFromDip(6f, getResources()));
 
         mNewsLabel = findViewById(R.id.newsLabel);
         mPhotoLabel = findViewById(R.id.photoLabel);
         mName = (TextView) findViewById(R.id.businessName);
         mDescription = (TextView) findViewById(R.id.businessDescription);
         mNews = (TextView) findViewById(R.id.businessNews);
+
+
+        if (mBusinessInfo.mPhotos.size() > 0) {
+            BusinessPhotoSliderAdapter adapter = new BusinessPhotoSliderAdapter(this,
+                    (PagerIndicator) findViewById(R.id.pagerIndicator), mBusinessInfo.mPhotos);
+
+            mPhotoViewPager.setAdapter(adapter);
+            mPhotoViewPager.addOnPageChangeListener(adapter);
+            mPhotoViewPager.setPageMargin(Utils.getPixelsFromDip(6f, getResources()));
+        } else {
+            mPhotoLabel.setVisibility(View.GONE);
+            mPhotoViewPager.setVisibility(View.GONE);
+            findViewById(R.id.pagerIndicator).setVisibility(View.GONE);
+        }
+
 
         mName.setText(mBusinessInfo.getStoreName());
         mDescription.setText(mBusinessInfo.getDescription());
@@ -124,7 +118,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
         }
 
         mOpenHours = (TextView) findViewById(R.id.openHours);
-        if (!mBusinessInfo.mHours.isEmpty()) {
+        if (mBusinessInfo.mHours.trim().isEmpty()) {
             mOpenHours.setVisibility(View.GONE);
         } else {
             mOpenHours.setText(mBusinessInfo.mHours);
@@ -150,7 +144,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
             }
         });
         mCall = (TextView) findViewById(R.id.call);
-        if (mBusinessInfo.mPhone == null) {
+        if (mBusinessInfo.mPhone.trim().isEmpty()) {
             mCall.setVisibility(View.GONE);
         } else {
             mCall.setText(mBusinessInfo.mPhone);
@@ -165,7 +159,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
             });
         }
         mWebsite = (TextView) findViewById(R.id.website);
-        if (mBusinessInfo.mWebSiteAddr == null) {
+        if (mBusinessInfo.mWebSiteAddr.trim().isEmpty()) {
             mWebsite.setVisibility(View.GONE);
         } else {
             mWebsite.setOnClickListener(new View.OnClickListener() {
@@ -192,17 +186,21 @@ public class BusinessPageActivity extends SwipeDismissActivity {
 
 
         if (mBusinessInfo.mCouponsId.size() > 0) {
-            mMoreCouponRow.setVisibility(View.VISIBLE);
             for (final Integer couponId : mBusinessInfo.mCouponsId) {
 
                 CouponInfo info = DataListModel.getInstance().getCouponMap().get(couponId);
+                if (!info.mActive) continue;
+                findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
+                mMoreCouponRow.setVisibility(View.VISIBLE);
 
                 View otherCoupon = getLayoutInflater().inflate(R.layout.card_layout_others, null);
                 //load image
                 ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
                 TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
                 cardPrice.setText(info.getDisplayedPrice());
-                ((AspectRatioNetworkImageView) otherCoupon.findViewById(R.id.card_image)).setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
+
+                final AspectRatioNetworkImageView imageView = ((AspectRatioNetworkImageView) otherCoupon.findViewById(R.id.card_image));
+                imageView.setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
 
                 int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
                 int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);
@@ -214,6 +212,7 @@ public class BusinessPageActivity extends SwipeDismissActivity {
                 otherCoupon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DataListModel.sTransitBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                         Intent i = new Intent(BusinessPageActivity.this, DetailsActivity.class);
                         DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
                         DataListModel.getInstance().getMoreCouponsList().add(couponId);

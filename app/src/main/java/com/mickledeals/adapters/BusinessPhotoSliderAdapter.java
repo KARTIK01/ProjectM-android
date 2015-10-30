@@ -6,16 +6,18 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.mickledeals.R;
 import com.mickledeals.activities.BusinessPhotosActivity;
 import com.mickledeals.datamodel.BusinessPhoto;
 import com.mickledeals.utils.DLog;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.views.PagerIndicator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Nicky on 12/26/2014.
@@ -25,11 +27,11 @@ import java.util.ArrayList;
 public class BusinessPhotoSliderAdapter extends PagerAdapter implements
         ViewPager.OnPageChangeListener {
 
-    private ArrayList<BusinessPhoto> mList;
+    private List<BusinessPhoto> mList;
     private PagerIndicator mIndicator;
     private Activity mActivity;
 
-    public BusinessPhotoSliderAdapter(Activity activity, PagerIndicator indicator, ArrayList<BusinessPhoto> photoList) {
+    public BusinessPhotoSliderAdapter(Activity activity, PagerIndicator indicator, List<BusinessPhoto> photoList) {
         mActivity = activity;
         mIndicator = indicator;
         mList = photoList;
@@ -46,16 +48,16 @@ public class BusinessPhotoSliderAdapter extends PagerAdapter implements
         DLog.d(this, "onCreateView");
         ViewGroup rootView = (ViewGroup) mActivity.getLayoutInflater().inflate(
                 R.layout.business_photo_slide_page, null);
-        final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
+        final NetworkImageView imageView = (NetworkImageView) rootView.findViewById(R.id.slider_image);
         final TextView description = (TextView) rootView.findViewById(R.id.slider_text);
-        imageView.setImageResource(mList.get(position).mResId);
+        imageView.setImageUrl(mList.get(position).mUrl, MDApiManager.sImageLoader);
         description.setText(mList.get(position).mPhotoDescription);
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(v.getContext(), BusinessPhotosActivity.class);
-                i.putExtra("photoList", mList);
+                i.putExtra("photoList", (ArrayList) mList);
                 i.putExtra("position", position);
                 //transition does not look good because different scale!!!!, dont bother to try
                 mActivity.startActivity(i); //use default animation

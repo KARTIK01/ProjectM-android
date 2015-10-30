@@ -161,13 +161,13 @@ public class MDApiManager {
 
     private static Map<String, String> createBasicAuthHeader(String username, String password) {
         Map<String, String> headerMap = new HashMap<String, String>();
-        username = "nickyfantasy@gmail.com";
-        password = "123321";
+        username = "admin";
+        password = "mickledealsworks";
         String credentials = username + ":" + password;
         //"YWRtaW46dGVzdB=="
         //"bmlja3lmYW50YXN5OjEyMzMyMQ=="
         String encodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT);
-        headerMap.put("Authorization", "Basic " + "YWRtaW46dGVzdA==");
+        headerMap.put("Authorization", "Basic " + encodedCredentials);
 
         return headerMap;
     }
@@ -190,7 +190,7 @@ public class MDApiManager {
     // ---- Search, Browse, Feature, Top Feature, Favorite API ----- //
 
 
-    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, int page, final MDResponseListener<List<Integer>> listener) {
+    public static void fetchSearchCouponList(int categoryId, String city, Location location, String searchText, String sortBy, int page, final MDResponseListener<List<Integer>> listener) {
         String url = "http://www.mickledeals.com/api/coupons/search";
         JSONObject body = new JSONObject();
         try {
@@ -208,6 +208,9 @@ public class MDApiManager {
             if (searchText != null) {
                 body.put("searchText", searchText);
             }
+            if (sortBy != null) {
+                body.put("sortBy", sortBy);
+            }
             body.put("page", page);
             body.put("size", PAGE_SIZE);
         } catch (JSONException e) {
@@ -222,6 +225,7 @@ public class MDApiManager {
         try {
             body.put("active", true);
             body.put("page", 1);
+            body.put("sortBy", "Date");
             body.put("size", pageSize);
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
@@ -638,7 +642,7 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                DLog.e(MDApiManager.class, error.getMessage());
+                if (error.getMessage() != null) DLog.e(MDApiManager.class, error.getMessage());
                 if (listener != null) listener.onMDNetworkErrorResponse(error.getMessage());
             }
         });

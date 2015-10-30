@@ -3,6 +3,7 @@ package com.mickledeals.fragments;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -192,13 +193,20 @@ public class DetailsFragment extends BaseFragment {
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
         params.height = MDApplication.sDeviceWidth * 9 / 16; //DO NOT NEED THIS if the image is already fitted, this is just for adjusting to 16:9
         mImageView.setLayoutParams(params);
-        mImageView.setNoAnimation();
-        mImageView.setImageUrl(mHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
+//        mImageView.setNoAnimation();
+
+        boolean initialFragment = getArguments().getBoolean("initialFragment");
+//        Bitmap transitMap = getArguments().getParcelable("bitmap");
+        if (initialFragment && DataListModel.getInstance().sTransitBitmap != null) {
+            mImageView.setImageBitmap(DataListModel.getInstance().sTransitBitmap);
+            mImageView.disableLoadFromServer();
+        } else {
+            mImageView.setImageUrl(mHolder.mCoverPhotoUrl, MDApiManager.sImageLoader);
+        }
 
 
-
-        if (Build.VERSION.SDK_INT >= 21 && getArguments().getBoolean("initialFragment")) {
-            mImageView.setTransitionImage(DataListModel.sTransitDrawable);
+        if (Build.VERSION.SDK_INT >= 21 && initialFragment) {
+//            mImageView.setTransitionBitmap(DataListModel.sTransitBitmap);
             mImageView.setTransitionName("cardImage" + mHolder.mId);
             getActivity().startPostponedEnterTransition();
             //seems like no need to use below line???
@@ -344,18 +352,21 @@ public class DetailsFragment extends BaseFragment {
         updateViewForStatus();
 
         if (mHolder.mBusinessInfo.mCouponsId.size() > 1 && !getArguments().getBoolean("fromOtherCoupon")) {
-            view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
-            mMoreCouponRow.setVisibility(View.VISIBLE);
             for (final Integer couponId : mHolder.mBusinessInfo.mCouponsId) {
                 if (couponId == mHolder.mId) continue;
 
                 CouponInfo info = DataListModel.getInstance().getCouponMap().get(couponId);
+                if (!info.mActive) continue;
+                view.findViewById(R.id.moreCouponLabel).setVisibility(View.VISIBLE);
+                mMoreCouponRow.setVisibility(View.VISIBLE);
+
                 View otherCoupon = getActivity().getLayoutInflater().inflate(R.layout.card_layout_others, null);
                 //load image
                 ((TextView) otherCoupon.findViewById(R.id.card_description)).setText(info.getDescription());
                 TextView cardPrice = (TextView) otherCoupon.findViewById(R.id.card_price);
                 cardPrice.setText(info.getDisplayedPrice());
-                ((AspectRatioNetworkImageView) otherCoupon.findViewById(R.id.card_image)).setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
+                final AspectRatioNetworkImageView imageView = ((AspectRatioNetworkImageView) otherCoupon.findViewById(R.id.card_image));
+                imageView.setImageUrl(info.mCoverPhotoUrl, MDApiManager.sImageLoader);
 
                 int sp19 = getResources().getDimensionPixelSize(R.dimen.sp_19);
                 int sp20 = getResources().getDimensionPixelSize(R.dimen.sp_20);
@@ -367,6 +378,8 @@ public class DetailsFragment extends BaseFragment {
                 otherCoupon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //dont put transition, this ux behavior should be faster
+                        DataListModel.sTransitBitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                         Intent i = new Intent(mContext, DetailsActivity.class);
                         DataListModel.getInstance().getMoreCouponsList().clear(); //do not need list, but in case future we need
                         DataListModel.getInstance().getMoreCouponsList().add(couponId);

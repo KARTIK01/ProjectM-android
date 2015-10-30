@@ -130,7 +130,10 @@ public abstract class ListBaseFragment extends BaseFragment implements MDApiMana
     public void onMDSuccessResponse(List<Integer> resultList) {
         if (mPageToLoad > 1) {
             //remove progress bar
-            mDataList.remove(mDataList.size() - 1);
+            int removeIndex = mDataList.size() - 1;
+            if (removeIndex >=0 && mDataList.get(removeIndex) == null) {
+                mDataList.remove(mDataList.size() - 1);
+            }
             mAdapter.notifyItemRemoved(mAdapter.getItemCount());
             mDataList.addAll(resultList);
             mAdapter.notifyItemRangeInserted(mAdapter.getItemCount() - resultList.size(), resultList.size());

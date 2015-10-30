@@ -42,7 +42,7 @@ public class BusinessInfo implements Serializable {
 
     public List<Integer> mCouponsId = new ArrayList<Integer>();
 
-    public List<BusinessPhoto> mPhotoIds;
+    public List<BusinessPhoto> mPhotos = new ArrayList<BusinessPhoto>();
 
     public BusinessInfo(JSONObject jsonobject) {
         mId = JSONHelper.getInteger(jsonobject, "id");
@@ -80,6 +80,22 @@ public class BusinessInfo implements Serializable {
                     info.mBusinessInfo = this;
                     DataListModel.getInstance().getCouponMap().put(info.mId, info);
                     mCouponsId.add(info.mId);
+                } catch (JSONException e) {
+//                        DLog.e(MDApiManager.class, e.toString());
+                }
+            }
+        }
+
+
+        JSONArray photoList = JSONHelper.getJSONArray(jsonobject, "photos");
+        if (photoList != null) {
+            for (int i = 0; i < photoList.length(); i++) {
+                try {
+                    JSONObject photoObject = photoList.getJSONObject(i);
+                    BusinessPhoto info = new BusinessPhoto();
+                    info.mPhotoDescription = JSONHelper.getString(photoObject, "description");
+                    info.mUrl = JSONHelper.getString(photoObject, "url");
+                    mPhotos.add(info);
                 } catch (JSONException e) {
 //                        DLog.e(MDApiManager.class, e.toString());
                 }

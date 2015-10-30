@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -301,6 +300,8 @@ public class Utils {
 
     //this only get called above api level 17
     public static Bitmap blur(Context context, Bitmap image) {
+        //weird holo effect after blur, dont use for now
+
 
         final float BITMAP_SCALE = 0.4f;
         final float BLUR_RADIUS = 25f;

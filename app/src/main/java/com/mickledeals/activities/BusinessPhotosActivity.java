@@ -1,8 +1,6 @@
 package com.mickledeals.activities;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,10 +14,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.mickledeals.R;
 import com.mickledeals.datamodel.BusinessPhoto;
 import com.mickledeals.utils.DLog;
-import com.mickledeals.utils.Utils;
+import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.views.PagerIndicator;
 
 import java.util.ArrayList;
@@ -114,31 +114,40 @@ public class BusinessPhotosActivity extends BaseActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            BusinessPhoto photo = (BusinessPhoto) getArguments().getSerializable("photoObject");
+            final BusinessPhoto photo = (BusinessPhoto) getArguments().getSerializable("photoObject");
 
             DLog.d(this, "onCreateView");
-            ViewGroup rootView = (ViewGroup) inflater.inflate(
+            final ViewGroup rootView = (ViewGroup) inflater.inflate(
                     R.layout.business_photo_fullscreen_slide_page, container, false);
-            ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
+            final ImageView imageView = (ImageView) rootView.findViewById(R.id.slider_image);
             TextView description = (TextView) rootView.findViewById(R.id.slider_text);
 
-            PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
+            MDApiManager.sImageLoader.get(photo.mUrl, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    Bitmap bitmap = response.getBitmap();
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
 
-            //temp
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), photo.mResId);
-            //
+                        PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
+                        attacher.update();
 
-            if (Build.VERSION.SDK_INT >= 17) {
-                ImageView imageViewBg = (ImageView) rootView.findViewById(R.id.slider_blurry_image);
-                imageViewBg.setImageBitmap(Utils.blur(rootView.getContext(), bm));
-            }
-            imageView.setImageResource(photo.mResId);
-            attacher.update();
+//                        if (Build.VERSION.SDK_INT >= 17) {
+//                            ImageView imageViewBg = (ImageView) rootView.findViewById(R.id.slider_blurry_image);
+//                            imageViewBg.setImageBitmap(Utils.blur(rootView.getContext(), bitmap));
+//                        }
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+
             description.setText(photo.mPhotoDescription);
 
 
             return rootView;
-
         }
     }
 }
