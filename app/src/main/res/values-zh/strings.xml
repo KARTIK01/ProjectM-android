@@ -13,10 +13,9 @@
 
     <string name="menu_faq">常見問題</string>
     <string name="menu_promote">推廣你的業務</string>
-    <string name="menu_feedback">意見提交</string>
+    <string name="menu_feedback">客戶支援/意見提交</string>
     <string name="menu_rate">給我們好評</string>
     <string name="menu_about">關於我們</string>
-    <string name="menu_terms">適用條款</string>
 
     <!-- Launch Screen -->
     <string name="continue_in_launch">開始使用!</string>
@@ -251,6 +250,17 @@
     <string name="new_password_not_match">確認密碼與新密碼不符</string>
     <string name="update_password_succeed">密碼已成功更新</string>
     <string name="update_password_wrong_password">你的密碼不正確。請輸入正確密碼以更新密碼</string>
+
+    <!-- Contact Us -->
+    <string name="contact_us_message">歡迎聯絡我們有關任何優惠券,購買問題或給我們提供意見</string>
+    <string name="contact_us_reply_email_message">我們會回覆到以下電郵:</string>
+    <string name="contact_us_reply_email_hint">電郵 (可留空)</string>
+    <string name="contact_us_subject_hint">主題 (可留空)</string>
+    <string name="contact_us_message_hint">輸入你的信息...</string>
+    <string name="contact_us_submit">提交</string>
+    <string name="contact_us_message_too_short">你的信息太短,請輸入超過8個字的句子</string>
+    <string name="contact_us_succeed">謝謝你的聯繫,我們會盡快回覆到你的電郵</string>
+
     <!-- Temp -->
     <string name="bought_date">你於 05/30/15 以%s購買此優惠券</string>
     <string name="obtain_date">你於 05/30/15 免費換領此優惠券</string>

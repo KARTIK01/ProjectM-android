@@ -164,8 +164,6 @@ public class MDApiManager {
         username = "admin";
         password = "mickledealsworks";
         String credentials = username + ":" + password;
-        //"YWRtaW46dGVzdB=="
-        //"bmlja3lmYW50YXN5OjEyMzMyMQ=="
         String encodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT);
         headerMap.put("Authorization", "Basic " + encodedCredentials);
 
@@ -182,6 +180,21 @@ public class MDApiManager {
         DLog.e(MDApiManager.class, error.getMessage());
         if (error.getMessage().contains("JSONException")) {
             listener.onMDErrorResponse(error.getMessage());
+        } else {
+            listener.onMDNetworkErrorResponse(error.getMessage());
+        }
+    }
+
+    private static void handleErrorWithNoResponse(VolleyError error, final MDResponseListener<JSONObject> listener) {
+        if (listener == null) return;
+
+        if (error.getMessage() == null) {
+            listener.onMDNetworkErrorResponse("timeout");
+            return;
+        }
+        DLog.e(MDApiManager.class, error.getMessage());
+        if (error.getMessage().contains("JSONException")) {
+            listener.onMDSuccessResponse(null);
         } else {
             listener.onMDNetworkErrorResponse(error.getMessage());
         }
@@ -447,7 +460,7 @@ public class MDApiManager {
         });
     }
 
-    public static void forgotPassword(String email, final MDResponseListener<Boolean> listener) {
+    public static void forgotPassword(String email, final MDResponseListener<JSONObject> listener) {
         String url = "http://www.mickledeals.com/api/userses/forgotPassword";
         JSONObject body = new JSONObject();
         try {
@@ -455,25 +468,28 @@ public class MDApiManager {
         } catch (JSONException e) {
             DLog.e(MDApiManager.class, e.toString());
         }
+
         sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                listener.onMDSuccessResponse(null);
+
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (response.has("ERROR")) {
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    listener.onMDSuccessResponse(null);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //check what error maybe....
-                listener.onMDSuccessResponse(null);
-                //always return error because no response received but try to convert to JSON
-//                        listener.onMDNetworkErrorResponse(error.getMessage());
-//                DLog.e(MDApiManager.class, error.getMessage());
+                handleErrorWithNoResponse(error, listener);
             }
         });
     }
 
     //no response
-    public static void changePassword(String email, String oldPassword, String newPassword, final MDResponseListener<Boolean> listener) {
+    public static void changePassword(String email, String oldPassword, String newPassword, final MDResponseListener<JSONObject> listener) {
         String url = "http://www.mickledeals.com/api/userses/resetPassword";
         JSONObject body = new JSONObject();
         try {
@@ -497,10 +513,7 @@ public class MDApiManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                listener.onMDSuccessResponse(null);
-                //always return error because no response received but try to convert to JSON
-//                        listener.onMDNetworkErrorResponse(error.getMessage());
-//                DLog.e(MDApiManager.class, error.getMessage());
+                handleErrorWithNoResponse(error, listener);
             }
         });
     }
@@ -743,6 +756,40 @@ public class MDApiManager {
             @Override
             public void onErrorResponse(VolleyError error) {
 //                DLog.e(MDApiManager.class, error.getMessage());
+            }
+        });
+    }
+
+
+    //no response
+    public static void contactUs(String name, String email, String subject, String message, String device, String version, final MDResponseListener<JSONObject> listener) {
+        String url = "http://www.mickledeals.com/api/contactUs";
+        JSONObject body = new JSONObject();
+        try {
+            if (name != null) body.put("name", name);
+            if (email != null) body.put("fromEmail", email);
+            if (subject != null) body.put("subject", subject);
+            if (message != null) body.put("message", message);
+            if (device != null) body.put("device", device);
+            if (version != null) body.put("appVersion", version);
+        } catch (JSONException e) {
+            DLog.e(MDApiManager.class, e.toString());
+        }
+        sendJSONRequest(url, body, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                String errorMessage = JSONHelper.getString(response, "ERROR");
+                if (response.has("ERROR")) {
+                    listener.onMDErrorResponse(errorMessage);
+                } else {
+                    listener.onMDSuccessResponse(null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                handleErrorWithNoResponse(error, listener);
             }
         });
     }

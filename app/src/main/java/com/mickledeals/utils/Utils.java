@@ -18,15 +18,11 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mickledeals.R;
@@ -167,43 +163,6 @@ public class Utils {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
-
-    public static void wrapStringsIntoLinearLayout(String[] strings, LinearLayout rootLayout, int layoutRes) {
-
-        Context context = rootLayout.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        int maxWidth = MDApplication.sDeviceWidth - context.getResources().getDimensionPixelSize(R.dimen.suggestion_card_left_padding);
-        int widthSoFar = 0;
-        boolean isFirstTime = true;
-        LinearLayout subLL = null;
-
-        for (String string : strings) {
-
-            CardView cardView = (CardView) inflater.inflate(layoutRes, null);
-            TextView tv = (TextView) cardView.findViewById(R.id.tv);
-            tv.setText(string);
-            int rightMargin = context.getResources().getDimensionPixelSize(R.dimen.card_margin);
-            cardView.measure(0, 0);
-            int measuredWidth = cardView.getMeasuredWidth();
-            if (measuredWidth >= maxWidth - rightMargin) continue;
-            widthSoFar += cardView.getMeasuredWidth() + rightMargin;
-            if (widthSoFar >= maxWidth || isFirstTime) {
-                isFirstTime = false;
-                subLL = new LinearLayout(context);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                        android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.bottomMargin = context.getResources().getDimensionPixelSize(R.dimen.suggestion_card_margin_bottom);
-                subLL.setLayoutParams(params);
-                subLL.setOrientation(LinearLayout.HORIZONTAL);
-                rootLayout.addView(subLL);
-                widthSoFar = measuredWidth + rightMargin;
-            }
-            subLL.addView(cardView);
-
-        }
-
     }
 
     public static void toggleKeyboard(boolean show, EditText editText, Activity activity) {
@@ -395,5 +354,9 @@ public class Utils {
         return format.format(new Date(timeStamp));
     }
 
+
+    public static boolean containsChinese(String str) {
+        return !str.matches("^[\u0000-\u0080]+$");
+    }
 
 }

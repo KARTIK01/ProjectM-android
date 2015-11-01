@@ -221,7 +221,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
 //                        }
 //                    }
 //                    PreferenceHelper.savePreferencesStr(mFragmentActivity, "saveList", sb.toString());
-                    if (mListType == Constants.TYPE_SAVED_LIST) {
+                    if (mListType == Constants.TYPE_SAVED_LIST && dataHolder.mSaved) {
 
                         AlertDialog dialog = new AlertDialog.Builder(v.getContext(), R.style.AppCompatAlertDialogStyle)
                                 .setMessage(R.string.remove_save_msg)
@@ -229,6 +229,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MainViewHolder
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dataHolder.mSaved = !dataHolder.mSaved;
+
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt("couponId", dataHolder.mId);
+                                        EventBus.getInstance().sendEvent(dataHolder.mSaved ? EventBus.EVENT_ADD_SAVE : EventBus.EVENT_REMOVE_SAVE, bundle);
+
                                         MDApiManager.addOrRemoveFavorite(dataHolder.mId, dataHolder.mSaved);
                                         mDataset.remove(newPos);
                                         notifyItemRemoved(newPos);

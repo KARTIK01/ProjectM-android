@@ -29,10 +29,9 @@
 
     <string name="menu_faq">FAQs</string>
     <string name="menu_promote">Promote Your Business</string>
-    <string name="menu_feedback">Send Us Your Feedback</string>
-    <string name="menu_rate">Give Us Good Reviews/Ratings</string>
+    <string name="menu_feedback">Contact Us / Send Feedback</string>
+    <string name="menu_rate">Give Us Good Reviews</string>
     <string name="menu_about">About Us</string>
-    <string name="menu_terms">Terms of Use</string>
 
     <!-- Home -->
     <string name="nearby_tab_text">BROWSE</string>
@@ -280,6 +279,16 @@
     <string name="new_password_not_match">Confirmed password does not match with new password</string>
     <string name="update_password_succeed">Password has been update successfully</string>
     <string name="update_password_wrong_password">Your password is incorrect. Please enter the correct password in order to update your password.</string>
+
+    <!-- Contact Us -->
+    <string name="contact_us_message">Send your feedback or questions regarding the app, your account, coupons or anything that can make us serve you better</string>
+    <string name="contact_us_reply_email_message">We will reply your message to the email below:</string>
+    <string name="contact_us_reply_email_hint">Email (Optional)</string>
+    <string name="contact_us_subject_hint">Subject (Optional)</string>
+    <string name="contact_us_message_hint">Enter your message here...</string>
+    <string name="contact_us_submit">Submit</string>
+    <string name="contact_us_message_too_short">Your message is too short. Please enter a valid and meaningful sentence.</string>
+    <string name="contact_us_succeed">Thanks for contacting us! We will reply to your email as soon as possible.</string>
 
     <!-- Special Characters-->
     <string name="cent_symbol">¢</string>

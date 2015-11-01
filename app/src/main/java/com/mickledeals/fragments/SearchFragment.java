@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.mickledeals.R;
 import com.mickledeals.adapters.CardAdapter;
 import com.mickledeals.datamodel.DataListModel;
+import com.mickledeals.utils.ChangeCode;
 import com.mickledeals.utils.Constants;
+import com.mickledeals.utils.Utils;
 
 import java.util.List;
 
@@ -61,7 +63,12 @@ public class SearchFragment extends ListMapBaseFragment {
     }
 
     protected String getSearchText() {
-        return mSearchStr.trim().toLowerCase();
+        String searchStr = mSearchStr.trim().toLowerCase();
+        boolean isChinese = Utils.containsChinese(searchStr);
+        if (isChinese) {
+            return ChangeCode.toLong(searchStr);
+        }
+        return searchStr;
     }
 
     public List<Integer> getDataList() {

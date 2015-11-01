@@ -4,6 +4,7 @@ package com.mickledeals.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -202,7 +203,15 @@ public class HomeActivity extends BaseActivity
         DLog.d(this, "onNavigationDrawerItemSelected pos = " + position);
         final NavMenuItem item = MDApplication.sNavMenuList.get(position);
 
-        if (item.needsLogin()) {
+        if (item.getTitleRes() == R.string.menu_rate) {
+            final String appPackageName = getPackageName();
+            DLog.d(this, "appPackageName = " + appPackageName);
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
+        } else if (item.needsLogin()) {
 
             MDLoginManager.loginIfNecessary(this, new MDLoginManager.LoginCallback() {
                 @Override

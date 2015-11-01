@@ -82,7 +82,7 @@ public class MDApplication extends Application {
         sNavMenuList.add(new NavMenuItem(null, 0, 0, false)); //divider
         sNavMenuList.add(new NavMenuItem(null, R.string.menu_faq, 0, false));
         sNavMenuList.add(new NavMenuItem(null, R.string.menu_promote, 0, false));
-        sNavMenuList.add(new NavMenuItem(null, R.string.menu_feedback, 0, false));
+        sNavMenuList.add(new NavMenuItem(ContactusActivity.class, R.string.menu_feedback, 0, false));
         sNavMenuList.add(new NavMenuItem(null, R.string.menu_rate, 0, false));
         sNavMenuList.add(new NavMenuItem(null, R.string.menu_about, 0, false));
     }

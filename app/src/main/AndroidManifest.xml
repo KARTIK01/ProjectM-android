@@ -73,6 +73,11 @@
             android:name=".activities.SettingsActivity"
             android:theme="@style/AppTheme.Base.Transcluent"
             android:label="@string/menu_settings" />
+        <activity
+            android:name=".activities.ContactusActivity"
+            android:theme="@style/AppTheme.Base.Transcluent"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:label="@string/menu_feedback" />
         <activity android:name=".activities.BusinessPageActivity"
             android:theme="@style/AppTheme.Base.Transcluent"
             />

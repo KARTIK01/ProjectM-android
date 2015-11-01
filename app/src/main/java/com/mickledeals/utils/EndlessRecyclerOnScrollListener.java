@@ -2,6 +2,7 @@ package com.mickledeals.utils;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 /**
  * Created by Nicky on 7/26/2015.
@@ -32,14 +33,14 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
 
         if (loading) {
-            if (totalItemCount > previousTotal + 1 ) {
+            if (totalItemCount > previousTotal + 1 ) { //+1 is for progress bar
                 loading = false;
                 previousTotal = totalItemCount;
             }
         }
 //
-//        Log.e("XXX", "loading = " + loading + "totalItemCount = " + totalItemCount + "visibleItemCount = " + visibleItemCount +
-//                "firstVisibleItem = " + firstVisibleItem + "visibleThreshold = " + visibleThreshold);
+        Log.e("XXX", "loading = " + loading + "totalItemCount = " + totalItemCount + "visibleItemCount = " + visibleItemCount +
+                "firstVisibleItem = " + firstVisibleItem + "visibleThreshold = " + visibleThreshold);
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
 
             if (totalItemCount % MDApiManager.PAGE_SIZE != 0 && !ignoreRemainder()) {
@@ -58,6 +59,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     //we need to reset previous total when refresh the whole list, otherwise loading flag never get set to false
     public void resetPreviousTotal() {
+        Log.e("XXX", "reset to -2");
         previousTotal = 0;
     }
 

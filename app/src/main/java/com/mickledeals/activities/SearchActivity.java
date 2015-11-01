@@ -27,6 +27,8 @@ import android.widget.TextView;
 
 import com.mickledeals.R;
 import com.mickledeals.fragments.SearchFragment;
+import com.mickledeals.utils.ChangeCode;
+import com.mickledeals.utils.PreferenceHelper;
 import com.mickledeals.utils.Utils;
 
 import java.util.ArrayList;
@@ -37,9 +39,7 @@ import java.util.List;
  */
 public class SearchActivity extends BaseActivity {
 
-    //temporary
-    private String[] mRecentList = {"sushi", "spa", "Savory Steak House", "seafood", "steak"};
-
+    private String mRecentListStr;
     private List<String> mSuggestionList = new ArrayList<String>();
     private EditText mSearchEdit;
     private View mClear;
@@ -48,6 +48,7 @@ public class SearchActivity extends BaseActivity {
     private RecyclerView mSuggestionRecyclerView;
     private View mRecentHotLayout;
     private LinearLayout mRecentLayout;
+    private View mRecentLabel;
     private LinearLayout mHotLayout;
     private SearchFragment mSearchFragment;
     private Handler mHandler = new Handler();
@@ -60,6 +61,7 @@ public class SearchActivity extends BaseActivity {
 
         mSearchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.searchFragment);
 
+        mRecentListStr = PreferenceHelper.getPreferenceValueStr(this, "recentList", "");
 
         mRecentHotLayout = findViewById(R.id.recentHotLayout);
         mRecentHotLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -72,10 +74,11 @@ public class SearchActivity extends BaseActivity {
         });
 
         mRecentLayout = (LinearLayout) findViewById(R.id.recentLayout);
+        mRecentLabel = findViewById(R.id.recentSearchLabel);
         mHotLayout = (LinearLayout) findViewById(R.id.hotLayout);
 
         wrapStringsIntoLinearLayout(getResources().getStringArray(R.array.hot_list), mHotLayout, R.layout.hot_searches_card_textview);
-        wrapStringsIntoLinearLayout(mRecentList, mRecentLayout, R.layout.recent_searches_card_textview);
+        updateRecentSearches();
 
         mListMapContainer = findViewById(R.id.listMapContainer);
 
@@ -172,9 +175,25 @@ public class SearchActivity extends BaseActivity {
         });
     }
 
+    private void updateRecentSearches() {
+
+        mRecentLayout.removeAllViews();
+        if (mRecentListStr.isEmpty()) {
+            mRecentLabel.setVisibility(View.GONE);
+        } else {
+            mRecentLabel.setVisibility(View.VISIBLE);
+            String[] recentWords = mRecentListStr.split("\\|\\|");
+            wrapStringsIntoLinearLayout(recentWords, mRecentLayout, R.layout.recent_searches_card_textview);
+        }
+    }
+
     private void suggestionSearch(String query) {
 
         query = query.toLowerCase().trim();
+        boolean isChinese = Utils.containsChinese(query);
+        if (isChinese) {
+            query = ChangeCode.toLong(query);
+        }
         mSuggestionList.clear();
 
         String[] stringArray = getResources().getStringArray(R.array.suggestion_list);
@@ -188,6 +207,7 @@ public class SearchActivity extends BaseActivity {
 
     private void sendSearchRequest(String str) {
         if (str == null || str.trim().length() == 0) return;
+        str = str.trim();
         Utils.toggleKeyboard(false, mSearchEdit, SearchActivity.this);
         mSearchEdit.setText(str);
         mSearchEdit.setCursorVisible(false);
@@ -196,6 +216,19 @@ public class SearchActivity extends BaseActivity {
         mSearchFragment.clearDataListWhenLoading();
         mSearchFragment.prepareSendRequest();
 
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(str);
+        String[] recentWords = mRecentListStr.split("\\|\\|");
+        for (String word : recentWords) {
+            if (!word.equals(str) && !word.trim().isEmpty()) {
+                sb.append("||");
+                sb.append(word);
+            }
+        }
+        mRecentListStr = sb.toString();
+        PreferenceHelper.savePreferencesStr(this, "recentList", sb.toString());
+        updateRecentSearches();
     }
 
 
@@ -209,6 +242,7 @@ public class SearchActivity extends BaseActivity {
         LinearLayout subLL = null;
 
         for (final String string : strings) {
+            if (string.trim().isEmpty()) continue;
 
             CardView cardView = (CardView) inflater.inflate(layoutRes, null);
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -326,6 +360,10 @@ public class SearchActivity extends BaseActivity {
             String string = mSuggestionList.get(position);
 
             String keyString = mSearchEdit.getText().toString().toLowerCase().trim();
+            boolean isChinese = Utils.containsChinese(keyString);
+            if (isChinese) {
+                keyString = ChangeCode.toLong(keyString);
+            }
             int index = string.toLowerCase().trim().indexOf(keyString);
             SpannableString spannable = new SpannableString(string);
             spannable.setSpan(new StyleSpan(Typeface.BOLD), index, index + keyString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -347,11 +385,11 @@ public class SearchActivity extends BaseActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (mSuggestionList.get(position).equals("Savory Steak House")) {
-                return TYPE_BUSINESS_SUGGESTION;
-            } else {
+//            if (mSuggestionList.get(position).equals("Savory Steak House")) {
+//                return TYPE_BUSINESS_SUGGESTION;
+//            } else {
                 return TYPE_CATEGORY_SUGGESTION;
-            }
+//            }
         }
     }
 }

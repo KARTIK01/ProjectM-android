@@ -9,6 +9,8 @@ import com.mickledeals.R;
 import com.mickledeals.utils.MDApiManager;
 import com.mickledeals.utils.MDLoginManager;
 
+import org.json.JSONObject;
+
 /**
  * Created by Nicky on 5/17/2015.
  */
@@ -52,9 +54,9 @@ public class ChangePasswordActivity extends DialogSwipeDismissActivity {
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
             MDApiManager.changePassword(MDLoginManager.mEmailAddr, mOldPassword.getText().toString().trim(),
-                    mNewPassword.getText().toString().trim(), new MDReponseListenerImpl<Boolean>() {
+                    mNewPassword.getText().toString().trim(), new MDReponseListenerImpl<JSONObject>() {
                         @Override
-                        public void onMDSuccessResponse(Boolean object) {
+                        public void onMDSuccessResponse(JSONObject object) {
                             super.onMDSuccessResponse(object);
                             Toast.makeText(ChangePasswordActivity.this, R.string.update_password_succeed, Toast.LENGTH_LONG).show();
                             finish();

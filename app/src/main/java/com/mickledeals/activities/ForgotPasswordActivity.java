@@ -8,6 +8,8 @@ import android.widget.Toast;
 import com.mickledeals.R;
 import com.mickledeals.utils.MDApiManager;
 
+import org.json.JSONObject;
+
 /**
  * Created by Nicky on 5/17/2015.
  */
@@ -46,9 +48,9 @@ public class ForgotPasswordActivity extends DialogSwipeDismissActivity {
             return;
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
-            MDApiManager.forgotPassword(emailStr, new MDReponseListenerImpl<Boolean>() {
+            MDApiManager.forgotPassword(emailStr, new MDReponseListenerImpl<JSONObject>() {
                 @Override
-                public void onMDSuccessResponse(Boolean object) {
+                public void onMDSuccessResponse(JSONObject object) {
                     super.onMDSuccessResponse(object);
                     Toast.makeText(ForgotPasswordActivity.this, R.string.reset_password_succeed, Toast.LENGTH_LONG).show();
                     finish();

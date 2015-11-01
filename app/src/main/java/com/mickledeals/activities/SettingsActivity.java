@@ -122,6 +122,7 @@ public class SettingsActivity extends SwipeDismissActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        PreferenceHelper.savePreferencesStr(SettingsActivity.this, "recentList", "");
                         dialog.dismiss();
                     }
                 })
